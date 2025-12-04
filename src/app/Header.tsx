@@ -36,7 +36,7 @@ export default function Header() {
           {[
             { href: "/", label: "Accueil" },
             { href: "/equipes", label: "Équipes" },
-            { href: "/hall-of-fame", label: "Hall Of Fame" },
+            { href: "/hall-of-fame", label: "Hall Of Fame/Résultats" },
             { href: "/recrutement", label: "Recrutement" },
             { href: "/social", label: "Social Media" },
             { href: "/shop", label: "Shop" },
