@@ -109,7 +109,7 @@ export default function Home() {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
                   Jeux
                 </p>
-                <p className="mt-1 text-lg font-bold">LoL, Valorant, RL, R6</p>
+                <p className="mt-1 text-lg font-bold">LoL, Valorant, RL, R6, MR</p>
                 <p className="mt-1 text-xs text-white/70">
                   Priorité au sérieux des projets et au suivi des équipes.
                 </p>
@@ -217,8 +217,7 @@ export default function Home() {
                 Places en Académie et rôles staff disponibles
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-white/80">
-                DME ouvre régulièrement des places pour des joueurs LoL et
-                Valorant, ainsi que des rôles de coach, analyste et manager. Si
+                DME ouvre régulièrement des places pour des joueurs , ainsi que des rôles de coach, analyste et manager. Si
                 tu veux t&apos;investir dans un projet encadré, c&apos;est le bon
                 moment pour postuler.
               </p>

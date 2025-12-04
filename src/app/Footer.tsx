@@ -4,79 +4,34 @@ import Image from "next/image";
 import Link from "next/link";
 
 const partners = [
-  {
-    name: "Arène des Dieux",
-    logo: "/medias/sponsors/arene1.png",
-    url: "https://www.godsarena.com/",
-  },
-  {
-    name: "GURU",
-    logo: "/medias/sponsors/guru1.png",
-    url: "https://guruenergy.com/fr",
-  },
-  {
-    name: "Tuninclub",
-    logo: "/medias/sponsors/tuninclub.png",
-    url: "https://example.com/tuninclub",
-  },
-  {
-    name: "Rogue",
-    logo: "/medias/sponsors/rogue1.png",
-    url: "https://rogueenergy.com/fr-ca",
-  },
-  {
-    name: "TNT",
-    logo: "/medias/sponsors/tnt1.png",
-    url: "https://lostnttacos.ca/",
-  },
-  {
-    name: "IG",
-    logo: "/medias/sponsors/ig1.png",
-    url: "https://www.instant-gaming.com/en/",
-  },
-  {
-    name: "Passion Sim",
-    logo: "/medias/sponsors/passion.png",
-    url: "https://www.passionsim.com/",
-  },
+  { name: "Arène des Dieux", logo: "/medias/sponsors/arene1.png", url: "https://www.godsarena.com/" },
+  { name: "GURU", logo: "/medias/sponsors/guru1.png", url: "https://guruenergy.com/fr" },
+  { name: "Tuninclub", logo: "/medias/sponsors/tuninclub.png", url: "https://example.com/tuninclub" },
+  { name: "Rogue", logo: "/medias/sponsors/rogue1.png", url: "https://rogueenergy.com/fr-ca" },
+  { name: "TNT", logo: "/medias/sponsors/tnt1.png", url: "https://lostnttacos.ca/" },
+  { name: "IG", logo: "/medias/sponsors/ig1.png", url: "https://www.instant-gaming.com/en/" },
+  { name: "Passion Sim", logo: "/medias/sponsors/passion.png", url: "https://www.passionsim.com/" },
 ];
 
 const socials = [
-  {
-    name: "Twitter/X",
-    icon: "🐦",
-    url: "https://x.com/DeathMarkEsport",
-  },
-  {
-    name: "Twitch",
-    icon: "📺",
-    url: "https://www.twitch.tv/deathmarkesport",
-  },
-  {
-    name: "Discord",
-    icon: "💬",
-    url: "https://discord.gg/Zu4FP5pU9M",
-  },
-  {
-    name: "Instagram",
-    icon: "📷",
-    url: "https://www.instagram.com/deathmarkofficial/",
-  },
+  { name: "Twitter/X", icon: "🐦", url: "https://x.com/DeathMarkEsport" },
+  { name: "Twitch", icon: "📺", url: "https://www.twitch.tv/deathmarkesport" },
+  { name: "Discord", icon: "💬", url: "https://discord.gg/Zu4FP5pU9M" },
+  { name: "Instagram", icon: "📷", url: "https://www.instagram.com/deathmarkofficial/" },
 ];
-
-const currentYear = new Date().getFullYear();
 
 export default function Footer() {
   return (
     <footer className="mt-0 border-t-2 border-red-600 bg-black/95 text-white">
-      {/* même largeur que les sections au-dessus */}
       <div className="mx-auto max-w-[95%] px-6 py-14">
-        {/* TOP BAR : À PROPOS • PARTENAIRES • RÉSEAUX */}
-        <div className="flex flex-col gap-16 md:flex-row md:items-start md:justify-between">
-          {/* À PROPOS */}
-          <div className="flex-1 max-w-md text-left md:max-w-none">
+
+        {/* ZONE PRINCIPALE : 3 COLONNES */}
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-3">
+
+          {/* À PROPOS (TOUT À GAUCHE) */}
+          <div className="text-left">
             <h3 className="mb-4 text-xl font-bold text-red-500">À propos</h3>
-            <p className="text-lg leading-relaxed text-white/90">
+            <p className="text-lg leading-relaxed text-white/90 max-w-sm">
               <span className="font-semibold">DeathMark Esports</span> rassemble
               des passionnés de jeux compétitifs.
               <br />
@@ -85,8 +40,8 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* PARTENAIRES — COLONNE CENTRALE */}
-          <div className="flex flex-1 flex-col items-center">
+          {/* PARTENAIRES (CENTRE) */}
+          <div className="flex flex-col items-center">
             <h3 className="mb-5 w-full text-center text-xl font-bold uppercase text-red-500">
               Partenaires officiels
             </h3>
@@ -98,7 +53,6 @@ export default function Footer() {
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  title={p.name}
                   className="opacity-90 transition hover:opacity-100"
                 >
                   <Image
@@ -113,8 +67,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* RÉSEAUX */}
-          <div className="flex-1 text-right">
+          {/* RÉSEAUX (À DROITE) */}
+          <div className="text-right">
             <h3 className="mb-4 text-xl font-bold text-red-500">Réseaux</h3>
             <ul className="space-y-4 text-lg">
               {socials.map((s) => (
@@ -132,6 +86,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+
         </div>
 
         {/* SÉPARATEUR */}
@@ -139,17 +94,13 @@ export default function Footer() {
 
         {/* BOTTOM BAR */}
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+
+          {/* Menu bas */}
           <nav className="flex flex-wrap gap-x-12 gap-y-3 text-base uppercase tracking-wide text-white/85">
-            <Link
-              href="/recrutement"
-              className="transition hover:text-red-500"
-            >
+            <Link href="/recrutement" className="transition hover:text-red-500">
               Recrutement
             </Link>
-            <Link
-              href="/contact"
-              className="transition hover:text-red-500"
-            >
+            <Link href="/contact" className="transition hover:text-red-500">
               Partenariat
             </Link>
             <Link href="/contact" className="transition hover:text-red-500">
@@ -157,14 +108,24 @@ export default function Footer() {
             </Link>
           </nav>
 
-          <div className="text-sm text-white/70">
-            © {currentYear} DeathMark E-Sports — Tous droits réservés
+          {/* ZONE LÉGALE AVEC LIENS CLIQUABLES */}
+          <div className="text-sm text-white/70 flex flex-wrap gap-3">
+            <span>© 2025 DME — Tous droits réservés</span>
+
+            <Link href="/mentions-legales" className="hover:text-red-500">
+              | Mentions légales
+            </Link>
+
+            <Link href="/confidentialite" className="hover:text-red-500">
+              | Politique de confidentialité
+            </Link>
+
+            <Link href="/conditions-utilisation" className="hover:text-red-500">
+              | Conditions d’utilisation
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
 }
-
-
-

@@ -51,6 +51,13 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
 ];
 
 /* --- Cartes de recrutement --- */
@@ -70,7 +77,7 @@ const jeuxRecrutement: JeuRecrutement[] = [
     nom: "League of Legends",
     roleTexte: "Pôle LoL – équipes espoir & compétitives",
     description:
-      "Plusieurs rosters actifs du haut Diamant au Master. Objectif : encadrer les joueurs sérieux, performer en ligues francophones et construire un pôle LoL solide autour de projets à long terme.",
+      "Plusieurs rosters actifs du haut Gold au Challenger. Objectif : encadrer les joueurs sérieux, performer en ligues francophones,NA et construire un pôle LoL solide autour de projets à long terme.",
     boutonTexte: "Rejoindre une équipe LoL",
     lienFormulaire: "https://docs.google.com/forms/d/e/1FAIpQLScfbd24P68d4kXh_YYOHju1XZtZVjhPgS3_qTNM2auefj367A/viewform?usp=publish-editor",
     logoSrc: "/medias/commun/logo-lol1.png",

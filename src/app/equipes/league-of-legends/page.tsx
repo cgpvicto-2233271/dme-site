@@ -37,6 +37,13 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+    "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
 ];
 
 /* --- TYPES --- */
@@ -202,7 +209,7 @@ const rosters: Roster[] = [
          drapeaux: [
           { src: "/medias/flags/ca.png", label: "Canada" },
           { src: "/medias/flags/rom.png", label: "USA" },],
-        photoSrc: "/logo/krips.png",
+        photoSrc: "/logo/kri.png",
         xUrl: "https://x.com/Kripsus09",
       },
       {
@@ -212,7 +219,7 @@ const rosters: Roster[] = [
         role: "MID",
         pays: "CAN",
         drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/image_player.png",
+        photoSrc: "/logo/wazapro.png",
         xUrl: "https://x.com/Wazabiee",
       },
       {
@@ -232,7 +239,7 @@ const rosters: Roster[] = [
         role: "SUPPORT",
         pays: "CAN",
         drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/image_player.png",
+        photoSrc: "/logo/spypro.png",
         xUrl: "https://x.com/lol_spy1",
       },
     ],
@@ -779,7 +786,7 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
                       </p>
 
                       <p className="mt-4 text-[15px] leading-relaxed text-white/90">
-                        Équipes inscrites en ACL, ADL et autres ligues. Staff
+                        Équipes inscrites en NACL OQ, ACL, AVL et autres ligues. Staff
                         complet, cadre sérieux et objectifs élevés pour viser le
                         haut du classement.
                       </p>

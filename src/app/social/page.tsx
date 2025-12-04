@@ -37,6 +37,13 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
 ];
 
 /* --- Plateformes principales --- */
@@ -173,40 +180,41 @@ const formatsContenu: FormatContenu[] = [
   },
 ];
 
-/* Helpers accent */
+/* Helpers accent (fonds) */
 function accentClasses(accent: PlateformeSociale["accent"]) {
   switch (accent) {
     case "x":
-      return "bg-white text-black";
+      return "bg-white/5 border border-white/20";
     case "twitch":
-      return "bg-violet-600";
+      return "bg-[#9146FF]/15 border border-[#9146FF]/40";
     case "insta":
-      return "bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-400";
+      return "bg-gradient-to-tr from-pink-500/30 via-red-500/30 to-yellow-400/30 border border-pink-400/50";
     case "tiktok":
-      return "bg-cyan-400";
+      return "bg-cyan-400/15 border border-cyan-300/50";
     case "yt":
-      return "bg-red-600";
+      return "bg-red-600/15 border border-red-500/50";
     case "discord":
-      return "bg-indigo-500";
+      return "bg-indigo-500/15 border border-indigo-400/50";
     default:
-      return "bg-red-600";
+      return "bg-red-600/15 border border-red-500/50";
   }
 }
 
-function accentLabel(accent: PlateformeSociale["accent"]) {
+/* Paths vers les vrais logos (à mettre dans /public/medias/social/) */
+function accentIconPath(accent: PlateformeSociale["accent"]) {
   switch (accent) {
     case "x":
-      return "X";
+      return "/logo/x.png";
     case "twitch":
-      return "Live";
+      return "/logo/twitch.png";
     case "insta":
-      return "IG";
+      return "/logo/insta.png";
     case "tiktok":
-      return "TT";
+      return "/logo/tiktok.png";
     case "yt":
-      return "YT";
+      return "/logo/youtube.png";
     case "discord":
-      return "DC";
+      return "/logo/discord.png";
   }
 }
 
@@ -246,11 +254,8 @@ export default function SocialMediaPage() {
             </p>
 
             <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-5xl lg:text-[3.2rem]">
-              Vivre{" "}
-              <span className="text-red-500">
-                DeathMark
-              </span>{" "}
-              au quotidien, en direct de nos réseaux.
+              Vivre <span className="text-red-500">DeathMark</span> au
+              quotidien, en direct de nos réseaux.
             </h1>
 
             <p className="mt-4 text-sm md:text-base text-white/85">
@@ -318,11 +323,17 @@ export default function SocialMediaPage() {
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold uppercase ${accentClasses(
+                        className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${accentClasses(
                           p.accent
                         )}`}
                       >
-                        {accentLabel(p.accent)}
+                        <Image
+                          src={accentIconPath(p.accent)}
+                          alt={p.nom}
+                          width={16}
+                          height={16}
+                          className="h-4 w-4 object-contain"
+                        />
                       </div>
                       <div className="flex flex-col">
                         <span className="text-[11px] font-semibold">
@@ -355,7 +366,7 @@ export default function SocialMediaPage() {
               <h2 className="text-2xl font-bold md:text-3xl">
                 Nos canaux clés
               </h2>
-              <p className="mt-2 text-sm text-white/80">
+            <p className="mt-2 text-sm text-white/80">
                 Les trois points d&apos;entrée principaux pour suivre DeathMark
                 au plus proche : annonces, live et communauté.
               </p>
@@ -372,11 +383,17 @@ export default function SocialMediaPage() {
                   {/* Icône + nom */}
                   <div className="relative flex flex-1 items-center gap-4">
                     <div
-                      className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl text-xs font-bold uppercase ${accentClasses(
+                      className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full ${accentClasses(
                         p.accent
                       )}`}
                     >
-                      {accentLabel(p.accent)}
+                      <Image
+                        src={accentIconPath(p.accent)}
+                        alt={p.nom}
+                        width={22}
+                        height={22}
+                        className="h-[22px] w-[22px] object-contain"
+                      />
                     </div>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-red-300">
@@ -429,11 +446,17 @@ export default function SocialMediaPage() {
                   <div className="relative mb-3 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex h-9 w-9 items-center justify-center rounded-2xl text-[10px] font-bold uppercase ${accentClasses(
+                        className={`flex h-9 w-9 items-center justify-center rounded-2xl ${accentClasses(
                           p.accent
                         )}`}
                       >
-                        {accentLabel(p.accent)}
+                        <Image
+                          src={accentIconPath(p.accent)}
+                          alt={p.nom}
+                          width={18}
+                          height={18}
+                          className="h-[18px] w-[18px] object-contain"
+                        />
                       </div>
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
@@ -503,5 +526,3 @@ export default function SocialMediaPage() {
     </div>
   );
 }
-
-

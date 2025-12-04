@@ -37,6 +37,13 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
 ];
 
 /* BOUTON : Retour aux jeux */
