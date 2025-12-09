@@ -10,18 +10,46 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="fr">
-      <body className="bg-black text-white">
+    <html lang="fr" className="h-full">
+      <body
+        className="
+          bg-black text-white
+          min-h-screen
+          flex flex-col
+          antialiased
+          overflow-x-hidden
+        "
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        }}
+      >
         <Header />
-        <div className="pt-[72px]">
+
+        {/* plus de max-width ici, la page peut utiliser 100% de la largeur */}
+        <main className="w-full pt-[72px] flex-1">
           {children}
-        </div>
+        </main>
+
         <Footer />
       </body>
     </html>
   );
 }
+
+

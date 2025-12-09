@@ -225,7 +225,7 @@ const rosters: Roster[] = [
       {
         id: "avl-adc",
         pseudo: "raynerz",
-        nom: "Samuel",
+        nom: "Samuel Vachon",
         role: "ADC",
         pays: "CAN",
         drapeauSrc: "/medias/flags/ca.png",
