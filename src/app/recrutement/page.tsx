@@ -129,9 +129,9 @@ const jeuxRecrutement: JeuRecrutement[] = [
   },
 ];
 
-/* --- Config des formulaires par jeu (modals internes optionnels) --- */
+/* --- Config des formulaires par jeu --- */
 type FormConfig = {
-  id: string; // id HTML (#form-lol, etc.)
+  id: string;
   titre: string;
   sousTitre: string;
   rankPlaceholder: string;
@@ -221,7 +221,7 @@ const formsConfig: FormConfig[] = [
   },
 ];
 
-/* --- Modal de formulaire (toujours là si tu veux les activer plus tard) --- */
+/* --- Modal de formulaire (affiché au clic sur un bouton) --- */
 function FormModal({
   id,
   titre,
@@ -235,86 +235,86 @@ function FormModal({
   return (
     <section
       id={id}
-      className="recrutement-modal fixed inset-0 z-40 hidden items-center justify-center bg-black/80 px-4"
+      className="recrutement-modal fixed inset-0 z-40 items-center justify-center bg-black/80 px-4"
     >
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-red-700/80 bg-black/95 p-6 sm:p-8 shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-red-700/80 bg-black/95 p-8 shadow-[0_0_40px_rgba(0,0,0,0.9)]">
         {/* header modal */}
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.25em] text-red-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-400">
               Formulaire de recrutement
             </p>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
+            <h2 className="text-2xl font-bold md:text-3xl">
               {titre} <span className="text-red-500">– Rejoindre DME</span>
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-white/80">{sousTitre}</p>
+            <p className="mt-2 text-sm text-white/80">{sousTitre}</p>
           </div>
 
           {/* bouton fermer */}
           <Link
             href="/recrutement"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-600/70 bg-black/70 text-xs sm:text-sm font-semibold text-red-300 hover:bg-red-600/80 hover:text-white transition"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-red-600/70 bg-black/70 text-sm font-semibold text-red-300 hover:bg-red-600/80 hover:text-white transition"
           >
             ✕
           </Link>
         </div>
 
         {/* formulaire */}
-        <form action="#" method="post" className="grid gap-5 md:grid-cols-2">
+        <form action="#" method="post" className="grid gap-6 md:grid-cols-2">
           {/* Colonne gauche */}
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Pseudo en jeu
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder="Pseudo + tag (ex : Coussinho#NA1)"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Rang / MMR
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder={rankPlaceholder}
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Rôle / position
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder={rolePlaceholder}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+                <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                   Âge
                 </label>
                 <input
                   type="number"
                   min={13}
                   max={99}
-                  className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                  className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+                <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                   Timezone / région
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                  className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                   placeholder="Ex : NA-EST (QC), EUW (FR), etc."
                 />
               </div>
@@ -324,52 +324,52 @@ function FormModal({
           {/* Colonne droite */}
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Discord
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder="Ton @Discord complet"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Disponibilités
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder={dispoPlaceholder}
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Expérience en équipe
               </label>
               <textarea
-                className="min-h-[96px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="min-h-[96px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder={experiencePlaceholder}
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-xs sm:text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
                 Ce que tu recherches chez DME
               </label>
               <textarea
-                className="min-h-[80px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="min-h-[80px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
                 placeholder={objectifsPlaceholder}
               />
             </div>
           </div>
 
-          <div className="md:col-span-2 mt-3 flex justify-end">
+          <div className="md:col-span-2 mt-4 flex justify-end">
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-full bg-red-600 px-6 sm:px-8 py-2.5 sm:py-3 text-[11px] sm:text-sm font-semibold uppercase tracking-[0.2em]
+              className="inline-flex items-center justify-center rounded-full bg-red-600 px-8 py-3 text-sm font-semibold uppercase tracking-[0.2em]
                          text-white shadow-[0_0_22px_rgba(239,68,68,0.9)]
                          hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)] transition"
             >
@@ -413,24 +413,23 @@ export default function RecrutementPage() {
           </div>
 
           <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-extrabold">
-            Rejoindre{" "}
-            <span className="text-red-500">DeathMark E-Sports</span>
+            Rejoindre <span className="text-red-500">DeathMark E-Sports</span>
           </h1>
 
-          <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-white/85">
+          <p className="mt-4 text-base sm:text-lg text-white/85">
             Tu veux faire partie d’une structure ambitieuse, sérieuse et en
             constante évolution ? Choisis ton jeu et tente ta chance pour
             rejoindre nos rangs.
           </p>
         </header>
 
-        {/* ===== CARTES DE JEUX (responsive) ===== */}
-        <main className="mx-auto w-full max-w-6xl lg:max-w-[90rem] px-4 sm:px-6 lg:px-10 pb-16 sm:pb-20">
-          <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {/* ===== CARTES DE JEUX (même taille qu'avant) ===== */}
+        <main className="mx-auto w-full max-w-[140rem] px-4 sm:px-10 pb-16 sm:pb-20">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {jeuxRecrutement.map((jeu) => (
               <article
                 key={jeu.id}
-                className="relative flex h-full flex-col rounded-3xl border border-red-700/90 bg-black/85 px-5 sm:px-6 lg:px-8 pb-8 sm:pb-10 pt-8 sm:pt-10
+                className="relative flex h-[670px] flex-col rounded-3xl border border-red-700/90 bg-black/85 px-8 pb-10 pt-10
                            shadow-[0_0_32px_rgba(0,0,0,0.85)]
                            hover:border-red-500 hover:shadow-[0_0_45px_rgba(248,113,113,0.8)] transition"
               >
@@ -438,14 +437,14 @@ export default function RecrutementPage() {
                 <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/25" />
 
                 {/* logo */}
-                <div className="relative mb-6 sm:mb-8 flex items-center justify-center">
-                  <div className="flex h-[110px] sm:h-[130px] w-full items-center justify-center rounded-xl bg-black/80">
+                <div className="relative mb-8 flex items-center justify-center">
+                  <div className="flex h-[130px] w-full items-center justify-center rounded-xl bg-black/80">
                     <Image
                       src={jeu.logoSrc}
                       alt={jeu.nom}
                       width={260}
                       height={130}
-                      className="max-h-[100px] sm:max-h-[120px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
+                      className="max-h-[120px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
                     />
                   </div>
                 </div>
@@ -453,23 +452,22 @@ export default function RecrutementPage() {
                 {/* contenu + bouton, avec alignement bas */}
                 <div className="relative flex flex-1 flex-col justify-between">
                   <div>
-                    <h2 className="text-base sm:text-lg font-bold uppercase text-red-400 tracking-wide">
+                    <h2 className="text-lg font-bold uppercase text-red-400 tracking-wide">
                       {jeu.nom}
                     </h2>
-                    <p className="mt-1 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
                       {jeu.roleTexte}
                     </p>
 
-                    <p className="mt-3 sm:mt-4 text-[13px] sm:text-[15px] leading-relaxed text-white/90">
+                    <p className="mt-4 text-[15px] leading-relaxed text-white/90">
                       {jeu.description}
                     </p>
                   </div>
 
-                  <div className="pt-5 sm:pt-6">
+                  <div className="pt-6">
                     <Link
                       href={jeu.lienFormulaire}
-                      target="_blank"
-                      className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-4 sm:px-5 py-2.5 sm:py-3 text-[11px] sm:text-sm font-semibold uppercase tracking-[0.18em]
+                      className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
                                  text-white shadow-[0_0_22px_rgba(239,68,68,0.9)]
                                  hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)] transition"
                     >
@@ -481,7 +479,7 @@ export default function RecrutementPage() {
             ))}
           </div>
 
-          {/* ===== MODALS DE FORMULAIRE (optionnels, cachés par défaut) ===== */}
+          {/* ===== MODALS DE FORMULAIRE ===== */}
           {formsConfig.map((cfg) => (
             <FormModal key={cfg.id} {...cfg} />
           ))}

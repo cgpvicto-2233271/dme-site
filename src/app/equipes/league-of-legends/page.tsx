@@ -37,7 +37,14 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-    "/medias/sponsors/guru1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/tuninclub.png",
   "/medias/sponsors/rogue1.png",
   "/medias/sponsors/tnt1.png",
@@ -206,9 +213,10 @@ const rosters: Roster[] = [
         nom: "Serban Mihai",
         role: "JUNGLE",
         pays: "CAN/ROM",
-         drapeaux: [
+        drapeaux: [
           { src: "/medias/flags/ca.png", label: "Canada" },
-          { src: "/medias/flags/rom.png", label: "USA" },],
+          { src: "/medias/flags/rom.png", label: "ROM" },
+        ],
         photoSrc: "/logo/kri.png",
         xUrl: "https://x.com/Kripsus09",
       },
@@ -420,7 +428,6 @@ const academyRosters: AcademyRoster[] = [
 
 /* =========================================================
    CARTE PERSONNE (Joueur / Staff) – Semi-Pro
-   + lien X qui apparaît au survol si xUrl est défini
 ========================================================= */
 
 function CartePersonne({ personne }: { personne: Joueur }) {
@@ -462,37 +469,35 @@ function CartePersonne({ personne }: { personne: Joueur }) {
         </div>
 
         {/* Infos pays / drapeaux */}
-          {(personne.pays || personne.drapeauSrc || personne.drapeaux?.length) && (
-            <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
-            {/* Plusieurs drapeaux */}
-             {personne.drapeaux?.length
+        {(personne.pays || personne.drapeauSrc || personne.drapeaux?.length) && (
+          <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
+            {personne.drapeaux?.length
               ? personne.drapeaux.map((d) => (
-              <Image
-                key={d.src}
-                 src={d.src}
-                  alt={d.label || "drapeau"}
-                 width={18}
-                  height={12}
-                  className="h-3 w-auto rounded-[2px] object-cover"
-          />
-             ))
-            : personne.drapeauSrc && (
-          <Image
-            src={personne.drapeauSrc}
-            alt={personne.pays || "drapeau"}
-            width={18}
-            height={12}
-            className="h-3 w-auto rounded-[2px] object-cover"
-          />
-            )}
+                  <Image
+                    key={d.src}
+                    src={d.src}
+                    alt={d.label || "drapeau"}
+                    width={18}
+                    height={12}
+                    className="h-3 w-auto rounded-[2px] object-cover"
+                  />
+                ))
+              : personne.drapeauSrc && (
+                  <Image
+                    src={personne.drapeauSrc}
+                    alt={personne.pays || "drapeau"}
+                    width={18}
+                    height={12}
+                    className="h-3 w-auto rounded-[2px] object-cover"
+                  />
+                )}
 
-          {personne.pays && <span>{personne.pays}</span>}
-        </div>
+            {personne.pays && <span>{personne.pays}</span>}
+          </div>
         )}
-
       </div>
 
-      {/* Lien X qui apparaît au hover (si xUrl présent) */}
+      {/* Lien X */}
       {personne.xUrl && (
         <div
           className="pointer-events-none mt-0 transform opacity-0 transition
@@ -696,17 +701,14 @@ type Props = {
 };
 
 export default function LeagueOfLegendsPage({ searchParams }: Props) {
+  // ?niveau=academie ou ?niveau=semi-pro
   const niveauParam = (searchParams?.niveau ?? "").toLowerCase();
 
-  const vue: "chooser" | "semi-pro" | "academie" =
-    niveauParam === "semi-pro"
-      ? "semi-pro"
-      : niveauParam === "academie"
-      ? "academie"
-      : "chooser";
+  // vue par défaut : Semi-Pro
+  const vue: "semi-pro" | "academie" =
+    niveauParam === "academie" ? "academie" : "semi-pro";
 
   const rostersSemi = rosters.filter((r) => r.niveau === "Semi-Pro");
-
   const track = [...sponsorLogos, ...sponsorLogos];
 
   const academySorted = [...academyRosters].sort(
@@ -730,157 +732,31 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
       <section className="bg-texture min-h-screen">
         <div className="pt-[64px]" />
 
-        {/* ========================= 1) CHOIX NIVEAU ========================= */}
-        {vue === "chooser" && (
-          <main className="mx-auto w-full max-w-[140rem] px-10 pb-20 pt-12">
-            <BoutonRetourJeux />
-
-            <header className="mx-auto max-w-4xl pb-8 text-center">
-              <div className="flex justify-center">
-                <div className="inline-flex items-center gap-3 rounded-full border border-red-600/70 bg-black/70 px-4 py-1 text-sm uppercase tracking-[0.2em] text-red-400">
-                  <span className="h-2 w-2 rounded-full bg-red-500" />
-                  League of Legends – Rosters
-                </div>
-              </div>
-
-              <h1 className="mt-6 text-4xl font-extrabold md:text-5xl">
-                Choisis ton{" "}
-                <span className="text-red-500">niveau d&apos;équipe</span>
-              </h1>
-
-              <p className="mt-4 text-lg text-white/85">
-                DeathMark E-Sports structure ses équipes LoL en deux pôles : un
-                bloc <span className="font-semibold text-red-400">Semi-Pro</span>{" "}
-                tourné vers les résultats, et une{" "}
-                <span className="font-semibold text-red-400">Académie</span>{" "}
-                dédiée à la progression des joueurs.
-              </p>
-            </header>
-
-            <section className="mx-auto mt-4 grid max-w-6xl gap-8 md:grid-cols-2">
-              {/* Semi-Pro */}
-              <Link
-                href="/equipes/league-of-legends?niveau=semi-pro"
-                className="group"
-              >
-                <article className="relative flex h-[420px] flex-col rounded-3xl border border-red-700/90 bg-black/85 px-8 pb-8 pt-10 shadow-[0_0_32px_rgba(0,0,0,0.85)] transition hover:border-red-500 hover:shadow-[0_0_45px_rgba(248,113,113,0.9)]">
-                  <div className="mb-6 flex justify-center">
-                    <div className="flex h-[110px] w-full items-center justify-center rounded-xl bg-black/80">
-                      <Image
-                        src="/logo/logo-dme.png"
-                        alt="Pôle LoL Semi-Pro"
-                        width={200}
-                        height={110}
-                        className="max-h-[100px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="relative flex flex-1 flex-col justify-between">
-                    <div>
-                      <h2 className="text-lg font-bold uppercase tracking-wide text-red-400">
-                        Rosters Semi-Pro
-                      </h2>
-                      <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
-                        Résultats &amp; haut niveau compétitif
-                      </p>
-
-                      <p className="mt-4 text-[15px] leading-relaxed text-white/90">
-                        Équipes inscrites en NACL OQ, ACL, AVL et autres ligues. Staff
-                        complet, cadre sérieux et objectifs élevés pour viser le
-                        haut du classement.
-                      </p>
-
-                      <ul className="mt-4 space-y-1.5 text-[13px] text-white/82">
-                        <li>• Staff complet : coach, analyste, manager</li>
-                        <li>
-                          • Objectif séries &amp; titres dans les ligues majeures
-                        </li>
-                        <li>• Scrims réguliers contre des top teams</li>
-                        <li>• Visibilité sur la scène NA &amp; QC</li>
-                      </ul>
-                    </div>
-
-                    <div className="pt-6">
-                      <span className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_22px_rgba(239,68,68,0.9)] group-hover:bg-red-500 group-hover:shadow-[0_0_30px_rgba(248,113,113,1)]">
-                        Voir les rosters Semi-Pro
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </Link>
-
-              {/* Académie */}
-              <Link
-                href="/equipes/league-of-legends?niveau=academie"
-                className="group"
-              >
-                <article className="relative flex h-[420px] flex-col rounded-3xl border border-red-700/90 bg-black/85 px-8 pb-8 pt-10 shadow-[0_0_32px_rgba(0,0,0,0.85)] transition hover:border-red-500 hover:shadow-[0_0_45px_rgba(248,113,113,0.9)]">
-                  <div className="mb-6 flex justify-center">
-                    <div className="flex h-[110px] w-full items-center justify-center rounded-xl bg-black/80">
-                      <Image
-                        src="/logo/logo-dme.png"
-                        alt="Pôle LoL Académie"
-                        width={200}
-                        height={110}
-                        className="max-h-[100px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="relative flex flex-1 flex-col justify-between">
-                    <div>
-                      <h2 className="text-lg font-bold uppercase tracking-wide text-red-400">
-                        Rosters Académie
-                      </h2>
-                      <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
-                        Progression &amp; évolution vers le Semi-Pro
-                      </p>
-
-                      <p className="mt-4 text-[15px] leading-relaxed text-white/90">
-                        Pour les joueurs qui veulent se développer dans un
-                        environnement encadré, apprendre à jouer en équipe et
-                        viser le Semi-Pro.
-                      </p>
-
-                      <ul className="mt-4 space-y-1.5 text-[13px] text-white/82">
-                        <li>• Focus méca, macro &amp; communication</li>
-                        <li>• Premiers pas en ligues &amp; scrims organisés</li>
-                        <li>• Coaching par un staff DME d&apos;expérience</li>
-                        <li>• Tremplin direct vers nos rosters Semi-Pro</li>
-                      </ul>
-                    </div>
-
-                    <div className="pt-6">
-                      <span className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_22px_rgba(239,68,68,0.9)] group-hover:bg-red-500 group-hover:shadow-[0_0_30px_rgba(248,113,113,1)]">
-                        Voir les projets &amp; équipes
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </Link>
-            </section>
-          </main>
-        )}
-
-        {/* ========================= 2) SEMI-PRO ========================= */}
+        {/* ========================= SEMI-PRO (vue par défaut) ========================= */}
         {vue === "semi-pro" && (
           <main className="mx-auto w-full max-w-[100rem] px-6 pb-24 pt-10 sm:px-10">
+            <BoutonRetourJeux />
+
             <header className="mb-12 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <h1 className="text-4xl font-extrabold">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-400">
+                  League of Legends – Semi-Pro
+                </p>
+                <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
                   Rosters <span className="text-red-500">Semi-Pro</span>
                 </h1>
-                <p className="mt-2 text-sm text-white/80">
-                  Présentation de nos équipes alignées dans les ligues majeures.
+                <p className="mt-2 max-w-2xl text-sm text-white/80">
+                  Présentation de nos équipes alignées dans les ligues majeures
+                  (ACL, AVL, NACL OQ). Staff complet, cadre sérieux et
+                  objectifs de haut de tableau.
                 </p>
               </div>
 
               <Link
-                href="/equipes/league-of-legends"
-                className="inline-flex items-center rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
+                href="/equipes/league-of-legends/academie"
+                className="inline-flex items-center gap-2 rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
               >
-                ← Retour au choix des niveaux
+                Voir les rosters Académie →
               </Link>
             </header>
 
@@ -927,9 +803,11 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
           </main>
         )}
 
-        {/* ========================= 3) ACADÉMIE ========================= */}
+        {/* ========================= ACADÉMIE ========================= */}
         {vue === "academie" && (
           <main className="mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
+            <BoutonRetourJeux />
+
             <header className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-400">
@@ -947,10 +825,10 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
               </div>
 
               <Link
-                href="/equipes/league-of-legends"
+                href="/equipes/league-of-legend/academie"
                 className="inline-flex items-center gap-2 rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
               >
-                ← Retour au choix des niveaux
+                ← Revenir aux rosters Semi-Pro
               </Link>
             </header>
 
