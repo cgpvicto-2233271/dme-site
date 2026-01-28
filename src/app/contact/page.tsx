@@ -203,16 +203,31 @@ export default function ContactPage() {
                   </p>
                 </div>
 
+                {/* ✅ MODIF 1 : Communauté 2000+ */}
                 <div className="rounded-3xl border border-neutral-800 bg-neutral-900/90 px-5 py-5 text-center shadow-[0_18px_45px_rgba(0,0,0,0.85)]">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-red-400">
                     Communauté
                   </p>
                   <p className="mt-2 text-2xl font-extrabold text-white">
-                    1500+
+                    2000+
                   </p>
                   <p className="mt-2 text-xs text-white/75">
                     Membres sur nos plateformes (Discord, réseaux sociaux,
                     viewers) avec une base très présente sur la scène QC & FR.
+                  </p>
+                </div>
+
+                {/* ✅ MODIF 2 : Earn 6200$ */}
+                <div className="rounded-3xl border border-neutral-800 bg-neutral-900/90 px-5 py-5 text-center shadow-[0_18px_45px_rgba(0,0,0,0.85)]">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-red-400">
+                    Earn (1 an)
+                  </p>
+                  <p className="mt-2 text-2xl font-extrabold text-white">
+                    6200$
+                  </p>
+                  <p className="mt-2 text-xs text-white/75">
+                    Récompenses cumulées en 1 an d’existence, via nos runs en
+                    tournois et ligues.
                   </p>
                 </div>
 
@@ -427,7 +442,7 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-4">
                 <div className="rounded-3xl border border-neutral-800 bg-neutral-900/90 px-6 py-6 text-center shadow-[0_18px_45px_rgba(0,0,0,0.85)]">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-400">
                     Rosters
@@ -442,17 +457,32 @@ export default function ContactPage() {
                   </p>
                 </div>
 
+                {/* ✅ MODIF 1 : Communauté 2000+ */}
                 <div className="rounded-3xl border border-neutral-800 bg-neutral-900/90 px-6 py-6 text-center shadow-[0_18px_45px_rgba(0,0,0,0.85)]">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-400">
                     Communauté
                   </p>
                   <p className="mt-2 text-3xl font-extrabold text-white">
-                    1500+
+                    2000+
                   </p>
                   <p className="mt-2 text-sm text-white/75">
                     Membres sur nos plateformes (Discord, réseaux sociaux,
                     viewers réguliers), avec une base très présente sur la scène
                     québécoise et francophone.
+                  </p>
+                </div>
+
+                {/* ✅ MODIF 2 : Earn 6200$ */}
+                <div className="rounded-3xl border border-neutral-800 bg-neutral-900/90 px-6 py-6 text-center shadow-[0_18px_45px_rgba(0,0,0,0.85)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-400">
+                    Earn (1 an)
+                  </p>
+                  <p className="mt-2 text-3xl font-extrabold text-white">
+                    6200$
+                  </p>
+                  <p className="mt-2 text-sm text-white/75">
+                    Récompenses cumulées en 1 an d’existence, via nos runs en
+                    tournois et ligues.
                   </p>
                 </div>
 

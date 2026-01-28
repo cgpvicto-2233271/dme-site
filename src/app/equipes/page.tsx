@@ -37,10 +37,24 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
 ];
 
-/* --- Jeux cliquables --- */
-const GAMES = [
+/* --- Jeux --- */
+type GameItem = {
+  href: string;
+  src: string;
+  label: string;
+  comingSoon?: boolean;
+};
+
+const GAMES: GameItem[] = [
   {
     href: "/equipes/rocket-league",
     src: "/medias/commun/banner-rocketleague.png",
@@ -65,6 +79,7 @@ const GAMES = [
     href: "/equipes/rainbow-six",
     src: "/medias/commun/banner-r6.png",
     label: "Rainbow Six Siege",
+    comingSoon: true,
   },
 ];
 
@@ -72,27 +87,65 @@ type GameCardProps = {
   href: string;
   src: string;
   label: string;
+  comingSoon?: boolean;
 };
 
-function GameCard({ href, src, label }: GameCardProps) {
+function GameCard({ href, src, label, comingSoon }: GameCardProps) {
+  const estComingSoon = !!comingSoon;
+
+  const baseClass = `
+    relative overflow-hidden rounded-2xl
+    w-[14rem] h-[21rem]
+    border-4 border-red-600 bg-black/40
+    shadow-[0_0_18px_rgba(255,0,0,0.4)]
+    transition
+  `;
+
+  /* ===== COMING SOON : AUCUNE IMAGE ===== */
+  if (estComingSoon) {
+    return (
+      <div
+        className={`${baseClass} opacity-95`}
+        title="New game - Coming Soon"
+        aria-disabled="true"
+      >
+        {/* halo */}
+        <div className="pointer-events-none absolute inset-0 ring-1 ring-red-500/30" />
+
+        {/* fond full noir / rouge (aucune image) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-red-950/40" />
+        <div className="absolute inset-0 bg-black/60" />
+
+        {/* texte */}
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="text-center px-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+              New Game
+            </p>
+            <p className="mt-2 text-2xl font-extrabold uppercase tracking-[0.2em] text-red-500">
+              Coming Soon
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ===== CARTE NORMALE ===== */
   return (
     <Link
       href={href}
-      className="
-        group relative block overflow-hidden rounded-2xl
-        w-[14rem] h-[21rem]
-        border-4 border-red-600 bg-black/40
-        shadow-[0_0_18px_rgba(255,0,0,0.4)]
-        transition
+      className={`${baseClass}
+        group block
         hover:scale-[1.04] hover:border-red-500
         hover:shadow-[0_0_32px_rgba(255,0,0,0.7)]
-      "
+      `}
       title={label}
     >
-      {/* halo subtil */}
+      {/* halo */}
       <div className="pointer-events-none absolute inset-0 ring-1 ring-red-500/30" />
 
-      {/* fumée au survol */}
+      {/* fumée au hover */}
       <span
         aria-hidden
         className="
@@ -104,7 +157,7 @@ function GameCard({ href, src, label }: GameCardProps) {
         "
       />
 
-      {/* image du jeu */}
+      {/* image */}
       <Image
         src={src}
         alt={label}
@@ -113,7 +166,7 @@ function GameCard({ href, src, label }: GameCardProps) {
         className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.06]"
       />
 
-      {/* overlay + texte au survol */}
+      {/* overlay texte */}
       <div className="absolute inset-0 grid place-items-center bg-black/55 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <span className="px-3 text-center text-lg font-bold text-white drop-shadow">
           {label}
@@ -128,7 +181,7 @@ export default function EquipesPage() {
 
   return (
     <div className="bg-black text-white">
-      {/* ===== Bande sponsors (fond noir uniquement) ===== */}
+      {/* ===== Bande sponsors ===== */}
       <div className="marquee relative z-0 border-y border-red-600 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
@@ -139,9 +192,8 @@ export default function EquipesPage() {
         </div>
       </div>
 
-      {/* ===== Contenu principal avec fond texturé ===== */}
+      {/* ===== Contenu ===== */}
       <section className="bg-texture min-h-screen">
-        {/* espace sous la nav fixe */}
         <div className="pt-[64px]" />
 
         {/* HERO */}
@@ -151,7 +203,7 @@ export default function EquipesPage() {
             Nos équipes
           </div>
 
-          <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-4xl font-extrabold md:text-5xl lg:text-6xl">
             L&apos;effectif{" "}
             <span className="text-red-500">compétitif DeathMark</span>
           </h1>
@@ -163,7 +215,7 @@ export default function EquipesPage() {
           </p>
         </header>
 
-        {/* SECTION JEUX */}
+        {/* CARTES */}
         <section className="mx-auto max-w-[90rem] px-4 pb-16">
           <h2 className="mb-6 text-center text-2xl font-semibold text-red-400">
             Sélectionne un jeu
@@ -176,12 +228,13 @@ export default function EquipesPage() {
                 href={game.href}
                 src={game.src}
                 label={game.label}
+                comingSoon={game.comingSoon}
               />
             ))}
           </div>
         </section>
 
-        {/* SECTION TEXTE / VISION COMPÉTITIVE */}
+        {/* TEXTE */}
         <section className="mx-auto max-w-5xl px-6 pb-20">
           <div className="grid gap-6 md:grid-cols-3">
             <div className="rounded-2xl border border-red-700/80 bg-black/80 p-5 shadow-[0_0_20px_rgba(0,0,0,0.8)]">
@@ -190,8 +243,8 @@ export default function EquipesPage() {
               </p>
               <h3 className="mt-2 text-lg font-semibold">Rosters structurés</h3>
               <p className="mt-2 text-sm text-white/80">
-                Chaque équipe a des objectifs clairs, un planning de scrims et
-                un suivi régulier pour progresser split après split.
+                Des objectifs clairs, des scrims réguliers et un suivi simple
+                pour progresser split après split et performer quand ça compte.
               </p>
             </div>
 
@@ -203,8 +256,8 @@ export default function EquipesPage() {
                 Accompagnement des joueurs
               </h3>
               <p className="mt-2 text-sm text-white/80">
-                Coaching, review, structure : l&apos;objectif est de faire
-                évoluer les joueurs dans le temps, pas seulement sur un split.
+                Coaching, review et échanges : on aide les joueurs à progresser
+                mécaniquement et collectivement, dans un cadre sérieux.
               </p>
             </div>
 
@@ -216,9 +269,9 @@ export default function EquipesPage() {
                 ADN DeathMark E-Sports
               </h3>
               <p className="mt-2 text-sm text-white/80">
-                Un style de jeu assumé, une image forte sur les réseaux et une
-                volonté de s&apos;installer parmi les structures les plus
-                sérieuses de la scène.
+                Une structure ambitieuse, une image forte et des valeurs claires
+                : travail, respect, engagement et envie de s’imposer sur la
+                scène.
               </p>
             </div>
           </div>
@@ -227,4 +280,3 @@ export default function EquipesPage() {
     </div>
   );
 }
-

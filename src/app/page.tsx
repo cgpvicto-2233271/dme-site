@@ -7,19 +7,19 @@ const bestOfVideos = [
     id: "lol",
     titre: "Best-of League of Legends",
     sousTitre: "Highlights des rosters LoL",
-    youtubeId: "1qsvs8eyQK0", // remplace par l'ID de ta vidéo
+    youtubeId: "1qsvs8eyQK0",
   },
   {
     id: "league",
     titre: "Best-of League of Legends",
     sousTitre: "Clutch & plays explosifs",
-    youtubeId: "J8EiMbRO4do", // remplace
+    youtubeId: "J8EiMbRO4do",
   },
   {
     id: "leagueoflegends",
     titre: "Best-of League of Legends",
     sousTitre: "Bangers",
-    youtubeId: "xsW5fzRhPpg", // remplace
+    youtubeId: "xsW5fzRhPpg",
   },
 ];
 
@@ -109,7 +109,7 @@ export default function Home() {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
                   Jeux
                 </p>
-                <p className="mt-1 text-lg font-bold">LoL, Valorant, RL, R6, MR</p>
+                <p className="mt-1 text-lg font-bold">LoL, Valorant, RL, MR</p>
                 <p className="mt-1 text-xs text-white/70">
                   Priorité au sérieux des projets et au suivi des équipes.
                 </p>
@@ -129,9 +129,7 @@ export default function Home() {
           {/* Bloc valeurs */}
           <div className="flex-1">
             <div className="rounded-2xl bg-black/40 p-6 backdrop-blur-md md:p-7">
-              <h3 className="mb-3 text-xl font-semibold">
-                Nos piliers chez DME
-              </h3>
+              <h3 className="mb-3 text-xl font-semibold">Nos piliers chez DME</h3>
               <div className="space-y-4 text-sm text-white/95">
                 <div>
                   <p className="font-semibold">Intégrité &amp; respect</p>
@@ -175,77 +173,98 @@ export default function Home() {
           {/* header centré */}
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold md:text-3xl">
-              Dernières nouvelles DME
+              Derniers résultats &amp; actus DME
             </h2>
             <p className="mt-2 text-sm text-white/75">
-              Une sorte de mini newsletter pour rester à jour sur ce qui se
-              passe chez DeathMark E-Sports.
+              Le recap simple et rapide de ce qu&apos;on vient d&apos;accomplir, et
+              de ce qui arrive ensuite.
             </p>
           </div>
 
-          {/* liste verticale type newsletter */}
           <div className="space-y-5">
+            {/* AVL CHAMPIONS (gros bloc mis en avant) */}
+            <article className="relative overflow-hidden rounded-3xl border border-red-600/80 bg-gradient-to-br from-black via-[#140000] to-black p-6 shadow-[0_0_34px_rgba(239,68,68,0.55)]">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(239,68,68,0.35),_transparent_60%)]" />
+
+              <div className="relative">
+                <div className="flex flex-wrap items-center justify-between gap-3 text-[11px]">
+                  <p className="font-semibold uppercase tracking-[0.22em] text-red-200">
+                    League of Legends
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="rounded-full border border-amber-400/60 bg-amber-500/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200">
+                      Champions AVL
+                    </span>
+                    <span className="rounded-full border border-red-500/40 bg-red-600/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-red-100">
+                      Circuit Aegis
+                    </span>
+                  </div>
+                </div>
+
+                <h3 className="mt-3 text-lg font-extrabold md:text-xl">
+                  DME remporte l&apos;AVL — une première historique pour une structure québécoise
+                </h3>
+
+                <p className="mt-3 text-sm leading-relaxed text-white/90">
+                  C&apos;est un cap majeur pour nous : DME devient la{" "}
+                  <span className="font-semibold">
+                    première organisation québécoise
+                  </span>{" "}
+                  à décrocher un titre dans le circuit Aegis. Un run construit par
+                  les joueurs, le staff, et toute la communauté.
+                </p>
+
+                <p className="mt-3 text-xs leading-relaxed text-white/80">
+                  On va continuer à pousser : garder le niveau, rester constants, et
+                  représenter le Québec comme il faut.
+                </p>
+              </div>
+            </article>
+
+            {/* LAN CSF PASSEE */}
             <article className="rounded-2xl border border-red-700/70 bg-[#09090f] p-5 shadow-[0_0_18px_rgba(0,0,0,0.8)]">
               <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
                 <p className="font-semibold uppercase tracking-[0.22em] text-red-300">
-                  League of Legends
+                  Évènements
                 </p>
                 <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/70">
-                  Saison en cours
+                  LAN terminée
                 </span>
               </div>
               <h3 className="mt-2 text-sm font-bold">
-                DME Voltigeurs poursuit sa saison en AVL
+                LAN CSF : merci à ceux qui sont venus nous voir
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-white/80">
-                Le roster Semi-Pro continue sa progression en Aegis Vanguard
-                League avec un suivi rapproché du staff et des objectifs
-                clairs : stabilité, séries et constance de résultats.
+                La LAN CSF est maintenant derrière nous. Gros shoutout à tous ceux qui
+                sont passés, qui ont supporté, et qui ont pris le temps de jaser avec
+                nous IRL. On repart avec de l&apos;énergie pour la suite.
               </p>
             </article>
 
+            {/* PROCHAINE LAN ETS */}
             <article className="rounded-2xl border border-red-700/70 bg-[#09090f] p-5 shadow-[0_0_18px_rgba(0,0,0,0.8)]">
               <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
                 <p className="font-semibold uppercase tracking-[0.22em] text-red-300">
-                  Recrutement
+                  Prochain rendez-vous
                 </p>
-                <span className="rounded-full border border-red-500/40 bg-red-600/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-red-200">
-                  Postes ouverts
+                <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/70">
+                  29–31 mai 2026
                 </span>
               </div>
               <h3 className="mt-2 text-sm font-bold">
-                Places en Académie et rôles staff disponibles
+                Prochaine étape : LAN ETS (29–31 mai 2026)
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-white/80">
-                DME ouvre régulièrement des places pour des joueurs , ainsi que des rôles de coach, analyste et manager. Si
-                tu veux t&apos;investir dans un projet encadré, c&apos;est le bon
-                moment pour postuler.
+                On se retrouve au prochain gros event : la LAN ETS du{" "}
+                <span className="font-semibold">29 au 31 mai 2026</span>. On donnera
+                les infos (présence, horaires, annonces) sur nos réseaux dès que c&apos;est confirmé.
               </p>
               <Link
-                href="/recrutement"
+                href="/social"
                 className="mt-3 inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-red-300 hover:text-red-200"
               >
-                Candidater maintenant →
+                Suivre les annonces →
               </Link>
-            </article>
-
-            <article className="rounded-2xl border border-red-700/70 bg-[#09090f] p-5 shadow-[0_0_18px_rgba(0,0,0,0.8)]">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                <p className="font-semibold uppercase tracking-[0.22em] text-red-300">
-                  Communauté
-                </p>
-                <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/70">
-                  Soirées internes
-                </span>
-              </div>
-              <h3 className="mt-2 text-sm font-bold">
-                Soirées communautaires &amp; scrims internes
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-white/80">
-                En dehors des matchs officiels, DME organise des soirées chill,
-                des mixes entre rosters et des scrims internes pour garder une
-                ambiance saine, tester des joueurs et développer la synergie.
-              </p>
             </article>
           </div>
         </div>
@@ -335,35 +354,35 @@ export default function Home() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
-            {/* LAN CSF */}
+            {/* LAN ETS */}
             <article className="relative overflow-hidden rounded-3xl border border-red-700/80 bg-gradient-to-br from-black via-[#120000] to-black p-6 shadow-[0_0_28px_rgba(0,0,0,0.9)]">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(239,68,68,0.18),_transparent_55%)]" />
               <div className="relative">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-red-300">
-                  LAN CSF 2026
+                  LAN ETS 2026
                 </p>
                 <h3 className="mt-2 text-xl font-bold">
-                  Présence de DME à la LAN CSF – Janvier 2026
+                  Prochaine LAN : ETS (29–31 mai 2026)
                 </h3>
                 <p className="mt-3 text-sm text-white/85">
-                  DeathMark E-Sports sera présent à la LAN CSF en janvier 2026,
-                  avec des joueurs et du staff sur place. L&apos;occasion de
-                  rencontrer la structure, supporter nos équipes et vivre
-                  l&apos;évènement IRL.
+                  La prochaine date à noter, c&apos;est la LAN ETS du{" "}
+                  <span className="font-semibold">29 au 31 mai 2026</span>. On
+                  partagera les détails (présence, équipes, horaires, contenu) sur
+                  nos réseaux dès que tout est verrouillé.
                 </p>
 
                 <ul className="mt-4 text-xs text-white/80">
-                  <li>• Tournois sur place et rencontres avec la communauté</li>
-                  <li>• Discussions avec le staff sur les projets 2026</li>
-                  <li>• Contenu et coverage via nos réseaux sociaux</li>
+                  <li>• Meet-up &amp; échanges avec la communauté</li>
+                  <li>• Coverage et contenu sur place</li>
+                  <li>• Annonces possibles autour des projets 2026</li>
                 </ul>
 
                 <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px]">
                   <span className="rounded-full border border-white/20 bg-black/60 px-3 py-1 uppercase tracking-[0.2em] text-white/80">
-                    Janvier 2026
+                    29–31 mai 2026
                   </span>
                   <span className="rounded-full border border-red-500/60 bg-red-600/30 px-3 py-1 uppercase tracking-[0.2em] text-red-100">
-                    LAN CSF
+                    LAN ETS
                   </span>
                 </div>
               </div>
@@ -371,9 +390,7 @@ export default function Home() {
 
             {/* petit bloc liens / réseaux */}
             <aside className="flex flex-col gap-4 rounded-3xl bg-black/70 p-5 text-center md:text-left">
-              <p className="text-sm font-semibold">
-                Suivre DME avant la LAN CSF
-              </p>
+              <p className="text-sm font-semibold">Suivre DME</p>
               <p className="text-xs text-white/80">
                 Annonces, line-up définitifs, horaires de matches et contenu
                 seront partagés sur nos réseaux.
@@ -384,6 +401,15 @@ export default function Home() {
               >
                 Voir nos réseaux
               </Link>
+
+              <div className="rounded-2xl border border-white/15 bg-black/60 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70">
+                  Note
+                </p>
+                <p className="mt-2 text-xs text-white/75">
+                  La LAN CSF est passée — merci à tous ceux qui ont supporté IRL.
+                </p>
+              </div>
             </aside>
           </div>
         </div>
@@ -400,5 +426,3 @@ export default function Home() {
     </div>
   );
 }
-
-

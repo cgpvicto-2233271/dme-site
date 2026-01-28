@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { achievements, GAME_LABELS } from "../_data";
+import { achievements } from "../_data";
 
 export const metadata: Metadata = {
   title: "Hall Of Fame – League of Legends | DeathMark E-Sports",
@@ -16,21 +16,21 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/tuninclub.png",
   "/medias/sponsors/rogue1.png",
   "/medias/sponsors/tnt1.png",
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/tuninclub.png",
   "/medias/sponsors/rogue1.png",
   "/medias/sponsors/tnt1.png",
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/tuninclub.png",
   "/medias/sponsors/rogue1.png",
   "/medias/sponsors/tnt1.png",
@@ -41,8 +41,75 @@ const sponsorLogos = [
 
 const track = [...sponsorLogos, ...sponsorLogos];
 
+/* ===== Types ===== */
+type ResultType = "LAN" | "ONLINE";
+type Category = "AEGIS" | "ONLINE";
+
+type Achievement = {
+  id: string;
+  type: ResultType;
+  jeu: string;
+  category?: Category;
+  titre: string;
+  sousTitre: string;
+  description: string;
+  cashprize?: string;
+  badge?: string;
+  bannerSrc?: string;
+  bannerAlt?: string;
+};
+
+type LolManual = Omit<Achievement, "jeu"> & { jeu: "lol" };
+
+/* ===== Labels locaux (remplace GAME_LABELS) ===== */
+function labelJeu(jeu: string) {
+  const j = jeu.toLowerCase();
+  if (j === "lol" || j === "league-of-legends") return "League of Legends";
+  return jeu;
+}
+
+/* ===== Nouveaux resultats LoL (sans toucher _data) ===== */
+const NOUVEAUX_RESULTATS_LOL: LolManual[] = [
+  {
+    id: "lol-aegis-avl-1",
+    type: "ONLINE",
+    jeu: "lol",
+    category: "AEGIS",
+    titre: "Champions — Aegis Vanguard League",
+    sousTitre: "League of Legends",
+    description:
+      "Titre majeur en ligue Aegis : une victoire qui marque un cap pour DeathMark E-Sports sur la scène compétitive.",
+    cashprize: "2 450$",
+    badge: "1ère place",
+    bannerSrc: "/medias/commun/avl.png", // <- mets ta bannière ici
+    bannerAlt: "Champions Aegis Vanguard League — 2 450$",
+  },
+  {
+    id: "lol-lan-csf-3",
+    type: "LAN",
+    jeu: "lol",
+    category: "ONLINE",
+    titre: "Podium — LAN CSF",
+    sousTitre: "League of Legends",
+    description:
+      "Top 3 en LAN : podium confirmé et performance qui renforce la crédibilité de DeathMark E-Sports.",
+    cashprize: "600$",
+    badge: "3e place",
+    bannerSrc: "/medias/commun/Lan_CSF.png", // <- mets ta bannière ici
+    bannerAlt: "LAN CSF LoL — 3e place — 600$",
+  },
+];
+
 export default function HallOfFameLolPage() {
-  const filtered = achievements.filter((a) => a.jeu === "lol");
+  const achievementsTyped = achievements as Achievement[];
+
+  const baseLol = achievementsTyped.filter((a) => a.jeu === "lol");
+
+  // Merge: nouveaux + data, sans doublons par id
+  const merged: Achievement[] = [
+    ...NOUVEAUX_RESULTATS_LOL,
+    ...baseLol.filter((a) => !NOUVEAUX_RESULTATS_LOL.some((n) => n.id === a.id)),
+  ];
 
   return (
     <div className="bg-black text-white">
@@ -51,7 +118,12 @@ export default function HallOfFameLolPage() {
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
-              <Image src={src} alt={`Sponsor ${i + 1}`} width={120} height={60} />
+              <Image
+                src={src}
+                alt={`Sponsor ${i + 1}`}
+                width={120}
+                height={60}
+              />
             </div>
           ))}
         </div>
@@ -74,19 +146,18 @@ export default function HallOfFameLolPage() {
           </div>
 
           <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-            Hall Of Fame{" "}
-            <span className="text-red-500">League of Legends</span>
+            Hall Of Fame <span className="text-red-500">League of Legends</span>
           </h1>
 
           <p className="mt-3 text-sm sm:text-base md:text-lg text-white/85">
-            LANs, ligues en ligne, Aegis &amp; NACL : tous les résultats
-            DeathMark E-Sports sur League of Legends.
+            LANs, ligues en ligne, Aegis &amp; NACL : tous les résultats DeathMark
+            E-Sports sur League of Legends.
           </p>
         </header>
 
         {/* Liste des résultats LoL */}
         <main className="mx-auto w-full max-w-5xl lg:max-w-[102rem] px-4 sm:px-6 pb-16">
-          {filtered.length === 0 ? (
+          {merged.length === 0 ? (
             <div className="mx-auto max-w-xl rounded-2xl border border-red-700/70 bg-black/80 px-5 sm:px-6 py-6 text-xs sm:text-sm text-center text-white/80">
               Aucun résultat League of Legends n&apos;est enregistré pour le
               moment.
@@ -97,7 +168,7 @@ export default function HallOfFameLolPage() {
             </div>
           ) : (
             <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:gap-10">
-              {filtered.map((item) => (
+              {merged.map((item) => (
                 <article
                   key={item.id}
                   className="relative overflow-hidden rounded-2xl border border-red-700/80 bg-black/80 px-5 sm:px-6 md:px-7 py-5 sm:py-6 md:py-7 shadow-[0_0_24px_rgba(0,0,0,0.7)]"
@@ -119,7 +190,7 @@ export default function HallOfFameLolPage() {
                         </span>
 
                         <span className="inline-flex items-center rounded-full border border-white/20 bg-black/60 px-3 py-1 text-[11px] sm:text-xs font-semibold text-white/75">
-                          {GAME_LABELS[item.jeu]}
+                          {labelJeu(item.jeu)}
                         </span>
 
                         {item.category === "AEGIS" && (

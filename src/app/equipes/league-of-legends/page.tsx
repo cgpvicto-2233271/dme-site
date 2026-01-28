@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Équipes League of Legends | DeathMark E-Sports",
 };
 
+/* =========================================================
+   CONFIG
+   - Saison terminée : on masque TOUT pour les joueurs Semi-Pro
+   (nom, pseudo, role, pays, drapeaux, lien X, photo)
+   - Le staff (ex: manager) reste visible
+========================================================= */
+
+const SAISON_TERMINEE_SEMI_PRO = true;
+
 /* --- Sponsors --- */
 const sponsorLogos = [
   "/medias/sponsors/guru1.png",
@@ -80,9 +89,7 @@ type Roster = {
 };
 
 /* --- Académie --- */
-
 type Lane = "TOP" | "JUNGLE" | "MID" | "ADC" | "SUPPORT";
-
 type AcademyRank = "Master" | "Diamond" | "Emerald" | "Platinum" | "Gold";
 
 type AcademyPlayer = {
@@ -427,10 +434,27 @@ const academyRosters: AcademyRoster[] = [
 ];
 
 /* =========================================================
-   CARTE PERSONNE (Joueur / Staff) – Semi-Pro
+   HELPERS
 ========================================================= */
 
-function CartePersonne({ personne }: { personne: Joueur }) {
+function isManager(personne: Joueur) {
+  return (personne.role || "").toUpperCase() === "MANAGER";
+}
+
+/* =========================================================
+   CARTE PERSONNE (Joueur / Staff) – Semi-Pro
+   - Saison terminée : on masque TOUT pour les joueurs (pas le staff)
+========================================================= */
+
+function CartePersonne({
+  personne,
+  masquerTout = false,
+}: {
+  personne: Joueur;
+  masquerTout?: boolean;
+}) {
+  const masquer = masquerTout && !isManager(personne);
+
   return (
     <article
       className="group relative flex h-[340px] flex-col overflow-hidden rounded-3xl border border-red-700/90
@@ -443,14 +467,40 @@ function CartePersonne({ personne }: { personne: Joueur }) {
 
       {/* Image */}
       <div className="relative mb-5 flex items-center justify-center">
-        <div className="flex h-[180px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black/80">
-          <Image
-            src={personne.photoSrc || "/logo/logo-dme.png"}
-            alt={personne.pseudo}
-            width={220}
-            height={180}
-            className="h-full w-auto object-contain"
-          />
+        <div className="relative flex h-[180px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black/80">
+          {!masquer && (
+            <Image
+              src={personne.photoSrc || "/logo/logo-dme.png"}
+              alt={personne.pseudo}
+              width={220}
+              height={180}
+              className="h-full w-auto object-contain"
+            />
+          )}
+
+          {masquer && (
+            <>
+              <div className="absolute inset-0">
+                <Image
+                  src="/logo/logo-dme.png"
+                  alt="DME"
+                  fill
+                  className="object-contain blur-md opacity-70"
+                />
+              </div>
+
+              <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
+                  COMING SOON
+                </p>
+                <p className="mt-1 text-[11px] text-white/60">
+                  Visuels et roster dévoilés prochainement
+                </p>
+              </div>
+
+              <div className="pointer-events-none absolute inset-0 bg-black/35" />
+            </>
+          )}
         </div>
       </div>
 
@@ -458,47 +508,50 @@ function CartePersonne({ personne }: { personne: Joueur }) {
       <div className="relative flex flex-1 flex-col justify-between">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-400">
-            {personne.role}
+            {masquer ? "JOUEUR" : personne.role}
           </p>
 
           <p className="text-base font-bold uppercase text-white">
-            {personne.pseudo}
+            {masquer ? "COMING SOON" : personne.pseudo}
           </p>
 
-          <p className="text-[11px] italic text-white/70">{personne.nom}</p>
+          <p className="text-[11px] italic text-white/70">
+            {masquer ? "—" : personne.nom}
+          </p>
         </div>
 
         {/* Infos pays / drapeaux */}
-        {(personne.pays || personne.drapeauSrc || personne.drapeaux?.length) && (
-          <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
-            {personne.drapeaux?.length
-              ? personne.drapeaux.map((d) => (
-                  <Image
-                    key={d.src}
-                    src={d.src}
-                    alt={d.label || "drapeau"}
-                    width={18}
-                    height={12}
-                    className="h-3 w-auto rounded-[2px] object-cover"
-                  />
-                ))
-              : personne.drapeauSrc && (
-                  <Image
-                    src={personne.drapeauSrc}
-                    alt={personne.pays || "drapeau"}
-                    width={18}
-                    height={12}
-                    className="h-3 w-auto rounded-[2px] object-cover"
-                  />
-                )}
+        {!masquer &&
+          (personne.pays || personne.drapeauSrc || personne.drapeaux?.length) && (
+            <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
+              {personne.drapeaux?.length
+                ? personne.drapeaux.map((d) => (
+                    <Image
+                      key={d.src}
+                      src={d.src}
+                      alt={d.label || "drapeau"}
+                      width={18}
+                      height={12}
+                      className="h-3 w-auto rounded-[2px] object-cover"
+                    />
+                  ))
+                : personne.drapeauSrc && (
+                    <Image
+                      src={personne.drapeauSrc}
+                      alt={personne.pays || "drapeau"}
+                      width={18}
+                      height={12}
+                      className="h-3 w-auto rounded-[2px] object-cover"
+                    />
+                  )}
 
-            {personne.pays && <span>{personne.pays}</span>}
-          </div>
-        )}
+              {personne.pays && <span>{personne.pays}</span>}
+            </div>
+          )}
       </div>
 
-      {/* Lien X */}
-      {personne.xUrl && (
+      {/* Lien X (désactivé si masqué) */}
+      {personne.xUrl && !masquer && (
         <div
           className="pointer-events-none mt-0 transform opacity-0 transition
                      group-hover:pointer-events-auto group-hover:opacity-100"
@@ -696,12 +749,11 @@ function BoutonRetourJeux() {
 
 type Props = {
   searchParams?: {
-    niveau?: string;
+    niveau?: string; // "semi-pro" | "academie"
   };
 };
 
 export default function LeagueOfLegendsPage({ searchParams }: Props) {
-  // ?niveau=academie ou ?niveau=semi-pro
   const niveauParam = (searchParams?.niveau ?? "").toLowerCase();
 
   // vue par défaut : Semi-Pro
@@ -750,8 +802,16 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
                   (ACL, AVL, NACL OQ). Staff complet, cadre sérieux et
                   objectifs de haut de tableau.
                 </p>
+
+                {SAISON_TERMINEE_SEMI_PRO && (
+                  <p className="mt-3 max-w-2xl text-xs text-white/60">
+                    Saison terminée : les informations joueurs sont masquées. Le
+                    roster sera dévoilé prochainement.
+                  </p>
+                )}
               </div>
 
+              {/* IMPORTANT: lien qui marche (query param) */}
               <Link
                 href="/equipes/league-of-legends/academie"
                 className="inline-flex items-center gap-2 rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
@@ -777,13 +837,17 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
 
                       <div className="grid place-items-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                         {roster.joueurs.map((p) => (
-                          <CartePersonne key={p.id} personne={p} />
+                          <CartePersonne
+                            key={p.id}
+                            personne={p}
+                            masquerTout={SAISON_TERMINEE_SEMI_PRO}
+                          />
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* STAFF */}
+                  {/* STAFF (reste visible) */}
                   {roster.staff && (
                     <div className="mt-14 max-w-4xl mx-auto">
                       <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
@@ -792,7 +856,7 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
 
                       <div className="grid place-items-center gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-1">
                         {roster.staff.map((s) => (
-                          <CartePersonne key={s.id} personne={s} />
+                          <CartePersonne key={s.id} personne={s} masquerTout={false} />
                         ))}
                       </div>
                     </div>
@@ -824,8 +888,9 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
                 </p>
               </div>
 
+              {/* IMPORTANT: lien retour qui marche */}
               <Link
-                href="/equipes/league-of-legend/academie"
+                href="/equipes/league-of-legends?niveau=semi-pro"
                 className="inline-flex items-center gap-2 rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
               >
                 ← Revenir aux rosters Semi-Pro

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Recrutement | DeathMark E-Sports",
 };
 
-/* --- Sponsors défilants --- */
+/* --- Sponsors defilants --- */
 const sponsorLogos = [
   "/medias/sponsors/guru1.png",
   "/medias/sponsors/tuninclub.png",
@@ -69,16 +69,17 @@ type JeuRecrutement = {
   boutonTexte: string;
   lienFormulaire: string;
   logoSrc: string;
+  comingSoon?: boolean; // <-- AJOUT
 };
 
 const jeuxRecrutement: JeuRecrutement[] = [
   {
     id: "lol",
     nom: "League of Legends",
-    roleTexte: "Pôle LoL – équipes espoir & compétitives",
+    roleTexte: "Pole LoL - equipes espoir & competitives",
     description:
-      "Plusieurs rosters actifs du haut Gold au Challenger. Objectif : encadrer les joueurs sérieux, performer en ligues francophones, NA et construire un pôle LoL solide autour de projets à long terme.",
-    boutonTexte: "Rejoindre une équipe LoL",
+      "Plusieurs rosters actifs du haut Gold au Challenger. Objectif : encadrer les joueurs serieux, performer en ligues francophones, NA et construire un pole LoL solide autour de projets a long terme.",
+    boutonTexte: "Rejoindre une equipe LoL",
     lienFormulaire:
       "https://docs.google.com/forms/d/e/1FAIpQLScfbd24P68d4kXh_YYOHju1XZtZVjhPgS3_qTNM2auefj367A/viewform?usp=publish-editor",
     logoSrc: "/medias/commun/logo-lol1.png",
@@ -86,10 +87,10 @@ const jeuxRecrutement: JeuRecrutement[] = [
   {
     id: "valorant",
     nom: "Valorant",
-    roleTexte: "Line-up en construction – pôle espoir",
+    roleTexte: "Line-up en construction - pole espoir & competitives ",
     description:
-      "Une équipe principale existe déjà. Nous cherchons des remplaçants et des profils espoir pour stabiliser la line-up, structurer les scrims et viser les ligues semi-pro à moyen terme.",
-    boutonTexte: "Rejoindre une équipe Valo",
+      "Une equipe principale existe deja. Nous cherchons des remplacants et des profils espoir pour stabiliser la line-up, structurer les scrims et viser les ligues semi-pro a moyen terme.",
+    boutonTexte: "Rejoindre une equipe Valo",
     lienFormulaire:
       "https://docs.google.com/forms/d/e/1FAIpQLSfJSsPpkQK4KiJBeSKHCL861BG41d9K8HMGD74f7X6AoVK-fw/viewform?usp=publish-editor",
     logoSrc: "/medias/commun/logo-valorant2.png",
@@ -97,32 +98,35 @@ const jeuxRecrutement: JeuRecrutement[] = [
   {
     id: "rocket-league",
     nom: "Rocket League",
-    roleTexte: "Pôle RL – développement & progression",
+    roleTexte: "Pole RL - developpement & progression",
     description:
-      "Pôle en croissance pour joueurs réguliers et motivés. L’objectif : progresser en équipe, enchaîner les tournois communautaires et poser les bases d’un vrai pôle Rocket League chez DME.",
-    boutonTexte: "Rejoindre une équipe RL",
+      "Pole en croissance pour joueurs reguliers et motives. L’objectif : progresser en equipe, enchainer les tournois communautaires et poser les bases d’un vrai pole Rocket League chez DME.",
+    boutonTexte: "Rejoindre une equipe RL",
     lienFormulaire:
       "https://docs.google.com/forms/d/e/1FAIpQLSdX_TjLQR0GrI8oErHzerN5B84zWyXv7EHV3JFonzvgu701Ww/viewform?usp=publish-editor",
     logoSrc: "/medias/commun/logo-rl.png",
   },
+
+  // ===== R6 -> COMING SOON (flou + overlay + bouton desactive) =====
   {
     id: "r6",
     nom: "Rainbow Six Siege",
-    roleTexte: "Pôle R6 – projet compétitif",
+    roleTexte: "Nouveau projet en approche",
     description:
-      "Projet structuré en construction pour profils sérieux, disciplinés et intéressés par le travail d’équipe, les strats et les VOD review régulières sur le moyen/long terme.",
-    boutonTexte: "Rejoindre une équipe R6",
-    lienFormulaire:
-      "https://docs.google.com/forms/d/e/1FAIpQLSd1uXEocYUFEvnhgxgb6WMy-_ytkidzuDXaJaLf488fkmQpUQ/viewform?usp=publish-editor",
+      "Le pole est temporairement en pause. Un nouveau jeu arrive bientot avec un recrutement dedie. Reste a l’affut.",
+    boutonTexte: "Coming soon",
+    lienFormulaire: "#",
     logoSrc: "/medias/commun/logo-r6 (2).png",
+    comingSoon: true,
   },
+
   {
     id: "mr",
     nom: "Marvel Rivals",
-    roleTexte: "Pôle Marvel Rivals – projet test",
+    roleTexte: "Pole Marvel Rivals - projet test",
     description:
-      "Un nouveau pôle en test pour les pionniers qui veulent découvrir le jeu en structure. Objectif : former un noyau stable, tester le potentiel compétitif et préparer les futures ligues/tournois.",
-    boutonTexte: "Rejoindre une équipe MR",
+      "Un nouveau pole en test pour les pionniers qui veulent decouvrir le jeu en structure. Objectif : former un noyau stable, tester le potentiel competitif et preparer les futures ligues/tournois.",
+    boutonTexte: "Rejoindre une equipe MR",
     lienFormulaire:
       "https://docs.google.com/forms/d/e/1FAIpQLSdvsWzhDudCCinp_5EQgTGW3IqIYIfqFMP05IUCt5dIRQ9J5g/viewform?usp=publish-editor",
     logoSrc: "/medias/commun/logo-marvel.png",
@@ -153,75 +157,62 @@ const formsConfig: FormConfig[] = [
     dispoPlaceholder:
       "Ex : Lundi au jeudi 20h-23h (QC / EU), week-end selon ligues...",
     experiencePlaceholder:
-      "Anciennes équipes, ligues (Aegis, LFL2, ligues FR...), rôle dans le groupe, shotcall, etc.",
+      "Anciennes equipes, ligues (Aegis, LFL2, ligues FR...), role dans le groupe, shotcall, etc.",
     objectifsPlaceholder:
-      "Objectifs en ligue (Aegis, LAN, niveau visé), rôle que tu veux avoir dans le projet...",
+      "Objectifs en ligue (Aegis, LAN, niveau vise), role que tu veux avoir dans le projet...",
   },
   {
     id: "form-valorant",
     titre: "Valorant",
     sousTitre:
-      "Pour les joueurs réguliers qui veulent intégrer ou renforcer la line-up principale Valorant.",
+      "Pour les joueurs reguliers qui veulent integrer ou renforcer la line-up principale Valorant.",
     rankPlaceholder: "Ex : Immortal 1, Ascendant 3, peak Radiant...",
     rolePlaceholder:
-      "Rôle : Duelist, Controller, Initiator, Sentinel (agents maîtrisés)...",
+      "Role : Duelist, Controller, Initiator, Sentinel (agents maitrises)...",
     dispoPlaceholder:
-      "Jours/soirs disponibles pour scrims + matchs officiels (précise ta timezone).",
+      "Jours/soirs disponibles pour scrims + matchs officiels (precise ta timezone).",
     experiencePlaceholder:
-      "Anciennes teams, tournois joués (VCT, ligues communautaires), expérience IGL/support...",
+      "Anciennes teams, tournois joues (VCT, ligues communautaires), experience IGL/support...",
     objectifsPlaceholder:
-      "Ce que tu veux construire avec DME sur Valorant : niveau visé, fréquence de scrims, etc.",
+      "Ce que tu veux construire avec DME sur Valorant : niveau vise, frequence de scrims, etc.",
   },
   {
     id: "form-rl",
     titre: "Rocket League",
     sousTitre:
-      "Pour les joueurs motivés à grind en équipe et à représenter DME sur les tournois communautaires.",
-    rankPlaceholder: "Ex : GC1 1500 MMR, C3, SSL (mode préféré)...",
+      "Pour les joueurs motives a grind en equipe et a representer DME sur les tournois communautaires.",
+    rankPlaceholder: "Ex : GC1 1500 MMR, C3, SSL (mode prefere)...",
     rolePlaceholder:
-      "Format préféré (1s/2s/3s), rôle (support, scorer, flex) et style de jeu.",
+      "Format prefere (1s/2s/3s), role (support, scorer, flex) et style de jeu.",
     dispoPlaceholder:
-      "Plages horaires pour scrims réguliers (avec timezone : QC / EU, etc.).",
+      "Plages horaires pour scrims reguliers (avec timezone : QC / EU, etc.).",
     experiencePlaceholder:
-      "Teams précédentes, tournois joués, résultats notables, expérience de grind en team.",
+      "Teams precedentes, tournois joues, resultats notables, experience de grind en team.",
     objectifsPlaceholder:
       "Objectifs perso : monter en rank, jouer des tournois hebdo, ligues, LAN, etc.",
   },
-  {
-    id: "form-r6",
-    titre: "Rainbow Six Siege",
-    sousTitre:
-      "Pour les profils sérieux, disciplinés, prêts à s’investir dans un projet R6 structuré.",
-    rankPlaceholder:
-      "Ex : Plat 1, Emerald, Diamond, Champion (peak + actuel).",
-    rolePlaceholder:
-      "Rôle : Entry, Flex, Support, IGL, Anchor, etc. (opérateurs maîtrisés).",
-    dispoPlaceholder:
-      "Jours/soirs pour scrims, VOD review et matchs officiels (avec timezone).",
-    experiencePlaceholder:
-      "Anciennes line-ups, ligues jouées, expérience en structure (strats, VOD review, IGL...).",
-    objectifsPlaceholder:
-      "Ce que tu cherches : projet structuré, staff, scrims réguliers, ligues ciblées, etc.",
-  },
+
+  // NOTE: On retire volontairement le form R6 tant que c'est "Coming Soon"
+
   {
     id: "form-mr",
     titre: "Marvel Rivals",
     sousTitre:
-      "Pour les pionniers qui veulent construire le pôle Marvel Rivals de DME.",
+      "Pour les pionniers qui veulent construire le pole Marvel Rivals de DME.",
     rankPlaceholder:
-      "Si le jeu n’a pas encore de rank clair, indique ton niveau estimé + expérience sur jeux similaires.",
+      "Si le jeu n’a pas encore de rank clair, indique ton niveau estime + experience sur jeux similaires.",
     rolePlaceholder:
-      "Héros préférés, rôle naturel (frontline, backline, flex, shotcall, etc.).",
+      "Heros preferes, role naturel (frontline, backline, flex, shotcall, etc.).",
     dispoPlaceholder:
-      "Disponibilités pour tester le jeu, scrims et custom games (avec timezone).",
+      "Disponibilites pour tester le jeu, scrims et custom games (avec timezone).",
     experiencePlaceholder:
-      "Expérience compétitive sur d’autres jeux (LoL, Overwatch, Valorant, etc.), tournois déjà joués.",
+      "Experience competitive sur d’autres jeux (LoL, Overwatch, Valorant, etc.), tournois deja joues.",
     objectifsPlaceholder:
       "Ce que tu veux construire avec DME sur MR : fun tryhard, ligues, tournois, contenu, etc.",
   },
 ];
 
-/* --- Modal de formulaire (affiché au clic sur un bouton) --- */
+/* --- Modal de formulaire (affiche au clic sur un bouton) --- */
 function FormModal({
   id,
   titre,
@@ -245,7 +236,7 @@ function FormModal({
               Formulaire de recrutement
             </p>
             <h2 className="text-2xl font-bold md:text-3xl">
-              {titre} <span className="text-red-500">– Rejoindre DME</span>
+              {titre} <span className="text-red-500">- Rejoindre DME</span>
             </h2>
             <p className="mt-2 text-sm text-white/80">{sousTitre}</p>
           </div>
@@ -287,7 +278,7 @@ function FormModal({
 
             <div>
               <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
-                Rôle / position
+                Role / position
               </label>
               <input
                 type="text"
@@ -299,7 +290,7 @@ function FormModal({
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
-                  Âge
+                  Age
                 </label>
                 <input
                   type="number"
@@ -310,7 +301,7 @@ function FormModal({
               </div>
               <div>
                 <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
-                  Timezone / région
+                  Timezone / region
                 </label>
                 <input
                   type="text"
@@ -336,7 +327,7 @@ function FormModal({
 
             <div>
               <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
-                Disponibilités
+                Disponibilites
               </label>
               <input
                 type="text"
@@ -347,7 +338,7 @@ function FormModal({
 
             <div>
               <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
-                Expérience en équipe
+                Experience en equipe
               </label>
               <textarea
                 className="min-h-[96px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
@@ -398,7 +389,7 @@ export default function RecrutementPage() {
         </div>
       </div>
 
-      {/* ===== Contenu principal avec background texturé ===== */}
+      {/* ===== Contenu principal avec background texture ===== */}
       <section id="recrutement-top" className="bg-texture min-h-screen">
         {/* espace sous la nav */}
         <div className="pt-[64px]" />
@@ -417,69 +408,114 @@ export default function RecrutementPage() {
           </h1>
 
           <p className="mt-4 text-base sm:text-lg text-white/85">
-            Tu veux faire partie d’une structure ambitieuse, sérieuse et en
-            constante évolution ? Choisis ton jeu et tente ta chance pour
+            Tu veux faire partie d’une structure ambitieuse, serieuse et en
+            constante evolution ? Choisis ton jeu et tente ta chance pour
             rejoindre nos rangs.
           </p>
         </header>
 
-        {/* ===== CARTES DE JEUX (même taille qu'avant) ===== */}
+        {/* ===== CARTES DE JEUX ===== */}
         <main className="mx-auto w-full max-w-[140rem] px-4 sm:px-10 pb-16 sm:pb-20">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {jeuxRecrutement.map((jeu) => (
-              <article
-                key={jeu.id}
-                className="relative flex h-[670px] flex-col rounded-3xl border border-red-700/90 bg-black/85 px-8 pb-10 pt-10
-                           shadow-[0_0_32px_rgba(0,0,0,0.85)]
-                           hover:border-red-500 hover:shadow-[0_0_45px_rgba(248,113,113,0.8)] transition"
-              >
-                {/* halo interne */}
-                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/25" />
+            {jeuxRecrutement.map((jeu) => {
+              const estComingSoon = !!jeu.comingSoon;
 
-                {/* logo */}
-                <div className="relative mb-8 flex items-center justify-center">
-                  <div className="flex h-[130px] w-full items-center justify-center rounded-xl bg-black/80">
-                    <Image
-                      src={jeu.logoSrc}
-                      alt={jeu.nom}
-                      width={260}
-                      height={130}
-                      className="max-h-[120px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
-                    />
+              return (
+                <article
+                  key={jeu.id}
+                  className={`relative flex h-[670px] flex-col rounded-3xl border border-red-700/90 bg-black/85 px-8 pb-10 pt-10
+                              shadow-[0_0_32px_rgba(0,0,0,0.85)]
+                              transition
+                              ${estComingSoon
+                                ? "opacity-80"
+                                : "hover:border-red-500 hover:shadow-[0_0_45px_rgba(248,113,113,0.8)]"
+                              }`}
+                >
+                  {/* halo interne */}
+                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/25" />
+
+                  {/* Tout le contenu blurré si Coming Soon */}
+                  <div className={`${estComingSoon ? "blur-sm opacity-60 pointer-events-none select-none" : ""}`}>
+                    {/* logo */}
+                    <div className="relative mb-8 flex items-center justify-center">
+                      <div className="flex h-[130px] w-full items-center justify-center rounded-xl bg-black/80">
+                        <Image
+                          src={jeu.logoSrc}
+                          alt={jeu.nom}
+                          width={260}
+                          height={130}
+                          className="max-h-[120px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* contenu + bouton */}
+                    <div className="relative flex flex-1 flex-col justify-between">
+                      <div>
+                        <h2 className="text-lg font-bold uppercase text-red-400 tracking-wide">
+                          {jeu.nom}
+                        </h2>
+                        <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                          {jeu.roleTexte}
+                        </p>
+
+                        <p className="mt-4 text-[15px] leading-relaxed text-white/90">
+                          {jeu.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-6">
+                        {/* Bouton normal */}
+                        {!estComingSoon ? (
+                          <Link
+                            href={jeu.lienFormulaire}
+                            className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
+                                       text-white shadow-[0_0_22px_rgba(239,68,68,0.9)]
+                                       hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)] transition"
+                          >
+                            {jeu.boutonTexte}
+                          </Link>
+                        ) : (
+                          // Placeholder, le vrai bouton est au-dessus (overlay)
+                          <div className="h-[48px]" />
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* contenu + bouton, avec alignement bas */}
-                <div className="relative flex flex-1 flex-col justify-between">
-                  <div>
-                    <h2 className="text-lg font-bold uppercase text-red-400 tracking-wide">
-                      {jeu.nom}
-                    </h2>
-                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
-                      {jeu.roleTexte}
-                    </p>
+                  {/* OVERLAY COMING SOON (net, non flou) */}
+                  {estComingSoon && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-black/55">
+                      <div className="text-center">
+                        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+                          New game
+                        </p>
+                        <p className="mt-2 text-2xl font-extrabold uppercase tracking-[0.2em] text-red-500">
+                          Coming Soon
+                        </p>
+                        <p className="mt-3 text-sm text-white/80">
+                          Recrutement bientot
+                        </p>
+                      </div>
 
-                    <p className="mt-4 text-[15px] leading-relaxed text-white/90">
-                      {jeu.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-6">
-                    <Link
-                      href={jeu.lienFormulaire}
-                      className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
-                                 text-white shadow-[0_0_22px_rgba(239,68,68,0.9)]
-                                 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)] transition"
-                    >
-                      {jeu.boutonTexte}
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
+                      <div className="mt-8 w-full px-8">
+                        <button
+                          type="button"
+                          disabled
+                          className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-full border border-red-600/40 bg-black/60 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
+                                     text-white/70 shadow-[0_0_22px_rgba(0,0,0,0.7)]"
+                        >
+                          {jeu.boutonTexte}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
           </div>
 
-          {/* ===== MODALS DE FORMULAIRE ===== */}
+          {/* ===== MODALS DE FORMULAIRE (sans R6) ===== */}
           {formsConfig.map((cfg) => (
             <FormModal key={cfg.id} {...cfg} />
           ))}

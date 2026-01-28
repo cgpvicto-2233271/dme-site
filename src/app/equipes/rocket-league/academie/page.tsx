@@ -47,6 +47,41 @@ type RosterAcademie = {
 ========================================================= */
 
 const rostersAcademie: RosterAcademie[] = [
+  // ===== AJOUTS DEMANDES (Team 2-3-4) =====
+  {
+    id: "rl-academy-hurricane",
+    nom: "DME Hurricane",
+    ligue: "Scrims internes & tournois communautaires",
+    statut: "Actif",
+    description:
+      "Roster Académie Rocket League orienté progression et régularité en 3v3 : rotations propres, communication et automatisme en équipe.",
+    joueurs: [
+      {
+        id: "hurricane1",
+        pseudo: "Lionrage",
+        role: "JOUEUR",
+        photoSrc: "/logo/image_player.png",
+      },
+      {
+        id: "hurricane2",
+        pseudo: "Jormungandr",
+        role: "JOUEUR",
+        photoSrc: "/logo/image_player.png",
+      },
+      {
+        id: "hurricane3",
+        pseudo: "MrSnoweeQc",
+        role: "JOUEUR",
+        photoSrc: "/logo/image_player.png",
+      },
+      {
+        id: "hurricane-sub",
+        pseudo: "SlayZii",
+        role: "SUB",
+        photoSrc: "/logo/image_player.png",
+      },
+    ],
+  },
   {
     id: "rl-academy-vortex",
     nom: "DME Vortex",
@@ -57,116 +92,48 @@ const rostersAcademie: RosterAcademie[] = [
     joueurs: [
       {
         id: "vortex1",
-        pseudo: "SlayZii",
-        nom: "Attaquant",
-        role: "OFFENSIF",
+        pseudo: "JØK3RZ",
+        role: "JOUEUR",
         photoSrc: "/logo/image_player.png",
       },
       {
         id: "vortex2",
-        pseudo: "LionRage",
-        nom: "Anchor",
-        role: "DÉFENSIF",
+        pseudo: "Denis",
+        role: "JOUEUR",
         photoSrc: "/logo/image_player.png",
       },
       {
         id: "vortex3",
-        pseudo: "Jokerz",
-        nom: "Support",
-        role: "FLEX",
+        pseudo: "K1ng_Max_333",
+        role: "JOUEUR",
         photoSrc: "/logo/image_player.png",
       },
     ],
   },
   {
-    id: "rl-academy-tempest",
-    nom: "DME Tempest",
+    id: "rl-academy-orion",
+    nom: "DME Orion",
     ligue: "Scrims internes & tournois communautaires",
-    statut: "Recrutement ouvert",
+    statut: "Actif",
     description:
-      "Roster Académie en construction, pensé pour accueillir des joueurs 3v3 motivés à grinder dans un cadre structuré.",
+      "Roster Académie Rocket League axé sur la constance : rythme de scrims, progression en tournois et travail d’équipe semaine après semaine.",
     joueurs: [
       {
-        id: "tempest1",
-        pseudo: "À annoncer",
-        nom: "Slot 1",
-        role: "3v3 COMP",
+        id: "orion1",
+        pseudo: "P90xxl",
+        role: "JOUEUR",
         photoSrc: "/logo/image_player.png",
       },
       {
-        id: "tempest2",
-        pseudo: "À annoncer",
-        nom: "Slot 2",
-        role: "3v3 COMP",
+        id: "orion2",
+        pseudo: "RB08",
+        role: "JOUEUR",
         photoSrc: "/logo/image_player.png",
       },
       {
-        id: "tempest3",
-        pseudo: "À annoncer",
-        nom: "Slot 3",
-        role: "3v3 COMP",
-        photoSrc: "/logo/image_player.png",
-      },
-    ],
-  },
-  {
-    id: "rl-academy-nova",
-    nom: "DME Nova",
-    ligue: "Tournois communautaires & scrims externes",
-    statut: "Recrutement ouvert",
-    description:
-      "Line-up Académie orientée progression progressive vers un niveau compétitif supérieur, avec un suivi sur la vision de jeu.",
-    joueurs: [
-      {
-        id: "nova1",
-        pseudo: "À annoncer",
-        nom: "Slot 1",
-        role: "3v3 COMP",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "nova2",
-        pseudo: "À annoncer",
-        nom: "Slot 2",
-        role: "3v3 COMP",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "nova3",
-        pseudo: "À annoncer",
-        nom: "Slot 3",
-        role: "3v3 COMP",
-        photoSrc: "/logo/image_player.png",
-      },
-    ],
-  },
-  {
-    id: "rl-academy-eclipse",
-    nom: "DME Eclipse",
-    ligue: "Scrims internes / externes",
-    statut: "Recrutement ouvert",
-    description:
-      "Projet de roster Académie pour joueurs sérieux qui veulent un cadre de grind régulier, en vue de rejoindre le haut de la structure DME.",
-    joueurs: [
-      {
-        id: "eclipse1",
-        pseudo: "À annoncer",
-        nom: "Slot 1",
-        role: "3v3 COMP",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "eclipse2",
-        pseudo: "À annoncer",
-        nom: "Slot 2",
-        role: "3v3 COMP",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "eclipse3",
-        pseudo: "À annoncer",
-        nom: "Slot 3",
-        role: "3v3 COMP",
+        id: "orion3",
+        pseudo: "Flinx",
+        role: "JOUEUR",
         photoSrc: "/logo/image_player.png",
       },
     ],
@@ -261,12 +228,13 @@ export default function RocketLeagueAcademiePage() {
                 Rocket League – Académie
               </p>
               <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                Rosters <span className="text-red-400">Académie</span> Rocket League
+                Rosters{" "}
+                <span className="text-red-400">Académie</span> Rocket League
               </h1>
               <p className="mt-2 max-w-2xl text-sm text-white/80">
-                Pôle Académie dédié aux joueurs 3v3 qui veulent progresser dans un
-                cadre encadré : rotation, communication et passage progressif vers
-                le Semi-Pro.
+                Pôle Académie dédié aux joueurs 3v3 qui veulent progresser dans
+                un cadre encadré : rotation, communication et passage progressif
+                vers le Semi-Pro.
               </p>
             </div>
           </header>
@@ -292,9 +260,7 @@ export default function RocketLeagueAcademiePage() {
                       )}
                     </div>
 
-                    <h2 className="text-xl font-bold text-white">
-                      {roster.nom}
-                    </h2>
+                    <h2 className="text-xl font-bold text-white">{roster.nom}</h2>
                     <p className="mt-2 text-sm text-white/85">
                       {roster.description}
                     </p>
@@ -307,7 +273,7 @@ export default function RocketLeagueAcademiePage() {
                   </div>
                 </div>
 
-                <div className="mt-3 max-w-4xl mx-auto w-full">
+                <div className="mt-3 mx-auto w-full max-w-4xl">
                   <h3 className="mb-3 text-center text-sm uppercase tracking-[0.25em] text-white/70">
                     Joueurs
                   </h3>
@@ -320,14 +286,15 @@ export default function RocketLeagueAcademiePage() {
                 </div>
 
                 {/* Bloc Team Manager sous les joueurs */}
-                <div className="mt-8 max-w-md mx-auto rounded-2xl border border-red-500/60 bg-black/80 px-5 py-4 text-sm text-white/85">
+                <div className="mt-8 mx-auto max-w-md rounded-2xl border border-red-500/60 bg-black/80 px-5 py-4 text-sm text-white/85">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-red-300">
                     Team Manager
                   </p>
                   <p className="mt-2 text-base font-semibold">The Power</p>
                   <p className="mt-1 text-xs text-white/65">
-                    Point de contact principal pour la section Académie Rocket League
-                    (planning, scrims, inscriptions en ligues et suivi des joueurs).
+                    Point de contact principal pour la section Académie Rocket
+                    League (planning, scrims, inscriptions en ligues et suivi des
+                    joueurs).
                   </p>
                 </div>
               </article>

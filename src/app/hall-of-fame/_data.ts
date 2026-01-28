@@ -43,7 +43,6 @@ export const achievements: Achievement[] = [
     category: "LAN",
     jeu: "lol",
     cashprize: "2 000 $",
-    badge: "Highlight",
     description:
       "Notre plus gros cashprize à ce jour. Une performance collective solide, une draft maîtrisée et une ambiance de scène qui marque un vrai tournant dans l’histoire de DeathMark E-Sports.",
     bannerSrc: "/medias/commun/CQC.png",
@@ -188,7 +187,7 @@ export const achievements: Achievement[] = [
     badge: "Aegis",
     description:
       "Une Winter Split disputée dans un environnement très compétitif, qui confirme notre place dans le milieu de tableau du Tier 2 NA tout en mettant en lumière les axes de progression pour la suite.",
-    bannerSrc: "/medias/commun/Roster_ACL.png",
+    bannerSrc: "/medias/commun/DME_ACL.png",
     bannerAlt: "Roster DME pour l'ACL Winter 2025",
   },
   {
