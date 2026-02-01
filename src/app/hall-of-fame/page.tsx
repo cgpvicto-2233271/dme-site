@@ -123,7 +123,6 @@ function isAclRelated(item: Achievement) {
 }
 
 /** TOP 3 seulement (exclut Top4 / Top5 / 4e / 5e etc.) */
-/** TOP 3 seulement (exclut Top4 / Top5 / 4e / 5e etc.) */
 function isTop3Only(item: Achievement) {
   const hay = buildHaystack(item);
 
@@ -154,13 +153,11 @@ function isTop3Only(item: Achievement) {
     hay.includes("top2") ||
     hay.includes("top 3") ||
     hay.includes("top3") ||
-
     // 1ère place (ajout 1re)
     hay.includes("1re") ||
     hay.includes("1ere") ||
     hay.includes("1ère") ||
     hay.includes("1er") ||
-
     // 2e / 3e
     hay.includes("2e") ||
     hay.includes("2eme") ||
@@ -168,7 +165,6 @@ function isTop3Only(item: Achievement) {
     hay.includes("3e") ||
     hay.includes("3eme") ||
     hay.includes("3ème") ||
-
     // EN
     hay.includes("1st") ||
     hay.includes("2nd") ||
@@ -236,7 +232,6 @@ function podiumRank(item: Achievement): number {
   return 99;
 }
 
-
 /* ===== MANUAL CARDS (UNIQUEMENT LES 2 LAN) ===== */
 const HOF_MANUAL: HOFManual[] = [
   {
@@ -278,92 +273,111 @@ function CarteResultat({
   return (
     <article
       className={
-        "relative overflow-hidden rounded-2xl border bg-black/80 px-5 sm:px-6 md:px-7 py-5 sm:py-6 md:py-7 shadow-[0_0_24px_rgba(0,0,0,0.7)] " +
+        "group relative overflow-hidden rounded-3xl border bg-black/65 " +
+        "shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl transition " +
+        "hover:-translate-y-1 hover:border-red-500/40 " +
         (highlight
-          ? "border-red-700/90 shadow-[0_0_26px_rgba(248,113,113,0.45)]"
-          : "border-red-700/80")
+          ? "border-red-500/35 shadow-[0_22px_78px_rgba(239,68,68,0.18)]"
+          : "border-red-500/20")
       }
     >
+      {/* accents */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/12 blur-3xl" />
+        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
       <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-red-500 via-red-600 to-red-800" />
 
-      <div className="relative flex flex-col gap-4 sm:gap-5 md:flex-row md:items-stretch md:gap-6">
-        <div className="flex flex-1 flex-col gap-3 sm:gap-4">
-          <div className="flex flex-row flex-wrap gap-2">
-            <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wide ${
-                item.type === "LAN"
-                  ? "border border-orange-400/70 bg-orange-500/10 text-orange-200"
-                  : "border border-blue-400/70 bg-blue-500/10 text-blue-200"
-              }`}
-            >
-              {item.type === "LAN" ? "LAN" : "Ligue en ligne"}
-            </span>
-
-            <span className="inline-flex items-center rounded-full border border-white/20 bg-black/60 px-3 py-1 text-[11px] sm:text-xs font-semibold text-white/75">
-              {labelJeu(item.jeu)}
-            </span>
-
-            {item.category === "AEGIS" && (
-              <span className="inline-flex items-center rounded-full border border-purple-400/80 bg-purple-500/15 px-3 py-1 text-[11px] sm:text-xs font-semibold text-purple-100">
-                Aegis / NACL
+      <div className="relative px-5 py-5 sm:px-6 sm:py-6 md:px-7 md:py-7">
+        <div className="flex flex-col gap-5 md:flex-row md:items-stretch md:gap-6">
+          <div className="flex flex-1 flex-col gap-4">
+            <div className="flex flex-row flex-wrap gap-2">
+              <span
+                className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.14em] ${
+                  item.type === "LAN"
+                    ? "border border-orange-400/70 bg-orange-500/10 text-orange-200"
+                    : "border border-blue-400/70 bg-blue-500/10 text-blue-200"
+                }`}
+              >
+                {item.type === "LAN" ? "LAN" : "Ligue en ligne"}
               </span>
-            )}
 
-            {item.category === "ONLINE" && (
-              <span className="inline-flex items-center rounded-full border border-sky-400/80 bg-sky-500/15 px-3 py-1 text-[11px] sm:text-xs font-semibold text-sky-100">
-                Online
+              <span className="inline-flex items-center rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] sm:text-xs font-semibold text-white/80">
+                {labelJeu(item.jeu)}
               </span>
-            )}
 
-            {item.cashprize && (
-              <span className="inline-flex items-center rounded-full border border-emerald-400/70 bg-emerald-500/10 px-3 py-1 text-[11px] sm:text-xs font-semibold text-emerald-200">
-                Cashprize : {item.cashprize}
-              </span>
-            )}
+              {item.category === "AEGIS" && (
+                <span className="inline-flex items-center rounded-full border border-purple-400/60 bg-purple-500/12 px-3 py-1 text-[11px] sm:text-xs font-semibold text-purple-100">
+                  Aegis / NACL
+                </span>
+              )}
 
-            {item.badge && (
-              <span className="inline-flex items-center rounded-full border border-red-400/80 bg-red-500/10 px-3 py-1 text-[11px] sm:text-xs font-semibold text-red-200">
-                {item.badge}
-              </span>
-            )}
-          </div>
+              {item.category === "ONLINE" && (
+                <span className="inline-flex items-center rounded-full border border-sky-400/60 bg-sky-500/12 px-3 py-1 text-[11px] sm:text-xs font-semibold text-sky-100">
+                  Online
+                </span>
+              )}
 
-          <div className="space-y-1.5 sm:space-y-2">
-            <h3 className="text-base sm:text-lg md:text-xl font-bold">
-              {item.titre}
-            </h3>
-            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-red-300">
-              {item.sousTitre}
-            </p>
-            <p className="text-xs sm:text-sm leading-relaxed text-white/85">
-              {item.description}
-            </p>
-          </div>
-        </div>
+              {item.cashprize && (
+                <span className="inline-flex items-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[11px] sm:text-xs font-semibold text-emerald-200">
+                  Cashprize : {item.cashprize}
+                </span>
+              )}
 
-        <div className="flex w-full flex-none items-center md:w-[55%]">
-          {item.bannerSrc ? (
-            <div className="relative h-[180px] sm:h-[200px] md:h-[220px] w-full overflow-hidden rounded-xl border border-red-700/80 bg-black/70">
-              <Image
-                src={item.bannerSrc}
-                alt={item.bannerAlt ?? item.titre}
-                fill
-                className="object-contain object-center"
-              />
+              {item.badge && (
+                <span className="inline-flex items-center rounded-full border border-red-400/60 bg-red-500/10 px-3 py-1 text-[11px] sm:text-xs font-semibold text-red-200">
+                  {item.badge}
+                </span>
+              )}
             </div>
-          ) : (
-            <div className="flex h-[180px] sm:h-[200px] md:h-[220px] w-full items-center justify-center rounded-xl border border-red-700/70 bg-gradient-to-br from-red-900/40 via-black/70 to-black/90">
-              <div className="text-center text-[10px] sm:text-[11px] leading-relaxed text-red-200/80">
-                <p className="font-semibold tracking-[0.18em] uppercase">
-                  Espace bannière roster
-                </p>
-                <p className="mt-1 text-[9px] sm:text-[10px] text-red-200/70">
-                  (remplacer ce bloc par une image bannière ultra-large du roster
-                  concerné)
-                </p>
+
+            <div className="space-y-2">
+              <h3 className="text-base sm:text-lg md:text-xl font-extrabold text-white">
+                {item.titre}
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.22em] text-red-300">
+                {item.sousTitre}
+              </p>
+              <p className="text-xs sm:text-sm leading-relaxed text-white/85">
+                {item.description}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex w-full flex-none items-center md:w-[55%]">
+            {item.bannerSrc ? (
+              <div className="relative h-[190px] sm:h-[210px] md:h-[230px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black/55 ring-1 ring-transparent transition group-hover:ring-red-500/30">
+                <Image
+                  src={item.bannerSrc}
+                  alt={item.bannerAlt ?? item.titre}
+                  fill
+                  className="
+                    object-contain object-center
+                    brightness-[0.86] contrast-[1.05] saturate-[1.02]
+                    transition duration-500
+                    group-hover:brightness-[1.10]
+                    group-hover:contrast-[1.10]
+                    group-hover:saturate-[1.10]
+                  "
+                />
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(255,255,255,0.06),transparent_55%)]" />
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="flex h-[190px] sm:h-[210px] md:h-[230px] w-full items-center justify-center rounded-2xl border border-white/10 bg-black/55">
+                <div className="text-center text-[10px] sm:text-[11px] leading-relaxed text-white/70">
+                  <p className="font-semibold tracking-[0.18em] uppercase">
+                    Espace bannière roster
+                  </p>
+                  <p className="mt-1 text-[9px] sm:text-[10px] text-white/60">
+                    (remplacer ce bloc par une image bannière ultra-large)
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </article>
@@ -382,16 +396,12 @@ export default function HallOfFamePage() {
   );
 
   // Résultats = tout le reste + TOUT ce qui est ACL
-  const autresResultats = sansR6.filter(
-    (a) => !isTop3Only(a) || isAclRelated(a)
-  );
+  const autresResultats = sansR6.filter((a) => !isTop3Only(a) || isAclRelated(a));
 
   // Manual (2 LAN)
-  const manualSorted = [...HOF_MANUAL].sort(
-    (a, b) => podiumRank(a) - podiumRank(b)
-  );
+  const manualSorted = [...HOF_MANUAL].sort((a, b) => podiumRank(a) - podiumRank(b));
 
-  // IMPORTANT: Podiums = on merge + on trie ensemble pour que GGL (1ere place) passe en haut
+  // Podiums = on merge + on trie ensemble pour que GGL (1ere place) passe en haut
   const hallOfFameAll = [...manualSorted, ...hallOfFameFromData].sort(
     (a, b) => podiumRank(a) - podiumRank(b)
   );
@@ -399,59 +409,65 @@ export default function HallOfFamePage() {
   return (
     <div className="bg-black text-white">
       {/* Sponsors */}
-      <div className="marquee border-y border-red-600 bg-black">
+      <div className="marquee border-y border-red-600/70 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
-              <Image
-                src={src}
-                alt={`Sponsor ${i + 1}`}
-                width={120}
-                height={60}
-              />
+              <Image src={src} alt={`Sponsor ${i + 1}`} width={120} height={60} />
             </div>
           ))}
         </div>
       </div>
 
-      <section className="bg-texture min-h-screen pt-10 pb-16">
+      {/* Background premium (meme DA que tes autres pages) */}
+      <section className="relative min-h-screen overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.22),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
+          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
+        </div>
+
         <div className="pt-[64px]" />
 
         {/* HERO */}
-        <header className="mx-auto max-w-5xl px-4 sm:px-6 pb-10 text-center">
+        <header className="relative mx-auto max-w-5xl px-4 sm:px-6 pb-10 pt-10 text-center">
           <div className="flex justify-center">
-            <div className="inline-flex items-center gap-3 rounded-full border border-red-600/70 bg-black/70 px-4 py-1 text-xs sm:text-sm uppercase tracking-[0.2em] text-red-400">
+            <div className="inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-red-100">
               <span className="h-2 w-2 rounded-full bg-red-500" />
               Hall Of Fame
             </div>
           </div>
 
-          <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
+          <h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
             Les résultats qui construisent
             <br />
-            <span className="text-red-500">l&apos;histoire DeathMark</span>
+            <span className="text-red-300">l&apos;histoire DeathMark</span>
           </h1>
 
-          <p className="mt-4 text-sm sm:text-base md:text-lg text-white/85">
+          <p className="mx-auto mt-4 max-w-3xl text-sm sm:text-base md:text-lg text-white/85">
             LANs, ligues en ligne, Aegis, NACL : un aperçu clair des moments forts
             qui ont façonné l’ADN compétitif de la structure, tous jeux confondus.
           </p>
 
           {/* Stats rapides */}
           <div className="mt-6 flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-white/80">
-            <div className="rounded-xl border border-red-600/70 bg-black/70 px-3 sm:px-4 py-2 shadow-[0_0_14px_rgba(255,0,0,0.45)]">
-              <span className="block text-[10px] sm:text-[11px] uppercase text-red-400">
+            <div className="relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 px-4 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
+              <div className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+              <span className="relative block text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-red-300">
                 Cashprize cumulé
               </span>
-              <span className="text-base sm:text-lg font-semibold">
+              <span className="relative text-base sm:text-lg font-semibold text-white">
                 6 200 $+ remportés
               </span>
             </div>
-            <div className="rounded-xl border border-red-600/40 bg-black/60 px-3 sm:px-4 py-2 shadow-[0_0_12px_rgba(255,0,0,0.35)]">
-              <span className="block text-[10px] sm:text-[11px] uppercase text-red-400">
+
+            <div className="relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 px-4 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
+              <div className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+              <span className="relative block text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-red-300">
                 Formats
               </span>
-              <span className="text-base sm:text-lg font-semibold">
+              <span className="relative text-base sm:text-lg font-semibold text-white">
                 LAN, ligues en ligne, Aegis &amp; NACL
               </span>
             </div>
@@ -472,28 +488,50 @@ export default function HallOfFamePage() {
                 <Link
                   key={card.href}
                   href={card.href}
-                  className="group flex items-center justify-between rounded-2xl border border-red-700/80 bg-black/80 px-4 py-3 text-left text-xs sm:text-sm shadow-[0_0_20px_rgba(0,0,0,0.9)] transition hover:border-red-500 hover:shadow-[0_0_26px_rgba(248,113,113,0.9)]"
+                  className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 px-4 py-3 text-left text-xs sm:text-sm shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-red-500/40"
                 >
-                  <span className="font-semibold text-white">{card.titre}</span>
-                  <span className="text-[9px] uppercase tracking-[0.22em] text-red-300 group-hover:text-red-200">
-                    Voir &gt;
-                  </span>
+                  <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-red-500/10 blur-3xl" />
+                    <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+                  </div>
+
+                  <div className="relative flex items-center justify-between gap-3">
+                    <span className="font-semibold text-white">{card.titre}</span>
+                    <span className="text-[10px] uppercase tracking-[0.22em] text-red-300 group-hover:text-red-200">
+                      Voir →
+                    </span>
+                  </div>
                 </Link>
               ))}
             </div>
           </div>
+
+          <div className="mx-auto mt-10 h-px w-48 bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
         </header>
 
         {/* ===== BANNIERE AVL EN GROS (UNIQUE) ===== */}
-        <section className="mx-auto max-w-[44rem] px-4 sm:px-5 pb-8 sm:pb-10">
-          <div className="group relative overflow-hidden rounded-3xl border border-red-700/90 bg-black/90 shadow-[0_0_32px_rgba(0,0,0,0.9)]">
+        <section className="relative mx-auto max-w-[44rem] px-4 sm:px-5 pb-10">
+          <div className="group relative overflow-hidden rounded-3xl border border-red-500/35 bg-black/65 shadow-[0_22px_78px_rgba(239,68,68,0.14)] backdrop-blur-xl">
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
+              <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+              <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+            </div>
+
             <div className="relative h-[260px] sm:h-[340px] md:h-[420px] lg:h-[410px] w-full">
               <Image
                 src="/medias/commun/avl.png"
                 alt="Champions Aegis Vanguard League — 2 450$"
                 fill
                 priority
-                className="object-contain object-center"
+                className="
+                  object-contain object-center
+                  brightness-[0.86] contrast-[1.06] saturate-[1.02]
+                  transition duration-500
+                  group-hover:brightness-[1.08]
+                  group-hover:contrast-[1.10]
+                  group-hover:saturate-[1.10]
+                "
               />
             </div>
 
@@ -504,7 +542,7 @@ export default function HallOfFamePage() {
                 </p>
                 <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold">
                   Champions{" "}
-                  <span className="text-red-500">Aegis Vanguard League</span>
+                  <span className="text-red-400">Aegis Vanguard League</span>
                 </h2>
                 <p className="mt-1 text-[11px] sm:text-xs md:text-sm text-white/85">
                   Titre majeur —{" "}
@@ -517,14 +555,14 @@ export default function HallOfFamePage() {
         </section>
 
         {/* SECTION 1 : HALL OF FAME */}
-        <main className="mx-auto w-full max-w-5xl lg:max-w-[102rem] px-4 sm:px-6 pb-10">
-          <div className="mb-6 sm:mb-8 text-center">
+        <main className="relative mx-auto w-full max-w-5xl lg:max-w-[102rem] px-4 sm:px-6 pb-12">
+          <div className="mb-7 text-center">
             <p className="text-[11px] sm:text-xs uppercase tracking-[0.28em] text-white/55">
               Hall of Fame
             </p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold">
               Podiums (Top 3) &amp; grandes victoires{" "}
-              <span className="text-red-500">DME</span>
+              <span className="text-red-400">DME</span>
             </h2>
             <p className="mt-2 text-xs sm:text-sm text-white/75">
               Ici : uniquement 1ère / 2e / 3e place. (ACL = jamais ici)
@@ -532,29 +570,28 @@ export default function HallOfFamePage() {
           </div>
 
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:gap-10">
-            {/* Podiums = on merge + trie ensemble -> GGL (1ere place) monte en haut */}
             {hallOfFameAll.map((item) => (
               <CarteResultat key={item.id} item={item} highlight />
             ))}
           </div>
 
-          <div className="mt-10 sm:mt-12">
+          <div className="mt-12">
             <div className="mx-auto h-px w-full max-w-5xl bg-gradient-to-r from-transparent via-red-600/60 to-transparent" />
           </div>
         </main>
 
         {/* SECTION 2 : AUTRES RESULTATS */}
-        <section className="mx-auto w-full max-w-5xl lg:max-w-[102rem] px-4 sm:px-6 pb-16 sm:pb-20">
-          <div className="mb-6 sm:mb-8 text-center">
+        <section className="relative mx-auto w-full max-w-5xl lg:max-w-[102rem] px-4 sm:px-6 pb-20">
+          <div className="mb-7 text-center">
             <p className="text-[11px] sm:text-xs uppercase tracking-[0.28em] text-white/55">
               Résultats
             </p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold">
-              Autres performances <span className="text-red-500">DME</span>
+              Autres performances <span className="text-red-400">DME</span>
             </h2>
             <p className="mt-2 text-xs sm:text-sm text-white/75">
-              Runs, qualifications, bons parcours et résultats notables (hors Top
-              3). Toutes les entrées ACL sont ici.
+              Runs, qualifications, bons parcours et résultats notables (hors Top 3).
+              Toutes les entrées ACL sont ici.
             </p>
           </div>
 

@@ -47,7 +47,6 @@ type RosterAcademie = {
 ========================================================= */
 
 const rostersAcademie: RosterAcademie[] = [
-  // ===== AJOUTS DEMANDES (Team 2-3-4) =====
   {
     id: "rl-academy-hurricane",
     nom: "DME Hurricane",
@@ -56,30 +55,10 @@ const rostersAcademie: RosterAcademie[] = [
     description:
       "Roster Académie Rocket League orienté progression et régularité en 3v3 : rotations propres, communication et automatisme en équipe.",
     joueurs: [
-      {
-        id: "hurricane1",
-        pseudo: "Lionrage",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "hurricane2",
-        pseudo: "Jormungandr",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "hurricane3",
-        pseudo: "MrSnoweeQc",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "hurricane-sub",
-        pseudo: "SlayZii",
-        role: "SUB",
-        photoSrc: "/logo/image_player.png",
-      },
+      { id: "hurricane1", pseudo: "Lionrage", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "hurricane2", pseudo: "Jormungandr", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "hurricane3", pseudo: "MrSnoweeQc", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "hurricane-sub", pseudo: "SlayZii", role: "SUB", photoSrc: "/logo/image_player.png" },
     ],
   },
   {
@@ -90,24 +69,9 @@ const rostersAcademie: RosterAcademie[] = [
     description:
       "Roster Académie 3v3 pour structurer le jeu des joueurs Rocket League : rotation, communication et progression vers le Semi-Pro.",
     joueurs: [
-      {
-        id: "vortex1",
-        pseudo: "JØK3RZ",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "vortex2",
-        pseudo: "Denis",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "vortex3",
-        pseudo: "K1ng_Max_333",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
+      { id: "vortex1", pseudo: "JØK3RZ", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "vortex2", pseudo: "Denis", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "vortex3", pseudo: "K1ng_Max_333", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
     ],
   },
   {
@@ -118,60 +82,79 @@ const rostersAcademie: RosterAcademie[] = [
     description:
       "Roster Académie Rocket League axé sur la constance : rythme de scrims, progression en tournois et travail d’équipe semaine après semaine.",
     joueurs: [
-      {
-        id: "orion1",
-        pseudo: "P90xxl",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "orion2",
-        pseudo: "RB08",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
-      {
-        id: "orion3",
-        pseudo: "Flinx",
-        role: "JOUEUR",
-        photoSrc: "/logo/image_player.png",
-      },
+      { id: "orion1", pseudo: "P90xxl", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "orion2", pseudo: "RB08", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
+      { id: "orion3", pseudo: "Flinx", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
     ],
   },
 ];
 
 /* =========================================================
-   CARTE JOUEUR RL
+   UI: Badges (DA uniforme)
+========================================================= */
+
+function BadgeMeta({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={
+        "inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] " +
+        className
+      }
+    >
+      {children}
+    </span>
+  );
+}
+
+/* =========================================================
+   CARTE JOUEUR RL (DA premium, rouge/noir)
 ========================================================= */
 
 function CarteJoueurRL({ joueur }: { joueur: Joueur }) {
   return (
-    <article className="relative flex h-[220px] flex-col overflow-hidden rounded-3xl border border-red-700/90 bg-gradient-to-b from-black via-black/95 to-[#170000] px-4 pb-4 pt-4 shadow-[0_0_26px_rgba(0,0,0,0.9)]">
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/15" />
-
-      <div className="relative mb-3 flex items-center justify-center">
-        <div className="flex h-[120px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black/80">
-          <Image
-            src={joueur.photoSrc || "/logo/logo-dme.png"}
-            alt={joueur.pseudo}
-            width={160}
-            height={120}
-            className="h-full w-auto object-contain"
-          />
-        </div>
+    <article className="group relative flex h-[230px] flex-col overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
+      {/* accents */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-red-500/14 blur-3xl" />
+        <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-red-500/10 blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
       </div>
 
-      <div className="relative flex flex-1 flex-col justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-400">
-            {joueur.role}
-          </p>
-          <p className="text-base font-bold uppercase text-white">
-            {joueur.pseudo}
-          </p>
-          {joueur.nom && (
-            <p className="text-[11px] italic text-white/70">{joueur.nom}</p>
-          )}
+      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
+
+      <div className="relative p-4">
+        <div className="mb-3 flex items-center justify-center">
+          <div className="flex h-[120px] w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/70">
+            <Image
+              src={joueur.photoSrc || "/logo/logo-dme.png"}
+              alt={joueur.pseudo}
+              width={220}
+              height={140}
+              className="h-full w-auto object-contain"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-300">
+              {joueur.role || "JOUEUR"}
+            </p>
+            <p className="mt-1 text-base font-extrabold uppercase text-white">
+              {joueur.pseudo}
+            </p>
+            {joueur.nom ? (
+              <p className="text-[11px] italic text-white/70">{joueur.nom}</p>
+            ) : null}
+          </div>
+
+          <div className="mt-3 h-[1px] w-full bg-gradient-to-r from-transparent via-white/12 to-transparent" />
         </div>
       </div>
     </article>
@@ -179,14 +162,14 @@ function CarteJoueurRL({ joueur }: { joueur: Joueur }) {
 }
 
 /* =========================================================
-   BOUTON RETOUR SEMI-PRO RL
+   BOUTON RETOUR SEMI-PRO RL (DA uniforme)
 ========================================================= */
 
 function BoutonRetourSemiPro() {
   return (
     <Link
       href="/equipes/rocket-league"
-      className="inline-flex items-center justify-center rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white transition"
+      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
     >
       ← Revenir au roster Semi-Pro
     </Link>
@@ -194,7 +177,7 @@ function BoutonRetourSemiPro() {
 }
 
 /* =========================================================
-   PAGE ACADÉMIE ROCKET LEAGUE
+   PAGE ACADÉMIE ROCKET LEAGUE (DA pro)
 ========================================================= */
 
 export default function RocketLeagueAcademiePage() {
@@ -203,7 +186,7 @@ export default function RocketLeagueAcademiePage() {
   return (
     <div className="bg-black text-white">
       {/* ===== SPONSORS ===== */}
-      <div className="marquee border-y border-red-600 bg-black">
+      <div className="marquee border-y border-red-600/70 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div key={i} className="marquee-item">
@@ -213,89 +196,111 @@ export default function RocketLeagueAcademiePage() {
         </div>
       </div>
 
-      <section className="bg-texture min-h-screen">
+      {/* ===== BACKGROUND PRO (comme les autres pages) ===== */}
+      <section className="relative min-h-screen overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.20),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
+          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
+        </div>
+
         <div className="pt-[64px]" />
 
-        <main className="mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
-          {/* Bouton retour vers Semi-Pro RL */}
+        <main className="relative mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
           <div className="mb-6">
             <BoutonRetourSemiPro />
           </div>
 
-          <header className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <header className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-400">
-                Rocket League – Académie
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+                Rocket League
               </p>
+
               <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                Rosters{" "}
-                <span className="text-red-400">Académie</span> Rocket League
+                Rosters <span className="text-red-300">Académie</span>
               </h1>
-              <p className="mt-2 max-w-2xl text-sm text-white/80">
-                Pôle Académie dédié aux joueurs 3v3 qui veulent progresser dans
-                un cadre encadré : rotation, communication et passage progressif
-                vers le Semi-Pro.
+
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
+                Pôle Académie dédié aux joueurs 3v3 qui veulent progresser dans un cadre encadré :
+                rotation, communication et passage progressif vers le Semi-Pro.
               </p>
             </div>
           </header>
 
-          <section className="space-y-8">
+          <section className="grid gap-6 lg:grid-cols-3">
             {rostersAcademie.map((roster) => (
               <article
                 key={roster.id}
-                className="flex flex-col rounded-3xl border border-red-700/70 bg-black/85 p-6 shadow-[0_0_26px_rgba(0,0,0,0.9)] sm:p-8"
+                className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl"
               >
-                <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                  <div className="max-w-3xl">
-                    <div className="mb-3 flex flex-wrap gap-2">
-                      {roster.ligue && (
-                        <span className="rounded-full border border-sky-400/80 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold text-sky-300">
-                          {roster.ligue}
-                        </span>
-                      )}
-                      {roster.statut && (
-                        <span className="rounded-full border border-emerald-400/80 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-200">
-                          {roster.statut}
-                        </span>
-                      )}
+                {/* accents carte */}
+                <div className="pointer-events-none absolute inset-0">
+                  <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
+                  <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+                  <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+                </div>
+
+                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
+
+                <div className="relative p-6">
+                  {/* header roster */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-white/65">
+                        Roster Académie Rocket League
+                      </p>
+                      <h2 className="mt-1 truncate text-lg font-extrabold text-white">
+                        {roster.nom}
+                      </h2>
                     </div>
 
-                    <h2 className="text-xl font-bold text-white">{roster.nom}</h2>
-                    <p className="mt-2 text-sm text-white/85">
-                      {roster.description}
+                    <div className="flex flex-col items-end gap-2">
+                      {roster.statut ? (
+                        <BadgeMeta className="border-emerald-400/30 bg-emerald-500/10 text-emerald-200">
+                          {roster.statut}
+                        </BadgeMeta>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {roster.ligue ? (
+                    <div className="mt-3">
+                      <BadgeMeta className="border-white/10 bg-black/50 text-white/85">
+                        {roster.ligue}
+                      </BadgeMeta>
+                    </div>
+                  ) : null}
+
+                  <p className="mt-4 text-sm leading-relaxed text-white/80">
+                    {roster.description}
+                  </p>
+
+                  {/* joueurs */}
+                  <div className="mt-6">
+                    <h3 className="text-center text-[11px] font-semibold uppercase tracking-[0.28em] text-white/60">
+                      Joueurs
+                    </h3>
+
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                      {roster.joueurs.map((j) => (
+                        <CarteJoueurRL key={j.id} joueur={j} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* manager bloc */}
+                  <div className="mt-6 rounded-2xl border border-white/10 bg-black/55 px-5 py-4 text-sm text-white/85">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/60">
+                      Team Manager
+                    </p>
+                    <p className="mt-2 text-base font-semibold text-white">The Power</p>
+                    <p className="mt-1 text-xs text-white/65">
+                      Point de contact principal pour la section Académie Rocket League (planning,
+                      scrims, inscriptions en ligues et suivi des joueurs).
                     </p>
                   </div>
-
-                  <div className="mt-2 md:mt-0">
-                    <div className="inline-flex items-center rounded-2xl border border-red-500/70 bg-black/80 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
-                      Roster Académie Rocket League
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-3 mx-auto w-full max-w-4xl">
-                  <h3 className="mb-3 text-center text-sm uppercase tracking-[0.25em] text-white/70">
-                    Joueurs
-                  </h3>
-
-                  <div className="grid place-items-center gap-6 sm:grid-cols-2 md:grid-cols-3">
-                    {roster.joueurs.map((j) => (
-                      <CarteJoueurRL key={j.id} joueur={j} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bloc Team Manager sous les joueurs */}
-                <div className="mt-8 mx-auto max-w-md rounded-2xl border border-red-500/60 bg-black/80 px-5 py-4 text-sm text-white/85">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-red-300">
-                    Team Manager
-                  </p>
-                  <p className="mt-2 text-base font-semibold">The Power</p>
-                  <p className="mt-1 text-xs text-white/65">
-                    Point de contact principal pour la section Académie Rocket
-                    League (planning, scrims, inscriptions en ligues et suivi des
-                    joueurs).
-                  </p>
                 </div>
               </article>
             ))}

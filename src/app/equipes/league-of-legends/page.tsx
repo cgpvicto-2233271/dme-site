@@ -11,7 +11,7 @@ export const metadata: Metadata = {
    CONFIG
    - Saison terminée : on masque TOUT pour les joueurs Semi-Pro
    (nom, pseudo, role, pays, drapeaux, lien X, photo)
-   - Le staff (ex: manager) reste visible
+   - Le staff (manager + coach) reste visible
 ========================================================= */
 
 const SAISON_TERMINEE_SEMI_PRO = true;
@@ -88,34 +88,6 @@ type Roster = {
   staff?: Joueur[];
 };
 
-/* --- Académie --- */
-type Lane = "TOP" | "JUNGLE" | "MID" | "ADC" | "SUPPORT";
-type AcademyRank = "Master" | "Diamond" | "Emerald" | "Platinum" | "Gold";
-
-type AcademyPlayer = {
-  lane: Lane;
-  pseudo: string;
-};
-
-type AcademyRoster = {
-  id: string;
-  nom: string;
-  rank: AcademyRank;
-  logoSrc?: string;
-  pitch: string;
-  focus: string;
-  manager?: string;
-  joueurs: AcademyPlayer[];
-};
-
-const ACADEMY_RANK_ORDER: AcademyRank[] = [
-  "Master",
-  "Diamond",
-  "Emerald",
-  "Platinum",
-  "Gold",
-];
-
 /* =========================================================
    ROSTERS SEMI-PRO
 ========================================================= */
@@ -126,7 +98,7 @@ const rosters: Roster[] = [
     nom: "DeathMark E-Sports",
     niveau: "Semi-Pro",
     ligue: "Aegis Challenger League (ACL)",
-    statut: "En saison",
+    statut: "Saison terminée",
     description:
       "Roster principal League of Legends orienté haut niveau amateur NA, avec objectif séries ACL et participations régulières aux NACL Open Qualifiers.",
     joueurs: [
@@ -192,15 +164,24 @@ const rosters: Roster[] = [
         photoSrc: "/logo/logo-dme.png",
         xUrl: "https://x.com/MathCous",
       },
+      {
+        id: "acl-coach",
+        pseudo: "À confirmer",
+        nom: "Head Coach",
+        role: "COACH",
+        pays: "—",
+        photoSrc: "/logo/logo-dme.png",
+        // xUrl: "https://x.com/...",
+      },
     ],
   },
 
   {
     id: "lol-avl",
-    nom: "DME Voltigeurs",
+    nom: "DeathMark E'Sports",
     niveau: "Semi-Pro",
     ligue: "Aegis Vanguard League (AVL)",
-    statut: "En saison",
+    statut: "Saison terminée",
     description:
       "Équipe compétitive bâtie autour de joueurs d’expérience, axée sur la progression collective et les performances en ligues francophones et nord-américaines.",
     joueurs: [
@@ -269,166 +250,15 @@ const rosters: Roster[] = [
         photoSrc: "/logo/logo-dme.png",
         xUrl: "https://x.com/MathCous",
       },
-    ],
-  },
-];
-
-/* =========================================================
-   ROSTERS ACADÉMIE – RÉELS
-========================================================= */
-
-const academyRosters: AcademyRoster[] = [
-  // MASTER
-  {
-    id: "aca-dawn",
-    nom: "DME Dawn",
-    rank: "Master",
-    logoSrc: "/logo/dme-dawn.png",
-    pitch:
-      "Roster Académie haut de tableau, qui flirte avec le niveau Master/GM et sert de passerelle directe vers le Semi-Pro.",
-    focus:
-      "Maintenir un niveau Master stable, structurer le travail d’équipe et préparer les futures saisons en ligues majeures.",
-    manager: "Coussinho",
-    joueurs: [
-      { lane: "TOP", pseudo: "Vallex" },
-      { lane: "JUNGLE", pseudo: "Chrovos" },
-      { lane: "MID", pseudo: "Sai" },
-      { lane: "ADC", pseudo: "Blyos" },
-      { lane: "SUPPORT", pseudo: "zWrath" },
-    ],
-  },
-  {
-    id: "aca-exodia",
-    nom: "DME Exodia",
-    rank: "Master",
-    logoSrc: "/logo/dme-exodia.png",
-    pitch:
-      "Roster Académie très expérimenté, souvent entre Master et GrandMaster, avec une grosse capacité de clutch.",
-    focus:
-      "Convertir le niveau individuel Master/GM en macro solide et en constance sur les BO de ligue.",
-    manager: "Coussinho",
-    joueurs: [
-      { lane: "TOP", pseudo: "Rorschàch" },
-      { lane: "JUNGLE", pseudo: "Tisane" },
-      { lane: "MID", pseudo: "AimDown" },
-      { lane: "ADC", pseudo: "Rayner" },
-      { lane: "SUPPORT", pseudo: "Spy" },
-    ],
-  },
-  {
-    id: "aca-forgotten",
-    nom: "DME Forgotten",
-    rank: "Master",
-    logoSrc: "/logo/dme-forg.png",
-    pitch:
-      "Roster Master axé sur la discipline et la structure en game, avec un noyau stable de joueurs expérimentés.",
-    focus:
-      "Stabiliser le niveau Master, renforcer la communication et préparer le passage éventuel en Semi-Pro.",
-    manager: "Coussinho",
-    joueurs: [
-      { lane: "TOP", pseudo: "Docteur Caron" },
-      { lane: "JUNGLE", pseudo: "Trixxouille" },
-      { lane: "MID", pseudo: "Rezkin" },
-      { lane: "ADC", pseudo: "pewpew" },
-      { lane: "SUPPORT", pseudo: "La Forge" },
-    ],
-  },
-
-  // DIAMOND
-  {
-    id: "aca-ghosts",
-    nom: "DME Ghosts",
-    rank: "Diamond",
-    logoSrc: "/logo/logo-dme.png",
-    pitch:
-      "Roster Diamond solide, axé sur la progression vers le très haut Elo et l’expérience de ligues structurées.",
-    focus:
-      "Solidifier la macro en Diamond, travailler la régularité en scrims et préparer la montée vers le Master.",
-    manager: "Coussinho",
-    joueurs: [
-      { lane: "TOP", pseudo: "W0rstBrzPlayer" },
-      { lane: "JUNGLE", pseudo: "TikaSann" },
-      { lane: "MID", pseudo: "Iruminati" },
-      { lane: "ADC", pseudo: "PeePooPoo" },
-      { lane: "SUPPORT", pseudo: "Coussinhoo" },
-    ],
-  },
-  {
-    id: "aca-takedown",
-    nom: "DME Takedown",
-    rank: "Diamond",
-    logoSrc: "/logo/dme-take.png",
-    pitch:
-      "Line-up Diamond tryhard qui vise les ligues intermédiaires et un passage progressif vers le haut du pôle Académie.",
-    focus:
-      "Clarifier les conditions de victoire, améliorer la discipline en fights et renforcer les automatismes d’équipe.",
-    manager: "Coussinho",
-    joueurs: [
-      { lane: "TOP", pseudo: "Atomic Welder" },
-      { lane: "JUNGLE", pseudo: "Mr Potate" },
-      { lane: "MID", pseudo: "erykon" },
-      { lane: "ADC", pseudo: "azenai" },
-      { lane: "SUPPORT", pseudo: "fleur de lys" },
-    ],
-  },
-
-  // EMERALD
-  {
-    id: "aca-poutine",
-    nom: "DME Poutin Lover",
-    rank: "Emerald",
-    logoSrc: "/logo/dme-pl.png",
-    pitch:
-      "Roster Emerald fun tryhard qui découvre les premiers pas en structure tout en gardant une bonne ambiance.",
-    focus:
-      "Sortir du chaos de la soloQ, travailler les bases collectives et viser un Emerald stable avant le Diamond.",
-    manager: "Jariss",
-    joueurs: [
-      { lane: "TOP", pseudo: "Leeran" },
-      { lane: "JUNGLE", pseudo: "David" },
-      { lane: "MID", pseudo: "Mineur" },
-      { lane: "ADC", pseudo: "Bacontactic" },
-      { lane: "SUPPORT", pseudo: "AmandaWhale" },
-    ],
-  },
-
-  // PLATINUM
-  {
-    id: "aca-abyss",
-    nom: "DME Abyss",
-    rank: "Platinum",
-    logoSrc: "/logo/dme-abyss.png",
-    pitch:
-      "Roster Plat qui sert de première vraie marche compétitive pour les joueurs sortant du Gold.",
-    focus:
-      "Structurer les rotations, travailler les resets propres et installer une communication claire en vocal.",
-    manager: "Jarsiss",
-    joueurs: [
-      { lane: "TOP", pseudo: "Fulldream" },
-      { lane: "JUNGLE", pseudo: "Berzerkir" },
-      { lane: "MID", pseudo: "King Max" },
-      { lane: "ADC", pseudo: "Denis" },
-      { lane: "SUPPORT", pseudo: "Fixx" },
-    ],
-  },
-
-  // GOLD
-  {
-    id: "aca-wish",
-    nom: "DME Wish",
-    rank: "Gold",
-    logoSrc: "/logo/logo-dme.png",
-    pitch:
-      "Roster d’entrée pour découvrir comment fonctionne une structure en venant directement de la soloQ.",
-    focus:
-      "Travailler les bases mécaniques, la compréhension des rôles et la discipline minimale pour jouer en équipe.",
-    manager: "Jarsiss",
-    joueurs: [
-      { lane: "TOP", pseudo: "Zeus" },
-      { lane: "JUNGLE", pseudo: "Wish Faker" },
-      { lane: "MID", pseudo: "Irukama" },
-      { lane: "ADC", pseudo: "MillsQc" },
-      { lane: "SUPPORT", pseudo: "GrosJack" },
+      {
+        id: "avl-coach",
+        pseudo: "À confirmer",
+        nom: "Head Coach",
+        role: "COACH",
+        pays: "—",
+        photoSrc: "/logo/logo-dme.png",
+        // xUrl: "https://x.com/...",
+      },
     ],
   },
 ];
@@ -437,13 +267,17 @@ const academyRosters: AcademyRoster[] = [
    HELPERS
 ========================================================= */
 
-function isManager(personne: Joueur) {
+function estManager(personne: Joueur) {
   return (personne.role || "").toUpperCase() === "MANAGER";
+}
+function estCoach(personne: Joueur) {
+  return (personne.role || "").toUpperCase() === "COACH";
 }
 
 /* =========================================================
    CARTE PERSONNE (Joueur / Staff) – Semi-Pro
-   - Saison terminée : on masque TOUT pour les joueurs (pas le staff)
+   - Saison terminée : on masque TOUT pour les joueurs
+   - Staff visible
 ========================================================= */
 
 function CartePersonne({
@@ -453,77 +287,96 @@ function CartePersonne({
   personne: Joueur;
   masquerTout?: boolean;
 }) {
-  const masquer = masquerTout && !isManager(personne);
+  const roleUpper = (personne.role || "").toUpperCase();
+  const estStaff = roleUpper === "MANAGER" || roleUpper === "COACH";
+  const masquer = masquerTout && !estStaff;
 
   return (
     <article
-      className="group relative flex h-[340px] flex-col overflow-hidden rounded-3xl border border-red-700/90
-                 bg-gradient-to-b from-black via-black/95 to-[#170000] px-5 pb-6 pt-6
-                 shadow-[0_0_32px_rgba(0,0,0,0.85)] transition
-                 hover:-translate-y-1 hover:border-red-500 hover:shadow-[0_0_40px_rgba(248,113,113,0.9)]"
+      className="group relative flex h-[340px] flex-col overflow-hidden rounded-3xl
+                 border border-red-500/20 bg-black/65 shadow-[0_18px_60px_rgba(0,0,0,0.58)]
+                 backdrop-blur-xl transition hover:-translate-y-1 hover:border-red-500/40"
     >
-      {/* halo */}
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/15" />
-
-      {/* Image */}
-      <div className="relative mb-5 flex items-center justify-center">
-        <div className="relative flex h-[180px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black/80">
-          {!masquer && (
-            <Image
-              src={personne.photoSrc || "/logo/logo-dme.png"}
-              alt={personne.pseudo}
-              width={220}
-              height={180}
-              className="h-full w-auto object-contain"
-            />
-          )}
-
-          {masquer && (
-            <>
-              <div className="absolute inset-0">
-                <Image
-                  src="/logo/logo-dme.png"
-                  alt="DME"
-                  fill
-                  className="object-contain blur-md opacity-70"
-                />
-              </div>
-
-              <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
-                  COMING SOON
-                </p>
-                <p className="mt-1 text-[11px] text-white/60">
-                  Visuels et roster dévoilés prochainement
-                </p>
-              </div>
-
-              <div className="pointer-events-none absolute inset-0 bg-black/35" />
-            </>
-          )}
-        </div>
+      {/* accents */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
+        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
       </div>
 
-      {/* Infos principales */}
-      <div className="relative flex flex-1 flex-col justify-between">
+      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
+
+      {/* VISUEL (plus de carre marque) */}
+      <div className="relative mb-4 flex items-center justify-center px-5 pt-6">
+        {!masquer ? (
+          <div className="relative flex h-[180px] w-full items-center justify-center">
+            {/* halo discret */}
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500/12 blur-2xl" />
+            </div>
+
+            {/* avatar rond (pro) */}
+            <div className="relative h-44 w-44 overflow-hidden rounded-full ring-1 ring-white/10 shadow-[0_18px_55px_rgba(0,0,0,0.55)]">
+              <Image
+                src={personne.photoSrc || "/logo/logo-dme.png"}
+                alt={personne.pseudo}
+                fill
+                className="object-cover"
+                sizes="176px"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="relative flex h-[180px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black/30 ring-1 ring-white/10">
+            <div className="absolute inset-0">
+              <Image
+                src="/logo/logo-dme.png"
+                alt="DME"
+                fill
+                className="object-contain blur-md opacity-65"
+              />
+            </div>
+
+            <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
+                COMING SOON
+              </p>
+              <p className="mt-1 text-[11px] text-white/60">
+                Visuels et roster dévoilés prochainement
+              </p>
+            </div>
+
+            <div className="pointer-events-none absolute inset-0 bg-black/35" />
+          </div>
+        )}
+      </div>
+
+      {/* Infos */}
+      <div className="relative flex flex-1 flex-col justify-between px-5 pb-6">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-400">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/65">
             {masquer ? "JOUEUR" : personne.role}
           </p>
 
-          <p className="text-base font-bold uppercase text-white">
+          <p className="mt-1 text-base font-extrabold uppercase text-white">
             {masquer ? "COMING SOON" : personne.pseudo}
           </p>
 
-          <p className="text-[11px] italic text-white/70">
+          <p className="mt-1 text-[11px] italic text-white/70">
             {masquer ? "—" : personne.nom}
           </p>
+
+          {!masquer && (estManager(personne) || estCoach(personne)) && (
+            <div className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">
+              {estManager(personne) ? "Staff DME" : "Coaching Staff"}
+            </div>
+          )}
         </div>
 
-        {/* Infos pays / drapeaux */}
+        {/* Pays / drapeaux */}
         {!masquer &&
           (personne.pays || personne.drapeauSrc || personne.drapeaux?.length) && (
-            <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
+            <div className="mt-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
               {personne.drapeaux?.length
                 ? personne.drapeaux.map((d) => (
                     <Image
@@ -548,27 +401,25 @@ function CartePersonne({
               {personne.pays && <span>{personne.pays}</span>}
             </div>
           )}
-      </div>
 
-      {/* Lien X (désactivé si masqué) */}
-      {personne.xUrl && !masquer && (
-        <div
-          className="pointer-events-none mt-0 transform opacity-0 transition
-                     group-hover:pointer-events-auto group-hover:opacity-100"
-        >
-          <Link
-            href={personne.xUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1 rounded-full border border-white/15
-                       bg-black/50 px-0 py-0.5 text-[11px] font-semibold uppercase tracking-[0.15em]
-                       text-white/70 hover:border-sky-350 hover:text-sky-200"
-          >
-            <span className="text-sm">𝕏</span>
-            <span> X/Twitter</span>
-          </Link>
-        </div>
-      )}
+        {/* X (toujours visible si présent) */}
+        {personne.xUrl && !masquer && (
+          <div className="mt-5">
+            <Link
+              href={personne.xUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full
+                         border border-white/10 bg-black/45 px-3 py-2 text-[11px]
+                         font-semibold uppercase tracking-[0.15em] text-white/80
+                         transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-white"
+            >
+              <span className="text-sm">𝕏</span>
+              <span>X/Twitter</span>
+            </Link>
+          </div>
+        )}
+      </div>
     </article>
   );
 }
@@ -582,147 +433,35 @@ function ResumeRoster({ roster }: { roster: Roster }) {
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div className="max-w-3xl">
         <div className="mb-3 flex flex-wrap gap-2">
-          <span className="rounded-full border border-red-600/80 bg-red-600/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-red-300">
+          <span className="rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-red-100">
             {roster.niveau}
           </span>
+
           {roster.ligue && (
-            <span className="rounded-full border border-sky-400/80 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold text-sky-300">
+            <span className="rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] font-semibold text-white/80">
               {roster.ligue}
             </span>
           )}
+
           {roster.statut && (
-            <span className="rounded-full border border-emerald-400/80 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-300">
+            <span className="rounded-full border border-emerald-300/25 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-100">
               {roster.statut}
             </span>
           )}
         </div>
 
-        <h2 className="text-2xl font-bold">{roster.nom}</h2>
+        <h2 className="text-2xl font-extrabold text-white">{roster.nom}</h2>
         <p className="mt-2 text-sm leading-relaxed text-white/80">
           {roster.description}
         </p>
       </div>
 
       <div className="mt-3 lg:mt-0">
-        <div className="inline-flex items-center rounded-2xl border border-red-500/70 bg-black/80 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+        <div className="inline-flex items-center rounded-2xl border border-white/10 bg-black/45 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
           Bloc Semi-Pro
         </div>
       </div>
     </div>
-  );
-}
-
-/* =========================================================
-   CARTE ACADÉMIE – COMPACTE
-========================================================= */
-
-function badgeColors(rank: AcademyRank) {
-  switch (rank) {
-    case "Master":
-      return "border-purple-400/80 bg-purple-500/15 text-purple-200";
-    case "Diamond":
-      return "border-cyan-300/80 bg-cyan-400/15 text-cyan-100";
-    case "Emerald":
-      return "border-emerald-300/80 bg-emerald-400/15 text-emerald-100";
-    case "Platinum":
-      return "border-sky-300/80 bg-sky-400/15 text-sky-100";
-    case "Gold":
-    default:
-      return "border-amber-300/80 bg-amber-400/15 text-amber-100";
-  }
-}
-
-function titreRank(rank: AcademyRank) {
-  return rank.toUpperCase();
-}
-
-function CarteAcademieRoster({ roster }: { roster: AcademyRoster }) {
-  const badgeClass = badgeColors(roster.rank);
-
-  return (
-    <article
-      className="relative flex flex-col gap-4 rounded-3xl border border-red-700/80
-                 bg-black/90 px-6 py-6 shadow-[0_0_30px_rgba(0,0,0,0.95)]"
-    >
-      {/* halo */}
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/15" />
-
-      {/* HEADER : logo + nom + rank */}
-      <div className="relative flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-red-700 via-black to-red-900 shadow-[0_0_20px_rgba(248,113,113,0.7)]">
-          <Image
-            src={roster.logoSrc || "/logo/logo-dme.png"}
-            alt={roster.nom}
-            width={56}
-            height={56}
-            className="h-12 w-12 object-contain"
-          />
-        </div>
-
-        <div className="flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-red-400">
-            Roster Académie
-          </p>
-          <h3 className="text-lg font-bold text-white">{roster.nom}</h3>
-        </div>
-
-        <span
-          className={
-            "inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] " +
-            badgeClass
-          }
-        >
-          {roster.rank}
-        </span>
-      </div>
-
-      {/* Pitch */}
-      <p className="relative mt-1 text-xs text-white/80 md:text-sm">
-        {roster.pitch}
-      </p>
-
-      {/* Focus */}
-      <div className="relative rounded-2xl border border-red-500/25 bg-black/70 px-3 py-3 text-xs text-white/85">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-red-300">
-          Focus du roster
-        </p>
-        <p className="mt-1 text-xs md:text-[13px]">{roster.focus}</p>
-      </div>
-
-      {/* Joueurs */}
-      <div className="relative rounded-2xl bg-black/70 p-3">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/60">
-          Joueurs
-        </p>
-        <div className="space-y-1.5">
-          {roster.joueurs.map((j) => (
-            <div
-              key={j.lane}
-              className="flex items-center justify-between rounded-xl border border-white/5 bg-black/60 px-3 py-1.5 text-[11px] text-white/90"
-            >
-              <span className="w-20 font-semibold tracking-[0.14em] text-white/70">
-                {j.lane}
-              </span>
-              <span className="flex-1 text-right font-medium">{j.pseudo}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Manager */}
-      <div className="relative rounded-2xl border border-red-500/30 bg-black/85 px-3 py-3 text-[11px] text-white/90">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-red-300">
-          Manager
-        </p>
-        <p className="mt-1 text-xs font-semibold">
-          {roster.manager || "À confirmer"}
-        </p>
-        <p className="mt-1 text-[10px] text-white/60">
-          Point de contact principal pour le suivi du roster, les inscriptions
-          en ligues et la communication avec le staff DME.
-        </p>
-      </div>
-    </article>
   );
 }
 
@@ -735,7 +474,7 @@ function BoutonRetourJeux() {
     <div className="mb-6">
       <Link
         href="/equipes"
-        className="inline-flex items-center gap-2 rounded-full border border-red-600/70 bg-black/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-red-600/80 hover:border-red-500 transition"
+        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
       >
         ← Retour aux jeux
       </Link>
@@ -763,15 +502,10 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
   const rostersSemi = rosters.filter((r) => r.niveau === "Semi-Pro");
   const track = [...sponsorLogos, ...sponsorLogos];
 
-  const academySorted = [...academyRosters].sort(
-    (a, b) =>
-      ACADEMY_RANK_ORDER.indexOf(a.rank) - ACADEMY_RANK_ORDER.indexOf(b.rank)
-  );
-
   return (
     <div className="bg-black text-white">
       {/* ===== SPONSORS ===== */}
-      <div className="marquee border-y border-red-600 bg-black">
+      <div className="marquee border-y border-red-600/70 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
@@ -781,26 +515,36 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
         </div>
       </div>
 
-      <section className="bg-texture min-h-screen">
+      {/* ===== BACKGROUND (copie exacte de la page academie) ===== */}
+      <section className="relative min-h-screen overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.22),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
+          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
+        </div>
+
         <div className="pt-[64px]" />
 
         {/* ========================= SEMI-PRO (vue par défaut) ========================= */}
         {vue === "semi-pro" && (
-          <main className="mx-auto w-full max-w-[100rem] px-6 pb-24 pt-10 sm:px-10">
+          <main className="relative mx-auto w-full max-w-[100rem] px-6 pb-24 pt-10 sm:px-10">
             <BoutonRetourJeux />
 
             <header className="mb-12 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
                   League of Legends – Semi-Pro
                 </p>
+
                 <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                  Rosters <span className="text-red-500">Semi-Pro</span>
+                  Rosters <span className="text-red-400">Semi-Pro</span>
                 </h1>
+
                 <p className="mt-2 max-w-2xl text-sm text-white/80">
                   Présentation de nos équipes alignées dans les ligues majeures
-                  (ACL, AVL, NACL OQ). Staff complet, cadre sérieux et
-                  objectifs de haut de tableau.
+                  (ACL, AVL, NACL OQ). Staff complet, cadre sérieux et objectifs
+                  de haut de tableau.
                 </p>
 
                 {SAISON_TERMINEE_SEMI_PRO && (
@@ -811,111 +555,85 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
                 )}
               </div>
 
-              {/* IMPORTANT: lien qui marche (query param) */}
               <Link
                 href="/equipes/league-of-legends/academie"
-                className="inline-flex items-center gap-2 rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-red-500/35 bg-red-500/10 px-4 py-2
+                           text-xs font-semibold uppercase tracking-[0.18em] text-red-100
+                           transition hover:border-red-500/55 hover:bg-red-500/15 hover:text-white"
               >
                 Voir les rosters Académie →
               </Link>
             </header>
 
-            <section className="space-y-4">
+            <section className="space-y-6">
               {rostersSemi.map((roster) => (
                 <article
                   key={roster.id}
-                  className="rounded-3xl border border-red-700/80 bg-black/85 px-6 pb-12 pt-8 shadow-[0_0_30px_rgba(0,0,0,0.95)] sm:px-10"
+                  className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65
+                             shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl"
                 >
-                  <ResumeRoster roster={roster} />
+                  <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/12 blur-3xl" />
+                    <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+                    <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+                  </div>
 
-                  {/* JOUEURS */}
-                  {roster.joueurs && (
-                    <div className="mt-10 max-w-6xl mx-auto">
-                      <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
-                        Joueurs
-                      </h3>
+                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
 
-                      <div className="grid place-items-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                        {roster.joueurs.map((p) => (
-                          <CartePersonne
-                            key={p.id}
-                            personne={p}
-                            masquerTout={SAISON_TERMINEE_SEMI_PRO}
-                          />
-                        ))}
+                  <div className="relative px-6 pb-12 pt-8 sm:px-10">
+                    <ResumeRoster roster={roster} />
+
+                    {/* JOUEURS */}
+                    {roster.joueurs && (
+                      <div className="mt-10 mx-auto max-w-6xl">
+                        <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
+                          Joueurs
+                        </h3>
+
+                        <div className="grid place-items-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                          {roster.joueurs.map((p) => (
+                            <CartePersonne
+                              key={p.id}
+                              personne={p}
+                              masquerTout={SAISON_TERMINEE_SEMI_PRO}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* STAFF (reste visible) */}
-                  {roster.staff && (
-                    <div className="mt-14 max-w-4xl mx-auto">
-                      <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
-                        Staff
-                      </h3>
+                    {/* STAFF (coach + manager collés) */}
+                    {roster.staff && (
+                      <div className="mt-14 mx-auto max-w-5xl">
+                        <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
+                          Staff
+                        </h3>
 
-                      <div className="grid place-items-center gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-1">
-                        {roster.staff.map((s) => (
-                          <CartePersonne key={s.id} personne={s} masquerTout={false} />
-                        ))}
+                        <div className="grid place-items-center gap-6 sm:grid-cols-2">
+                          {roster.staff.map((s) => (
+                            <CartePersonne
+                              key={s.id}
+                              personne={s}
+                              masquerTout={false}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </article>
               ))}
             </section>
           </main>
         )}
 
-        {/* ========================= ACADÉMIE ========================= */}
+        {/* Placeholder academie si jamais */}
         {vue === "academie" && (
-          <main className="mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
+          <main className="relative mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
             <BoutonRetourJeux />
 
-            <header className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-400">
-                  League of Legends – Académie
-                </p>
-                <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                  Rosters <span className="text-red-400">Académie</span>
-                </h1>
-                <p className="mt-2 max-w-2xl text-sm text-white/80">
-                  Pôle dédié à la progression des joueurs, aux ligues
-                  communautaires et aux premiers pas vers la compétition
-                  structurée. Les rosters sont classés par niveau, du Master au
-                  Gold.
-                </p>
-              </div>
-
-              {/* IMPORTANT: lien retour qui marche */}
-              <Link
-                href="/equipes/league-of-legends?niveau=semi-pro"
-                className="inline-flex items-center gap-2 rounded-full border border-red-500/70 bg-black/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-100 shadow-[0_0_18px_rgba(0,0,0,0.7)] hover:border-red-400 hover:text-white"
-              >
-                ← Revenir aux rosters Semi-Pro
-              </Link>
-            </header>
-
-            <div className="space-y-10">
-              {ACADEMY_RANK_ORDER.map((rank) => {
-                const group = academySorted.filter((r) => r.rank === rank);
-                if (!group.length) return null;
-
-                return (
-                  <section key={rank} className="space-y-4">
-                    <h2 className="text-xs font-semibold uppercase tracking-[0.5em] text-white/55">
-                      {titreRank(rank)}
-                    </h2>
-
-                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                      {group.map((roster) => (
-                        <CarteAcademieRoster key={roster.id} roster={roster} />
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
+            <div className="rounded-3xl border border-white/10 bg-black/55 p-6 text-sm text-white/80">
+              Page académie: /equipes/league-of-legends/academie
             </div>
           </main>
         )}

@@ -23,41 +23,6 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/passion.png",
 ];
 
 /* --- Cartes de recrutement --- */
@@ -69,7 +34,7 @@ type JeuRecrutement = {
   boutonTexte: string;
   lienFormulaire: string;
   logoSrc: string;
-  comingSoon?: boolean; // <-- AJOUT
+  comingSoon?: boolean;
 };
 
 const jeuxRecrutement: JeuRecrutement[] = [
@@ -87,7 +52,7 @@ const jeuxRecrutement: JeuRecrutement[] = [
   {
     id: "valorant",
     nom: "Valorant",
-    roleTexte: "Line-up en construction - pole espoir & competitives ",
+    roleTexte: "Line-up en construction - pole espoir & competitives",
     description:
       "Une equipe principale existe deja. Nous cherchons des remplacants et des profils espoir pour stabiliser la line-up, structurer les scrims et viser les ligues semi-pro a moyen terme.",
     boutonTexte: "Rejoindre une equipe Valo",
@@ -106,8 +71,6 @@ const jeuxRecrutement: JeuRecrutement[] = [
       "https://docs.google.com/forms/d/e/1FAIpQLSdX_TjLQR0GrI8oErHzerN5B84zWyXv7EHV3JFonzvgu701Ww/viewform?usp=publish-editor",
     logoSrc: "/medias/commun/logo-rl.png",
   },
-
-  // ===== R6 -> COMING SOON (flou + overlay + bouton desactive) =====
   {
     id: "r6",
     nom: "Rainbow Six Siege",
@@ -119,7 +82,6 @@ const jeuxRecrutement: JeuRecrutement[] = [
     logoSrc: "/medias/commun/logo-r6 (2).png",
     comingSoon: true,
   },
-
   {
     id: "mr",
     nom: "Marvel Rivals",
@@ -191,9 +153,6 @@ const formsConfig: FormConfig[] = [
     objectifsPlaceholder:
       "Objectifs perso : monter en rank, jouer des tournois hebdo, ligues, LAN, etc.",
   },
-
-  // NOTE: On retire volontairement le form R6 tant que c'est "Coming Soon"
-
   {
     id: "form-mr",
     titre: "Marvel Rivals",
@@ -212,7 +171,7 @@ const formsConfig: FormConfig[] = [
   },
 ];
 
-/* --- Modal de formulaire (affiche au clic sur un bouton) --- */
+/* --- Modal de formulaire (ancre) --- */
 function FormModal({
   id,
   titre,
@@ -226,17 +185,24 @@ function FormModal({
   return (
     <section
       id={id}
-      className="recrutement-modal fixed inset-0 z-40 items-center justify-center bg-black/80 px-4"
+      className="recrutement-modal fixed inset-0 z-40 hidden items-center justify-center bg-black/80 px-4"
     >
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-red-700/80 bg-black/95 p-8 shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+      <div className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-red-500/20 bg-black/85 p-8 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
+        {/* accents */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
+          <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+          <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+        </div>
+
         {/* header modal */}
-        <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="relative mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-300">
               Formulaire de recrutement
             </p>
-            <h2 className="text-2xl font-bold md:text-3xl">
-              {titre} <span className="text-red-500">- Rejoindre DME</span>
+            <h2 className="mt-2 text-2xl font-extrabold md:text-3xl">
+              {titre} <span className="text-red-300">- Rejoindre DME</span>
             </h2>
             <p className="mt-2 text-sm text-white/80">{sousTitre}</p>
           </div>
@@ -244,68 +210,69 @@ function FormModal({
           {/* bouton fermer */}
           <Link
             href="/recrutement"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-red-600/70 bg-black/70 text-sm font-semibold text-red-300 hover:bg-red-600/80 hover:text-white transition"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] text-sm font-semibold text-white/80 transition hover:border-red-500/40 hover:text-white"
+            aria-label="Fermer"
           >
             ✕
           </Link>
         </div>
 
         {/* formulaire */}
-        <form action="#" method="post" className="grid gap-6 md:grid-cols-2">
+        <form action="#" method="post" className="relative grid gap-6 md:grid-cols-2">
           {/* Colonne gauche */}
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Pseudo en jeu
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder="Pseudo + tag (ex : Coussinho#NA1)"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Rang / MMR
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder={rankPlaceholder}
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Role / position
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder={rolePlaceholder}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                   Age
                 </label>
                 <input
                   type="number"
                   min={13}
                   max={99}
-                  className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                  className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                   Timezone / region
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                  className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                   placeholder="Ex : NA-EST (QC), EUW (FR), etc."
                 />
               </div>
@@ -315,54 +282,54 @@ function FormModal({
           {/* Colonne droite */}
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Discord
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder="Ton @Discord complet"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Disponibilites
               </label>
               <input
                 type="text"
-                className="w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder={dispoPlaceholder}
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Experience en equipe
               </label>
               <textarea
-                className="min-h-[96px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="min-h-[96px] w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder={experiencePlaceholder}
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-semibold uppercase tracking-wide text-white/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Ce que tu recherches chez DME
               </label>
               <textarea
-                className="min-h-[80px] w-full rounded-lg border border-red-700/70 bg-black/70 px-3 py-2 text-sm text-white outline-none focus:border-red-400 focus:ring-1 focus:ring-red-500"
+                className="min-h-[80px] w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
                 placeholder={objectifsPlaceholder}
               />
             </div>
           </div>
 
-          <div className="md:col-span-2 mt-4 flex justify-end">
+          <div className="md:col-span-2 mt-2 flex justify-end">
             <button
               type="submit"
               className="inline-flex items-center justify-center rounded-full bg-red-600 px-8 py-3 text-sm font-semibold uppercase tracking-[0.2em]
                          text-white shadow-[0_0_22px_rgba(239,68,68,0.9)]
-                         hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)] transition"
+                         transition hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
             >
               Envoyer ma candidature
             </button>
@@ -373,13 +340,22 @@ function FormModal({
   );
 }
 
+/* --- UI helpers --- */
+function BadgePill({ children }: { children: string }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
+      {children}
+    </span>
+  );
+}
+
 export default function RecrutementPage() {
   const track = [...sponsorLogos, ...sponsorLogos];
 
   return (
     <div className="bg-black text-white">
-      {/* ===== Bande sponsors (fond noir uniquement) ===== */}
-      <div className="marquee relative z-0 border-y border-red-600 bg-black">
+      {/* ===== Bande sponsors ===== */}
+      <div className="marquee border-y border-red-600/70 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
@@ -389,120 +365,136 @@ export default function RecrutementPage() {
         </div>
       </div>
 
-      {/* ===== Contenu principal avec background texture ===== */}
-      <section id="recrutement-top" className="bg-texture min-h-screen">
-        {/* espace sous la nav */}
+      {/* ===== Background unifie (pro) ===== */}
+      <section id="recrutement-top" className="relative min-h-screen overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.20),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.12),transparent_60%)]" />
+          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
+        </div>
+
         <div className="pt-[64px]" />
 
         {/* ===== HERO ===== */}
-        <header className="mx-auto max-w-4xl px-4 sm:px-6 pt-8 sm:pt-10 pb-6 sm:pb-8 text-center">
+        <header className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-8 text-center">
           <div className="flex justify-center">
-            <div className="inline-flex items-center gap-3 rounded-full border border-red-600/70 bg-black/70 px-4 py-1 text-xs sm:text-sm uppercase tracking-[0.2em] text-red-400">
+            <div className="inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-black/50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.26em] text-red-200 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-red-500" />
               Recrutement
             </div>
           </div>
 
-          <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-extrabold">
+          <h1 className="mt-5 text-3xl font-extrabold sm:text-4xl md:text-5xl">
             Rejoindre <span className="text-red-500">DeathMark E-Sports</span>
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg text-white/85">
-            Tu veux faire partie d’une structure ambitieuse, serieuse et en
-            constante evolution ? Choisis ton jeu et tente ta chance pour
-            rejoindre nos rangs.
+          <p className="mx-auto mt-4 max-w-3xl text-base sm:text-lg text-white/85">
+            Choisis ton jeu, remplis le formulaire et on te recontacte. DME cherche des
+            joueurs serieux, investis et capables de progresser en structure.
           </p>
+
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <BadgePill>NA / QC</BadgePill>
+            <BadgePill>Structuree</BadgePill>
+            <BadgePill>Tryouts</BadgePill>
+            <BadgePill>Long terme</BadgePill>
+          </div>
         </header>
 
-        {/* ===== CARTES DE JEUX ===== */}
-        <main className="mx-auto w-full max-w-[140rem] px-4 sm:px-10 pb-16 sm:pb-20">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {/* ===== CARTES ===== */}
+        <main className="relative mx-auto w-full max-w-[110rem] px-4 sm:px-10 pb-16 sm:pb-20">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
             {jeuxRecrutement.map((jeu) => {
               const estComingSoon = !!jeu.comingSoon;
 
               return (
                 <article
                   key={jeu.id}
-                  className={`relative flex h-[670px] flex-col rounded-3xl border border-red-700/90 bg-black/85 px-8 pb-10 pt-10
-                              shadow-[0_0_32px_rgba(0,0,0,0.85)]
-                              transition
-                              ${estComingSoon
-                                ? "opacity-80"
-                                : "hover:border-red-500 hover:shadow-[0_0_45px_rgba(248,113,113,0.8)]"
-                              }`}
+                  className={`group relative flex min-h-[640px] flex-col overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 p-7 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl transition
+                    ${
+                      estComingSoon
+                        ? "opacity-90"
+                        : "hover:-translate-y-0.5 hover:border-red-500/45 hover:shadow-[0_24px_80px_rgba(0,0,0,0.75)]"
+                    }`}
                 >
-                  {/* halo interne */}
-                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-red-500/25" />
+                  {/* accents */}
+                  <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute -left-20 -top-24 h-72 w-72 rounded-full bg-red-500/14 blur-3xl" />
+                    <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-red-500/10 blur-3xl" />
+                    <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+                  </div>
 
-                  {/* Tout le contenu blurré si Coming Soon */}
-                  <div className={`${estComingSoon ? "blur-sm opacity-60 pointer-events-none select-none" : ""}`}>
+                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
+
+                  {/* contenu */}
+                  <div
+                    className={`relative flex h-full flex-col ${
+                      estComingSoon ? "blur-sm opacity-60 pointer-events-none select-none" : ""
+                    }`}
+                  >
                     {/* logo */}
-                    <div className="relative mb-8 flex items-center justify-center">
-                      <div className="flex h-[130px] w-full items-center justify-center rounded-xl bg-black/80">
+                    <div className="mb-6 flex items-center justify-center">
+                      <div className="flex h-[120px] w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/60">
                         <Image
                           src={jeu.logoSrc}
                           alt={jeu.nom}
                           width={260}
                           height={130}
-                          className="max-h-[120px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]"
+                          className="max-h-[105px] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]"
                         />
                       </div>
                     </div>
 
-                    {/* contenu + bouton */}
-                    <div className="relative flex flex-1 flex-col justify-between">
+                    <div className="flex flex-1 flex-col justify-between">
                       <div>
-                        <h2 className="text-lg font-bold uppercase text-red-400 tracking-wide">
-                          {jeu.nom}
+                        <h2 className="text-lg font-extrabold uppercase tracking-[0.08em] text-white">
+                          <span className="text-red-300">{jeu.nom}</span>
                         </h2>
-                        <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                        <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/60">
                           {jeu.roleTexte}
                         </p>
 
-                        <p className="mt-4 text-[15px] leading-relaxed text-white/90">
+                        <p className="mt-4 text-sm leading-relaxed text-white/85">
                           {jeu.description}
                         </p>
                       </div>
 
-                      <div className="pt-6">
-                        {/* Bouton normal */}
+                      <div className="mt-8">
                         {!estComingSoon ? (
                           <Link
                             href={jeu.lienFormulaire}
                             className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
                                        text-white shadow-[0_0_22px_rgba(239,68,68,0.9)]
-                                       hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)] transition"
+                                       transition hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
                           >
                             {jeu.boutonTexte}
                           </Link>
                         ) : (
-                          // Placeholder, le vrai bouton est au-dessus (overlay)
                           <div className="h-[48px]" />
                         )}
                       </div>
                     </div>
                   </div>
 
-                  {/* OVERLAY COMING SOON (net, non flou) */}
+                  {/* overlay coming soon */}
                   {estComingSoon && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-black/55">
-                      <div className="text-center">
-                        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
-                          New game
-                        </p>
-                        <p className="mt-2 text-2xl font-extrabold uppercase tracking-[0.2em] text-red-500">
-                          Coming Soon
-                        </p>
-                        <p className="mt-3 text-sm text-white/80">
-                          Recrutement bientot
-                        </p>
-                      </div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+                        New game
+                      </p>
+                      <p className="mt-2 text-2xl font-extrabold uppercase tracking-[0.2em] text-red-400">
+                        Coming Soon
+                      </p>
+                      <p className="mt-3 text-sm text-white/80">
+                        Recrutement bientot
+                      </p>
 
                       <div className="mt-8 w-full px-8">
                         <button
                           type="button"
                           disabled
-                          className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-full border border-red-600/40 bg-black/60 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
+                          className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-full border border-white/10 bg-black/60 px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em]
                                      text-white/70 shadow-[0_0_22px_rgba(0,0,0,0.7)]"
                         >
                           {jeu.boutonTexte}
@@ -515,7 +507,7 @@ export default function RecrutementPage() {
             })}
           </div>
 
-          {/* ===== MODALS DE FORMULAIRE (sans R6) ===== */}
+          {/* ===== MODALS (anchors) ===== */}
           {formsConfig.map((cfg) => (
             <FormModal key={cfg.id} {...cfg} />
           ))}

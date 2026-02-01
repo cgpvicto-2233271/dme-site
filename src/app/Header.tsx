@@ -3,9 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+
+  const role = session?.role ?? null;
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -25,11 +29,11 @@ export default function Header() {
           py-3
         "
       >
-        {/* LOGO + NOM — fortement à gauche */}
+        {/* LOGO */}
         <Link
           href="/"
           className="flex items-center gap-3"
-          style={{ transform: "translateX(-50px)" }} // ← décalage gauche
+          style={{ transform: "translateX(-50px)" }}
         >
           <Image
             src="/logo/logo-dme.png"
@@ -43,14 +47,10 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* NAVIGATION — fortement à droite */}
+        {/* NAV */}
         <nav
-          className="
-            hidden md:flex 
-            gap-7 
-            ml-auto
-          "
-          style={{ transform: "translateX(50px)" }} // → décalage droite
+          className="hidden md:flex gap-6 ml-auto items-center"
+          style={{ transform: "translateX(50px)" }}
         >
           {[
             { href: "/", label: "Accueil" },
@@ -76,6 +76,54 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
+
+          {/* SCOUTING */}
+          {(role === "coach" || role === "staff") && (
+            <Link
+              href="/scouting"
+              className={`
+                px-4 py-1 rounded-full transition
+                ${
+                  isActive("/scouting")
+                    ? "border border-red-600 text-red-500 bg-black shadow-[0_0_12px_rgba(248,113,113,0.8)]"
+                    : "text-white hover:text-red-500"
+                }
+              `}
+            >
+              Scouting
+            </Link>
+          )}
+
+          {/* AUTH */}
+          {!session ? (
+            <Link
+              href="/connexion"
+              className={`
+                px-4 py-1 rounded-full transition
+                ${
+                  isActive("/connexion")
+                    ? "border border-red-600 text-red-500 bg-black shadow-[0_0_12px_rgba(248,113,113,0.8)]"
+                    : "text-white hover:text-red-500"
+                }
+              `}
+            >
+              Connexion
+            </Link>
+          ) : (
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="
+                px-4 py-1 rounded-full
+                border border-white/20
+                text-white/80
+                hover:text-red-500
+                hover:border-red-500
+                transition
+              "
+            >
+              Déconnexion
+            </button>
+          )}
         </nav>
       </div>
     </header>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./Header";
 import Footer from "./Footer";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "DeathMark Esports",
@@ -39,17 +40,18 @@ export default function RootLayout({
           paddingRight: "env(safe-area-inset-right)",
         }}
       >
-        <Header />
+        {/* ✅ Provider NextAuth */}
+        <Providers>
+          <Header />
 
-        {/* plus de max-width ici, la page peut utiliser 100% de la largeur */}
-        <main className="w-full pt-[72px] flex-1">
-          {children}
-        </main>
+          {/* plus de max-width ici, la page peut utiliser 100% de la largeur */}
+          <main className="w-full pt-[72px] flex-1">
+            {children}
+          </main>
 
-        <Footer />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
 }
-
-
