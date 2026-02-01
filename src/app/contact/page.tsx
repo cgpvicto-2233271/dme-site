@@ -23,6 +23,20 @@ const sponsorLogos = [
   "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
+   "/medias/sponsors/guru1.png",
+  "/medias/sponsors/tuninclub.png",
+  "/medias/sponsors/rogue1.png",
+  "/medias/sponsors/tnt1.png",
+  "/medias/sponsors/ig1.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/passion.png",
 ];
 
 /* --- Blocs contact --- */
@@ -202,7 +216,7 @@ export default function ContactPage() {
             </a>
 
             <Link
-              href="/social-media"
+              href="/social"
               className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
                          transition hover:border-red-500/45 hover:text-red-200"
             >
@@ -304,7 +318,7 @@ export default function ContactPage() {
                   Nous ecrire maintenant
                 </a>
                 <Link
-                  href="/social-media"
+                  href="/social"
                   className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
                              transition hover:border-red-500/45 hover:text-red-200"
                 >
@@ -398,7 +412,7 @@ export default function ContactPage() {
                   </a>
 
                   <Link
-                    href="/social-media"
+                    href="/social"
                     className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
                                transition hover:border-red-500/45 hover:text-red-200"
                   >
@@ -523,7 +537,7 @@ export default function ContactPage() {
                   </a>
 
                   <Link
-                    href="/social-media"
+                    href="/social"
                     className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-8 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
                                transition hover:border-red-500/45 hover:text-red-200"
                   >

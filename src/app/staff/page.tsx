@@ -172,7 +172,7 @@ export default function StaffPage() {
             </Link>
 
             <Link
-              href="/social-media"
+              href="/social"
               className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
                          transition hover:border-red-500/45 hover:text-red-200"
             >
@@ -311,7 +311,7 @@ export default function StaffPage() {
                   </Link>
 
                   <Link
-                    href="/social-media"
+                    href="/social"
                     className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-8 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
                                transition hover:border-red-500/45 hover:text-red-200"
                   >
