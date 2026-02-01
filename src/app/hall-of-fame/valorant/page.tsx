@@ -59,7 +59,7 @@ const NOUVEAUX_RESULTATS_VALORANT: Item[] = [
       "Une run solide jusqu’à la finale : DeathMark E-Sports décroche une 2e place sur la LAN CSF et confirme son niveau sur la scène compétitive.",
     cashprize: "300$",
     badge: "2e place",
-    bannerSrc: "/medias/commun/avl.png",
+    bannerSrc: "/medias/commun/valo.png",
     bannerAlt: "Bannière — DeathMark E-Sports",
   },
 ];

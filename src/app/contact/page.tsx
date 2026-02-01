@@ -101,7 +101,7 @@ type Sponsor = { src: string; alt: string; tier: "major" | "support" };
 const sponsors: Sponsor[] = [
   { src: "/medias/sponsors/guru1.png", alt: "Guru", tier: "major" },
   { src: "/medias/sponsors/arene1.png", alt: "Rogue", tier: "major" },
-  { src: "/medias/sponsors/passion.png", alt: "Tuninclub", tier: "major" },
+  { src: "/medias/sponsors/sim.png", alt: "Tuninclub", tier: "major" },
 
   { src: "/medias/sponsors/tnt1.png", alt: "TNT", tier: "support" },
   { src: "/medias/sponsors/ig1.png", alt: "IG", tier: "support" },

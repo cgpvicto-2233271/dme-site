@@ -55,7 +55,7 @@ const staff: StaffMember[] = [
     id: "zachary",
     role: "Admin",
     prenom: "Zachary",
-    pseudo: "Jariss",
+    pseudo: "Jarsiss",
     nom: "Larocque",
     email: "zachary.larocque.pro@gmail.com",
     description:
