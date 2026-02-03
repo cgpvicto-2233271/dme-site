@@ -4,9 +4,8 @@ import { NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
-  // IMPORTANT: on vise uniquement riot.txt
-  // Si l'URL contient des doubles slash dans le path, on normalise et on REWRITE (pas redirect)
-  if (url.pathname.includes("riot.txt") && url.pathname.includes("//")) {
+  // Normalise toutes les variantes vers /riot.txt, sans redirect
+  if (url.pathname.includes("riot.txt")) {
     url.pathname = "/riot.txt";
     return NextResponse.rewrite(url);
   }
@@ -15,5 +14,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:path*"],
+  // Touche seulement riot.txt (et donc aussi //riot.txt)
+  matcher: ["/:path*riot.txt"],
 };

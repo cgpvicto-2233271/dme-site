@@ -16,7 +16,7 @@ import {
   type MatchInfoParticipantDTO,
   type RegionLoL,
   type TimelineDTO,
-  type SpectatorGameDTO,
+  type SpectatorPartieActiveDTO,
 } from "@/lib/riot/riotClient";
 
 /* =========================
@@ -50,9 +50,10 @@ type ReponseScoutingLOL = {
   masteries: ChampionMasteryDTO[];
   region: RegionLoL;
   count: number;
-  partieActive: SpectatorGameDTO | null;
-  filtres: {
+  partieActive: SpectatorPartieActiveDTO | null;
+  flags: {
     summonerIdAbsent: boolean;
+    rankedDisponible: boolean;
   };
 };
 
@@ -178,25 +179,30 @@ export async function GET(req: Request) {
 
     const region = trouverRegion(regionId);
 
-    // 1) Account -> PUUID (Riot ID)
+    // 1) Account -> PUUID
     const compte = await obtenirCompteParRiotId(region.regional, gameName, tagLine);
 
-    // 2) Summoner by-puuid (peut etre filtre, mais suffisant pour match-v5, mastery, spectator-v5)
+    // 2) Summoner by-puuid (peut etre filtre)
     const summoner = await obtenirSummonerParPuuid(region.plateforme, compte.puuid);
 
-    // 3) Ranked: seulement si on a summoner.id
+    // 3) Ranked (optionnel)
+    const summonerId =
+      typeof summoner.id === "string" && summoner.id.trim().length > 0 ? summoner.id : null;
+
     let ranked: LeagueEntryDTO[] = [];
-    const summonerId = typeof summoner.id === "string" && summoner.id.trim() ? summoner.id : null;
+    let rankedDisponible = false;
 
     if (summonerId) {
       try {
         ranked = await obtenirRankedParSummonerId(region.plateforme, summonerId);
+        rankedDisponible = true;
       } catch {
         ranked = [];
+        rankedDisponible = false;
       }
     }
 
-    // 4) Match IDs (match-v5)
+    // 4) Match IDs
     const ids = await obtenirIdsMatchsParPuuid({
       regional: region.regional,
       puuid: compte.puuid,
@@ -235,12 +241,12 @@ export async function GET(req: Request) {
       masteries = [];
     }
 
-    // 8) Spectator v5 (active game) par PUUID
-    let partieActive: SpectatorGameDTO | null = null;
+    // 8) Spectator (active game) par PUUID
+    let partieActive: SpectatorPartieActiveDTO | null = null;
     try {
       partieActive = await obtenirPartieActiveParPuuid(region.plateforme, compte.puuid);
     } catch {
-      partieActive = null; // pas en game ou bloque
+      partieActive = null;
     }
 
     const payload: ReponseScoutingLOL = {
@@ -258,8 +264,9 @@ export async function GET(req: Request) {
       region,
       count,
       partieActive,
-      filtres: {
+      flags: {
         summonerIdAbsent: !summonerId,
+        rankedDisponible,
       },
     };
 

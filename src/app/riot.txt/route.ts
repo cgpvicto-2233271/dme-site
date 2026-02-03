@@ -1,0 +1,5 @@
+export function GET() {
+  return new Response("F88952aeA055-42D5-89F8-7A01B37621AC", {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
+}
