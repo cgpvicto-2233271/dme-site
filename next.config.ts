@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      // Corrige explicitement l'URL avec double slash
+      {
+        source: "/:slash(\\/+)+riot.txt",
+        destination: "/riot.txt",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
