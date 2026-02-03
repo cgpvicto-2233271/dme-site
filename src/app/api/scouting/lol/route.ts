@@ -2,25 +2,21 @@ import { NextResponse } from "next/server";
 import {
   REGIONS_LOL,
   obtenirCompteParRiotId,
+  obtenirSummonerParPuuid,
+  obtenirRankedParSummonerId,
   obtenirIdsMatchsParPuuid,
   obtenirMatch,
   obtenirTimeline,
   obtenirMasteries,
-  obtenirRankedParSummonerId,
-  obtenirSummonerParPuuid,
   obtenirPartieActiveParPuuid,
-  obtenirFeaturedGames,
   estRiotErreur,
   type ChampionMasteryDTO,
   type LeagueEntryDTO,
   type MatchDTO,
   type MatchInfoParticipantDTO,
   type RegionLoL,
-  type SummonerDTO,
   type TimelineDTO,
-  type SpectatorPartieActiveDTO,
-  type SpectatorFeaturedGamesDTO,
-  type RoutageRegional,
+  type SpectatorGameDTO,
 } from "@/lib/riot/riotClient";
 
 /* =========================
@@ -54,15 +50,9 @@ type ReponseScoutingLOL = {
   masteries: ChampionMasteryDTO[];
   region: RegionLoL;
   count: number;
-  partieActive?: SpectatorPartieActiveDTO | null;
-  featuredGames?: SpectatorFeaturedGamesDTO | null;
-
-  // debug (optionnel)
-  debug?: {
-    regionalCompte: RoutageRegional;
-    regionTrouvee: string;
-    tentativesAccount: Array<{ regional: RoutageRegional; status: number | null }>;
-    tentativesSummoner: Array<{ id: string; plateforme: string; status: number | null }>;
+  partieActive: SpectatorGameDTO | null;
+  filtres: {
+    summonerIdAbsent: boolean;
   };
 };
 
@@ -87,14 +77,13 @@ function lireBool(searchParams: URLSearchParams, cle: string): boolean {
 
 function splitRiotId(riotIdBrut: string, tagLineBrut: string) {
   const v = (riotIdBrut ?? "").trim();
-
   if (v.includes("#")) {
     const parts = v.split("#");
-    const gameName = (parts[0] ?? "").trim();
-    const tagLine = (parts[1] ?? "").trim();
-    return { gameName, tagLine };
+    return {
+      gameName: (parts[0] ?? "").trim(),
+      tagLine: (parts[1] ?? "").trim(),
+    };
   }
-
   return { gameName: v, tagLine: (tagLineBrut ?? "").trim() };
 }
 
@@ -149,7 +138,7 @@ async function pool<T, R>(
   limit: number,
   worker: (item: T, index: number) => Promise<R>
 ): Promise<R[]> {
-  const results: R[] = Array.from({ length: items.length }) as unknown as R[];
+  const results: R[] = new Array(items.length);
   let i = 0;
 
   async function run() {
@@ -164,109 +153,22 @@ async function pool<T, R>(
   return results;
 }
 
-function lireStatusCode(e: unknown): number | null {
-  if (typeof e !== "object" || e === null) return null;
-
-  if ("status" in e && typeof (e as { status?: unknown }).status === "number") {
-    return (e as { status: number }).status;
-  }
-
-  if ("details" in e) {
-    const d = (e as { details?: unknown }).details;
-    if (typeof d === "object" && d !== null && "httpStatus" in d) {
-      const hs = (d as { httpStatus?: unknown }).httpStatus;
-      return typeof hs === "number" ? hs : null;
-    }
-  }
-
-  return null;
-}
-
-/* =========================
-   Fallback Account-V1 (regional)
-========================= */
-
-async function obtenirCompteAvecFallbackRegional(gameName: string, tagLine: string) {
-  const regionaux: RoutageRegional[] = ["americas", "europe", "asia", "sea"];
-  const tentatives: Array<{ regional: RoutageRegional; status: number | null }> = [];
-
-  for (const regional of regionaux) {
-    console.log("[SCOUT] tentative account-v1 sur", regional);
-    try {
-      const compte = await obtenirCompteParRiotId(regional, gameName, tagLine);
-      return { compte, regionalCompte: regional, tentatives };
-    } catch (e: unknown) {
-      const status = lireStatusCode(e);
-      tentatives.push({ regional, status });
-      console.log("[SCOUT] account-v1 fail", regional, "status:", status ?? "?", e);
-      // 404 -> on continue, 403 -> on continue aussi (ca peut etre rate-limit ponctuel)
-      continue;
-    }
-  }
-
-  const err = new Error("Compte Riot introuvable (Account-V1) sur tous les regionaux.");
-  (err as { tentatives?: unknown }).tentatives = tentatives;
-  throw err;
-}
-
-/* =========================
-   Fallback Summoner-V4 (plateformes)
-========================= */
-
-async function trouverSummonerParPuuidAvecFallback(puuid: string, regionPref: RegionLoL) {
-  const tentatives: Array<{ id: string; plateforme: string; status: number | null }> = [];
-
-  console.log("[SCOUT] tentative summoner-v4 by-puuid (pref)", regionPref.id, regionPref.plateforme);
-  try {
-    const s = await obtenirSummonerParPuuid(regionPref.plateforme, puuid);
-    if (s?.id) return { summoner: s, regionTrouvee: regionPref, tentatives };
-  } catch (e: unknown) {
-    const status = lireStatusCode(e);
-    tentatives.push({ id: regionPref.id, plateforme: regionPref.plateforme, status });
-    console.log("[SCOUT] summoner-v4 fail (pref)", regionPref.id, "status:", status ?? "?", e);
-  }
-
-  for (const r of REGIONS_LOL) {
-    if (r.id === regionPref.id) continue;
-
-    console.log("[SCOUT] tentative summoner-v4 by-puuid", r.id, r.plateforme);
-    try {
-      const s = await obtenirSummonerParPuuid(r.plateforme, puuid);
-      if (s?.id) return { summoner: s, regionTrouvee: r, tentatives };
-    } catch (e: unknown) {
-      const status = lireStatusCode(e);
-      tentatives.push({ id: r.id, plateforme: r.plateforme, status });
-      console.log("[SCOUT] summoner-v4 fail", r.id, "status:", status ?? "?", e);
-    }
-  }
-
-  const err = new Error("Summoner LoL introuvable via PUUID (toutes plateformes testees).");
-  (err as { tentatives?: unknown }).tentatives = tentatives;
-  throw err;
-}
-
 /* =========================
    Route GET
 ========================= */
 
 export async function GET(req: Request) {
   try {
-    console.log("[SCOUT] RIOT_API_KEY chargee ?", Boolean(process.env.RIOT_API_KEY));
-
     const { searchParams } = new URL(req.url);
 
     const riotIdRaw = (searchParams.get("riotId") ?? "").trim();
     const tagLineRaw = (searchParams.get("tagLine") ?? "").trim();
     const regionId = (searchParams.get("region") ?? "na").trim();
-    const count = lireCount(searchParams);
 
+    const count = lireCount(searchParams);
     const includeTimeline = lireBool(searchParams, "timeline");
-    const includeSpectator = lireBool(searchParams, "spectator");
-    const includeFeatured = lireBool(searchParams, "featured");
-    const includeDebug = lireBool(searchParams, "debug");
 
     const { gameName, tagLine } = splitRiotId(riotIdRaw, tagLineRaw);
-
     if (!gameName || !tagLine) {
       return NextResponse.json(
         { erreur: "riotId et tagLine requis (ou riotId au format Name#TAG)." },
@@ -274,42 +176,29 @@ export async function GET(req: Request) {
       );
     }
 
-    const regionPref = trouverRegion(regionId);
+    const region = trouverRegion(regionId);
 
-    // 1) Account-V1 avec fallback sur americas/europe/asia/sea
-    const { compte, regionalCompte, tentatives: tentativesAccount } =
-      await obtenirCompteAvecFallbackRegional(gameName, tagLine);
+    // 1) Account -> PUUID (Riot ID)
+    const compte = await obtenirCompteParRiotId(region.regional, gameName, tagLine);
 
-    console.log("[SCOUT] compte:", {
-      gameName: compte.gameName,
-      tagLine: compte.tagLine,
-      puuid: compte.puuid,
-      regionalCompte,
-      regionPref: regionPref.id,
-      plateformePref: regionPref.plateforme,
-    });
+    // 2) Summoner by-puuid (peut etre filtre, mais suffisant pour match-v5, mastery, spectator-v5)
+    const summoner = await obtenirSummonerParPuuid(region.plateforme, compte.puuid);
 
-    // 2) Summoner-V4 by-puuid avec fallback plateformes
-    const { summoner, regionTrouvee, tentatives: tentativesSummoner } =
-      await trouverSummonerParPuuidAvecFallback(compte.puuid, regionPref);
-
-    console.log("[SCOUT] regionTrouvee:", regionTrouvee.id, regionTrouvee.plateforme, regionTrouvee.regional);
-    console.log("[SCOUT] summoner:", { id: summoner.id, name: summoner.name });
-
-    const regionFinale: RegionLoL = regionTrouvee;
-
-    // 3) Ranked
+    // 3) Ranked: seulement si on a summoner.id
     let ranked: LeagueEntryDTO[] = [];
-    try {
-      ranked = await obtenirRankedParSummonerId(regionFinale.plateforme, summoner.id);
-    } catch (e: unknown) {
-      console.log("[SCOUT] Ranked fail (fallback []).", e);
-      ranked = [];
+    const summonerId = typeof summoner.id === "string" && summoner.id.trim() ? summoner.id : null;
+
+    if (summonerId) {
+      try {
+        ranked = await obtenirRankedParSummonerId(region.plateforme, summonerId);
+      } catch {
+        ranked = [];
+      }
     }
 
-    // 4) Match IDs (Match-V5 par puuid)
+    // 4) Match IDs (match-v5)
     const ids = await obtenirIdsMatchsParPuuid({
-      regional: regionFinale.regional,
+      regional: region.regional,
       puuid: compte.puuid,
       count,
       start: 0,
@@ -318,19 +207,17 @@ export async function GET(req: Request) {
     // 5) Match details (+ timeline optionnel)
     const matchsBruts = await pool<string, MatchAvecTimelineDTO | null>(ids, 5, async (id) => {
       try {
-        const match = await obtenirMatch(regionFinale.regional, id);
+        const match = await obtenirMatch(region.regional, id);
 
         if (!includeTimeline) return match;
 
         try {
-          const timeline = await obtenirTimeline(regionFinale.regional, id);
+          const timeline = await obtenirTimeline(region.regional, id);
           return { ...match, timeline };
-        } catch (eTimeline: unknown) {
-          console.log("[SCOUT] Timeline fail skip", id, eTimeline);
+        } catch {
           return match;
         }
-      } catch (e: unknown) {
-        console.log("[SCOUT] Match fail skip", id, e);
+      } catch {
         return null;
       }
     });
@@ -343,34 +230,17 @@ export async function GET(req: Request) {
     // 7) Masteries
     let masteries: ChampionMasteryDTO[] = [];
     try {
-      masteries = await obtenirMasteries(regionFinale.plateforme, compte.puuid);
-    } catch (e: unknown) {
-      console.log("[SCOUT] Masteries fail (fallback []).", e);
+      masteries = await obtenirMasteries(region.plateforme, compte.puuid);
+    } catch {
       masteries = [];
     }
 
-    // 8) Spectator optionnel
-    let partieActive: SpectatorPartieActiveDTO | null = null;
-    if (includeSpectator) {
-      try {
-        partieActive = await obtenirPartieActiveParPuuid(regionFinale.plateforme, compte.puuid);
-      } catch (e: unknown) {
-        const status = lireStatusCode(e);
-        console.log("[SCOUT] spectator fail (ok si 404/403)", "status:", status ?? "?", e);
-        partieActive = null;
-      }
-    }
-
-    // 9) Featured optionnel
-    let featuredGames: SpectatorFeaturedGamesDTO | null = null;
-    if (includeFeatured) {
-      try {
-        featuredGames = await obtenirFeaturedGames(regionFinale.plateforme);
-      } catch (e: unknown) {
-        const status = lireStatusCode(e);
-        console.log("[SCOUT] featured fail (ok)", "status:", status ?? "?", e);
-        featuredGames = null;
-      }
+    // 8) Spectator v5 (active game) par PUUID
+    let partieActive: SpectatorGameDTO | null = null;
+    try {
+      partieActive = await obtenirPartieActiveParPuuid(region.plateforme, compte.puuid);
+    } catch {
+      partieActive = null; // pas en game ou bloque
     }
 
     const payload: ReponseScoutingLOL = {
@@ -385,20 +255,12 @@ export async function GET(req: Request) {
       resume,
       matchs,
       masteries: masteries.slice(0, 10),
-      region: regionFinale,
+      region,
       count,
-      ...(includeSpectator ? { partieActive } : {}),
-      ...(includeFeatured ? { featuredGames } : {}),
-      ...(includeDebug
-        ? {
-            debug: {
-              regionalCompte,
-              regionTrouvee: regionFinale.id,
-              tentativesAccount,
-              tentativesSummoner,
-            },
-          }
-        : {}),
+      partieActive,
+      filtres: {
+        summonerIdAbsent: !summonerId,
+      },
     };
 
     return NextResponse.json(payload, {
@@ -407,45 +269,14 @@ export async function GET(req: Request) {
     });
   } catch (e: unknown) {
     if (estRiotErreur(e)) {
-      return NextResponse.json({ erreur: e.message, details: e.details ?? null }, { status: e.status });
-    }
-
-    const message = e instanceof Error ? e.message : typeof e === "string" ? e : "Erreur inconnue";
-
-    if (message.includes("Compte Riot introuvable")) {
-      const tentatives =
-        typeof e === "object" && e !== null && "tentatives" in e
-          ? (e as { tentatives?: unknown }).tentatives
-          : null;
-
       return NextResponse.json(
-        {
-          erreur: "Riot ID introuvable sur les regionaux (americas/europe/asia/sea).",
-          tentatives,
-        },
-        { status: 404 }
+        { erreur: e.message, details: e.details ?? null },
+        { status: e.status }
       );
     }
 
-    if (message.includes("Summoner LoL introuvable via PUUID")) {
-      const tentatives =
-        typeof e === "object" && e !== null && "tentatives" in e
-          ? (e as { tentatives?: unknown }).tentatives
-          : null;
-
-      return NextResponse.json(
-        {
-          erreur:
-            "Compte Riot trouve, mais aucun profil League of Legends n'a ete trouve sur les plateformes testees.",
-          pistes: [
-            "Verifier que le tagLine est exact (Riot ID complet).",
-            "Verifier que ce compte joue bien a League of Legends (pas seulement Valorant/TFT).",
-          ],
-          tentatives,
-        },
-        { status: 404 }
-      );
-    }
+    const message =
+      e instanceof Error ? e.message : typeof e === "string" ? e : "Erreur inconnue";
 
     return NextResponse.json({ erreur: message }, { status: 500 });
   }
