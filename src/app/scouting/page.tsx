@@ -1,1037 +1,1378 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useSession } from "next-auth/react";
+import {
+  REGIONS_LOL,
+  type ChampionMasteryDTO,
+  type LeagueEntryDTO,
+  type MatchDTO,
+  type RegionLoL,
+} from "@/lib/riot/riotClient";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 /* =========================
-   Types
+   Types UI (scouting)
 ========================= */
+export type MatchInfoParticipantDTO = {
+  puuid: string;
+  championName: string;
+  teamPosition: string;
+  lane: string;
+  win: boolean;
 
-type JeuId = "lol" | "valorant" | "r6" | "rocket" | "marvel";
-type Role = "coach" | "staff" | "joueur" | null;
+  teamId: number; // <-- AJOUT IMPORTANT
 
-type TrackerKey = "dpm" | "opgg" | "ugg" | "tracker" | "vlr";
+  kills: number;
+  deaths: number;
+  assists: number;
 
-type Player = {
+  totalMinionsKilled: number;
+  neutralMinionsKilled: number;
+
+  visionScore: number;
+
+  totalDamageDealtToChampions: number;
+  goldEarned: number;
+};
+
+type TeamId = "dme_acl" | "dme_avl" | "dme_aml" | "dme_adl" | "dme_ael";
+
+type TagNote =
+  | "draft"
+  | "lane"
+  | "macro"
+  | "micro"
+  | "mental"
+  | "comms"
+  | "discipline"
+  | "potential"
+  | "warning";
+
+type NoteJoueur = {
   id: string;
+  createdAt: number;
+  auteur: string;
+  tags: TagNote[];
+  contenu: string;
+};
+
+type SnapshotLP = {
+  ts: number;
+  queueType: string;
+  tier: string;
+  rank: string;
+  lp: number;
+};
+
+type JoueurRoster = {
+  id: string;
+
+  // Identite
   pseudo: string;
 
+  // LoL
+  regionId?: string;
   riotId?: string;
   tagLine?: string;
 
-  rang: string;
-  role?: string;
+  // Meta roster
+  roleEquipe?: string;
+  statut?: "starter" | "sub" | "tryout";
 
-  games7j?: number;
-  topPicks?: string;
+  // Notes
+  notes: NoteJoueur[];
 
-  trackers?: Partial<Record<TrackerKey, string>>;
+  // Donnees scoutees
+  scouting?: ReponseScoutingLOL;
+  lastFetchAt?: number;
+
+  // Historique LP (snapshots)
+  lpHistorique?: SnapshotLP[];
 };
 
-type JeuData = {
-  id: JeuId;
-  nom: string;
-  sousTitre: string;
-
-  ranks: { label: string; value: number }[];
-  players: Player[];
-
-  rankOptions: Array<{
-    id: string;
-    label: string;
-    predicate: (rank: string) => boolean;
-  }>;
+type EquipeScouting = {
+  id: TeamId;
+  titre: string;
+  league: string;
+  notesEquipe: string;
+  roster: JoueurRoster[];
 };
+
+type ResumeStats = {
+  winrate: number;
+  kda: number;
+  csMin: number;
+  visionMin: number;
+  dmgMin: number;
+  goldMin: number;
+};
+
+type JoueurDTO = {
+  riotId: string;
+  tagLine: string;
+  puuid: string;
+  profileIconId: number;
+  niveau: number;
+};
+
+type ReponseScoutingLOL = {
+  joueur: JoueurDTO;
+  ranked: LeagueEntryDTO[];
+  resume: ResumeStats;
+  matchs: MatchDTO[];
+  masteries: ChampionMasteryDTO[];
+  region: RegionLoL;
+  count: number;
+};
+
+/* =========================
+   Constantes
+========================= */
+
+const TEAMS: ReadonlyArray<{ id: TeamId; titre: string; league: string }> = [
+  { id: "dme_acl", titre: "DME ACL", league: "ACL" },
+  { id: "dme_avl", titre: "DME AVL", league: "AVL" },
+  { id: "dme_aml", titre: "DME AML", league: "AML" },
+  { id: "dme_adl", titre: "DME ADL", league: "ADL" },
+  { id: "dme_ael", titre: "DME AEL", league: "AEL" },
+] as const;
+
+const TAGS_DISPONIBLES: TagNote[] = [
+  "draft",
+  "lane",
+  "macro",
+  "micro",
+  "mental",
+  "comms",
+  "discipline",
+  "potential",
+  "warning",
+];
+
+const CLE_STORAGE = "dme_scouting_v2";
+const DEFAULT_COUNT = 20;
 
 /* =========================
    Helpers
 ========================= */
 
-const LOL_ORDER = [
-  "IRON",
-  "BRONZE",
-  "SILVER",
-  "GOLD",
-  "PLATINUM",
-  "EMERALD",
-  "DIAMOND",
-  "MASTER",
-  "GRANDMASTER",
-  "CHALLENGER",
-] as const;
-
-function normalizeRankLabel(rank: string) {
-  return rank.trim().toUpperCase();
+function uid(prefix = "id"): string {
+  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
 }
 
-function rankToIndexLoL(rank: string) {
-  const r = normalizeRankLabel(rank);
-
-  if (r === "PLAT") return LOL_ORDER.indexOf("PLATINUM");
-  if (r === "GM") return LOL_ORDER.indexOf("GRANDMASTER");
-  if (r === "CHALL") return LOL_ORDER.indexOf("CHALLENGER");
-
-  const idx = LOL_ORDER.indexOf(r as any);
-  return idx === -1 ? -1 : idx;
+function safeParseJson<T>(raw: string | null): T | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
 }
 
-function isAtLeastLoL(rank: string, minRank: (typeof LOL_ORDER)[number]) {
-  const idx = rankToIndexLoL(rank);
-  const minIdx = LOL_ORDER.indexOf(minRank);
-  if (idx === -1) return false;
-  return idx >= minIdx;
+function creerStateInitial(): EquipeScouting[] {
+  return TEAMS.map((t) => ({
+    id: t.id,
+    titre: t.titre,
+    league: t.league,
+    notesEquipe: "",
+    roster: [],
+  }));
 }
 
-function lolPeakToNormalizedRank(peak?: string) {
-  const p = (peak ?? "").trim().toUpperCase();
-
-  if (p === "CHALL" || p === "CHALLENGER") return "CHALLENGER";
-  if (p === "GM" || p === "GRANDMASTER") return "GRANDMASTER";
-  if (p === "M" || p === "MASTER") return "MASTER";
-  if (p.startsWith("D")) return "DIAMOND";
-  if (p.startsWith("E")) return "EMERALD";
-  if (p.startsWith("P")) return "PLATINUM";
-  if (p.startsWith("G")) return "GOLD";
-  if (p.startsWith("S")) return "SILVER";
-  if (p.startsWith("B")) return "BRONZE";
-  if (p.startsWith("I")) return "IRON";
-
-  return "DIAMOND";
+function fmtDate(ts: number | null): string {
+  if (!ts) return "-";
+  return new Date(ts).toLocaleDateString();
 }
 
-function trackerRocketSearchUrl(pseudo: string) {
-  return `https://tracker.gg/rocket-league/profile/search?query=${encodeURIComponent(
-    pseudo
-  )}`;
+function fmtKDA(k: number, d: number, a: number): string {
+  const kda = (k + a) / Math.max(d, 1);
+  return kda.toFixed(2);
 }
 
-/* =========================
-   Tes joueurs LoL (officiel)
-   (AVL / AML / ADL / AEL)
-========================= */
+type StatMatchDetail = {
+  matchId: string;
+  finTs: number | null;
+  champion: string;
+  role: string;
+  win: boolean;
 
-type LigueAegis = "AVL" | "AML" | "ADL" | "AEL";
-type EquipeSlot = "TOP" | "JGL" | "MID" | "ADC" | "SUP" | "SUB" | "C" | "M";
+  kills: number;
+  deaths: number;
+  assists: number;
 
-type JoueurSuivi = {
-  pseudo: string;
-  tagLine?: string;
+  cs: number;
+  csMin: number;
 
-  ligue?: LigueAegis;
-  slot?: EquipeSlot;
+  vision: number;
+  visionMin: number;
 
-  opggRegion?: "na" | "euw" | "eune";
-  opggUrl?: string;
-  dpmSlug?: string;
+  dmgChamp: number;
+  dmgMin: number;
 
-  peak?: string;
-  rankActuel?: string;
-  contact?: string;
-  multi?: string;
+  gold: number;
+  dureeMin: number;
 
-  note?: string;
+  kp: number;
 };
 
-const joueursLolDmeAegis: JoueurSuivi[] = [
-  // DME AVL
-  {
-    pseudo: "Jbear",
-    tagLine: "2005",
-    ligue: "AVL",
-    slot: "TOP",
-    contact: "jbearlol",
-    multi: "OPGG",
-    peak: "GM",
-    rankActuel: "GM 835LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Jbear-2005",
-    dpmSlug: "Jbear-2005",
-  },
-  {
-    pseudo: "Kripsus",
-    tagLine: "777",
-    ligue: "AVL",
-    slot: "JGL",
-    contact: "kripsus",
-    multi: "OPGG",
-    peak: "Chall",
-    rankActuel: "Chall 903LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Kripsus-777",
-    dpmSlug: "Kripsus-777",
-  },
-  {
-    pseudo: "Wazabiee",
-    tagLine: "WAZAB",
-    ligue: "AVL",
-    slot: "MID",
-    contact: "wazabiee",
-    multi: "OPGG",
-    peak: "GM",
-    rankActuel: "GM 846LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Wazabiee-WAZAB",
-    dpmSlug: "Wazabiee-WAZAB",
-  },
-  {
-    pseudo: "Raynarz",
-    tagLine: "NA1",
-    ligue: "AVL",
-    slot: "ADC",
-    contact: "raynarz",
-    multi: "OPGG",
-    peak: "GM",
-    rankActuel: "GM 823LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Raynarz-NA1",
-    dpmSlug: "Raynarz-NA1",
-  },
-  {
-    pseudo: "Spy",
-    tagLine: "Apex",
-    ligue: "AVL",
-    slot: "SUP",
-    contact: ".s.p.y.",
-    multi: "OPGG",
-    peak: "Chall",
-    rankActuel: "Chall 989LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Spy-Apex",
-    dpmSlug: "Spy-Apex",
-  },
+function extraireStatsMatchs(
+  puuid: string,
+  matchs: MatchDTO[]
+): StatMatchDetail[] {
+  return matchs
+    .map((m): StatMatchDetail | null => {
+      const participants = m.info?.participants ?? [];
+      const joueur = participants.find((p) => p.puuid === puuid);
+      if (!joueur) return null;
 
-  // DME AML
-  {
-    pseudo: "xAzorD",
-    tagLine: "2443",
-    ligue: "AML",
-    slot: "TOP",
-    multi: "OPGG",
-    peak: "M",
-    rankActuel: "M 242LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/xAzorD-2443",
-    dpmSlug: "xAzorD-2443",
-  },
-  {
-    pseudo: "Chrovos",
-    tagLine: "1503",
-    ligue: "AML",
-    slot: "JGL",
-    multi: "OPGG",
-    peak: "M",
-    rankActuel: "M 449LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Chrovos-1503",
-    dpmSlug: "Chrovos-1503",
-  },
-  {
-    pseudo: "Excessif",
-    tagLine: "NA1",
-    ligue: "AML",
-    slot: "MID",
-    multi: "OPGG",
-    peak: "M",
-    rankActuel: "M 426LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Excessif-NA1",
-    dpmSlug: "Excessif-NA1",
-  },
-  {
-    pseudo: "Blyos",
-    tagLine: "2509",
-    ligue: "AML",
-    slot: "ADC",
-    multi: "OPGG",
-    peak: "M",
-    rankActuel: "M 282LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Blyos-2509",
-    dpmSlug: "Blyos-2509",
-  },
-  {
-    pseudo: "Tié un tigre",
-    tagLine: "tv4k",
-    ligue: "AML",
-    slot: "SUP",
-    multi: "OPGG",
-    peak: "M",
-    rankActuel: "M 295LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Tié%20un%20tigre-tv4k",
-    dpmSlug: "Tié un tigre-tv4k",
-  },
+      const dureeSec = m.info?.gameDuration ?? 0;
+      const dureeMin = Math.max(dureeSec / 60, 1);
 
-  // DME ADL
-  {
-    pseudo: "Rorschàch",
-    tagLine: "5130",
-    ligue: "ADL",
-    slot: "TOP",
-    peak: "M",
-    rankActuel: "M 95LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Rorschàch-5130",
-    dpmSlug: "Rorschàch-5130",
-  },
-  {
-    pseudo: "Tupapa",
-    tagLine: "QC1",
-    ligue: "ADL",
-    slot: "JGL",
-    peak: "M",
-    rankActuel: "M 76LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Tupapa-QC1",
-    dpmSlug: "Tupapa-QC1",
-  },
-  {
-    pseudo: "gqb",
-    tagLine: "notag",
-    ligue: "ADL",
-    slot: "MID",
-    peak: "M",
-    rankActuel: "M 38LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/gqb-notag",
-    dpmSlug: "gqb-notag",
-  },
-  {
-    pseudo: "Bizoune",
-    tagLine: "NA2",
-    ligue: "ADL",
-    slot: "ADC",
-    peak: "D1",
-    rankActuel: "D1 78LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/Bizoune-NA2",
-    dpmSlug: "Bizoune-NA2",
-  },
-  {
-    pseudo: "xavifizz12",
-    tagLine: "NA1",
-    ligue: "ADL",
-    slot: "SUP",
-    peak: "D2",
-    rankActuel: "D2 88LP",
-    opggRegion: "na",
-    opggUrl: "https://www.op.gg/summoners/na/xavifizz12-NA1",
-    dpmSlug: "xavifizz12-NA1",
-  },
+      const cs =
+        (joueur.totalMinionsKilled ?? 0) +
+        (joueur.neutralMinionsKilled ?? 0);
 
-  // DME AEL
-  { pseudo: "Leeran", ligue: "AEL", slot: "TOP" },
-  { pseudo: "David", ligue: "AEL", slot: "JGL" },
-  { pseudo: "Mineur", ligue: "AEL", slot: "MID" },
-  { pseudo: "Bacontactic", ligue: "AEL", slot: "ADC" },
-  { pseudo: "Amandawhale", ligue: "AEL", slot: "SUP" },
-];
+      const dmg = joueur.totalDamageDealtToChampions ?? 0;
 
-function buildLolPlayers(): Player[] {
-  return joueursLolDmeAegis.map((j, idx) => {
-    const hasTag = Boolean(j.tagLine);
-    const pseudoAff = j.pseudo;
-    const riotId = hasTag ? j.pseudo : undefined;
-    const tagLine = hasTag ? j.tagLine : undefined;
+      // Team kill participation (SANS any)
+      const team = participants.filter(
+        (p) => p.teamId === joueur.teamId
+      );
 
-    const isStaff = j.slot === "C" || j.slot === "M";
-    const role = isStaff ? undefined : j.slot;
+      const teamKills = team.reduce(
+        (acc, p) => acc + (p.kills ?? 0),
+        0
+      );
 
-    const rang = isStaff ? "—" : lolPeakToNormalizedRank(j.peak);
+      const kp =
+        teamKills > 0
+          ? Math.round(
+              (((joueur.kills ?? 0) + (joueur.assists ?? 0)) /
+                teamKills) *
+                100
+            )
+          : 0;
 
-    const trackers: Player["trackers"] = {};
-    if (j.opggUrl) trackers.opgg = j.opggUrl;
-    if (j.dpmSlug) trackers.dpm = `/scouting/dpm/${encodeURIComponent(j.dpmSlug)}`;
+      return {
+        matchId: m.metadata.matchId,
+        finTs: m.info?.gameEndTimestamp ?? null,
+        champion: joueur.championName ?? "Unknown",
+        role:
+          joueur.teamPosition && joueur.teamPosition.trim()
+            ? joueur.teamPosition
+            : joueur.lane ?? "",
+        win: Boolean(joueur.win),
 
-    return {
-      id: `lol-${idx + 1}`,
-      pseudo: pseudoAff,
-      riotId,
-      tagLine,
-      rang,
-      role,
-      games7j: undefined,
-      topPicks: undefined,
-      trackers,
-    };
-  });
+        kills: joueur.kills ?? 0,
+        deaths: joueur.deaths ?? 0,
+        assists: joueur.assists ?? 0,
+
+        cs,
+        csMin: Number((cs / dureeMin).toFixed(1)),
+
+        vision: joueur.visionScore ?? 0,
+        visionMin: Number(
+          ((joueur.visionScore ?? 0) / dureeMin).toFixed(2)
+        ),
+
+        dmgChamp: dmg,
+        dmgMin: Math.round(dmg / dureeMin),
+
+        gold: joueur.goldEarned ?? 0,
+        dureeMin: Number(dureeMin.toFixed(1)),
+
+        kp,
+      };
+    })
+    .filter((x): x is StatMatchDetail => x !== null);
 }
 
-/* =========================
-   Data
-========================= */
+function points7Jours(lpHistorique: SnapshotLP[]): { date: string; lp: number }[] {
+  const now = Date.now();
+  const seven = now - 7 * 24 * 60 * 60 * 1000;
 
-const ROCKET_JOUEURS_GCPLUS = [
-  "Jey",
-  "Y.",
-  "Leroux",
-  "Lionrage",
-  "Jormungandr",
-  "MrSnoweeQc",
-  "SlayZii",
-  "JØK3RZ",
-  "Denis",
-  "K1ng_Max_333",
-  "P90xxl",
-  "RB08",
-  "Flinx",
-];
+  return (lpHistorique ?? [])
+    .filter((p) => p.ts >= seven)
+    .slice()
+    .reverse()
+    .map((p) => ({
+      date: new Date(p.ts).toLocaleDateString(),
+      lp: p.lp,
+    }));
+}
 
-const JEUX: JeuData[] = [
-  {
-    id: "lol",
-    nom: "League of Legends",
-    sousTitre: "Joueurs DME (AVL/AML/ADL/AEL) + liens OP.GG et DPM",
-    ranks: [
-      { label: "Challenger", value: 2 },
-      { label: "Grandmaster", value: 3 },
-      { label: "Master", value: 6 },
-      { label: "Diamond", value: 2 },
-      { label: "Other", value: 0 },
-    ],
-    players: buildLolPlayers(),
-    rankOptions: [
-      { id: "all", label: "Tous", predicate: () => true },
-      {
-        id: "chall",
-        label: "Challenger only",
-        predicate: (r) => normalizeRankLabel(r) === "CHALLENGER",
-      },
-      {
-        id: "gmplus",
-        label: "Grandmaster+",
-        predicate: (r) => isAtLeastLoL(r, "GRANDMASTER"),
-      },
-      {
-        id: "masterplus",
-        label: "Master+",
-        predicate: (r) => isAtLeastLoL(r, "MASTER"),
-      },
-      {
-        id: "diamondplus",
-        label: "Diamond+",
-        predicate: (r) => isAtLeastLoL(r, "DIAMOND"),
-      },
-    ],
-  },
+function GraphLP(props: { lpHistorique?: SnapshotLP[] }) {
+  const data = points7Jours(props.lpHistorique ?? []);
+  if (data.length < 2) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white/60">
+        Pas assez de points pour une courbe (refresh la fiche 1x/jour).
+      </div>
+    );
+  }
 
-  {
-    id: "valorant",
-    nom: "Valorant",
-    sousTitre: "Mock temporaire",
-    ranks: [
-      { label: "Gold", value: 3 },
-      { label: "Plat", value: 3 },
-      { label: "Diamond", value: 2 },
-      { label: "Asc", value: 2 },
-      { label: "Immo+", value: 1 },
-    ],
-    players: [
-      {
-        id: "val-1",
-        pseudo: "DemoDuelist",
-        rang: "Immortal",
-        role: "Duelist",
-        games7j: 22,
-        topPicks: "Jett, Raze",
-        trackers: {
-          tracker: "https://tracker.gg/valorant/",
-          vlr: "https://www.vlr.gg/",
-        },
-      },
-    ],
-    rankOptions: [
-      { id: "all", label: "Tous", predicate: () => true },
-      {
-        id: "immo",
-        label: "Immortal+",
-        predicate: (r) => normalizeRankLabel(r).includes("IMMO"),
-      },
-    ],
-  },
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+      <div className="text-sm font-semibold text-white/80">Progression LP (7 jours)</div>
+      <div className="mt-3 h-[180px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <XAxis dataKey="date" hide />
+            <YAxis hide domain={["dataMin - 10", "dataMax + 10"]} />
+            <Tooltip />
+            <Line type="monotone" dataKey="lp" dot={false} strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-2 text-xs text-white/50">
+        Astuce: clique &quot;Refresh stats&quot; 1x/jour pour construire l historique.
+      </div>
+    </div>
+  );
+}
 
-  {
-    id: "rocket",
-    nom: "Rocket League",
-    sousTitre: "Roster DME - tous GC+ (trackers uniquement)",
-    ranks: [{ label: "GC+", value: ROCKET_JOUEURS_GCPLUS.length }],
-    players: ROCKET_JOUEURS_GCPLUS.map((pseudo, idx) => ({
-      id: `rl-${idx + 1}`,
-      pseudo,
-      rang: "GC+",
-      trackers: {
-        tracker: trackerRocketSearchUrl(pseudo),
-      },
-    })),
-    rankOptions: [
-      { id: "all", label: "Tous (GC+)", predicate: () => true },
-      {
-        id: "gcplus",
-        label: "GC+",
-        predicate: (r) => normalizeRankLabel(r).includes("GC"),
-      },
-    ],
-  },
-
-  {
-    id: "marvel",
-    nom: "Marvel Rivals",
-    sousTitre: "Mock temporaire",
-    ranks: [
-      { label: "Bronze", value: 2 },
-      { label: "Silver", value: 3 },
-      { label: "Gold", value: 4 },
-      { label: "Plat", value: 2 },
-      { label: "Elite+", value: 1 },
-    ],
-    players: [
-      {
-        id: "mr-1",
-        pseudo: "DemoTank",
-        rang: "Elite",
-        role: "Tank",
-        games7j: 11,
-        topPicks: "—",
-        trackers: { tracker: "https://tracker.gg/" },
-      },
-    ],
-    rankOptions: [
-      { id: "all", label: "Tous", predicate: () => true },
-      {
-        id: "elite",
-        label: "Elite+",
-        predicate: (r) => normalizeRankLabel(r).includes("ELITE"),
-      },
-    ],
-  },
-];
+function badgeStatut(statut?: JoueurRoster["statut"]) {
+  const s = statut ?? "tryout";
+  if (s === "starter") return "border-emerald-500/30 bg-emerald-500/10 text-emerald-200";
+  if (s === "sub") return "border-blue-500/30 bg-blue-500/10 text-blue-200";
+  return "border-white/10 bg-white/5 text-white/70";
+}
 
 /* =========================
    Page
 ========================= */
 
-export default function ScoutingPage() {
-  const { data: session } = useSession();
-  const role: Role = session?.role ?? null;
+type EtatChargement = "idle" | "loading" | "ok" | "erreur";
+type OngletFiche = "overview" | "matchs" | "lp" | "notes";
 
-  const aAccesInterne = role === "staff" || role === "coach";
+export default function PageScouting() {
+  const [equipes, setEquipes] = useState<EquipeScouting[]>(creerStateInitial());
+  const [equipeActiveId, setEquipeActiveId] = useState<TeamId>("dme_acl");
 
-  const [jeuActif, setJeuActif] = useState<JeuId>("lol");
-  const [filtreRank, setFiltreRank] = useState<string>("all");
-  const [recherche, setRecherche] = useState<string>("");
-  const [tri, setTri] = useState<"rang" | "games" | "pseudo">("rang");
+  const equipeActive = useMemo(
+    () => equipes.find((e) => e.id === equipeActiveId) ?? equipes[0],
+    [equipes, equipeActiveId]
+  );
 
-  const data = useMemo(() => {
-    return JEUX.find((j) => j.id === jeuActif) ?? JEUX[0];
-  }, [jeuActif]);
+  const [joueurActifId, setJoueurActifId] = useState<string | null>(null);
+  const joueurActif = useMemo(() => {
+    if (!joueurActifId) return null;
+    return equipeActive.roster.find((j) => j.id === joueurActifId) ?? null;
+  }, [equipeActive, joueurActifId]);
 
+  const [ongletFiche, setOngletFiche] = useState<OngletFiche>("overview");
+
+  // Ajout manuel
+  const [pseudo, setPseudo] = useState("");
+  const [roleEquipe, setRoleEquipe] = useState("");
+  const [statut, setStatut] = useState<"starter" | "sub" | "tryout">("tryout");
+
+  // Ajout via Riot ID + refresh
+  const [region, setRegion] = useState<string>("na");
+  const [riotId, setRiotId] = useState<string>("");
+  const [tagLine, setTagLine] = useState<string>("");
+  const [etat, setEtat] = useState<EtatChargement>("idle");
+  const [erreur, setErreur] = useState<string>("");
+
+  // Search roster
+  const [filtreRoster, setFiltreRoster] = useState<string>("");
+
+  // Notes joueur
+  const [auteurNote, setAuteurNote] = useState<string>("Coach");
+  const [contenuNote, setContenuNote] = useState<string>("");
+  const [tagsNote, setTagsNote] = useState<TagNote[]>([]);
+
+  const regionChoisie = useMemo(() => REGIONS_LOL.find((r) => r.id === region), [region]);
+
+  // Charger depuis localStorage au mount
   useEffect(() => {
-    setFiltreRank("all");
-    setRecherche("");
-    setTri("rang");
-  }, [jeuActif]);
+    const raw = localStorage.getItem(CLE_STORAGE);
+    const saved = safeParseJson<EquipeScouting[]>(raw);
 
-  const rankPredicate = useMemo(() => {
-    return (
-      data.rankOptions.find((o) => o.id === filtreRank)?.predicate ?? (() => true)
+    if (saved && Array.isArray(saved) && saved.length > 0) {
+      const base = creerStateInitial();
+      const merged = base.map((b) => {
+        const found = saved.find((s) => s.id === b.id);
+        return found ? { ...b, ...found } : b;
+      });
+      setEquipes(merged);
+    }
+  }, []);
+
+  // Sauvegarder a chaque modif
+  useEffect(() => {
+    localStorage.setItem(CLE_STORAGE, JSON.stringify(equipes));
+  }, [equipes]);
+
+  function majEquipeActive(patch: Partial<EquipeScouting>) {
+    setEquipes((prev) => prev.map((e) => (e.id === equipeActiveId ? { ...e, ...patch } : e)));
+  }
+
+  function majJoueur(joueurId: string, patch: Partial<JoueurRoster>) {
+    setEquipes((prev) =>
+      prev.map((e) => {
+        if (e.id !== equipeActiveId) return e;
+        return {
+          ...e,
+          roster: e.roster.map((j) => (j.id === joueurId ? { ...j, ...patch } : j)),
+        };
+      })
     );
-  }, [data.rankOptions, filtreRank]);
+  }
 
-  const joueursFiltres = useMemo(() => {
-    const q = recherche.trim().toLowerCase();
+  function ajouterJoueurManuel() {
+    const p = pseudo.trim();
+    if (!p) return;
 
-    const base = data.players.filter((p) => {
-      if (!rankPredicate(p.rang)) return false;
-      if (!q) return true;
+    const joueur: JoueurRoster = {
+      id: uid("joueur"),
+      pseudo: p,
+      roleEquipe: roleEquipe.trim() || "",
+      statut,
+      notes: [],
+      lpHistorique: [],
+    };
 
-      const riot = `${p.riotId ?? ""}#${p.tagLine ?? ""}`.toLowerCase();
-      return (
-        p.pseudo.toLowerCase().includes(q) ||
-        (p.riotId ? p.riotId.toLowerCase().includes(q) : false) ||
-        riot.includes(q) ||
-        (p.role ? p.role.toLowerCase().includes(q) : false) ||
-        p.rang.toLowerCase().includes(q)
-      );
-    });
+    setEquipes((prev) =>
+      prev.map((e) => (e.id === equipeActiveId ? { ...e, roster: [joueur, ...e.roster] } : e))
+    );
 
-    const sorted = [...base].sort((a, b) => {
-      if (tri === "pseudo") return a.pseudo.localeCompare(b.pseudo);
+    setPseudo("");
+    setRoleEquipe("");
+    setStatut("tryout");
+    setJoueurActifId(joueur.id);
+    setOngletFiche("overview");
+  }
 
-      if (tri === "games") {
-        const ga = a.games7j ?? -1;
-        const gb = b.games7j ?? -1;
-        return gb - ga;
+  function supprimerJoueur(joueurId: string) {
+    setEquipes((prev) =>
+      prev.map((e) => {
+        if (e.id !== equipeActiveId) return e;
+        return { ...e, roster: e.roster.filter((j) => j.id !== joueurId) };
+      })
+    );
+    if (joueurActifId === joueurId) setJoueurActifId(null);
+  }
+
+  function toggleTag(tag: TagNote) {
+    setTagsNote((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+  }
+
+  function ajouterNoteJoueur() {
+    if (!joueurActif) return;
+    const contenu = contenuNote.trim();
+    if (!contenu) return;
+
+    const note: NoteJoueur = {
+      id: uid("note"),
+      createdAt: Date.now(),
+      auteur: auteurNote.trim() || "Coach",
+      tags: tagsNote,
+      contenu,
+    };
+
+    majJoueur(joueurActif.id, { notes: [note, ...(joueurActif.notes ?? [])] });
+    setContenuNote("");
+    setTagsNote([]);
+    setOngletFiche("notes");
+  }
+
+  function supprimerNote(joueurId: string, noteId: string) {
+    const joueur = equipeActive.roster.find((j) => j.id === joueurId);
+    if (!joueur) return;
+    majJoueur(joueurId, { notes: (joueur.notes ?? []).filter((n) => n.id !== noteId) });
+  }
+
+  function ajouterSnapshotLP(joueurId: string, snapshot: SnapshotLP) {
+    setEquipes((prev) =>
+      prev.map((e) => {
+        if (e.id !== equipeActiveId) return e;
+        return {
+          ...e,
+          roster: e.roster.map((j) => {
+            if (j.id !== joueurId) return j;
+            const exist = j.lpHistorique ?? [];
+            const next = [snapshot, ...exist].slice(0, 120);
+            return { ...j, lpHistorique: next };
+          }),
+        };
+      })
+    );
+  }
+
+  async function fetchScoutingEtAssignerAuJoueur(joueurId: string) {
+    setEtat("loading");
+    setErreur("");
+
+    try {
+      const url = `/api/scouting/lol?region=${encodeURIComponent(region)}&riotId=${encodeURIComponent(
+        riotId.trim()
+      )}&tagLine=${encodeURIComponent(tagLine.trim())}&count=${DEFAULT_COUNT}`;
+
+      const res = await fetch(url, { cache: "no-store" });
+      const json = (await res.json()) as { erreur?: string } | ReponseScoutingLOL;
+
+      if (!res.ok) {
+        const msg = "erreur" in json && typeof json.erreur === "string" ? json.erreur : "Erreur API";
+        throw new Error(msg);
       }
 
-      if (data.id === "lol") {
-        return rankToIndexLoL(b.rang) - rankToIndexLoL(a.rang);
+      const data = json as ReponseScoutingLOL;
+
+      // Snapshot LP (priorite SoloQ)
+      const solo =
+        (data.ranked ?? []).find((q) => q.queueType === "RANKED_SOLO_5x5") ??
+        (data.ranked ?? [])[0] ??
+        null;
+
+      if (solo) {
+        ajouterSnapshotLP(joueurId, {
+          ts: Date.now(),
+          queueType: solo.queueType,
+          tier: solo.tier,
+          rank: solo.rank,
+          lp: solo.leaguePoints,
+        });
       }
-      return normalizeRankLabel(b.rang).localeCompare(normalizeRankLabel(a.rang));
+
+      // Update joueur
+      majJoueur(joueurId, {
+        regionId: region,
+        riotId: data.joueur.riotId,
+        tagLine: data.joueur.tagLine,
+        pseudo: data.joueur.riotId,
+        scouting: data,
+        lastFetchAt: Date.now(),
+      });
+
+      setEtat("ok");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Erreur inconnue";
+      setErreur(msg);
+      setEtat("erreur");
+    }
+  }
+
+  async function ajouterJoueurViaRiotId() {
+    const g = riotId.trim();
+    const t = tagLine.trim();
+    if (!g || !t) return;
+
+    const joueur: JoueurRoster = {
+      id: uid("joueur"),
+      pseudo: g,
+      regionId: region,
+      riotId: g,
+      tagLine: t,
+      roleEquipe: "",
+      statut: "tryout",
+      notes: [],
+      lpHistorique: [],
+    };
+
+    setEquipes((prev) =>
+      prev.map((e) => (e.id === equipeActiveId ? { ...e, roster: [joueur, ...e.roster] } : e))
+    );
+
+    setJoueurActifId(joueur.id);
+    setOngletFiche("overview");
+    await fetchScoutingEtAssignerAuJoueur(joueur.id);
+  }
+
+  function resetTout() {
+    const base = creerStateInitial();
+    setEquipes(base);
+    setEquipeActiveId("dme_acl");
+    setJoueurActifId(null);
+    setOngletFiche("overview");
+    localStorage.removeItem(CLE_STORAGE);
+  }
+
+  const rosterFiltre = useMemo(() => {
+    const f = filtreRoster.trim().toLowerCase();
+    if (!f) return equipeActive.roster;
+
+    return equipeActive.roster.filter((j) => {
+      const a = (j.pseudo ?? "").toLowerCase();
+      const b = `${j.riotId ?? ""}#${j.tagLine ?? ""}`.toLowerCase();
+      const c = (j.roleEquipe ?? "").toLowerCase();
+      return a.includes(f) || b.includes(f) || c.includes(f);
     });
-
-    return sorted;
-  }, [data.players, data.id, rankPredicate, recherche, tri]);
-
-  const afficherColonnesRiot = data.id === "lol";
-  const afficherColonnesStats = data.id !== "rocket";
+  }, [equipeActive.roster, filtreRoster]);
 
   return (
-    <main className="min-h-screen text-white pt-24 pb-24">
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0b10] via-[#0f0f16] to-black" />
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[920px] rounded-full bg-red-600/18 blur-3xl" />
-        <div className="absolute top-40 right-0 h-[360px] w-[520px] rounded-full bg-red-600/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-[360px] w-[520px] rounded-full bg-white/5 blur-3xl" />
+    <div className="mx-auto w-full max-w-[1800px] px-4 md:px-8 py-10">
+      {/* Header */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+            Scouting - Espace coach/analyst
+          </h1>
+          <p className="mt-2 text-white/70">
+            Rosters DME, notes equipe, notes joueur 1v1, scouting LoL (20 games), et historique LP.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={resetTout}
+          className="h-10 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white/80 hover:bg-white/10"
+          title="Remet tout a zero (local)"
+        >
+          Reset local
+        </button>
       </div>
 
-      <div className="w-full max-w-[1800px] mx-auto px-4">
-        <section className="rounded-3xl border border-red-600/25 bg-white/5 backdrop-blur p-8 shadow-[0_0_32px_rgba(220,38,38,0.14)]">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white/75">
-                <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(220,38,38,0.9)]" />
-                Hub scouting & performance
-              </div>
+      {/* Layout 3 colonnes */}
+      <div className="mt-8 grid gap-6 lg:grid-cols-[290px_1fr_460px]">
+        {/* Colonne gauche */}
+        <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+          <div className="text-sm font-semibold text-white/80">Equipes</div>
 
-              <h1 className="mt-4 text-3xl md:text-5xl font-extrabold">
-                Scouting <span className="text-red-500">DME</span>
-              </h1>
+          <div className="mt-3 grid gap-2">
+            {TEAMS.map((t) => {
+              const active = t.id === equipeActiveId;
+              const count = equipes.find((e) => e.id === t.id)?.roster.length ?? 0;
 
-              <p className="mt-3 text-white/75 max-w-3xl">
-                Multi-jeux, table unique, filtres rank et liens trackers.
-              </p>
-
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link
-                  href="/equipes"
-                  className="px-5 py-2 rounded-xl border border-white/15 bg-black/25 hover:bg-black/35 hover:border-white/25 transition"
-                >
-                  Voir les rosters
-                </Link>
-
-                {!session ? (
-                  <Link
-                    href="/connexion"
-                    className="px-5 py-2 rounded-xl border border-red-600/45 bg-black/25 hover:border-red-500 hover:text-red-400 transition"
-                  >
-                    Connexion (Discord)
-                  </Link>
-                ) : (
-                  <div className="px-5 py-2 rounded-xl border border-red-600/25 bg-black/25 text-white/80">
-                    Connecte :{" "}
-                    <span className="text-red-300 font-semibold">
-                      {role ?? "inconnu"}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/25 px-5 py-4">
-              <div className="text-white/60 text-sm">Jeu selectionne</div>
-              <div className="text-xl font-bold mt-1">{data.nom}</div>
-              <div className="text-white/70 text-sm mt-1">{data.sousTitre}</div>
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-2">
-            {JEUX.map((j) => {
-              const actif = j.id === jeuActif;
               return (
                 <button
-                  key={j.id}
-                  onClick={() => setJeuActif(j.id)}
+                  key={t.id}
+                  type="button"
+                  onClick={() => {
+                    setEquipeActiveId(t.id);
+                    setJoueurActifId(null);
+                    setOngletFiche("overview");
+                    setEtat("idle");
+                    setErreur("");
+                  }}
                   className={[
-                    "px-4 py-2 rounded-full border transition text-sm",
-                    actif
-                      ? "border-red-500 bg-red-600/20 text-red-200 shadow-[0_0_18px_rgba(220,38,38,0.18)]"
-                      : "border-white/10 bg-black/20 text-white/70 hover:border-white/20 hover:text-white",
+                    "w-full rounded-xl border px-3 py-3 text-left transition",
+                    active
+                      ? "border-red-600/50 bg-red-600/10"
+                      : "border-white/10 bg-black/30 hover:bg-white/5",
                   ].join(" ")}
                 >
-                  {j.nom}
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold">{t.titre}</div>
+                    <div className="text-xs text-white/60">{count} joueurs</div>
+                  </div>
+                  <div className="text-xs text-white/60">{t.league}</div>
                 </button>
               );
             })}
           </div>
-        </section>
 
-        <section className="mt-8 grid lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
-            <div className="flex items-end justify-between gap-4 flex-wrap">
-              <div>
-                <h2 className="text-xl font-bold">Distribution des ranks</h2>
-                <p className="text-white/70 mt-1">LoL = estime via peak, Rocket = GC+.</p>
-              </div>
-              <div className="text-sm text-white/60">
-                Jeu: <span className="text-red-300">{data.nom}</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <DonutChart data={data.ranks} />
-            </div>
+          <div className="mt-6">
+            <div className="text-sm font-semibold text-white/80">Notes equipe</div>
+            <textarea
+              value={equipeActive.notesEquipe}
+              onChange={(e) => majEquipeActive({ notesEquipe: e.target.value })}
+              className="mt-2 w-full min-h-[160px] rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white/90 outline-none focus:border-red-500/40"
+              placeholder="Plan de split, objectifs, pool draft, regles internes, etc."
+            />
           </div>
+        </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
-            <h2 className="text-xl font-bold">Resume</h2>
-            <div className="mt-5 grid gap-3">
-              <Kpi title="Joueurs (filtre)" value={String(joueursFiltres.length)} />
-              <Kpi title="Jeu actif" value={data.id.toUpperCase()} />
-              <Kpi title="Mode" value={aAccesInterne ? "Interne" : "Public"} />
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
-          <div className="flex items-end justify-between gap-4 flex-wrap">
+        {/* Colonne milieu */}
+        <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold">Joueurs ({data.nom})</h2>
-              <p className="text-white/70 mt-1">
-                Rocket = pas de Riot ID, pas de roles, tous GC+, tracker only.
-              </p>
+              <div className="text-sm text-white/60">Roster</div>
+              <div className="text-xl font-bold">{equipeActive.titre}</div>
             </div>
+            <div className="text-xs text-white/50">Sauvegarde locale (navigateur)</div>
+          </div>
 
-            <div className="text-sm text-white/60">
-              Total: <span className="text-red-300">{data.players.length}</span>
+          {/* Search */}
+          <div className="mt-4 grid gap-2">
+            <label className="text-xs text-white/60">Recherche roster</label>
+            <input
+              value={filtreRoster}
+              onChange={(e) => setFiltreRoster(e.target.value)}
+              className="h-10 w-full rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+              placeholder="Pseudo / RiotID#Tag / role..."
+            />
+          </div>
+
+          {/* Ajout manuel */}
+          <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div className="text-sm font-semibold text-white/80">Ajouter joueur (manuel)</div>
+
+            <div className="mt-3 grid gap-3 md:grid-cols-[1fr_160px_160px_140px]">
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">Pseudo</label>
+                <input
+                  value={pseudo}
+                  onChange={(e) => setPseudo(e.target.value)}
+                  className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                  placeholder="Ex: Reppy"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">Role equipe</label>
+                <input
+                  value={roleEquipe}
+                  onChange={(e) => setRoleEquipe(e.target.value)}
+                  className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                  placeholder="TOP/JGL/MID/ADC/SUP"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">Statut</label>
+                <select
+                  value={statut}
+                  onChange={(e) => setStatut(e.target.value as "starter" | "sub" | "tryout")}
+                  className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                >
+                  <option value="starter">Starter</option>
+                  <option value="sub">Sub</option>
+                  <option value="tryout">Tryout</option>
+                </select>
+              </div>
+
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">&nbsp;</label>
+                <button
+                  type="button"
+                  onClick={ajouterJoueurManuel}
+                  disabled={!pseudo.trim()}
+                  className="h-10 rounded-xl border border-red-600/40 bg-red-600/15 px-4 text-sm font-semibold text-red-200 hover:bg-red-600/25 disabled:opacity-50"
+                >
+                  Ajouter
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="mt-5 grid lg:grid-cols-12 gap-3">
-            <div className="lg:col-span-4">
-              <label className="text-white/60 text-xs">Recherche</label>
-              <input
-                value={recherche}
-                onChange={(e) => setRecherche(e.target.value)}
-                placeholder="Pseudo, Riot ID (LoL), role, rank..."
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white outline-none focus:border-red-600/35"
-              />
+          {/* Ajout via Riot */}
+          <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div className="text-sm font-semibold text-white/80">Ajouter + scout (Riot ID)</div>
+
+            <div className="mt-3 grid gap-3 lg:grid-cols-[160px_1fr_170px_auto] items-end">
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">Region</label>
+                <select
+                  value={region}
+                  onChange={(e) => setRegion(e.target.value)}
+                  className="h-10 w-full rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                >
+                  {REGIONS_LOL.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">Riot ID (gameName)</label>
+                <input
+                  value={riotId}
+                  onChange={(e) => setRiotId(e.target.value)}
+                  className="h-10 w-full rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                  placeholder="Ex: Coussinho"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className="text-xs text-white/60">TagLine</label>
+                <input
+                  value={tagLine}
+                  onChange={(e) => setTagLine(e.target.value)}
+                  className="h-10 w-full rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                  placeholder="Ex: DME"
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={ajouterJoueurViaRiotId}
+                  disabled={!riotId.trim() || !tagLine.trim() || etat === "loading"}
+                  className="h-10 min-w-[150px] rounded-xl border border-red-600/40 bg-red-600/15 px-4 text-sm font-semibold text-red-200 hover:bg-red-600/25 disabled:opacity-50"
+                >
+                  {etat === "loading" ? "..." : "Ajouter + scout"}
+                </button>
+              </div>
             </div>
 
-            <div className="lg:col-span-4">
-              <label className="text-white/60 text-xs">Filtre rank</label>
-              <select
-                value={filtreRank}
-                onChange={(e) => setFiltreRank(e.target.value)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white outline-none focus:border-red-600/35"
-              >
-                {data.rankOptions.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
+            <div className="mt-2 text-xs text-white/45">
+              Plateforme: {regionChoisie?.plateforme} | Regional: {regionChoisie?.regional}
             </div>
 
-            <div className="lg:col-span-4">
-              <label className="text-white/60 text-xs">Tri</label>
-              <select
-                value={tri}
-                onChange={(e) => setTri(e.target.value as any)}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white outline-none focus:border-red-600/35"
-              >
-                <option value="rang">Rank (desc)</option>
-                <option value="games">Games 7j (desc)</option>
-                <option value="pseudo">Pseudo (A-Z)</option>
-              </select>
-            </div>
+            {etat === "erreur" ? (
+              <div className="mt-3 rounded-xl border border-red-600/30 bg-red-600/10 p-3 text-sm text-red-200">
+                {erreur}
+              </div>
+            ) : null}
           </div>
 
-          <div className="mt-5 overflow-x-auto">
+          {/* Liste roster */}
+          <div className="mt-6 overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="text-white/70">
+              <thead className="text-white/60">
                 <tr className="border-b border-white/10">
-                  <th className="py-3 text-left">Joueur</th>
-
-                  {afficherColonnesRiot ? (
-                    <th className="py-3 text-left">Riot ID</th>
-                  ) : null}
-
-                  <th className="py-3 text-left">Role</th>
-                  <th className="py-3 text-left">Rank</th>
-
-                  {afficherColonnesStats ? (
-                    <>
-                      <th className="py-3 text-left">Games 7j</th>
-                      <th className="py-3 text-left">Top</th>
-                    </>
-                  ) : null}
-
-                  <th className="py-3 text-left">Trackers</th>
+                  <th className="py-2 text-left">Joueur</th>
+                  <th className="py-2 text-left">Role</th>
+                  <th className="py-2 text-left">Statut</th>
+                  <th className="py-2 text-left">Notes</th>
+                  <th className="py-2 text-right">Actions</th>
                 </tr>
               </thead>
+              <tbody>
+                {rosterFiltre.map((j) => {
+                  const actif = j.id === joueurActifId;
+                  return (
+                    <tr key={j.id} className={["border-b border-white/10", actif ? "bg-white/5" : ""].join(" ")}>
+                      <td className="py-2 pr-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setJoueurActifId(j.id);
+                            setOngletFiche("overview");
+                          }}
+                          className="text-left font-semibold text-white/85 hover:text-white"
+                        >
+                          {j.pseudo}
+                        </button>
 
-              <tbody className="text-white/90">
-                {joueursFiltres.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={
-                        1 +
-                        (afficherColonnesRiot ? 1 : 0) +
-                        1 +
-                        1 +
-                        (afficherColonnesStats ? 2 : 0) +
-                        1
-                      }
-                      className="py-10 text-center text-white/60"
-                    >
-                      Aucun joueur ne correspond aux filtres.
-                    </td>
-                  </tr>
-                ) : (
-                  joueursFiltres.map((p) => (
-                    <tr key={p.id} className="border-b border-white/10">
-                      <td className="py-3 font-semibold">{p.pseudo}</td>
+                        {j.riotId && j.tagLine ? (
+                          <div className="text-xs text-white/50">
+                            {j.riotId}#{j.tagLine} ({j.regionId ?? "?"})
+                          </div>
+                        ) : (
+                          <div className="text-xs text-white/35">Sans Riot ID</div>
+                        )}
+                      </td>
 
-                      {afficherColonnesRiot ? (
-                        <td className="py-3">
-                          {p.riotId ? (
-                            <span className="text-white/85">
-                              {p.riotId}
-                              {p.tagLine ? (
-                                <span className="text-white/60">#{p.tagLine}</span>
-                              ) : null}
-                            </span>
-                          ) : (
-                            <span className="text-white/50">—</span>
-                          )}
-                        </td>
-                      ) : null}
+                      <td className="py-2 pr-3 text-white/80">{j.roleEquipe ?? ""}</td>
 
-                      <td className="py-3">{p.role ?? "—"}</td>
-
-                      <td className="py-3">
-                        <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">
-                          {p.rang}
+                      <td className="py-2 pr-3">
+                        <span className={["inline-flex rounded-full border px-2 py-1 text-[11px] font-semibold", badgeStatut(j.statut)].join(" ")}>
+                          {j.statut ?? "tryout"}
                         </span>
                       </td>
 
-                      {afficherColonnesStats ? (
-                        <>
-                          <td className="py-3">{p.games7j ?? "—"}</td>
-                          <td className="py-3">{p.topPicks ?? "—"}</td>
-                        </>
-                      ) : null}
+                      <td className="py-2 pr-3 text-white/70">{j.notes?.length ?? 0}</td>
 
-                      <td className="py-3">
-                        <div className="flex flex-wrap gap-2">
-                          {p.trackers?.dpm ? (
-                            <TrackerChip href={p.trackers.dpm} label="DPM" />
-                          ) : null}
-                          {p.trackers?.opgg ? (
-                            <TrackerChip href={p.trackers.opgg} label="OP.GG" external />
-                          ) : null}
-                          {p.trackers?.ugg ? (
-                            <TrackerChip href={p.trackers.ugg} label="U.GG" external />
-                          ) : null}
-                          {p.trackers?.tracker ? (
-                            <TrackerChip href={p.trackers.tracker} label="Tracker" external />
-                          ) : null}
-                          {p.trackers?.vlr ? (
-                            <TrackerChip href={p.trackers.vlr} label="VLR" external />
-                          ) : null}
-
-                          {!p.trackers || Object.keys(p.trackers).length === 0 ? (
-                            <span className="text-white/50">—</span>
-                          ) : null}
-                        </div>
+                      <td className="py-2 text-right">
+                        <button
+                          type="button"
+                          onClick={() => supprimerJoueur(j.id)}
+                          className="rounded-lg border border-white/10 bg-black/30 px-3 py-1 text-xs text-white/70 hover:bg-white/5"
+                        >
+                          Supprimer
+                        </button>
                       </td>
                     </tr>
-                  ))
-                )}
+                  );
+                })}
+
+                {rosterFiltre.length === 0 ? (
+                  <tr>
+                    <td className="py-4 text-white/60" colSpan={5}>
+                      Aucun joueur pour le moment.
+                    </td>
+                  </tr>
+                ) : null}
               </tbody>
             </table>
           </div>
+        </div>
 
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <div className="text-white/60 text-sm">
-              Affiches:{" "}
-              <span className="text-white/85 font-semibold">
-                {joueursFiltres.length}
-              </span>{" "}
-              / {data.players.length}
+        {/* Colonne droite */}
+        <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+          <div className="text-sm font-semibold text-white/80">Fiche joueur</div>
+
+          {!joueurActif ? (
+            <div className="mt-3 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/60">
+              Clique sur un joueur dans le roster pour ouvrir sa fiche.
             </div>
+          ) : (
+            <div className="mt-3 grid gap-4">
+              {/* Header joueur */}
+              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-xl font-bold">{joueurActif.pseudo}</div>
+                    <div className="text-sm text-white/60">
+                      {joueurActif.roleEquipe ?? ""}{" "}
+                      {joueurActif.statut ? `- ${joueurActif.statut}` : ""}
+                    </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setRecherche("");
-                  setFiltreRank("all");
-                  setTri("rang");
-                }}
-                className="px-5 py-2 rounded-xl border border-white/15 bg-black/20 hover:border-white/25 transition"
-              >
-                Reset filtres
-              </button>
+                    <div className="text-xs text-white/45 mt-1">
+                      {joueurActif.riotId && joueurActif.tagLine
+                        ? `Riot: ${joueurActif.riotId}#${joueurActif.tagLine} (${joueurActif.regionId ?? "?"})`
+                        : "Riot: non defini"}
+                    </div>
 
-              <Link
-                href="/contact"
-                className="px-5 py-2 rounded-xl border border-red-600/35 bg-black/20 hover:border-red-500 hover:text-red-300 transition"
-              >
-                Ajouter un joueur
-              </Link>
+                    <div className="text-xs text-white/45 mt-1">
+                      {joueurActif.lastFetchAt ? `Dernier refresh: ${new Date(joueurActif.lastFetchAt).toLocaleString()}` : "Dernier refresh: -"}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRegion(joueurActif.regionId ?? "na");
+                      setRiotId(joueurActif.riotId ?? "");
+                      setTagLine(joueurActif.tagLine ?? "");
+                    }}
+                    className="h-9 rounded-xl border border-white/10 bg-black/40 px-3 text-xs text-white/70 hover:bg-white/5"
+                    title="Pre-remplir les champs de scouting"
+                  >
+                    Prefill
+                  </button>
+                </div>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <div className="grid gap-2">
+                    <label className="text-xs text-white/60">Role equipe</label>
+                    <input
+                      value={joueurActif.roleEquipe ?? ""}
+                      onChange={(e) => majJoueur(joueurActif.id, { roleEquipe: e.target.value })}
+                      className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                      placeholder="TOP/JGL/MID/ADC/SUP"
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <label className="text-xs text-white/60">Statut</label>
+                    <select
+                      value={joueurActif.statut ?? "tryout"}
+                      onChange={(e) => majJoueur(joueurActif.id, { statut: e.target.value as "starter" | "sub" | "tryout" })}
+                      className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                    >
+                      <option value="starter">Starter</option>
+                      <option value="sub">Sub</option>
+                      <option value="tryout">Tryout</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Onglets */}
+              <div className="rounded-2xl border border-white/10 bg-black/30 p-2">
+                <div className="grid grid-cols-4 gap-2">
+                  <TabBtn active={ongletFiche === "overview"} onClick={() => setOngletFiche("overview")}>
+                    Overview
+                  </TabBtn>
+                  <TabBtn active={ongletFiche === "matchs"} onClick={() => setOngletFiche("matchs")}>
+                    Matchs
+                  </TabBtn>
+                  <TabBtn active={ongletFiche === "lp"} onClick={() => setOngletFiche("lp")}>
+                    LP
+                  </TabBtn>
+                  <TabBtn active={ongletFiche === "notes"} onClick={() => setOngletFiche("notes")}>
+                    Notes
+                  </TabBtn>
+                </div>
+              </div>
+
+              {/* Bloc scouting refresh (toujours visible) */}
+              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="text-sm font-semibold text-white/80">Scouting LoL</div>
+                  <button
+                    type="button"
+                    onClick={() => fetchScoutingEtAssignerAuJoueur(joueurActif.id)}
+                    disabled={!riotId.trim() || !tagLine.trim() || etat === "loading"}
+                    className="h-9 rounded-xl border border-red-600/40 bg-red-600/15 px-3 text-xs font-semibold text-red-200 hover:bg-red-600/25 disabled:opacity-50"
+                  >
+                    {etat === "loading" ? "..." : "Refresh stats"}
+                  </button>
+                </div>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-[120px_1fr_1fr]">
+                  <div className="grid gap-2">
+                    <label className="text-xs text-white/60">Region</label>
+                    <select
+                      value={region}
+                      onChange={(e) => setRegion(e.target.value)}
+                      className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                    >
+                      {REGIONS_LOL.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <label className="text-xs text-white/60">Riot ID</label>
+                    <input
+                      value={riotId}
+                      onChange={(e) => setRiotId(e.target.value)}
+                      className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                      placeholder="Ex: Coussinho"
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <label className="text-xs text-white/60">TagLine</label>
+                    <input
+                      value={tagLine}
+                      onChange={(e) => setTagLine(e.target.value)}
+                      className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+                      placeholder="Ex: DME"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-2 text-xs text-white/45">
+                  Matchs: {DEFAULT_COUNT} | Plateforme: {regionChoisie?.plateforme} | Regional: {regionChoisie?.regional}
+                </div>
+
+                {etat === "erreur" ? (
+                  <div className="mt-3 rounded-xl border border-red-600/30 bg-red-600/10 p-3 text-sm text-red-200">
+                    {erreur}
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Contenu onglets */}
+              {ongletFiche === "overview" ? (
+                <OngletOverview joueur={joueurActif} />
+              ) : null}
+
+              {ongletFiche === "matchs" ? (
+                <OngletMatchs joueur={joueurActif} />
+              ) : null}
+
+              {ongletFiche === "lp" ? (
+                <OngletLP joueur={joueurActif} />
+              ) : null}
+
+              {ongletFiche === "notes" ? (
+                <OngletNotes
+                  joueur={joueurActif}
+                  auteurNote={auteurNote}
+                  setAuteurNote={setAuteurNote}
+                  contenuNote={contenuNote}
+                  setContenuNote={setContenuNote}
+                  tagsNote={tagsNote}
+                  toggleTag={toggleTag}
+                  ajouterNoteJoueur={ajouterNoteJoueur}
+                  supprimerNote={supprimerNote}
+                />
+              ) : null}
             </div>
-          </div>
-        </section>
+          )}
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
 
 /* =========================
-   UI components
+   Onglets
 ========================= */
 
-function Kpi(props: { title: string; value: string }) {
+function OngletOverview(props: { joueur: JoueurRoster }) {
+  const s = props.joueur.scouting;
+
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:border-red-600/20 transition">
-      <div className="text-white/60 text-xs">{props.title}</div>
-      <div className="text-2xl font-extrabold mt-1">{props.value}</div>
+    <div className="grid gap-4">
+      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+        <div className="text-sm font-semibold text-white/80">Resume</div>
+
+        {!s ? (
+          <div className="mt-2 text-sm text-white/60">Aucune stats chargee.</div>
+        ) : (
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            <BlocStat label={`Winrate (${s.count})`} value={`${s.resume.winrate}%`} />
+            <BlocStat label="KDA" value={String(s.resume.kda)} />
+            <BlocStat label="CS/min" value={String(s.resume.csMin)} />
+            <BlocStat label="Vision/min" value={String(s.resume.visionMin)} />
+            <BlocStat label="DMG/min" value={String(s.resume.dmgMin)} />
+            <BlocStat label="Gold/min" value={String(s.resume.goldMin)} />
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+        <div className="text-sm font-semibold text-white/80">Ranked</div>
+
+        {!s ? (
+          <div className="mt-2 text-sm text-white/60">Aucune info ranked.</div>
+        ) : (s.ranked ?? []).length === 0 ? (
+          <div className="mt-2 text-sm text-white/60">Aucune info ranked.</div>
+        ) : (
+          <div className="mt-3 grid gap-2">
+            {s.ranked.map((q) => (
+              <div key={q.queueType} className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/40 px-3 py-2">
+                <div className="text-sm text-white/70">{q.queueType}</div>
+                <div className="text-sm font-semibold">
+                  {q.tier} {q.rank} - {q.leaguePoints} LP
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-function TrackerChip(props: { href: string; label: string; external?: boolean }) {
-  const common =
-    "inline-flex items-center gap-2 rounded-full border border-red-600/25 bg-black/20 px-3 py-1 text-xs hover:border-red-500 hover:text-red-300 transition";
-
-  if (props.external) {
+function OngletMatchs(props: { joueur: JoueurRoster }) {
+  const s = props.joueur.scouting;
+  if (!s) {
     return (
-      <a href={props.href} target="_blank" rel="noreferrer" className={common}>
-        {props.label} →
-      </a>
+      <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/60">
+        Aucune stats chargee.
+      </div>
     );
   }
 
+  const puuid = s.joueur.puuid;
+  const stats = extraireStatsMatchs(puuid, s.matchs ?? []);
+
   return (
-    <a href={props.href} className={common}>
-      {props.label} →
-    </a>
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-semibold text-white/80">{s.count} dernieres parties</div>
+        <div className="text-xs text-white/50">{stats.length} matchs</div>
+      </div>
+
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead className="text-white/50">
+            <tr className="border-b border-white/10">
+              <th className="py-2 text-left">Date</th>
+              <th className="py-2 text-left">Champ</th>
+              <th className="py-2 text-left">Role</th>
+              <th className="py-2 text-left">K/D/A</th>
+              <th className="py-2 text-left">KDA</th>
+              <th className="py-2 text-left">KP</th>
+              <th className="py-2 text-left">CS/m</th>
+              <th className="py-2 text-left">V/m</th>
+              <th className="py-2 text-left">DMG/m</th>
+              <th className="py-2 text-left">Res</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stats.map((m) => (
+              <tr key={m.matchId} className="border-b border-white/10">
+                <td className="py-2 text-white/60">{fmtDate(m.finTs)}</td>
+                <td className="py-2 font-semibold">{m.champion}</td>
+                <td className="py-2 text-white/70">{m.role}</td>
+                <td className="py-2 text-white/80">
+                  {m.kills}/{m.deaths}/{m.assists}
+                </td>
+                <td className="py-2 text-white/70">{fmtKDA(m.kills, m.deaths, m.assists)}</td>
+                <td className="py-2 text-white/70">{m.kp}%</td>
+                <td className="py-2 text-white/70">{m.csMin}</td>
+                <td className="py-2 text-white/70">{m.visionMin}</td>
+                <td className="py-2 text-white/70">{m.dmgMin}</td>
+                <td className="py-2">
+                  <span
+                    className={[
+                      "inline-flex rounded-full px-2 py-1 text-[11px] font-semibold border",
+                      m.win
+                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
+                        : "border-red-500/30 bg-red-500/10 text-red-200",
+                    ].join(" ")}
+                  >
+                    {m.win ? "WIN" : "LOSS"}
+                  </span>
+                </td>
+              </tr>
+            ))}
+
+            {stats.length === 0 ? (
+              <tr>
+                <td colSpan={10} className="py-4 text-white/60">
+                  Aucune donnee de matchs.
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
-function DonutChart(props: { data: { label: string; value: number }[] }) {
-  const totalValue = props.data.reduce((acc, d) => acc + d.value, 0) || 1;
+function OngletLP(props: { joueur: JoueurRoster }) {
+  const hist = props.joueur.lpHistorique ?? [];
 
-  const palette = [
-    "rgba(220,38,38,0.85)",
-    "rgba(255,255,255,0.65)",
-    "rgba(255,255,255,0.52)",
-    "rgba(255,255,255,0.42)",
-    "rgba(255,255,255,0.32)",
-    "rgba(255,255,255,0.26)",
-    "rgba(255,255,255,0.20)",
-    "rgba(255,255,255,0.16)",
-  ];
-
-  const size = 220;
-  const stroke = 18;
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-
-  let acc = 0;
+  const dernier = hist[0] ?? null;
 
   return (
-    <div className="grid md:grid-cols-[260px_1fr] gap-6 items-center">
-      <div className="relative w-[260px] h-[260px] mx-auto">
-        <div className="absolute inset-0 grid place-items-center">
-          <div className="text-center">
-            <div className="text-white/60 text-xs">Total joueurs</div>
-            <div className="text-3xl font-extrabold">{totalValue}</div>
-            <div className="text-white/60 text-xs mt-1">distribution ranks</div>
+    <div className="grid gap-4">
+      <GraphLP lpHistorique={hist} />
+
+      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+        <div className="text-sm font-semibold text-white/80">Dernier snapshot</div>
+        {!dernier ? (
+          <div className="mt-2 text-sm text-white/60">
+            Aucun snapshot. Fais un refresh stats pour en enregistrer.
           </div>
-        </div>
-
-        <svg width="260" height="260" viewBox={`0 0 ${size} ${size}`} className="drop-shadow">
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={r}
-            fill="transparent"
-            stroke="rgba(255,255,255,0.10)"
-            strokeWidth={stroke}
-          />
-
-          {props.data.map((d, i) => {
-            const fraction = d.value / totalValue;
-            const dash = fraction * c;
-            const gap = c - dash;
-
-            const dashArray = `${dash} ${gap}`;
-            const dashOffset = -acc * c;
-
-            acc += fraction;
-
-            return (
-              <circle
-                key={d.label}
-                cx={size / 2}
-                cy={size / 2}
-                r={r}
-                fill="transparent"
-                stroke={palette[i % palette.length]}
-                strokeWidth={stroke}
-                strokeLinecap="round"
-                strokeDasharray={dashArray}
-                strokeDashoffset={dashOffset}
-                className="transition hover:opacity-90"
-                style={{
-                  transformOrigin: "50% 50%",
-                  transform: "rotate(-90deg)",
-                  filter: i === 0 ? "drop-shadow(0 0 10px rgba(220,38,38,0.35))" : undefined,
-                }}
-              />
-            );
-          })}
-        </svg>
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-black/15 p-5">
-        <div>
-          <div className="text-lg font-bold">Legend</div>
-          <div className="text-white/60 text-sm">Hover sur une ligne pour mieux lire.</div>
-        </div>
-
-        <div className="mt-4 space-y-2">
-          {props.data.map((d, i) => {
-            const pct = Math.round((d.value / totalValue) * 100);
-            return (
-              <div
-                key={d.label}
-                className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/15 px-4 py-3 hover:border-red-600/25 transition"
-                title={`${d.label}: ${d.value} (${pct}%)`}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="h-3 w-3 rounded-full" style={{ background: palette[i % palette.length] }} />
-                  <div className="font-semibold">{d.label}</div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="text-white/70 text-sm">{pct}%</div>
-                  <div className="text-white/85 font-bold w-8 text-right">{d.value}</div>
-                </div>
+        ) : (
+          <div className="mt-2 grid gap-2 text-sm text-white/80">
+            <div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-3 py-2">
+              <div className="text-white/70">Queue</div>
+              <div className="font-semibold">{dernier.queueType}</div>
+            </div>
+            <div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-3 py-2">
+              <div className="text-white/70">Rank</div>
+              <div className="font-semibold">
+                {dernier.tier} {dernier.rank} - {dernier.lp} LP
               </div>
-            );
-          })}
+            </div>
+            <div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-3 py-2">
+              <div className="text-white/70">Date</div>
+              <div className="font-semibold">{new Date(dernier.ts).toLocaleString()}</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function OngletNotes(props: {
+  joueur: JoueurRoster;
+  auteurNote: string;
+  setAuteurNote: (v: string) => void;
+  contenuNote: string;
+  setContenuNote: (v: string) => void;
+  tagsNote: TagNote[];
+  toggleTag: (t: TagNote) => void;
+  ajouterNoteJoueur: () => void;
+  supprimerNote: (joueurId: string, noteId: string) => void;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <div className="text-sm font-semibold text-white/80">Notes joueur (1v1)</div>
+
+      <div className="mt-3 grid gap-3">
+        <div className="grid gap-2">
+          <label className="text-xs text-white/60">Auteur</label>
+          <input
+            value={props.auteurNote}
+            onChange={(e) => props.setAuteurNote(e.target.value)}
+            className="h-10 rounded-xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none focus:border-red-500/40"
+            placeholder="Coach / Analyst"
+          />
         </div>
 
-        <div className="mt-5">
-          <div className="text-white/60 text-xs mb-2">Stacked overview</div>
-          <div className="h-3 rounded-full overflow-hidden border border-white/10 bg-black/20 flex">
-            {props.data.map((d, i) => {
-              const pct = (d.value / totalValue) * 100;
+        <div className="grid gap-2">
+          <label className="text-xs text-white/60">Tags</label>
+          <div className="flex flex-wrap gap-2">
+            {TAGS_DISPONIBLES.map((tag) => {
+              const active = props.tagsNote.includes(tag);
               return (
-                <div
-                  key={d.label}
-                  style={{ width: `${pct}%`, background: palette[i % palette.length] }}
-                  className="h-full"
-                  title={`${d.label}: ${d.value}`}
-                />
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => props.toggleTag(tag)}
+                  className={[
+                    "rounded-full border px-3 py-1 text-xs transition",
+                    active
+                      ? "border-red-600/50 bg-red-600/10 text-red-200"
+                      : "border-white/10 bg-black/40 text-white/70 hover:bg-white/5",
+                  ].join(" ")}
+                >
+                  {tag}
+                </button>
               );
             })}
           </div>
         </div>
+
+        <div className="grid gap-2">
+          <label className="text-xs text-white/60">Note</label>
+          <textarea
+            value={props.contenuNote}
+            onChange={(e) => props.setContenuNote(e.target.value)}
+            className="min-h-[110px] rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-red-500/40"
+            placeholder="Ex: tres bon lane swap, manque de discipline sur resets, etc."
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={props.ajouterNoteJoueur}
+          disabled={!props.contenuNote.trim()}
+          className="h-10 rounded-xl border border-red-600/40 bg-red-600/15 px-4 text-sm font-semibold text-red-200 hover:bg-red-600/25 disabled:opacity-50"
+        >
+          Ajouter la note
+        </button>
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        {(props.joueur.notes ?? []).map((n) => (
+          <div key={n.id} className="rounded-2xl border border-white/10 bg-black/40 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-sm font-semibold">{n.auteur}</div>
+                <div className="text-xs text-white/50">{new Date(n.createdAt).toLocaleString()}</div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => props.supprimerNote(props.joueur.id, n.id)}
+                className="rounded-lg border border-white/10 bg-black/30 px-3 py-1 text-xs text-white/70 hover:bg-white/5"
+              >
+                Supprimer
+              </button>
+            </div>
+
+            {n.tags.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {n.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[11px] text-white/70"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="mt-3 text-sm text-white/80 whitespace-pre-wrap">{n.contenu}</div>
+          </div>
+        ))}
+
+        {(props.joueur.notes ?? []).length === 0 ? (
+          <div className="text-sm text-white/60">Aucune note pour ce joueur.</div>
+        ) : null}
       </div>
     </div>
+  );
+}
+
+/* =========================
+   UI petits blocs
+========================= */
+
+function BlocStat(props: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/40 px-4 py-2">
+      <div className="text-xs text-white/60">{props.label}</div>
+      <div className="text-base font-bold">{props.value}</div>
+    </div>
+  );
+}
+
+function TabBtn(props: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={props.onClick}
+      className={[
+        "h-9 rounded-xl border px-3 text-xs font-semibold transition",
+        props.active
+          ? "border-red-600/50 bg-red-600/15 text-red-200"
+          : "border-white/10 bg-black/30 text-white/70 hover:bg-white/5",
+      ].join(" ")}
+    >
+      {props.children}
+    </button>
   );
 }
