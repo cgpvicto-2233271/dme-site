@@ -3,7 +3,13 @@
     {
       "source": "/(.*)",
       "destination": "https://www.deathmarkesport.com/$1",
-      "permanent": true
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "deathmarkesport.org"
+        }
+      ]
     }
   ]
 }
