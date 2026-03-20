@@ -4,310 +4,327 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Équipes Marvel Rivals | DeathMark E-Sports",
+  title: "Marvel Rivals | DeathMark E-Sports",
 };
 
 const sponsorLogos = [
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
 ];
 
-type Joueur = {
-  pseudo: string;
-  role: string;
-  picks: string[];
-  note?: string;
-};
+/* =========================================================
+   TYPES
+========================================================= */
+
+interface Joueur {
+  pseudo:    string;
+  role:      string;
+  picks:     string[];
+  note?:     string;
+  photoSrc?: string;
+}
+
+interface Palmares {
+  saison: string;
+  resultat: string;
+  dates: string;
+}
+
+/* =========================================================
+   DATA
+========================================================= */
 
 const roster: Joueur[] = [
-  { pseudo: "Mathis", role: "Off-tank", picks: ["Thor", "Venom", "Angela", "Rogue"] },
-  { pseudo: "Fluffy", role: "Main Tank", picks: ["Magneto", "Strange", "Groot", "Emma"] },
-  {
-    pseudo: "Zekio",
-    role: "DPS",
-    picks: ["Hela", "Phoenix", "Punisher", "Star-Lord"],
-    note: "Un des meilleurs Star-Lord du jeu",
-  },
-  {
-    pseudo: "Deer",
-    role: "Flex",
-    picks: [
-      "2nd DPS (Mister Fantastic, Punisher, Namor)",
-      "3rd healer (Adam Warlock)",
-      "3rd tank (Peni Parker, Hulk)",
-    ],
-  },
-  { pseudo: "PurpleShadow", role: "Healeuse", picks: ["Invisible Woman", "Raccoon", "Luna"] },
-  { pseudo: "Waxx", role: "Healeur", picks: ["Gambit", "Cloak", "Mantis"] },
-  { pseudo: "Blue", role: "Sub (Flex)", picks: ["Psylocke"], note: "Flex comme Deer, spécialiste dive DPS" },
+  { pseudo: "Mathis",       role: "Off-tank",   picks: ["Thor", "Venom", "Angela", "Rogue"],                                                        photoSrc: "/medias/commun/thor1.png"       },
+  { pseudo: "Fluffy",       role: "Main Tank",  picks: ["Magneto", "Strange", "Groot", "Emma"],                                                     photoSrc: "/medias/commun/magneto1.png"       },
+  { pseudo: "Zekio",        role: "DPS",        picks: ["Hela", "Phoenix", "Punisher", "Star-Lord"],   note: "Un des meilleurs Star-Lord du jeu",   photoSrc: "/medias/commun/starlord.png"        },
+  { pseudo: "Deer",         role: "Flex",       picks: ["Mister Fantastic", "Punisher", "Namor", "Adam Warlock", "Peni Parker", "Hulk"],             photoSrc: "/medias/commun/mister.png"         },
+  { pseudo: "PurpleShadow", role: "Support",    picks: ["Invisible Woman", "Raccoon", "Luna"],                                                       photoSrc: "/medias/commun/woman.png" },
+  { pseudo: "Waxx",         role: "Support",    picks: ["Gambit", "Cloak", "Mantis"],                                                               photoSrc: "/medias/commun/Gambit.png"         },
+  { pseudo: "Blue",         role: "Sub · Flex", picks: ["Psylocke"],                                   note: "Spécialiste dive DPS",                photoSrc: "/medias/commun/Psylocke.png"         },
 ];
 
-// === TEAM MANAGER ===
-const teamManagerNom = "Capt.Cock";
-const teamManagerNote = "Team Manager";
+const palmares: Palmares[] = [
+  { saison: "Season 6 — Night at the Museum", resultat: "Top 256",  dates: "Jan 2026 — Mar 2026" },
+  { saison: "Season 5 — Love is a Battlefield", resultat: "Top 256", dates: "Nov 2025 — Jan 2026" },
+  { saison: "Season 2 — Hellfire Gala",       resultat: "Top 256",  dates: "Mai 2025 — Jul 2025"  },
+];
 
-// Optionnel: afficher le Discord en texte (PAS un lien)
-const teamManagerDiscord = "Discord : pineapplejuice22"; // ex: "discord: capt.cock" ou "discord: user#1234"
+const manager = {
+  pseudo:  "Capt.Cock",
+  discord: "pineapplejuice22",
+};
 
-function initials(nom: string) {
-  const parts = (nom || "").trim().split(/\s+/).filter(Boolean);
-  if (!parts.length) return "DME";
-  const a = parts[0]?.[0] ?? "";
-  const b = parts.length > 1 ? parts[parts.length - 1][0] : "";
-  return (a + b).toUpperCase();
-}
+/* =========================================================
+   ICÔNE DISCORD
+========================================================= */
 
-/* === UI helpers (DA unifiée) === */
-function BadgeRole({ children }: { children: string }) {
+function IconDiscord() {
   return (
-    <span className="inline-flex items-center rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-red-200">
-      {children}
-    </span>
-  );
-}
-
-function Chip({ children }: { children: string }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] text-white/80">
-      {children}
-    </span>
-  );
-}
-
-/* === Icône X (lien ok) === */
-function IconX({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932Zm-1.29 19.49h2.04L6.48 3.258H4.292L17.61 20.643Z" />
+    <svg viewBox="0 0 256 199" className="h-3 w-3 shrink-0 opacity-50" fill="currentColor">
+      <path d="M216.9 16.6A208.4 208.4 0 0 0 164.8 0a145.2 145.2 0 0 0-6.7 13.8 193.3 193.3 0 0 0-60.2 0A145 145 0 0 0 91.2 0a208.2 208.2 0 0 0-52.1 16.6C6.8 67.7-2.2 117.7 2.3 166.9a208.4 208.4 0 0 0 63.3 32.1 154 154 0 0 0 13.6-22.1 134.9 134.9 0 0 1-21.5-10.2c1.8-1.3 3.6-2.7 5.3-4.1a149.7 149.7 0 0 0 131.9 0c1.7 1.4 3.5 2.8 5.3 4.1a134.8 134.8 0 0 1-21.5 10.2 154 154 0 0 0 13.6 22.1 208.3 208.3 0 0 0 63.3-32.1c5.3-56.7-9-106.3-38.2-150.3ZM85.6 135.1c-12 0-21.8-10.9-21.8-24.3 0-13.5 9.7-24.4 21.8-24.4 12.1 0 21.9 11 21.8 24.4 0 13.4-9.7 24.3-21.8 24.3Zm84.8 0c-12 0-21.8-10.9-21.8-24.3 0-13.5 9.7-24.4 21.8-24.4 12.1 0 21.9 11 21.8 24.4 0 13.4-9.7 24.3-21.8 24.3Z" />
     </svg>
   );
 }
 
-/* === Discord "tag" non cliquable (pas de lien) === */
-function DiscordTag({ value }: { value?: string }) {
-  if (!value) return null;
-  return (
-    <span
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] text-white/75"
-      title={value}
-    >
-      <span className="h-2 w-2 rounded-full bg-indigo-400/90" />
-      <span className="truncate">{value}</span>
-    </span>
-  );
-}
+/* =========================================================
+   CARTE JOUEUR
+========================================================= */
 
-function XLink({ href }: { href?: string }) {
-  if (!href) return null;
+function CarteJoueur({ joueur }: { joueur: Joueur }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] text-white/80 transition hover:border-red-500/40 hover:text-white"
-      aria-label="X"
-    >
-      <IconX className="h-4 w-4" />
-      <span className="hidden sm:inline">X</span>
-    </a>
-  );
-}
+    <article className="group flex flex-col overflow-hidden bg-[#0d0d0f] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(239,68,68,0.08)]">
+      <div className="h-[2px] w-full origin-left scale-x-50 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
 
-function CarteJoueur({ j }: { j: Joueur }) {
-  return (
-    <article className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-      {/* accents */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
-        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+      {/* zone photo */}
+      <div className="relative h-[340px] w-full overflow-hidden bg-[#0a0a0c]">
+        <span className="absolute left-0 top-0 z-10 bg-red-600 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.22em] text-white">
+          {joueur.role}
+        </span>
+
+        {joueur.photoSrc ? (
+          <>
+            <Image
+              src={joueur.photoSrc}
+              alt={joueur.pseudo}
+              fill
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+              sizes="(max-width: 640px) 50vw, 25vw"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-red-900/30 mix-blend-multiply" />
+            <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.65)_100%)]" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#111113] to-transparent" />
+          </>
+        ) : (
+          <>
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#0a0a0c]">
+              <div className="relative h-12 w-12 opacity-[0.07]">
+                <Image src="/logo/logo-dme.png" alt="DME" fill className="object-contain" />
+              </div>
+              <p className="text-[8px] font-bold uppercase tracking-[0.3em] text-white/15">
+                Photo à venir
+              </p>
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-red-900/20 mix-blend-multiply" />
+          </>
+        )}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
-
-      <div className="relative flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/25 bg-black/55 text-sm font-extrabold text-red-200">
-            {initials(j.pseudo)}
-          </div>
-
-          <div>
-            <p className="text-sm font-extrabold text-white">{j.pseudo}</p>
-            <p className="text-[11px] uppercase tracking-[0.24em] text-white/55">Marvel Rivals</p>
-          </div>
-        </div>
-
-        <BadgeRole>{j.role}</BadgeRole>
-      </div>
-
-      <div className="relative mt-4">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/60">
-          Picks
+      {/* infos bas */}
+      <div className="border-t-2 border-red-600 bg-[#111113] px-3 py-3">
+        <p className="text-[15px] font-black uppercase leading-tight tracking-[0.04em] text-white">
+          {joueur.pseudo}
         </p>
-
-        <div className="flex flex-wrap gap-2">
-          {j.picks.map((p) => (
-            <Chip key={p}>{p}</Chip>
+        {/* picks */}
+        <div className="mt-2 flex flex-wrap gap-1">
+          {joueur.picks.map((p) => (
+            <span key={p} className="border border-white/8 bg-white/[0.03] px-1.5 py-[2px] text-[9px] font-semibold text-white/40">
+              {p}
+            </span>
           ))}
         </div>
-
-        {j.note ? (
-          <p className="mt-3 text-[11px] text-white/70">
-            <span className="font-semibold text-red-300">Note :</span> {j.note}
-          </p>
-        ) : null}
+        {joueur.note && (
+          <p className="mt-1.5 text-[9px] text-white/25 italic">— {joueur.note}</p>
+        )}
       </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-600/40 to-transparent" />
     </article>
   );
 }
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 export default function MarvelRivalsPage() {
   const track = [...sponsorLogos, ...sponsorLogos];
 
   return (
-    <div className="bg-black text-white">
-      {/* ====== SPONSORS ====== */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#0a0a0c] text-white">
+
+      {/* marquee */}
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
-            <div key={i} className="marquee-item">
+            <div className="marquee-item" key={i}>
               <Image src={src} width={120} height={60} alt="sponsor" />
             </div>
           ))}
         </div>
       </div>
 
-      {/* ===== BACKGROUND PRO (unifié) ===== */}
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.20),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        <div className="pt-[64px]" />
+      {/* ── HERO ── */}
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-[100rem] px-6 py-14 sm:px-10">
 
-        <main className="relative mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6">
-          {/* ===== TOP BAR ===== */}
-          <div className="flex items-center justify-between gap-4">
-            <Link
-              href="/equipes"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
-            >
-              ← Retour aux jeux
+          {/* breadcrumb */}
+          <div className="mb-8 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]">
+            <Link href="/equipes" className="text-white/30 transition-colors hover:text-white/60">
+              Équipes
             </Link>
+            <span className="text-white/15">/</span>
+            <span className="text-red-400/80">Marvel Rivals</span>
+          </div>
 
-            <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/70">
-              Roster
-              <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-              2026
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="mb-3 text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                Compétitif · Top 256 · Americas
+              </p>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl">
+                Marvel <span className="text-red-500">Rivals</span>
+              </h1>
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
+                DME Street — Top 256 Americas sur 3 saisons consécutives.
+                Roster structuré, picks optimisés, objectif playoffs.
+              </p>
+            </div>
+
+            {/* stats */}
+            <div className="flex divide-x divide-white/[0.07] border border-white/[0.07]">
+              {([
+                { val: "3×",   label: "Top 256"   },
+                { val: "7",    label: "Joueurs"   },
+                { val: "NA",   label: "Région"    },
+              ] as const).map((s) => (
+                <div key={s.label} className="px-7 py-5 text-center">
+                  <p className="text-2xl font-black text-white">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* ===== HERO ===== */}
-          <header className="relative mt-6 overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 px-6 py-8 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -left-28 -top-28 h-96 w-96 rounded-full bg-red-500/14 blur-3xl" />
-              <div className="absolute -right-28 -bottom-28 h-96 w-96 rounded-full bg-red-500/10 blur-3xl" />
-              <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:72px_72px]" />
-            </div>
+          {/* tabs */}
+          <div className="mt-10 flex items-center gap-8 border-t border-white/[0.06] pt-6">
+            <span className="border-b-2 border-red-500 pb-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-white">
+              Roster
+            </span>
+            <Link
+              href="/recrutement"
+              className="ml-auto text-[11px] font-bold uppercase tracking-[0.25em] text-red-500/60 transition-colors hover:text-red-400"
+            >
+              Tryouts →
+            </Link>
+          </div>
+        </div>
+      </header>
 
-            <div className="relative">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-red-300">
-                DeathMark E-Sports
-              </p>
-              <h1 className="mt-3 text-3xl font-extrabold sm:text-4xl">
-                Équipe <span className="text-red-300">Marvel Rivals</span>
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm text-white/75">
-                Présentation claire du roster : rôles + picks principaux.
-              </p>
+      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
 
-              {/* manager card */}
-              <div className="mt-6 flex w-full flex-col items-start justify-between gap-3 rounded-2xl border border-white/10 bg-black/55 px-5 py-4 sm:flex-row sm:items-center">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/25 bg-black/55 text-sm font-extrabold text-red-200">
-                    {initials(teamManagerNom)}
-                  </div>
-                  <div>
-                    <p className="text-sm font-extrabold text-white">{teamManagerNom}</p>
-                    <p className="text-[11px] uppercase tracking-[0.24em] text-white/55">
-                      {teamManagerNote}
-                    </p>
-                  </div>
-                </div>
+        {/* ── PALMARÈS ── */}
+        <div className="mb-16">
+          <div className="mb-8 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+              Palmarès
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
 
-                {/* Ici: Discord en texte (non cliquable) + X en lien si tu veux */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <DiscordTag value={teamManagerDiscord} />
-                  {/* Mets un lien si tu en as un, sinon enlève la ligne */}
-                  {/* <XLink href="https://x.com/..." /> */}
-                </div>
-              </div>
-            </div>
-          </header>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {palmares.map((p, i) => (
+              <div key={i} className="relative bg-[#0d0d0f] px-6 py-7 overflow-hidden">
+                {/* accent rouge discret */}
+                <div className="absolute left-0 top-0 h-full w-[2px] bg-red-600/60" />
 
-          {/* ===== GRID ROSTER ===== */}
-          <section className="mt-10">
-            <div className="mb-5 flex flex-col items-center justify-between gap-3 sm:flex-row">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-white/55">
-                  Line-up
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/60 mb-3">
+                  {p.dates}
                 </p>
-                <h2 className="mt-1 text-xl font-extrabold">
-                  Roster principal <span className="text-red-300">DME</span>
-                </h2>
+                <p className="text-3xl font-black uppercase text-white mb-2">
+                  {p.resultat}
+                </p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/50">
+                  {p.saison}
+                </p>
+                <p className="mt-1 text-[10px] text-white/25 uppercase tracking-[0.15em]">
+                  Americas · DME Street
+                </p>
               </div>
+            ))}
+          </div>
+        </div>
 
-              <div className="rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/70">
-                {roster.length} joueurs listés
-              </div>
+        {/* ── MANAGER ── */}
+        <div className="mb-8 flex items-center gap-5 border border-red-500/20 bg-[#111113] px-6 py-5">
+          <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-red-600/50 bg-[#0e0e10]">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-red-900/40 to-[#0e0e10]">
+              <span className="text-2xl font-black text-red-500/80">
+                {manager.pseudo[0].toUpperCase()}
+              </span>
             </div>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/70">Team Manager</p>
+            <p className="mt-0.5 text-lg font-black uppercase tracking-[0.04em] text-white">{manager.pseudo}</p>
+          </div>
+          <span className="flex items-center gap-1.5 text-[10px] text-white/25">
+            <IconDiscord />
+            {manager.discord}
+          </span>
+        </div>
 
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {roster.map((j) => (
-                <CarteJoueur key={j.pseudo} j={j} />
-              ))}
-            </div>
-          </section>
-        </main>
-      </section>
+        {/* ── ROSTER ── */}
+        <div className="mb-8 flex items-center gap-4">
+          <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+            Roster · DME Street
+          </span>
+          <div className="h-px flex-1 bg-white/[0.05]" />
+          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
+            {roster.length} joueurs
+          </span>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {roster.map((j) => (
+            <CarteJoueur key={j.pseudo} joueur={j} />
+          ))}
+        </div>
+
+        <div className="my-16 border-t border-white/[0.06]" />
+
+        {/* ── CTA ── */}
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500/70">
+              Recrutement
+            </p>
+            <h2 className="mt-1.5 text-2xl font-black uppercase tracking-tight text-white">
+              Tu veux jouer pour DME Rivals ?
+            </h2>
+            <p className="mt-2 max-w-sm text-sm text-white/35">
+              Tryouts ouverts selon les besoins. Profils sérieux, constants, bonne communication.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/recrutement"
+              className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500 hover:shadow-[0_0_40px_rgba(239,68,68,0.55)]"
+            >
+              Postuler
+            </Link>
+            <Link
+              href="/contact"
+              className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/50 transition-all hover:border-white/25 hover:text-white"
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

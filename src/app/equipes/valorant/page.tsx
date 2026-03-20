@@ -4,350 +4,385 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Équipes Valorant | DeathMark E-Sports",
+  title: "Valorant | DeathMark E-Sports",
 };
 
 export const dynamic = "force-dynamic";
 
-/* --- Sponsors --- */
 const sponsorLogos = [
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
 ];
 
-/* ===== Donnees roster (Semi-Pro) ===== */
-type Joueur = {
-  id: string;
-  pseudo: string;
-  role?: string;
+/* =========================================================
+   TYPES
+========================================================= */
+
+interface Joueur {
+  id:        string;
+  pseudo:    string;
+  note?:     string;
   photoSrc?: string;
-};
-
-type RosterValorant = {
-  id: string;
-  nom: string;
-  niveau: "Semi-Pro";
-  ligue?: string;
-  statut?: string;
-  description: string;
-  joueurs: Joueur[];
-  teamManagerNom?: string;
-  teamManagerNote?: string;
-  teamManagerDiscord?: string; // affiche seulement (pas de lien)
-  teamManagerX?: string; // lien ok
-};
-
-const rosterValorant: RosterValorant = {
-  id: "valo-semi-pro",
-  nom: "DME Valorant",
-  niveau: "Semi-Pro",
-  ligue: "Valorant — 5v5",
-  statut: "Actif",
-  description:
-    "Roster Semi-Pro Valorant de DME. Objectif : structurer notre identité d’équipe, enchaîner les scrims et viser des résultats solides sur les tournois et ligues au fil de la saison.",
-  joueurs: [
-    { id: "valo1", pseudo: "BinoX", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
-    { id: "valo2", pseudo: "Biggie", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
-    { id: "valo3", pseudo: "Elder", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
-    { id: "valo4", pseudo: "Niv Loves", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
-    { id: "valo5", pseudo: "Kurokawa", role: "JOUEUR", photoSrc: "/logo/image_player.png" },
-  ],
-  teamManagerNom: "Jarsiss",
-  teamManagerNote: "Team Manager",
-  teamManagerDiscord: "discord: jarsiss",
-  // teamManagerX: "https://x.com/....",
-};
-
-/* --- Bouton retour aux jeux (/equipes) --- */
-function BoutonRetourJeux() {
-  return (
-    <div className="mb-6">
-      <Link
-        href="/equipes"
-        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
-      >
-        ← Retour aux jeux
-      </Link>
-    </div>
-  );
+  xUrl?:     string;
 }
 
-/* ===== Icons ===== */
-function IconX({ className = "h-4 w-4" }: { className?: string }) {
+interface Manager {
+  pseudo:   string;
+  discord?: string;
+  xUrl?:    string;
+}
+
+interface Roster {
+  id:          string;
+  tag:         string;
+  ligue:       string;
+  ligueTag:    string;
+  description: string;
+  joueurs:     Joueur[];
+  manager:     Manager;
+}
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const rosters: Roster[] = [
+  {
+    id:          "valo-contenders",
+    tag:         "DME Contenders",
+    ligue:       "Valorant Contenders",
+    ligueTag:    "CONTENDERS",
+    description: "Roster Contenders de DME — encadrement pro, scrims réguliers, objectif résultats.",
+    joueurs: [
+      { id: "c1", pseudo: "Volta",   note: "Duelist",    photoSrc: "/medias/commun/Astra.png"   },
+      { id: "c2", pseudo: "Alex",    note: "Controller", photoSrc: "/medias/commun/viper.png"    },
+      { id: "c3", pseudo: "oormy",   note: "Initiator",  photoSrc: "/medias/commun/fade2.png"   },
+      { id: "c4", pseudo: "oodlyd",  note: "Duelist",    photoSrc: "/medias/commun/Neon.png"  },
+      { id: "c5", pseudo: "Tchoupi", note: "Flex",       photoSrc: "/medias/commun/waylay.png" },
+    ],
+    manager: {
+      pseudo:  "Jarsiss",
+      discord: "jarsiss",
+      xUrl:    "https://x.com/Jarsiss",
+    },
+  },
+  {
+    id:          "valo-elite4",
+    tag:         "DME Elite 4",
+    ligue:       "Valorant Elite 4",
+    ligueTag:    "ELITE 4",
+    description: "Roster Elite 4 de DME — profils compétitifs, ambition de progression et standard DME.",
+    joueurs: [
+      { id: "e1", pseudo: "Elder"   },
+      { id: "e2", pseudo: "Kuro"    },
+      { id: "e3", pseudo: "Ced"     },
+      { id: "e4", pseudo: "Fusco"   },
+      { id: "e5", pseudo: "Myllove" },
+    ],
+    manager: {
+      pseudo:  "Jarsiss",
+      discord: "jarsiss",
+      xUrl:    "https://x.com/Jarsiss",
+    },
+  },
+];
+
+/* =========================================================
+   ICÔNE DISCORD
+========================================================= */
+
+function IconDiscord() {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932Zm-1.29 19.49h2.04L6.48 3.258H4.292L17.61 20.643Z" />
+    <svg viewBox="0 0 256 199" className="h-3 w-3 shrink-0 opacity-50" fill="currentColor">
+      <path d="M216.9 16.6A208.4 208.4 0 0 0 164.8 0a145.2 145.2 0 0 0-6.7 13.8 193.3 193.3 0 0 0-60.2 0A145 145 0 0 0 91.2 0a208.2 208.2 0 0 0-52.1 16.6C6.8 67.7-2.2 117.7 2.3 166.9a208.4 208.4 0 0 0 63.3 32.1 154 154 0 0 0 13.6-22.1 134.9 134.9 0 0 1-21.5-10.2c1.8-1.3 3.6-2.7 5.3-4.1a149.7 149.7 0 0 0 131.9 0c1.7 1.4 3.5 2.8 5.3 4.1a134.8 134.8 0 0 1-21.5 10.2 154 154 0 0 0 13.6 22.1 208.3 208.3 0 0 0 63.3-32.1c5.3-56.7-9-106.3-38.2-150.3ZM85.6 135.1c-12 0-21.8-10.9-21.8-24.3 0-13.5 9.7-24.4 21.8-24.4 12.1 0 21.9 11 21.8 24.4 0 13.4-9.7 24.3-21.8 24.3Zm84.8 0c-12 0-21.8-10.9-21.8-24.3 0-13.5 9.7-24.4 21.8-24.4 12.1 0 21.9 11 21.8 24.4 0 13.4-9.7 24.3-21.8 24.3Z" />
     </svg>
   );
 }
 
-function initials(nom: string) {
-  const parts = (nom || "").trim().split(/\s+/).filter(Boolean);
-  if (!parts.length) return "DME";
-  const a = parts[0]?.[0] ?? "";
-  const b = parts.length > 1 ? parts[parts.length - 1][0] : "";
-  return (a + b).toUpperCase();
-}
+/* =========================================================
+   CARTE JOUEUR
+========================================================= */
 
-/* ===== UI helpers (DA pro + unifiee) ===== */
-function Chip({ children }: { children: string }) {
+function CarteJoueur({ joueur }: { joueur: Joueur }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] text-white/80">
-      {children}
-    </span>
-  );
-}
+    <article className="group flex flex-col overflow-hidden bg-[#0d0d0f] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(239,68,68,0.08)]">
 
-function DiscordTag({ value }: { value?: string }) {
-  if (!value) return null;
-  return (
-    <span
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] text-white/75"
-      title={value}
-    >
-      <span className="h-2 w-2 rounded-full bg-indigo-400/90" />
-      <span className="truncate">{value}</span>
-    </span>
-  );
-}
+      <div className="h-[2px] w-full origin-left scale-x-50 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
 
-function XLink({ href }: { href?: string }) {
-  if (!href) return null;
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] text-white/80 transition hover:border-red-500/40 hover:text-white"
-      aria-label="X"
-    >
-      <IconX className="h-4 w-4" />
-      <span className="hidden sm:inline">X</span>
-    </a>
-  );
-}
+      {/* zone photo */}
+      <div className="relative h-[360px] w-full overflow-hidden bg-[#0a0a0c]">
 
-/* ===== Carte joueur (style DME unifie) ===== */
-function CarteJoueurValorant({ joueur }: { joueur: Joueur }) {
-  return (
-    <article className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
-        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+        {/* badge rôle */}
+        <span className="absolute left-0 top-0 z-10 bg-red-600 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.22em] text-white">
+          {joueur.note ?? "JOUEUR"}
+        </span>
+
+        {joueur.photoSrc ? (
+          <>
+            <Image
+              src={joueur.photoSrc}
+              alt={joueur.pseudo}
+              fill
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+              sizes="(max-width: 640px) 50vw, 20vw"
+            />
+            {/* overlay rouge identité DME */}
+            <div className="pointer-events-none absolute inset-0 bg-red-900/30 mix-blend-multiply" />
+            {/* vignette bords */}
+            <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.65)_100%)]" />
+            {/* fondu bas */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#111113] to-transparent" />
+          </>
+        ) : (
+          <>
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#0a0a0c]">
+              <div className="relative h-12 w-12 opacity-[0.07]">
+                <Image src="/logo/logo-dme.png" alt="DME" fill className="object-contain" />
+              </div>
+              <p className="text-[8px] font-bold uppercase tracking-[0.3em] text-white/15">
+                Photo à venir
+              </p>
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-red-900/20 mix-blend-multiply" />
+          </>
+        )}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
-
-      <div className="relative mb-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/25 bg-black/55 text-sm font-extrabold text-red-200">
-            {initials(joueur.pseudo)}
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-extrabold text-white">{joueur.pseudo}</p>
-            <p className="text-[11px] uppercase tracking-[0.24em] text-white/55">Valorant</p>
-          </div>
-        </div>
-
-        <Chip>{joueur.role || "JOUEUR"}</Chip>
+      {/* infos bas */}
+      <div className="border-t-2 border-red-600 bg-[#111113] px-3 py-3">
+        <p className="text-[15px] font-black uppercase leading-tight tracking-[0.04em] text-white">
+          {joueur.pseudo}
+        </p>
+        {joueur.xUrl && (
+          <Link
+            href={joueur.xUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-0.5 block text-[10px] font-semibold text-white/30 transition-colors hover:text-red-400"
+          >
+            𝕏 @{joueur.xUrl.split("/").pop()}
+          </Link>
+        )}
       </div>
-
-      <div className="relative">
-        <div className="flex h-[120px] w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/70">
-          <Image
-            src={joueur.photoSrc || "/logo/logo-dme.png"}
-            alt={joueur.pseudo}
-            width={180}
-            height={120}
-            className="h-full w-auto object-contain"
-          />
-        </div>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-600/40 to-transparent" />
     </article>
   );
 }
+
+/* =========================================================
+   CARTE MANAGER
+========================================================= */
+
+function CarteManager({ manager }: { manager: Manager }) {
+  return (
+    <div className="flex items-center gap-5 border border-red-500/20 bg-[#111113] px-6 py-5">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-red-600/50 bg-[#0e0e10]">
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-red-900/40 to-[#0e0e10]">
+          <span className="text-2xl font-black text-red-500/80">
+            {manager.pseudo[0].toUpperCase()}
+          </span>
+        </div>
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/70">Team Manager</p>
+        <p className="mt-0.5 text-lg font-black uppercase tracking-[0.04em] text-white">{manager.pseudo}</p>
+      </div>
+      <div className="flex items-center gap-3">
+        {manager.discord && (
+          <span className="flex items-center gap-1.5 text-[10px] text-white/25">
+            <IconDiscord />
+            {manager.discord}
+          </span>
+        )}
+        {manager.xUrl && (
+          <Link
+            href={manager.xUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 border border-white/10 bg-white/[0.04] px-5 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-white/60 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+          >
+            <span className="text-base">𝕏</span>
+            <span>@{manager.xUrl.split("/").pop()}</span>
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   BLOC ROSTER
+========================================================= */
+
+function BlocRoster({ roster, index }: { roster: Roster; index: number }) {
+  return (
+    <section className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500/70">
+            Roster {String(index + 1).padStart(2, "0")} · {roster.ligue}
+          </p>
+          <h2 className="mt-1 text-xl font-black uppercase tracking-tight text-white">
+            {roster.tag}
+          </h2>
+          <p className="mt-1 max-w-xl text-sm text-white/40">{roster.description}</p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="border border-red-500/30 bg-red-500/[0.07] px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-red-300/80">
+            {roster.ligueTag}
+          </span>
+          <span className="border border-emerald-500/25 bg-emerald-500/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400/70">
+            ● Actif
+          </span>
+        </div>
+      </div>
+
+      <CarteManager manager={roster.manager} />
+
+      <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25">Joueurs</p>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {roster.joueurs.map((j) => (
+          <CarteJoueur key={j.id} joueur={j} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 export default function ValorantPage() {
   const track = [...sponsorLogos, ...sponsorLogos];
 
   return (
-    <div className="bg-black text-white">
-      {/* ===== SPONSORS ===== */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#0a0a0c] text-white">
+
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
-            <div key={i} className="marquee-item">
+            <div className="marquee-item" key={i}>
               <Image src={src} width={120} height={60} alt="sponsor" />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Background pro (unifie) */}
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.20),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        {/* espace sous le header */}
-        <div className="pt-[64px]" />
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-[100rem] px-6 py-14 sm:px-10">
 
-        <main className="relative mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
-          <BoutonRetourJeux />
+          <div className="mb-8 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]">
+            <Link href="/equipes" className="text-white/30 transition-colors hover:text-white/60">
+              Équipes
+            </Link>
+            <span className="text-white/15">/</span>
+            <span className="text-red-400/80">Valorant</span>
+          </div>
 
-          {/* HEADER Semi-Pro + bouton vers Académie */}
-          <header className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
-                Valorant
+              <p className="mb-3 text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                Semi-Pro · Contenders & Elite 4 · 2026
               </p>
-
-              <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                Roster <span className="text-red-300">Semi-Pro</span>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl">
+                <span className="text-red-500">Valorant</span>
               </h1>
-
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
-                Présentation du roster Semi-Pro Valorant de DME.
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
+                Deux rosters Semi-Pro actifs. Encadrement pro, scrims réguliers —
+                on représente DME sur la scène Valorant compétitive.
               </p>
             </div>
 
+            <div className="flex divide-x divide-white/[0.07] border border-white/[0.07]">
+              {([
+                { val: "02", label: "Rosters" },
+                { val: "10", label: "Joueurs" },
+                { val: "QC", label: "Région"  },
+              ] as const).map((s) => (
+                <div key={s.label} className="px-7 py-5 text-center">
+                  <p className="text-2xl font-black text-white">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10 flex items-center gap-8 border-t border-white/[0.06] pt-6">
+            <span className="border-b-2 border-red-500 pb-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-white">
+              Semi-Pro
+            </span>
             <Link
               href="/equipes/valorant/academie"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
+              className="pb-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/30 transition-colors hover:text-white/70"
             >
-              Voir le pôle Académie →
+              Académie
             </Link>
-          </header>
+            <Link
+              href="/recrutement"
+              className="ml-auto text-[11px] font-bold uppercase tracking-[0.25em] text-red-500/60 transition-colors hover:text-red-400"
+            >
+              Tryouts →
+            </Link>
+          </div>
+        </div>
+      </header>
 
-          {/* Bloc roster principal (DA unifiée) */}
-          <section>
-            <article className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
-                <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-                <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
-              </div>
+      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
+        <div className="flex flex-col gap-20">
+          {rosters.map((roster, i) => (
+            <BlocRoster key={roster.id} roster={roster} index={i} />
+          ))}
+        </div>
 
-              <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
+        <div className="my-16 border-t border-white/[0.06]" />
 
-              <div className="relative p-6 sm:p-8">
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                  <div className="max-w-3xl">
-                    <div className="mb-3 flex flex-wrap gap-2">
-                      <span className="rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-red-200">
-                        {rosterValorant.niveau}
-                      </span>
-
-                      {rosterValorant.ligue ? <Chip>{rosterValorant.ligue}</Chip> : null}
-
-                      {rosterValorant.statut ? (
-                        <span className="rounded-full border border-emerald-400/50 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-200">
-                          {rosterValorant.statut}
-                        </span>
-                      ) : null}
-                    </div>
-
-                    <h2 className="text-2xl font-extrabold text-white">{rosterValorant.nom}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-white/80">
-                      {rosterValorant.description}
-                    </p>
-                  </div>
-
-                  {/* Manager bloc (Discord en texte, pas de lien) */}
-                  <div className="w-full max-w-md rounded-2xl border border-white/10 bg-black/55 px-5 py-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/25 bg-black/55 text-sm font-extrabold text-red-200">
-                          {initials(rosterValorant.teamManagerNom || "DME")}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-extrabold text-white">
-                            {rosterValorant.teamManagerNom || "A confirmer"}
-                          </p>
-                          <p className="text-[11px] uppercase tracking-[0.24em] text-white/55">
-                            {rosterValorant.teamManagerNote || "Team Manager"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap items-center justify-end gap-2">
-                        <DiscordTag value={rosterValorant.teamManagerDiscord} />
-                        <XLink href={rosterValorant.teamManagerX} />
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-white/65">
-                      Point de contact principal pour le planning, les scrims et les inscriptions.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Joueurs */}
-                <div className="mt-10">
-                  <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
-                    Joueurs
-                  </h3>
-
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-                    {rosterValorant.joueurs.map((j) => (
-                      <CarteJoueurValorant key={j.id} joueur={j} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* CTA recrutement (tu l'avais deja) */}
-                <div className="mt-10 flex justify-center">
-                  <Link
-                    href="/recrutement#form-valorant"
-                    className="inline-flex items-center justify-center rounded-full bg-red-600 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_22px_rgba(239,68,68,0.9)] transition hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
-                  >
-                    Être informé des prochains tryouts
-                  </Link>
-                </div>
-              </div>
-            </article>
-          </section>
-        </main>
-      </section>
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500/70">
+              Recrutement
+            </p>
+            <h2 className="mt-1.5 text-2xl font-black uppercase tracking-tight text-white">
+              Tu veux jouer pour DME Valorant ?
+            </h2>
+            <p className="mt-2 max-w-sm text-sm text-white/35">
+              Tryouts ouverts selon les besoins. Profils sérieux, constants, bonne communication.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/recrutement#form-valorant"
+              className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500 hover:shadow-[0_0_40px_rgba(239,68,68,0.55)]"
+            >
+              Postuler
+            </Link>
+            <Link
+              href="/contact"
+              className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/50 transition-all hover:border-white/25 hover:text-white"
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -9,130 +9,192 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-/* --- Sponsors --- */
 const sponsorLogos = [
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
 ];
-
-/* --- Bouton retour roster Semi-Pro Valorant --- */
-function BoutonRetourSemiPro() {
-  return (
-    <div className="mb-6">
-      <Link
-        href="/equipes/valorant"
-        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
-      >
-        ← Revenir au roster Semi-Pro
-      </Link>
-    </div>
-  );
-}
 
 export default function ValorantAcademiePage() {
   const track = [...sponsorLogos, ...sponsorLogos];
 
   return (
-    <div className="bg-black text-white">
-      {/* ===== SPONSORS ===== */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#0a0a0c] text-white">
+
+      {/* marquee */}
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
-            <div key={i} className="marquee-item">
+            <div className="marquee-item" key={i}>
               <Image src={src} width={120} height={60} alt="sponsor" />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Background pro (unifie) */}
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.18),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.12),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        <div className="pt-[64px]" />
+      {/* ── HERO ── */}
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-[100rem] px-6 py-14 sm:px-10">
 
-        <main className="relative mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
-          <BoutonRetourSemiPro />
+          {/* breadcrumb */}
+          <div className="mb-8 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]">
+            <Link href="/equipes" className="text-white/30 transition-colors hover:text-white/60">
+              Équipes
+            </Link>
+            <span className="text-white/15">/</span>
+            <Link href="/equipes/valorant" className="text-white/30 transition-colors hover:text-white/60">
+              Valorant
+            </Link>
+            <span className="text-white/15">/</span>
+            <span className="text-red-400/80">Académie</span>
+          </div>
 
-          <header className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
-                Valorant
+              <p className="mb-3 text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                Académie · Valorant · 2026
               </p>
-
-              <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                Pôle <span className="text-red-300">Académie</span>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl">
+                Académie <span className="text-red-500">Valorant</span>
               </h1>
-
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
-                On vient tout juste de lancer la section Académie Valorant.
-                La présentation officielle arrive très bientôt (visuels, structure,
-                staff et infos complètes).
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
+                Section en construction — structure, staff et roster en cours de mise en place.
+                Annonces officielles à venir.
               </p>
             </div>
-          </header>
+          </div>
 
-          <section className="mx-auto max-w-4xl">
-            <article className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
-                <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-                <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
-              </div>
+          {/* tabs */}
+          <div className="mt-10 flex items-center gap-8 border-t border-white/[0.06] pt-6">
+            <Link
+              href="/equipes/valorant"
+              className="pb-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/30 transition-colors hover:text-white/70"
+            >
+              Semi-Pro
+            </Link>
+            <span className="border-b-2 border-red-500 pb-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-white">
+              Académie
+            </span>
+            <Link
+              href="/recrutement"
+              className="ml-auto text-[11px] font-bold uppercase tracking-[0.25em] text-red-500/60 transition-colors hover:text-red-400"
+            >
+              Tryouts →
+            </Link>
+          </div>
+        </div>
+      </header>
 
-              <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
+      {/* ── CONTENU COMING SOON ── */}
+      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
 
-              <div className="relative px-8 py-10 text-center">
-                <p className="inline-flex rounded-full border border-amber-400/70 bg-amber-500/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-amber-100">
-                  Coming soon — présentation officielle en cours
-                </p>
+        {/* bloc principal coming soon */}
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3">
 
-                <h2 className="mt-5 text-2xl font-extrabold text-white">
-                  Académie Valorant DME
-                </h2>
+          {/* grande carte principale */}
+          <div className="col-span-2 flex flex-col justify-between bg-[#0d0d0f] p-10">
+            <div>
+              <div className="mb-6 h-[2px] w-8 bg-red-500" />
+              <p className="text-[9px] font-black uppercase tracking-[0.38em] text-amber-400/60 mb-3">
+                En construction
+              </p>
+              <h2 className="text-3xl font-black uppercase leading-tight tracking-tight text-white sm:text-4xl">
+                Académie DME<br />
+                <span className="text-red-500">Valorant</span>
+              </h2>
+              <p className="mt-6 max-w-lg text-sm leading-relaxed text-white/40">
+                On met en place la structure complète — cadre d&apos;entraînement,
+                rôles, suivi et staff. Le pôle Académie servira de passerelle
+                directe vers les rosters Semi-Pro Contenders et Elite 4.
+              </p>
+            </div>
 
-                <p className="mt-4 text-sm text-white/80">
-                  Le pôle Académie sert de passerelle vers le Semi-Pro. On met en place
-                  la structure complète (cadre d’entraînement, rôles, suivi, staff).
-                </p>
-
-                <ul className="mt-6 mx-auto max-w-xl space-y-2 text-left text-sm text-white/85">
-                  <li>• Section récemment lancée — annonces complètes à venir</li>
-                  <li>• Tryouts au besoin selon l’évolution des rosters</li>
-                  <li>• Objectif : progression vers le T2 sur le long terme</li>
-                  <li>• Encadrement &amp; accompagnement par le staff DME</li>
-                </ul>
-
-                <div className="mt-8 flex justify-center">
-                  <Link
-                    href="/recrutement#form-valorant"
-                    className="inline-flex items-center justify-center rounded-full bg-red-600 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_22px_rgba(239,68,68,0.9)] transition hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
-                  >
-                    Postuler pour l&apos;Académie Valorant
-                  </Link>
+            {/* points clés */}
+            <div className="mt-10 grid gap-px bg-white/[0.04] sm:grid-cols-3">
+              {[
+                { num: "01", label: "Passerelle Semi-Pro",    desc: "Progression directe vers Contenders et Elite 4."          },
+                { num: "02", label: "Tryouts à venir",        desc: "Ouverture selon l'évolution des rosters."                 },
+                { num: "03", label: "Encadrement DME",        desc: "Suivi, coaching et accompagnement par le staff DME."      },
+              ].map((b) => (
+                <div key={b.num} className="bg-[#0a0a0c] px-5 py-6">
+                  <p className="font-mono text-[9px] font-black text-red-500/40 mb-3">{b.num}</p>
+                  <p className="text-[12px] font-black uppercase tracking-tight text-white mb-1.5">{b.label}</p>
+                  <p className="text-[11px] leading-relaxed text-white/30">{b.desc}</p>
                 </div>
-              </div>
-            </article>
-          </section>
-        </main>
-      </section>
+              ))}
+            </div>
+          </div>
+
+          {/* carte latérale — CTA */}
+          <div className="flex flex-col justify-between bg-[#0d0d0f] p-8">
+            <div>
+              <span className="inline-block border border-amber-400/30 bg-amber-400/[0.06] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.28em] text-amber-300/70 mb-6">
+                Annonce bientôt
+              </span>
+              <h3 className="text-xl font-black uppercase leading-tight text-white mb-4">
+                Tu veux être informé ?
+              </h3>
+              <p className="text-sm text-white/35 leading-relaxed mb-8">
+                Postule dès maintenant pour être dans les premiers notifiés
+                lors de l&apos;ouverture des tryouts Académie Valorant.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/recrutement#form-valorant"
+                className="flex items-center justify-center bg-red-600 px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500 hover:shadow-[0_0_40px_rgba(239,68,68,0.55)]"
+              >
+                Postuler pour l&apos;Académie
+              </Link>
+              <Link
+                href="/equipes/valorant"
+                className="flex items-center justify-center border border-white/10 px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/40 transition-all hover:border-white/20 hover:text-white/70"
+              >
+                Voir le Semi-Pro →
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="my-16 border-t border-white/[0.06]" />
+
+        {/* stats à venir */}
+        <div className="flex items-center gap-4 mb-8">
+          <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+            À venir
+          </span>
+          <div className="h-px flex-1 bg-white/[0.05]" />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            { val: "—", label: "Rosters",        sub: "En cours de formation"    },
+            { val: "—", label: "Joueurs",         sub: "Tryouts à confirmer"      },
+            { val: "—", label: "Staff",           sub: "Annonce prochainement"    },
+          ].map((s) => (
+            <div key={s.label} className="bg-[#0d0d0f] px-7 py-7">
+              <p className="text-4xl font-black text-white/20">{s.val}</p>
+              <p className="mt-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/30">{s.label}</p>
+              <p className="mt-1 text-[10px] text-white/20">{s.sub}</p>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

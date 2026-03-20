@@ -7,555 +7,327 @@ export const metadata: Metadata = {
   title: "Contact | DeathMark E-Sports",
 };
 
-/* --- Sponsors defilants --- */
 const sponsorLogos = [
+  "/medias/sponsors/arene1.png",
   "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
   "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-   "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-   "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
 ];
 
-/* --- Blocs contact --- */
-type BlocContact = {
-  id: string;
-  titre: string;
-  tag: string;
-  description: string;
-  email: string;
-};
+/* =========================================================
+   CANAUX DE CONTACT
+========================================================= */
 
-const blocsContact: BlocContact[] = [
+const canaux = [
   {
-    id: "business",
-    titre: "Sponsors & partenariats",
-    tag: "Business",
-    description:
-      "Partenariats de marque, campagnes sponsor, activations et integrations sur nos rosters, contenus et evenements.",
+    id:    "business",
+    tag:   "Business",
+    titre: "Sponsors & Partenariats",
+    desc:  "Campagnes sponsor, activations roster, intégrations LAN, placements contenu et co-branding. On construit des activations mesurables et cohérentes avec votre marque.",
     email: "deathmarkesport@gmail.com",
+    subject: "[Business] Partenariat — DeathMark E-Sports",
   },
   {
-    id: "media",
-    titre: "Medias & collaborations",
-    tag: "Relations medias",
-    description:
-      "Interviews, demandes presse, formats co-brandes, reportages LAN et collaborations autour de la scene competitive.",
+    id:    "media",
+    tag:   "Médias",
+    titre: "Médias & Collaborations",
+    desc:  "Interviews, demandes presse, reportages LAN, formats co-brandés et collaborations autour de la scène compétitive québécoise.",
     email: "deathmarkesport@gmail.com",
+    subject: "[Médias] Collaboration — DeathMark E-Sports",
   },
   {
-    id: "general",
-    titre: "Contact general",
-    tag: "General",
-    description:
-      "Questions sur l organisation, les rosters, la communaute ou une demande specifique liee a DeathMark.",
+    id:    "general",
+    tag:   "Général",
+    titre: "Contact Général",
+    desc:  "Questions sur l'organisation, les rosters, la communauté ou une demande spécifique. On redirige en interne selon le sujet.",
     email: "deathmarkesport@gmail.com",
+    subject: "[Contact] DeathMark E-Sports",
   },
+] as const;
+
+/* =========================================================
+   CHIFFRES CLÉS
+========================================================= */
+
+const stats = [
+  { val: "15+",     label: "Rosters actifs",    desc: "De l'Académie au Semi-Pro sur 4 jeux."    },
+  { val: "6 500$+", label: "Cashprize cumulé",  desc: "Tournois, ligues et LANs en 1 an."        },
+  { val: "AVL",     label: "Champions",          desc: "1ère structure QC à remporter le circuit." },
+  { val: "LAN",    label: "Multi Podium",             desc: "On représente DME aussi au Québéc."          },
+] as const;
+
+/* =========================================================
+   SPONSORS
+========================================================= */
+
+const sponsorsMajors = [
+  { src: "/medias/sponsors/guru1.png",     alt: "Guru"      },
+  { src: "/medias/sponsors/arene1.png",    alt: "Arène"     },
+  { src: "/medias/sponsors/sim.png",       alt: "Passion Sim" },
 ];
 
-/* --- Chiffres (faciles a modifier) --- */
-type Stat = { id: string; label: string; value: string; desc: string };
-
-const stats: Stat[] = [
-  {
-    id: "rosters",
-    label: "Rosters",
-    value: "20+",
-    desc: "Equipes actives multi-jeux, de l Academie au Semi-Pro.",
-  },
-  {
-    id: "communaute",
-    label: "Communaute",
-    value: "2000+",
-    desc: "Membres et audience cumulee sur Discord et reseaux.",
-  },
-  {
-    id: "earn",
-    label: "Earn (1 an)",
-    value: "6200$",
-    desc: "Recompenses cumulees via tournois, ligues et LAN.",
-  },
-  {
-    id: "objectif",
-    label: "Objectif",
-    value: "Tier 2 NA",
-    desc: "Montee progressive et structuree vers le circuit NA.",
-  },
-];
-
-/* --- Sponsors (section merci) ---
-   Ajuste "tier" pour changer la repartition :
-   - tier: "major" => gros logos
-   - tier: "support" => petits logos
-*/
-type Sponsor = { src: string; alt: string; tier: "major" | "support" };
-
-const sponsors: Sponsor[] = [
-  { src: "/medias/sponsors/guru1.png", alt: "Guru", tier: "major" },
-  { src: "/medias/sponsors/arene1.png", alt: "Rogue", tier: "major" },
-  { src: "/medias/sponsors/sim.png", alt: "Tuninclub", tier: "major" },
-
-  { src: "/medias/sponsors/tnt1.png", alt: "TNT", tier: "support" },
-  { src: "/medias/sponsors/ig1.png", alt: "IG", tier: "support" },
-  { src: "/medias/sponsors/rogue1.png", alt: "Arene", tier: "support" },
-  { src: "/medias/sponsors/tuninclub.png", alt: "Passion", tier: "support" },
-];
-
-/* --- Helpers UI --- */
-function TagPill({ children }: { children: string }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-red-200">
-      {children}
-    </span>
-  );
-}
-
-function SoftChip({ children }: { children: string }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
-      {children}
-    </span>
-  );
-}
+/* =========================================================
+   PAGE
+========================================================= */
 
 export default function ContactPage() {
   const track = [...sponsorLogos, ...sponsorLogos];
-  const sponsorsMajor = sponsors.filter((s) => s.tier === "major");
-  const sponsorsSupport = sponsors.filter((s) => s.tier === "support");
 
   return (
-    <div className="bg-black text-white">
-      {/* ===== Sponsors ===== */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#07070a] text-white">
+
+      {/* marquee */}
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
-              <Image src={src} alt={`Sponsor ${i + 1}`} width={120} height={60} />
+              <Image src={src} alt="sponsor" width={120} height={60} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* ===== Page ===== */}
-      <section className="relative min-h-screen overflow-hidden">
-        {/* background premium */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.70),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_20%_5%,rgba(239,68,68,0.22),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_88%,rgba(239,68,68,0.10),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        <div className="pt-[64px]" />
-
-        {/* ===== HERO ===== */}
-        <header className="relative mx-auto max-w-7xl px-6 pt-10 pb-10 text-center lg:px-10">
-          <div className="flex justify-center">
-            <div className="inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-black/55 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.26em] text-red-200 backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-red-500" />
-              Contact & Partenariats
-            </div>
-          </div>
-
-          <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-5xl lg:text-[3.4rem]">
-            Une demande <span className="text-red-500">serieusement prise</span>.
-          </h1>
-
-          <p className="mx-auto mt-4 max-w-3xl text-sm md:text-base text-white/85">
-            DeathMark E-Sports construit sur le long terme : rosters competitifs,
-            presence LAN, contenu et communaute. Pour une marque, un media ou un
-            projet esport : on repond rapidement et proprement.
-          </p>
-
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            <SoftChip>Activation</SoftChip>
-            <SoftChip>Sponsors</SoftChip>
-            <SoftChip>Medias</SoftChip>
-            <SoftChip>Rosters</SoftChip>
-            <SoftChip>LAN</SoftChip>
-          </div>
-
-          {/* Actions hero */}
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/staff"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                         transition hover:border-red-500/45 hover:text-red-200"
-            >
-              Decouvrir notre staff
-            </Link>
-
-            <a
-              href="mailto:deathmarkesport@gmail.com?subject=Proposition%20-%20DeathMark%20E-Sports"
-              className="inline-flex items-center justify-center rounded-full bg-red-600 px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white
-                         shadow-[0_0_22px_rgba(239,68,68,0.9)] transition
-                         hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
-            >
-              Nous ecrire (email)
-            </a>
-
-            <Link
-              href="/social"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                         transition hover:border-red-500/45 hover:text-red-200"
-            >
-              Voir nos reseaux
-            </Link>
-          </div>
-
-          <p className="mt-4 text-[11px] text-white/60">
-            Tu preferes ne pas passer par les reseaux ? Aucun souci : ecris-nous
-            directement par email, c est le plus simple.
-          </p>
-        </header>
-
-        {/* ===== CONTENT ===== */}
-        <main className="relative mx-auto w-full max-w-[110rem] space-y-12 px-6 pb-24 lg:px-12">
-          {/* ===== CARDS CONTACT ===== */}
-          <section className="mx-auto max-w-6xl">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold md:text-3xl">
-                Choisis le bon canal
-              </h2>
-              <p className="mt-2 text-sm text-white/75">
-                Un message clair = une reponse plus rapide. On redirige ensuite en
-                interne (staff / management / media).
+      {/* ── HERO ── */}
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10 sm:py-24">
+          <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="mb-5 flex items-center gap-3">
+                <div className="h-[2px] w-8 bg-red-500" />
+                <span className="text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                  Contact & Partenariats
+                </span>
+              </div>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-[-0.02em] text-white sm:text-6xl lg:text-[5rem]">
+                Travaillons<br />
+                <span className="text-red-500">ensemble.</span>
+              </h1>
+              <p className="mt-6 max-w-lg text-sm leading-relaxed text-white/45 sm:text-base">
+                DeathMark E-Sports construit sur le long terme — rosters compétitifs,
+                présence LAN, contenu et communauté active. Pour une marque, un média
+                ou un projet esport : on répond vite et proprement.
               </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-3">
-              {blocsContact.map((b) => (
-                <article
-                  key={b.id}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/55
-                             shadow-[0_18px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl transition
-                             hover:-translate-y-0.5 hover:border-red-500/40"
-                >
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-red-500/12 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  </div>
-
-                  <div className="relative px-6 py-6">
-                    <TagPill>{b.tag}</TagPill>
-
-                    <h3 className="mt-4 text-lg font-extrabold">{b.titre}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/80">
-                      {b.description}
-                    </p>
-
-                    <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-                        Email
-                      </p>
-                      <a
-                        className="mt-1 block text-sm font-semibold text-red-200 hover:text-red-100"
-                        href={`mailto:${b.email}?subject=${encodeURIComponent(
-                          `[${b.tag}] DeathMark E-Sports - Contact`
-                        )}`}
-                      >
-                        {b.email}
-                      </a>
-                      <p className="mt-2 text-[11px] text-white/55">
-                        Objet recommande : {`[${b.tag}] Sujet court - Contexte`}
-                      </p>
-                    </div>
-
-                    <div className="mt-5">
-                      <a
-                        href={`mailto:${b.email}?subject=${encodeURIComponent(
-                          `[${b.tag}] DeathMark E-Sports - Contact`
-                        )}`}
-                        className="inline-flex w-full items-center justify-center rounded-full bg-red-600 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white
-                                   shadow-[0_0_18px_rgba(239,68,68,0.85)] transition
-                                   hover:bg-red-500 hover:shadow-[0_0_26px_rgba(248,113,113,1)]"
-                      >
-                        Contacter
-                      </a>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            {/* Option "sans reseaux" (petit rappel pro) */}
-            <div className="mx-auto mt-8 max-w-4xl rounded-3xl border border-white/10 bg-black/55 px-6 py-6 text-center shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-red-200">
-                Option simple
-              </p>
-              <p className="mt-2 text-sm text-white/80">
-                Pas besoin de passer par les reseaux : envoie un email avec ton
-                objectif + ta timeline + ton budget (si applicable) et on te
-                repond rapidement.
-              </p>
-              <div className="mt-4 flex flex-wrap justify-center gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 <a
-                  href="mailto:deathmarkesport@gmail.com?subject=Proposition%20-%20DeathMark%20E-Sports"
-                  className="inline-flex items-center justify-center rounded-full bg-red-600 px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white
-                             shadow-[0_0_20px_rgba(239,68,68,0.85)] transition
-                             hover:bg-red-500 hover:shadow-[0_0_28px_rgba(248,113,113,1)]"
+                  href={`mailto:deathmarkesport@gmail.com?subject=${encodeURIComponent("[Partenariat] DeathMark E-Sports")}`}
+                  className="bg-red-600 px-10 py-4 text-[12px] font-black uppercase tracking-[0.25em] text-white shadow-[0_0_36px_rgba(239,68,68,0.5)] transition-all hover:bg-red-500 hover:shadow-[0_0_50px_rgba(239,68,68,0.7)]"
                 >
-                  Nous ecrire maintenant
+                  Nous écrire →
                 </a>
                 <Link
-                  href="/social"
-                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                             transition hover:border-red-500/45 hover:text-red-200"
+                  href="/staff"
+                  className="border border-white/20 px-10 py-4 text-[12px] font-black uppercase tracking-[0.25em] text-white/70 transition-all hover:border-white/40 hover:text-white"
                 >
-                  Sinon : nos reseaux
+                  Notre staff
                 </Link>
               </div>
             </div>
-          </section>
 
-          {/* ===== MERCI SPONSORS (reparti mieux) ===== */}
-          <section className="mx-auto max-w-6xl">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold md:text-3xl">
-                Merci a nos sponsors
-              </h2>
-              <p className="mt-2 text-sm text-white/75">
-                Merci aux partenaires qui nous suivent au quotidien. En LAN, en
-                competition et dans la vie de tous les jours : votre support
-                fait avancer DeathMark.
-              </p>
-            </div>
-
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/55 px-6 py-8 shadow-[0_18px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-28 -top-28 h-80 w-80 rounded-full bg-red-500/12 blur-3xl" />
-                <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-white/8 blur-3xl" />
-              </div>
-
-              <div className="relative">
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                  <SoftChip>LAN</SoftChip>
-                  <SoftChip>Evenements</SoftChip>
-                  <SoftChip>Contenu</SoftChip>
-                  <SoftChip>Communaute</SoftChip>
-                </div>
-
-                {/* Rang 1 : partenaires majeurs */}
-                <div className="mt-7">
-                  <p className="text-center text-[10px] font-semibold uppercase tracking-[0.26em] text-white/55">
-                    Partenaires majeurs
-                  </p>
-                  <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    {sponsorsMajor.map((s) => (
-                      <div
-                        key={s.alt}
-                        className="flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-6"
-                      >
-                        <Image
-                          src={s.src}
-                          alt={s.alt}
-                          width={220}
-                          height={110}
-                          className="h-12 w-auto object-contain opacity-95"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Rang 2 : partenaires support */}
-                <div className="mt-8">
-                  <p className="text-center text-[10px] font-semibold uppercase tracking-[0.26em] text-white/55">
-                    Partenaires support
-                  </p>
-                  <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
-                    {sponsorsSupport.map((s) => (
-                      <div
-                        key={s.alt}
-                        className="flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-                      >
-                        <Image
-                          src={s.src}
-                          alt={s.alt}
-                          width={160}
-                          height={80}
-                          className="h-10 w-auto object-contain opacity-90"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 flex flex-wrap justify-center gap-3">
-                  <a
-                    href="mailto:deathmarkesport@gmail.com?subject=Partenariat%20-%20DeathMark%20E-Sports&body=Bonjour%2C%0A%0AJe%20souhaite%20discuter%20d%27un%20partenariat%20avec%20DeathMark%20E-Sports.%0A%0AObjectif%20%3A%0ABudget%20%3A%0ATimeline%20%3A%0A%0AMerci%2C%0ANom%20%2F%20Organisation"
-                    className="inline-flex items-center justify-center rounded-full bg-red-600 px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white
-                               shadow-[0_0_22px_rgba(239,68,68,0.9)] transition
-                               hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
-                  >
-                    Nous ecrire pour un partenariat
-                  </a>
-
-                  <Link
-                    href="/social"
-                    className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                               transition hover:border-red-500/45 hover:text-red-200"
-                  >
-                    Option : passer par les reseaux
-                  </Link>
-                </div>
-
-                <p className="mt-4 text-center text-[11px] text-white/55">
-                  Tu veux apparaître ici ? On propose des activations propres,
-                  coherentes et mesurables pour nos partenaires.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* ===== STATS / CREDIBILITE ===== */}
-          <section className="mx-auto max-w-6xl">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold md:text-3xl">
-                Pourquoi DeathMark
-              </h2>
-              <p className="mt-2 text-sm text-white/75">
-                Une structure en croissance avec une image propre et une vision
-                sportive sur le long terme.
-              </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {/* stats */}
+            <div className="grid grid-cols-2 divide-x divide-y divide-white/[0.07] border border-white/[0.07]">
               {stats.map((s) => (
-                <div
-                  key={s.id}
-                  className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/55 px-6 py-6
-                             shadow-[0_18px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl"
-                >
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-red-500/10 blur-3xl" />
-                  </div>
-
-                  <div className="relative">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/60">
-                      {s.label}
-                    </p>
-                    <p className="mt-2 text-3xl font-extrabold">{s.value}</p>
-                    <p className="mt-2 text-sm text-white/75">{s.desc}</p>
-                  </div>
+                <div key={s.label} className="px-7 py-6 text-center">
+                  <p className="text-2xl font-black text-white">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.25em] text-white/30">{s.label}</p>
+                  <p className="mt-1 text-[10px] text-white/20">{s.desc}</p>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+        </div>
+      </header>
 
-          {/* ===== PROCESS (pro) ===== */}
-          <section className="mx-auto max-w-6xl">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold md:text-3xl">
-                Process de collaboration
-              </h2>
-              <p className="mt-2 text-sm text-white/75">
-                Simple, clair, pro. Pour gagner du temps des deux cotes.
-              </p>
-            </div>
+      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
 
-            <div className="grid gap-6 lg:grid-cols-3">
-              {[
-                {
-                  t: "1) Contexte",
-                  d: "Ton objectif (campagne, activation, media, roster), timeline et livrables attendus.",
-                },
-                {
-                  t: "2) Proposition",
-                  d: "On revient avec un plan concret : formats, visuels, placements, calendrier et conditions.",
-                },
-                {
-                  t: "3) Execution",
-                  d: "Livraison, suivi, reporting (si besoin) et recaps. Propre et documente.",
-                },
-              ].map((x, i) => (
-                <article
-                  key={i}
-                  className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/55 px-6 py-6
-                             shadow-[0_18px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl"
-                >
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-red-500 via-red-600 to-red-800" />
-                  </div>
-                  <div className="relative pl-3">
-                    <p className="text-lg font-extrabold">{x.t}</p>
-                    <p className="mt-2 text-sm text-white/80">{x.d}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
+        {/* ── POURQUOI DME — pitch vendeur ── */}
+        <div className="mb-20">
+          <div className="mb-10 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+              Pourquoi DeathMark
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
 
-          {/* ===== CTA FINAL ===== */}
-          <section className="mx-auto max-w-4xl">
-            <div className="relative overflow-hidden rounded-3xl border border-red-500/25 bg-black/65 px-8 py-9 text-center shadow-[0_18px_70px_rgba(0,0,0,0.70)] backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-red-500/14 blur-3xl" />
-                <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-white/8 blur-3xl" />
+          <div className="grid gap-px bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                num:   "01",
+                titre: "Présence compétitive",
+                texte: "15+ rosters actifs, LANs régulières, circuits Aegis et NACL, Contenders. Votre marque visible là où ça se passe — en jeu, sur scène, en stream.",
+              },
+              {
+                num:   "02",
+                titre: "Communauté réelle",
+                texte: "2 500+ membres actifs sur nos réseaux, audience cross-plateforme (X, Twitch, TikTok, Instagram). Une communauté passionnée, pas des chiffres vides.",
+              },
+              {
+                num:   "03",
+                titre: "Image propre",
+                texte: "Direction artistique cohérente, identité forte, contenu de qualité. Un partenariat avec DME c'est un placement dans une structure qui sait se vendre.",
+              },
+              {
+                num:   "04",
+                titre: "Long terme",
+                texte: "On ne fait pas des deals one-shot. On build des relations durables avec des partenaires alignés sur notre vision — croissance, résultats, visibilité.",
+              },
+            ].map((b) => (
+              <div key={b.num} className="bg-[#0a0a0c] px-7 py-10">
+                <p className="font-mono text-[10px] font-black text-red-500/40 mb-5">{b.num}</p>
+                <h3 className="text-[15px] font-black uppercase tracking-tight text-white mb-3">{b.titre}</h3>
+                <p className="text-sm leading-relaxed text-white/35">{b.texte}</p>
               </div>
+            ))}
+          </div>
+        </div>
 
-              <div className="relative">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-red-300">
-                  Derniere etape
-                </p>
-                <h2 className="mt-3 text-2xl font-extrabold md:text-3xl">
-                  Envoie ton message a DeathMark
-                </h2>
-                <p className="mx-auto mt-3 max-w-2xl text-sm text-white/80">
-                  Partenariat, media, activations ou demande generale : un email
-                  avec contexte + objectif + deadline et on s occupe du reste.
-                </p>
+        {/* ── CANAUX DE CONTACT ── */}
+        <div className="mb-20">
+          <div className="mb-10 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+              Choisir le bon canal
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
 
-                <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="grid gap-5 sm:grid-cols-3">
+            {canaux.map((c) => (
+              <article key={c.id} className="group flex flex-col overflow-hidden bg-[#0d0d0f] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(239,68,68,0.08)]">
+                <div className="h-[2px] w-full origin-left scale-x-50 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
+                <div className="flex flex-1 flex-col gap-4 px-7 py-7">
+                  <div>
+                    <span className="border border-red-500/25 bg-red-500/[0.07] px-2.5 py-[3px] text-[8px] font-black uppercase tracking-[0.22em] text-red-300/70">
+                      {c.tag}
+                    </span>
+                    <h3 className="mt-3 text-[16px] font-black uppercase leading-tight tracking-tight text-white">
+                      {c.titre}
+                    </h3>
+                  </div>
+                  <p className="text-sm leading-relaxed text-white/40 flex-1">{c.desc}</p>
+                  <div className="border border-white/[0.06] bg-[#111113] px-4 py-3">
+                    <p className="text-[8px] font-black uppercase tracking-[0.22em] text-white/20 mb-1">Email</p>
+                    <p className="text-[11px] font-bold text-red-400/80">{c.email}</p>
+                    <p className="mt-1 text-[9px] text-white/20">Objet: {c.subject}</p>
+                  </div>
                   <a
-                    href="mailto:deathmarkesport@gmail.com?subject=Proposition%20-%20DeathMark%20E-Sports"
-                    className="inline-flex items-center justify-center rounded-full bg-red-600 px-8 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white
-                               shadow-[0_0_22px_rgba(239,68,68,0.9)] transition
-                               hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
+                    href={`mailto:${c.email}?subject=${encodeURIComponent(c.subject)}`}
+                    className="flex items-center justify-center bg-red-600 py-3 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_20px_rgba(239,68,68,0.25)] transition-all hover:bg-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.45)]"
                   >
-                    Contacter par email
+                    Contacter →
                   </a>
-
-                  <Link
-                    href="/social"
-                    className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-8 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                               transition hover:border-red-500/45 hover:text-red-200"
-                  >
-                    Passer par nos reseaux
-                  </Link>
                 </div>
+              </article>
+            ))}
+          </div>
+        </div>
 
-                <p className="mt-4 text-[11px] text-white/55">
-                  Email unique :{" "}
-                  <span className="font-semibold text-red-200">
-                    deathmarkesport@gmail.com
-                  </span>
-                </p>
+        {/* ── PROCESSUS ── */}
+        <div className="mb-20">
+          <div className="mb-10 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+              Comment ça marche
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
+
+          <div className="grid gap-px bg-white/[0.04] sm:grid-cols-3">
+            {[
+              { num: "01", titre: "Contexte",    texte: "Envoie un email avec ton objectif, ta timeline et ton budget (si applicable). On lit tout." },
+              { num: "02", titre: "Proposition", texte: "On revient avec un plan concret : formats, placements, calendrier et conditions. Propre et daté." },
+              { num: "03", titre: "Exécution",   texte: "Livraison, suivi, reporting si besoin. On documente tout et on est disponibles tout du long." },
+            ].map((b) => (
+              <div key={b.num} className="bg-[#0a0a0c] px-7 py-9">
+                <p className="font-mono text-[10px] font-black text-red-500/40 mb-5">{b.num}</p>
+                <h3 className="text-[15px] font-black uppercase tracking-tight text-white mb-3">{b.titre}</h3>
+                <p className="text-sm leading-relaxed text-white/35">{b.texte}</p>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SPONSORS ── */}
+        <div className="mb-20">
+          <div className="mb-10 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+              Merci à nos sponsors
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
+
+          {/* majors */}
+          <div className="mb-4 grid gap-4 sm:grid-cols-3">
+            {sponsorsMajors.map((s) => (
+              <div key={s.alt} className="flex h-[100px] items-center justify-center border border-white/[0.06] bg-[#0d0d0f] px-8">
+                <Image src={s.src} alt={s.alt} width={200} height={80} className="max-h-[60px] w-auto object-contain opacity-80 transition-opacity hover:opacity-100" />
+              </div>
+            ))}
+          </div>
+
+          {/* support */}
+          <div className="grid gap-4 sm:grid-cols-4">
+          </div>
+
+          <p className="mt-6 text-center text-[10px] font-bold uppercase tracking-[0.22em] text-white/20">
+            Tu veux apparaître ici ? — deathmarkesport@gmail.com
+          </p>
+        </div>
+
+        {/* ── CTA FINAL ── */}
+        <div className="flex flex-col gap-10 border border-red-500/15 bg-[#0d0d0f] px-10 py-14 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="h-[2px] w-5 bg-red-500" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">
+                Prêt à collaborer ?
+              </span>
             </div>
-          </section>
-        </main>
-      </section>
+            <h2 className="text-3xl font-black uppercase leading-none tracking-tight text-white sm:text-4xl">
+              On est là.<br />
+              <span className="text-red-500">Écris-nous.</span>
+            </h2>
+            <p className="mt-4 max-w-md text-sm text-white/35">
+              Partenariat, média, activation ou demande générale — un email avec
+              contexte + objectif + deadline et on s&apos;occupe du reste.
+              <br /><span className="mt-2 block text-[11px] font-bold text-red-400/60">deathmarkesport@gmail.com</span>
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-4">
+            <a
+              href={`mailto:deathmarkesport@gmail.com?subject=${encodeURIComponent("[Partenariat] DeathMark E-Sports")}`}
+              className="bg-red-600 px-10 py-4 text-[12px] font-black uppercase tracking-[0.25em] text-white shadow-[0_0_36px_rgba(239,68,68,0.4)] transition-all hover:bg-red-500 hover:shadow-[0_0_50px_rgba(239,68,68,0.6)]"
+            >
+              Envoyer un email →
+            </a>
+            <Link
+              href="/social-media"
+              className="border border-white/12 px-10 py-4 text-[12px] font-black uppercase tracking-[0.25em] text-white/50 transition-all hover:border-white/25 hover:text-white"
+            >
+              Nos réseaux
+            </Link>
+            <Link
+              href="/hall-of-fame"
+              className="border border-white/12 px-10 py-4 text-[12px] font-black uppercase tracking-[0.25em] text-white/50 transition-all hover:border-white/25 hover:text-white"
+            >
+              Nos résultats
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

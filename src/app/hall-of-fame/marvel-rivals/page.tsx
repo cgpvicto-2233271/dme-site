@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { achievements } from "../_data";
+import type { Achievement } from "../_data";
 
 export const metadata: Metadata = {
   title: "Hall Of Fame – Marvel Rivals | DeathMark E-Sports",
@@ -10,253 +11,199 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-/* ===== Sponsors ===== */
 const sponsorLogos = [
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
-  "/medias/sponsors/passion.png",
-  // un peu plus long = scroll plus smooth
   "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
-  "/medias/sponsors/arene1.png",
   "/medias/sponsors/passion.png",
-] as const;
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+];
 
-const track = [...sponsorLogos, ...sponsorLogos];
-
-/* ===== Types ===== */
-type ResultType = "LAN" | "ONLINE";
-type Category = "AEGIS" | "ONLINE";
-
-type Achievement = {
-  id: string;
-  type: ResultType;
-  jeu: string;
-  category?: Category;
-  titre: string;
-  sousTitre: string;
-  description: string;
-  cashprize?: string;
-  badge?: string;
-  bannerSrc?: string;
-  bannerAlt?: string;
-};
-
-/* ===== Helpers ===== */
 function normalize(str: string) {
-  return (str || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+  return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-function labelJeu(jeu: string) {
-  const j = normalize(jeu);
-  if (j === "marvel-rivals") return "Marvel Rivals";
-  return jeu;
-}
+/* =========================================================
+   CARTE
+========================================================= */
 
-/* ===== Carte premium ===== */
 function CarteResultat({ item }: { item: Achievement }) {
   return (
-    <article
-      className={
-        "group relative overflow-hidden rounded-3xl border bg-black/65 " +
-        "shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl transition " +
-        "hover:-translate-y-1 hover:border-red-500/40 border-red-500/20"
-      }
-    >
-      {/* accents */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/12 blur-3xl" />
-        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
-      </div>
+    <article className="group flex flex-col overflow-hidden bg-[#0d0d0f] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(239,68,68,0.08)]">
+      <div className="h-[2px] w-full origin-left scale-x-50 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
 
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-red-500 via-red-600 to-red-800" />
-
-      <div className="relative px-5 py-5 sm:px-6 sm:py-6 md:px-7 md:py-7">
-        <div className="flex flex-col gap-5 md:flex-row md:items-stretch md:gap-6">
-          {/* Texte */}
-          <div className="flex flex-1 flex-col gap-4">
-            <div className="flex flex-row flex-wrap gap-2">
-              <span
-                className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.14em] ${
-                  item.type === "LAN"
-                    ? "border border-orange-400/70 bg-orange-500/10 text-orange-200"
-                    : "border border-blue-400/70 bg-blue-500/10 text-blue-200"
-                }`}
-              >
-                {item.type === "LAN" ? "LAN" : "Ligue en ligne"}
-              </span>
-
-              <span className="inline-flex items-center rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] sm:text-xs font-semibold text-white/80">
-                {labelJeu(item.jeu)}
-              </span>
-
-              {item.category === "AEGIS" && (
-                <span className="inline-flex items-center rounded-full border border-purple-400/60 bg-purple-500/12 px-3 py-1 text-[11px] sm:text-xs font-semibold text-purple-100">
-                  Aegis / NACL
-                </span>
-              )}
-
-              {item.category === "ONLINE" && (
-                <span className="inline-flex items-center rounded-full border border-sky-400/60 bg-sky-500/12 px-3 py-1 text-[11px] sm:text-xs font-semibold text-sky-100">
-                  Online
-                </span>
-              )}
-
-              {item.cashprize && (
-                <span className="inline-flex items-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[11px] sm:text-xs font-semibold text-emerald-200">
-                  Cashprize : {item.cashprize}
-                </span>
-              )}
-
-              {item.badge && (
-                <span className="inline-flex items-center rounded-full border border-red-400/60 bg-red-500/10 px-3 py-1 text-[11px] sm:text-xs font-semibold text-red-200">
-                  {item.badge}
-                </span>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-base sm:text-lg md:text-xl font-extrabold text-white">
-                {item.titre}
-              </h2>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.22em] text-red-300">
-                {item.sousTitre}
-              </p>
-              <p className="text-xs sm:text-sm leading-relaxed text-white/85">
-                {item.description}
-              </p>
-            </div>
-          </div>
-
-          {/* Bannière */}
-          <div className="flex w-full flex-none items-center md:w-[55%]">
-            {item.bannerSrc ? (
-              <div className="relative h-[190px] sm:h-[210px] md:h-[230px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black/55 ring-1 ring-transparent transition group-hover:ring-red-500/30">
-                <Image
-                  src={item.bannerSrc}
-                  alt={item.bannerAlt ?? item.titre}
-                  fill
-                  className="
-                    object-contain object-center
-                    brightness-[0.86] contrast-[1.05] saturate-[1.02]
-                    transition duration-500
-                    group-hover:brightness-[1.10]
-                    group-hover:contrast-[1.10]
-                    group-hover:saturate-[1.10]
-                  "
-                />
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(255,255,255,0.06),transparent_55%)]" />
-              </div>
-            ) : (
-              <div className="flex h-[190px] sm:h-[210px] md:h-[230px] w-full items-center justify-center rounded-2xl border border-white/10 bg-black/55">
-                <div className="text-center text-[10px] sm:text-[11px] leading-relaxed text-white/70">
-                  <p className="font-semibold tracking-[0.18em] uppercase">
-                    Section en préparation
-                  </p>
-                  <p className="mt-1 text-[9px] sm:text-[10px] text-white/60">
-                    (les résultats apparaîtront ici au lancement)
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
+      <div className="flex flex-1 flex-col gap-3 px-5 py-5">
+        {/* badges */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="border border-blue-400/30 bg-blue-400/[0.07] px-2 py-[2px] text-[8px] font-black uppercase tracking-[0.2em] text-blue-300/80">
+            Ligue
+          </span>
+          <span className="text-[9px] font-black uppercase tracking-[0.18em] text-purple-400/70">
+            Marvel Rivals
+          </span>
+          {item.badge && (
+            <span className="ml-auto border border-red-500/20 bg-red-500/[0.06] px-2 py-[2px] text-[8px] font-black uppercase tracking-[0.18em] text-red-300/70">
+              {item.badge}
+            </span>
+          )}
         </div>
+
+        {/* titre */}
+        <h3 className="text-[14px] font-black uppercase leading-tight tracking-tight text-white">
+          {item.titre}
+        </h3>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-500/60">
+          {item.sousTitre}
+        </p>
+
+        {/* description */}
+        <p className="text-[11px] leading-relaxed text-white/35 line-clamp-3">
+          {item.description}
+        </p>
       </div>
     </article>
   );
 }
 
+/* =========================================================
+   PAGE
+========================================================= */
+
 export default function HallOfFameMarvelRivalsPage() {
-  const filtered = (achievements as Achievement[]).filter(
-    (a) => normalize(a.jeu) === "marvel-rivals"
-  );
+  const track = [...sponsorLogos, ...sponsorLogos];
+  const filtered = achievements.filter((a) => normalize(a.jeu) === "marvel-rivals");
 
   return (
-    <div className="bg-black text-white">
-      {/* Sponsors */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#0a0a0c] text-white">
+
+      {/* marquee */}
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
-              <Image src={src} alt={`Sponsor ${i + 1}`} width={120} height={60} />
+              <Image src={src} alt="sponsor" width={120} height={60} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Background premium (meme DA) */}
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.22),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        <div className="pt-[64px]" />
+      {/* ── HERO ── */}
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10">
 
-        {/* Header */}
-        <header className="relative mx-auto max-w-5xl px-4 sm:px-6 pb-10 pt-10 text-center">
-          <div className="mb-4 flex justify-center">
-            <Link
-              href="/hall-of-fame"
-              className="inline-flex items-center gap-2 rounded-full border border-red-500/35 bg-red-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-red-100 transition hover:border-red-500/50"
-            >
-              ← Retour au Hall Of Fame général
+          <div className="mb-8 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]">
+            <Link href="/hall-of-fame" className="text-white/30 transition-colors hover:text-white/60">
+              Hall of Fame
             </Link>
+            <span className="text-white/15">/</span>
+            <span className="text-red-400/80">Marvel Rivals</span>
           </div>
 
-          <div className="flex justify-center">
-            <div className="inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-red-100">
-              <span className="h-2 w-2 rounded-full bg-red-500" />
-              Marvel Rivals
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="mb-4 flex items-center gap-3">
+                <div className="h-[2px] w-8 bg-red-500" />
+                <span className="text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                  Résultats · Marvel Rivals
+                </span>
+              </div>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl">
+                Marvel <span className="text-red-500">Rivals</span>
+              </h1>
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
+                DME Street — 3× Top 256 Americas sur trois saisons consécutives.
+              </p>
             </div>
-          </div>
 
-          <h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
-            Hall Of Fame <span className="text-red-300">Marvel Rivals</span>
-          </h1>
-
-          <p className="mx-auto mt-4 max-w-3xl text-sm sm:text-base md:text-lg text-white/85">
-            La section Marvel Rivals est en préparation. Les premiers résultats
-            compétitifs seront affichés ici.
-          </p>
-
-          <div className="mx-auto mt-10 h-px w-48 bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
-        </header>
-
-        {/* Liste */}
-        <main className="relative mx-auto w-full max-w-5xl lg:max-w-[102rem] px-4 sm:px-6 pb-20">
-          {filtered.length === 0 ? (
-            <div className="mx-auto max-w-xl rounded-3xl border border-red-500/20 bg-black/65 px-6 py-6 text-center text-sm text-white/80 shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-              Aucun résultat Marvel Rivals n&apos;est enregistré pour le moment.
-              <br />
-              <span className="text-red-300">
-                Quand la section sera officiellement lancée, les résultats
-                apparaîtront ici.
-              </span>
-            </div>
-          ) : (
-            <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:gap-10">
-              {filtered.map((item) => (
-                <CarteResultat key={item.id} item={item as Achievement} />
+            <div className="flex divide-x divide-white/[0.07] border border-white/[0.07]">
+              {([
+                { val: "3×",  label: "Top 256"  },
+                { val: "NA",  label: "Région"   },
+                { val: filtered.length.toString(), label: "Résultats" },
+              ] as const).map((s) => (
+                <div key={s.label} className="px-7 py-5 text-center">
+                  <p className="text-2xl font-black text-white">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">{s.label}</p>
+                </div>
               ))}
             </div>
-          )}
-        </main>
-      </section>
+          </div>
+
+          <div className="mt-10 flex items-center gap-8 border-t border-white/[0.06] pt-6">
+            <Link href="/hall-of-fame/lol"          className="pb-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/30 transition-colors hover:text-white/70">LoL</Link>
+            <Link href="/hall-of-fame/valorant"      className="pb-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/30 transition-colors hover:text-white/70">Valorant</Link>
+            <Link href="/hall-of-fame/rocket-league" className="pb-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/30 transition-colors hover:text-white/70">Rocket League</Link>
+            <span className="border-b-2 border-red-500 pb-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-white">Marvel Rivals</span>
+            <Link href="/equipes/marvel-rivals" className="ml-auto text-[11px] font-bold uppercase tracking-[0.25em] text-red-500/60 transition-colors hover:text-red-400">
+              Voir l&apos;équipe →
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* ── RÉSULTATS ── */}
+      <main className="mx-auto max-w-7xl px-6 py-16 sm:px-10">
+
+        {filtered.length === 0 ? (
+          <div className="bg-[#0d0d0f] px-8 py-12 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-white/20 mb-3">Aucun résultat</p>
+            <p className="text-sm text-white/30">Les résultats Marvel Rivals apparaîtront ici.</p>
+          </div>
+        ) : (
+          <>
+            <div className="mb-8 flex items-center gap-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+                Tous les résultats
+              </span>
+              <div className="h-px flex-1 bg-white/[0.05]" />
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
+                {filtered.length} résultats
+              </span>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((item) => (
+                <CarteResultat key={item.id} item={item} />
+              ))}
+            </div>
+          </>
+        )}
+
+        <div className="my-16 border-t border-white/[0.06]" />
+
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500/70">Voir aussi</p>
+            <h2 className="mt-1.5 text-2xl font-black uppercase tracking-tight text-white">L&apos;équipe DME Rivals</h2>
+            <p className="mt-2 max-w-sm text-sm text-white/35">
+              Roster, picks et infos sur l&apos;équipe Marvel Rivals de DME.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/equipes/marvel-rivals" className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500">
+              Voir l&apos;équipe
+            </Link>
+            <Link href="/hall-of-fame" className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/50 transition-all hover:border-white/25 hover:text-white">
+              ← Hall of Fame
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

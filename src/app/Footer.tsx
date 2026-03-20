@@ -5,127 +5,134 @@ import Link from "next/link";
 
 const partners = [
   { name: "Arène des Dieux", logo: "/medias/sponsors/arene1.png", url: "https://www.godsarena.com/" },
-  { name: "GURU", logo: "/medias/sponsors/guru1.png", url: "https://guruenergy.com/fr" },
-  { name: "Tuninclub", logo: "/medias/sponsors/tuninclub.png", url: "https://example.com/tuninclub" },
-  { name: "Rogue", logo: "/medias/sponsors/rogue1.png", url: "https://rogueenergy.com/fr-ca" },
-  { name: "TNT", logo: "/medias/sponsors/tnt1.png", url: "https://lostnttacos.ca/" },
-  { name: "IG", logo: "/medias/sponsors/ig1.png", url: "https://www.instant-gaming.com/en/" },
-  { name: "Passion Sim", logo: "/medias/sponsors/passion.png", url: "https://www.passionsim.com/" },
+  { name: "GURU",            logo: "/medias/sponsors/guru1.png",  url: "https://guruenergy.com/fr"  },
+  { name: "Passion Sim",     logo: "/medias/sponsors/passion.png", url: "https://www.passionsim.com/" },
 ];
 
 const socials = [
-  { name: "Twitter/X", icon: "🐦", url: "https://x.com/DeathMarkEsport" },
-  { name: "Twitch", icon: "📺", url: "https://www.twitch.tv/deathmarkesport" },
-  { name: "Discord", icon: "💬", url: "https://discord.gg/Zu4FP5pU9M" },
-  { name: "Instagram", icon: "📷", url: "https://www.instagram.com/deathmarkofficial/" },
+  { name: "X / Twitter", handle: "@DeathMarkEsport",   url: "https://x.com/DeathMarkEsport"                 },
+  { name: "Twitch",      handle: "deathmarkesport",    url: "https://www.twitch.tv/deathmarkesport"          },
+  { name: "Discord",     handle: "Serveur DME",        url: "https://discord.gg/Zu4FP5pU9M"                 },
+  { name: "Instagram",   handle: "@deathmarkesports",  url: "https://www.instagram.com/deathmarkesports/"    },
+  { name: "YouTube",     handle: "DeathMark E-Sports", url: "https://www.youtube.com/@DeathMarkEsport"       },
+  { name: "TikTok",      handle: "@deathmarkesport",   url: "https://tiktok.com/@deathmarkesport"            },
+];
+
+const navLinks = [
+  { href: "/equipes",      label: "Équipes"     },
+  { href: "/hall-of-fame", label: "Résultats"   },
+  { href: "/recrutement",  label: "Recrutement" },
+  { href: "/social-media", label: "Social"      },
+  { href: "/shop",         label: "Shop"        },
+  { href: "/staff",        label: "Staff"       },
+  { href: "/contact",      label: "Contact"     },
 ];
 
 export default function Footer() {
   return (
-    <footer className="mt-0 border-t-2 border-red-600 bg-black/95 text-white">
+    <footer className="border-t border-red-600/40 bg-[#07070a] text-white">
+
       <div className="mx-auto max-w-[95%] px-6 py-14">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
 
-        {/* ZONE PRINCIPALE : 3 COLONNES */}
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-3">
-
-          {/* À PROPOS (TOUT À GAUCHE) */}
+          {/* ── GAUCHE — identité ── */}
           <div className="text-left">
-            <h3 className="mb-4 text-xl font-bold text-red-500">À propos</h3>
-            <p className="text-lg leading-relaxed text-white/90 max-w-sm">
-              <span className="font-semibold">DeathMark Esports</span> rassemble
-              des passionnés de jeux compétitifs.
-              <br />
-              Notre mission : encadrer les talents francophones/anglophones et
-              les faire briller sur la scène semi-pro internationale.
+            <div className="mb-6 flex items-center gap-2.5">
+              <Image src="/logo/logo-dme.png" alt="DeathMark E-Sports" width={36} height={36} className="h-9 w-9 object-contain" />
+              <span className="text-[16px] font-black uppercase tracking-[0.06em] text-white">
+                Death<span className="text-red-500">Mark</span>
+              </span>
+            </div>
+
+            <p className="max-w-sm text-sm leading-relaxed text-white/55">
+              Organisation esport compétitive québécoise fondée sur la discipline,
+              la progression et l&apos;ambition. On représente le Québec sur la scène NA
+              — du haut amateur au Semi-Pro.
+            </p>
+
+            <div className="mt-5 space-y-1.5">
+              <p className="text-[11px] font-bold text-white/40">
+                🏆 Structure qui vise les titres.
+              </p>
+              <p className="text-[11px] font-bold text-white/40">
+                🎮 LoL · Valorant · Rocket League · Marvel Rivals
+              </p>
+              <p className="text-[11px] font-bold text-white/40">
+                📍 Québec · Canada · NA
+              </p>
+            </div>
+
+            <p className="mt-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
+              DeathMark E-Sports © 2026
             </p>
           </div>
 
-          {/* PARTENAIRES (CENTRE) */}
-          <div className="flex flex-col items-center">
-            <h3 className="mb-5 w-full text-center text-xl font-bold uppercase text-red-500">
+          {/* ── CENTRE — partenaires en ligne ── */}
+          <div className="flex flex-col items-center text-center">
+            <p className="mb-6 text-[9px] font-black uppercase tracking-[0.32em] text-white/20">
               Partenaires officiels
-            </h3>
-
-            <div className="flex w-full flex-wrap items-center justify-center gap-6">
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-8">
               {partners.map((p) => (
-                <Link
-                  key={p.name}
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="opacity-90 transition hover:opacity-100"
-                >
-                  <Image
-                    src={p.logo}
-                    alt={p.name}
-                    width={180}
-                    height={70}
-                    className="h-14 w-auto object-contain drop-shadow-[0_0_12px_rgba(255,0,0,0.4)]"
-                  />
+                <Link key={p.name} href={p.url} target="_blank" rel="noopener noreferrer"
+                  className="opacity-50 transition-opacity hover:opacity-90" title={p.name}>
+                  <Image src={p.logo} alt={p.name} width={180} height={400} className="h-20 w-auto object-contain" />
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* RÉSEAUX (À DROITE) */}
+          {/* ── DROITE — réseaux ── */}
           <div className="text-right">
-            <h3 className="mb-4 text-xl font-bold text-red-500">Réseaux</h3>
-            <ul className="space-y-4 text-lg">
+            <p className="mb-5 text-[9px] font-black uppercase tracking-[0.32em] text-white/20">
+              Réseaux
+            </p>
+            <ul className="flex flex-col gap-3">
               {socials.map((s) => (
                 <li key={s.name}>
-                  <Link
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 transition hover:text-red-500"
-                  >
-                    <span className="text-xl">{s.icon}</span>
-                    {s.name}
+                  <Link href={s.url} target="_blank" rel="noopener noreferrer"
+                    className="group inline-flex items-baseline justify-end gap-2">
+                    <span className="text-[10px] text-white/15 transition-colors group-hover:text-white/30">
+                      {s.handle}
+                    </span>
+                    <span className="text-[12px] font-black uppercase tracking-[0.14em] text-white/40 transition-colors group-hover:text-white/80">
+                      {s.name}
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
         </div>
 
-        {/* SÉPARATEUR */}
-        <div className="my-10 h-px w-full bg-white/20" />
+        {/* séparateur */}
+        <div className="my-10 h-px w-full bg-white/[0.06]" />
 
-        {/* BOTTOM BAR */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-
-          {/* Menu bas */}
-          <nav className="flex flex-wrap gap-x-12 gap-y-3 text-base uppercase tracking-wide text-white/85">
-            <Link href="/recrutement" className="transition hover:text-red-500">
-              Recrutement
-            </Link>
-            <Link href="/contact" className="transition hover:text-red-500">
-              Partenariat
-            </Link>
-            <Link href="/contact" className="transition hover:text-red-500">
-              Contact
-            </Link>
+        {/* bas — nav + légal */}
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <nav className="flex flex-wrap gap-x-8 gap-y-2">
+            {navLinks.map((l) => (
+              <Link key={l.href} href={l.href}
+                className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/30 transition-colors hover:text-white/60">
+                {l.label}
+              </Link>
+            ))}
           </nav>
-
-          {/* ZONE LÉGALE AVEC LIENS CLIQUABLES */}
-          <div className="text-sm text-white/70 flex flex-wrap gap-3">
-            <span>© 2025 DME — Tous droits réservés</span>
-
-            <Link href="/mentions-legales" className="hover:text-red-500">
-              | Mentions légales
-            </Link>
-
-            <Link href="/confidentialite" className="hover:text-red-500">
-              | Politique de confidentialité
-            </Link>
-
-            <Link href="/conditions-utilisation" className="hover:text-red-500">
-              | Conditions d’utilisation
-            </Link>
+          <div className="flex flex-wrap gap-4 text-[10px] font-bold uppercase tracking-[0.16em] text-white/15">
+            <span>© 2026 DME — Tous droits réservés</span>
+            {[
+              { href: "/mentions-legales",      label: "Mentions légales"         },
+              { href: "/confidentialite",        label: "Confidentialité"          },
+              { href: "/conditions-utilisation", label: "Conditions d'utilisation" },
+            ].map((l) => (
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-white/40">
+                {l.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
+
     </footer>
   );
 }

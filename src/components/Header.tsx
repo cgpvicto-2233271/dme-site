@@ -7,176 +7,258 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 export type RoleAcces = "joueur" | "staff" | "coach" | "pending_staff" | "public";
 
-function IconUser(props: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={props.className ?? "h-5 w-5"}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 21a8 8 0 0 0-16 0" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
 type Props = { role: RoleAcces };
 
 export default function Header({ role }: Props) {
   const pathname = usePathname();
-  const [menuOuvert, setMenuOuvert] = useState(false);
-  const refMenu = useRef<HTMLDivElement | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [userOpen,   setUserOpen]   = useState(false);
+  const [scrolled,   setScrolled]   = useState(false);
+  const refUser = useRef<HTMLDivElement>(null);
 
-  const estConnecte = role !== "public";
+  const estConnecte  = role !== "public";
   const voirScouting = role === "coach" || role === "staff";
 
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
-  };
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (!userOpen) return;
+      if (refUser.current && !refUser.current.contains(e.target as Node)) setUserOpen(false);
+    };
+    window.addEventListener("mousedown", onDown);
+    return () => window.removeEventListener("mousedown", onDown);
+  }, [userOpen]);
+
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
+
+  const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   async function logout() {
     await fetch("/api/acces/logout", { method: "POST" });
     window.location.href = "/";
   }
 
-  const liensNav = useMemo(
-    () => [
-      { href: "/", label: "Accueil" },
-      { href: "/equipes", label: "Équipes" },
-      { href: "/hall-of-fame", label: "Hall Of Fame/Résultats" },
-      { href: "/recrutement", label: "Recrutement" },
-      { href: "/social", label: "Social Media" },
-      { href: "/shop", label: "Shop" },
-      { href: "/contact", label: "Contact" },
-    ] as const,
-    []
-  );
-
-  // Fermer le menu si on clique ailleurs
-  useEffect(() => {
-    function onDown(e: MouseEvent) {
-      if (!menuOuvert) return;
-      const target = e.target as Node;
-      if (refMenu.current && !refMenu.current.contains(target)) setMenuOuvert(false);
-    }
-    window.addEventListener("mousedown", onDown);
-    return () => window.removeEventListener("mousedown", onDown);
-  }, [menuOuvert]);
+  const liensNav = useMemo(() => [
+    { href: "/",             label: "Accueil"     },
+    { href: "/equipes",      label: "Équipes"     },
+    { href: "/hall-of-fame", label: "Résultats"   },
+    { href: "/recrutement",  label: "Recrutement" },
+    { href: "/social-media", label: "Social"      },
+    { href: "/shop",         label: "Shop"        },
+    { href: "/contact",      label: "Contact"     },
+  ] as const, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-black/80 backdrop-blur border-b border-red-600/35">
-      <div className="h-[72px] w-full">
-        {/* Agrandir la largeur: augmente max-w ici (ou enlève max-w pour full) */}
-        <div className="mx-auto flex h-full w-full max-w-[1800px] items-center gap-6 px-4 md:px-8">
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? "bg-black/85 backdrop-blur-2xl border-b border-red-600/50 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+            : "bg-black/50 backdrop-blur-x2 border-b border-red-600/25"
+        }`}
+      >
+        <div className="mx-auto flex h-[74px] w-full max-w-[2000px] items-center gap-8 px-5 md:px-10">
+
           {/* LOGO */}
-          <Link href="/" className="flex items-center gap-3">
-            <Image src="/logo/logo-dme.png" alt="Logo DME" width={44} height={44} priority />
-            <span className="font-bold tracking-wide text-red-500 text-lg md:text-xl whitespace-nowrap">
-              DeathMark E-Sports
+          <Link href="/" className="flex shrink-0 items-center gap-2.5">
+            <Image
+              src="/logo/logo-dme.png"
+              alt="DeathMark E-Sports"
+              width={34}
+              height={34}
+              priority
+              className="h-[34px] w-[34px] object-contain"
+            />
+            <span className="hidden text-[15px] font-black uppercase tracking-[0.06em] text-white sm:block">
+              DeathMark<span className="text-red-500"> E-Sports</span>
             </span>
           </Link>
 
-          {/* NAV */}
-          <nav className="hidden md:flex items-center gap-3 ml-auto">
+          {/* NAV DESKTOP */}
+          <nav className="hidden md:flex items-center gap-0.5 flex-1">
             {liensNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={[
-                  "px-3 py-2 rounded-full text-sm transition",
+                className={`relative px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] transition-all duration-200 ${
                   isActive(item.href)
-                    ? "border border-red-600/70 text-red-300 bg-black/40"
-                    : "text-white/85 hover:text-red-300 hover:bg-white/5",
-                ].join(" ")}
+                    ? "text-white"
+                    : "text-white/40 hover:text-white/75"
+                }`}
               >
                 {item.label}
+                {isActive(item.href) && (
+                  <span className="absolute inset-x-4 bottom-0 h-[1.5px] bg-red-500 rounded-full" />
+                )}
               </Link>
             ))}
-
-            {voirScouting ? (
+            {voirScouting && (
               <Link
                 href="/scouting"
-                className={[
-                  "px-3 py-2 rounded-full text-sm transition",
-                  isActive("/scouting")
-                    ? "border border-red-600/70 text-red-300 bg-black/40"
-                    : "text-white/85 hover:text-red-300 hover:bg-white/5",
-                ].join(" ")}
+                className={`relative px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] transition-all duration-200 ${
+                  isActive("/scouting") ? "text-white" : "text-white/40 hover:text-white/75"
+                }`}
               >
                 Scouting
+                {isActive("/scouting") && (
+                  <span className="absolute inset-x-4 bottom-0 h-[1.5px] bg-red-500 rounded-full" />
+                )}
               </Link>
-            ) : null}
+            )}
+          </nav>
 
-            {/* PROFIL + DROPDOWN */}
-            <div className="relative ml-2" ref={refMenu}>
+          {/* DROITE */}
+          <div className="ml-auto flex items-center gap-2">
+
+            {/* profil dropdown */}
+            <div className="relative hidden md:block" ref={refUser}>
               <button
                 type="button"
-                onClick={() => setMenuOuvert((v) => !v)}
-                className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/10 bg-black/30 text-white/80 hover:text-red-300 hover:border-red-500/40 transition"
-                aria-label="Menu profil"
-                title="Profil"
+                onClick={() => setUserOpen((v) => !v)}
+                className={`flex h-8 w-8 items-center justify-center rounded-full border text-[13px] transition-all duration-200 ${
+                  userOpen
+                    ? "border-red-500/50 bg-red-500/10 text-red-300"
+                    : "border-white/10 bg-white/[0.04] text-white/50 hover:border-white/20 hover:text-white/80"
+                }`}
+                aria-label="Profil"
               >
-                <IconUser className="h-5 w-5" />
+                ○
               </button>
 
-              {menuOuvert ? (
-                <div className="absolute right-0 mt-3 w-56 overflow-hidden rounded-2xl border border-white/10 bg-black/90 backdrop-blur shadow-xl">
-                  <div className="px-4 py-3 text-xs text-white/60 border-b border-white/10">
-                    {estConnecte ? `Connecte (${role})` : "Non connecte"}
+              {userOpen && (
+                <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-white/[0.08] bg-black/90 backdrop-blur-xl shadow-[0_16px_48px_rgba(0,0,0,0.7)]">
+                  <div className="border-b border-white/[0.06] px-4 py-2.5">
+                    <p className="text-[9px] font-black uppercase tracking-[0.25em] text-white/25">
+                      {estConnecte ? role : "Non connecté"}
+                    </p>
                   </div>
-
-                  <div className="p-2 grid gap-1">
+                  <div className="p-1.5 flex flex-col">
                     <Link
                       href="/shop"
-                      onClick={() => setMenuOuvert(false)}
-                      className="rounded-xl px-3 py-2 text-sm text-white/80 hover:bg-white/5 hover:text-white transition"
+                      onClick={() => setUserOpen(false)}
+                      className="rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white/40 transition-colors hover:bg-white/[0.05] hover:text-white/70"
                     >
-                      Panier / Shop
+                      Shop
                     </Link>
-
-                    {voirScouting ? (
+                    {voirScouting && (
                       <Link
                         href="/scouting"
-                        onClick={() => setMenuOuvert(false)}
-                        className="rounded-xl px-3 py-2 text-sm text-white/80 hover:bg-white/5 hover:text-white transition"
+                        onClick={() => setUserOpen(false)}
+                        className="rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white/40 transition-colors hover:bg-white/[0.05] hover:text-white/70"
                       >
                         Scouting
                       </Link>
-                    ) : null}
-
+                    )}
+                    <div className="my-1 mx-2 h-px bg-white/[0.06]" />
                     {!estConnecte ? (
                       <Link
                         href="/connexion"
-                        onClick={() => setMenuOuvert(false)}
-                        className="rounded-xl px-3 py-2 text-sm text-white/80 hover:bg-white/5 hover:text-white transition"
+                        onClick={() => setUserOpen(false)}
+                        className="rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white/40 transition-colors hover:bg-white/[0.05] hover:text-white/70"
                       >
                         Connexion
                       </Link>
                     ) : (
                       <button
                         type="button"
-                        onClick={async () => {
-                          setMenuOuvert(false);
-                          await logout();
-                        }}
-                        className="text-left rounded-xl px-3 py-2 text-sm text-white/80 hover:bg-white/5 hover:text-white transition"
+                        onClick={async () => { setUserOpen(false); await logout(); }}
+                        className="text-left rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-red-400/50 transition-colors hover:bg-red-500/[0.08] hover:text-red-300"
                       >
-                        Deconnexion
+                        Déconnexion
                       </button>
                     )}
                   </div>
                 </div>
-              ) : null}
+              )}
             </div>
-          </nav>
+
+            {/* CTA Rejoindre */}
+            <Link
+              href="/recrutement"
+              className="hidden md:flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/[0.08] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-red-300/80 transition-all duration-200 hover:border-red-500/70 hover:bg-red-500/15 hover:text-red-200"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500/80" />
+              Rejoindre
+            </Link>
+
+            {/* burger mobile */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/50 transition-all hover:border-white/20 hover:text-white/80 md:hidden"
+              aria-label="Menu"
+            >
+              <span className="text-[16px] leading-none">{mobileOpen ? "✕" : "≡"}</span>
+            </button>
+          </div>
         </div>
+      </header>
+
+      {/* MENU MOBILE */}
+      <div
+        className={`fixed inset-x-0 top-[64px] z-40 overflow-hidden border-b border-white/[0.06] bg-black/95 backdrop-blur-2xl transition-all duration-300 md:hidden ${
+          mobileOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <nav className="flex flex-col px-2 py-3">
+          {liensNav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] transition-colors ${
+                isActive(item.href)
+                  ? "bg-white/[0.05] text-white"
+                  : "text-white/40 hover:text-white/70"
+              }`}
+            >
+              {isActive(item.href) && (
+                <span className="h-4 w-[2px] bg-red-500 rounded-full shrink-0" />
+              )}
+              {item.label}
+            </Link>
+          ))}
+          {voirScouting && (
+            <Link
+              href="/scouting"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-white/40 hover:text-white/70 transition-colors"
+            >
+              Scouting
+            </Link>
+          )}
+
+          <div className="mx-4 my-3 h-px bg-white/[0.06]" />
+
+          <div className="flex items-center justify-between px-4 pb-3">
+            {!estConnecte ? (
+              <Link
+                href="/connexion"
+                className="text-[11px] font-black uppercase tracking-[0.18em] text-white/30 hover:text-white/60 transition-colors"
+              >
+                Connexion
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="text-[11px] font-black uppercase tracking-[0.18em] text-red-400/50 hover:text-red-400 transition-colors"
+              >
+                Déconnexion
+              </button>
+            )}
+            <Link
+              href="/recrutement"
+              className="rounded-full border border-red-500/40 bg-red-500/[0.08] px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-red-300/80 transition-all hover:bg-red-500/15 hover:text-red-200"
+            >
+              Rejoindre →
+            </Link>
+          </div>
+        </nav>
       </div>
-    </header>
+    </>
   );
 }

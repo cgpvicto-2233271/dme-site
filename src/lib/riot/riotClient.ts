@@ -1,10 +1,5 @@
-/* src/lib/riot/riotClient.ts */
 
 console.log("RIOT_API_KEY chargee ?", Boolean(process.env.RIOT_API_KEY));
-
-/* =========================
-   Types Riot (LoL + Account)
-========================= */
 
 export type RoutageRegional = "americas" | "europe" | "asia" | "sea";
 
@@ -27,10 +22,10 @@ export type RoutagePlateforme =
   | "vn2";
 
 export type RegionLoL = {
-  id: string; // ex: "na"
-  label: string; // ex: "NA"
-  plateforme: RoutagePlateforme; // ex: "na1"
-  regional: RoutageRegional; // ex: "americas"
+  id: string; 
+  label: string; 
+  plateforme: RoutagePlateforme; 
+  regional: RoutageRegional; 
 };
 
 export const REGIONS_LOL: RegionLoL[] = [
@@ -47,7 +42,7 @@ export const REGIONS_LOL: RegionLoL[] = [
   { id: "kr", label: "KR", plateforme: "kr", regional: "asia" },
   { id: "jp", label: "JP", plateforme: "jp1", regional: "asia" },
 
-  // Oceania + SEA (Match-V5 routing = sea)
+
   { id: "oce", label: "OCE", plateforme: "oc1", regional: "sea" },
   { id: "ph", label: "PH", plateforme: "ph2", regional: "sea" },
   { id: "sg", label: "SG", plateforme: "sg2", regional: "sea" },
@@ -56,10 +51,6 @@ export const REGIONS_LOL: RegionLoL[] = [
   { id: "vn", label: "VN", plateforme: "vn2", regional: "sea" },
 ];
 
-/* =========================
-   DTOs Riot
-========================= */
-
 export type RiotAccountDTO = {
   puuid: string;
   gameName: string;
@@ -67,8 +58,7 @@ export type RiotAccountDTO = {
 };
 
 export type SummonerDTO = {
-  // Sur certaines cles / contexts, Riot peut "filtrer" et ne pas renvoyer id/accountId/name
-  id?: string; // encryptedSummonerId
+  id?: string;
   accountId?: string;
   puuid: string;
   name?: string;
@@ -105,8 +95,8 @@ export type MatchInfoParticipantDTO = {
   puuid: string;
 
   championName: string;
-  teamPosition: string; // TOP/JUNGLE/MIDDLE/BOTTOM/UTILITY/"" etc.
-  lane: string; // TOP/JUNGLE/MIDDLE/BOTTOM/NONE etc.
+  teamPosition: string; 
+  lane: string; 
   win: boolean;
 
   kills: number;
@@ -138,13 +128,8 @@ export type MatchDTO = {
 
 export type TimelineDTO = Record<string, unknown>;
 
-/* =========================
-   Spectator DTOs (v5)
-========================= */
-
 export type SpectatorParticipantDTO = {
   puuid?: string;
-  // Certains champs varient selon les versions / payloads
   summonerId?: string;
   summonerName?: string;
   teamId: number;
@@ -170,10 +155,6 @@ export type SpectatorFeaturedGamesDTO = {
   clientRefreshInterval: number;
 };
 
-/* =========================
-   Erreurs Riot (typage)
-========================= */
-
 export type RiotErreur = {
   status: number;
   message: string;
@@ -190,9 +171,6 @@ export function estRiotErreur(e: unknown): e is RiotErreur {
   );
 }
 
-/* =========================
-   Helpers
-========================= */
 
 function lireCleRiot(): string {
   const cle = (process.env.RIOT_API_KEY ?? "").trim();
@@ -209,7 +187,6 @@ export function messageErreur(e: unknown): string {
 async function appelerRiot<T>(url: string): Promise<T> {
   const cle = lireCleRiot();
 
-  // Debug safe (prefix + longueur)
   console.log("[Riot] key prefix:", cle.slice(0, 8), "len:", cle.length);
   console.log("[Riot] url:", url);
 
@@ -243,11 +220,6 @@ async function appelerRiot<T>(url: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-/* =========================
-   Fonctions Riot
-========================= */
-
-/* --- Account-V1 (Riot ID <-> PUUID) --- */
 
 export async function obtenirCompteParRiotId(
   regional: RoutageRegional,
@@ -272,8 +244,6 @@ export async function obtenirCompteParPuuid(
   return appelerRiot<RiotAccountDTO>(url);
 }
 
-/* --- Summoner-V4 --- */
-
 export async function obtenirSummonerParPuuid(
   plateforme: RoutagePlateforme,
   puuid: string
@@ -285,8 +255,7 @@ export async function obtenirSummonerParPuuid(
   return appelerRiot<SummonerDTO>(url);
 }
 
-// Attention: cet endpoint peut etre interdit (403) ou limite selon contexte.
-// Garde-le uniquement si tu en as besoin.
+
 export async function obtenirSummonerParNom(
   plateforme: RoutagePlateforme,
   nom: string
@@ -298,7 +267,6 @@ export async function obtenirSummonerParNom(
   return appelerRiot<SummonerDTO>(url);
 }
 
-/* --- League-V4 --- */
 
 export async function obtenirRankedParSummonerId(
   plateforme: RoutagePlateforme,
@@ -311,7 +279,6 @@ export async function obtenirRankedParSummonerId(
   return appelerRiot<LeagueEntryDTO[]>(url);
 }
 
-/* --- Match-V5 --- */
 
 export async function obtenirIdsMatchsParPuuid(args: {
   regional: RoutageRegional;
@@ -350,7 +317,6 @@ export async function obtenirTimeline(
   return appelerRiot<TimelineDTO>(url);
 }
 
-/* --- Champion Mastery-V4 --- */
 
 export async function obtenirMasteries(
   plateforme: RoutagePlateforme,
@@ -363,10 +329,6 @@ export async function obtenirMasteries(
   return appelerRiot<ChampionMasteryDTO[]>(url);
 }
 
-/* --- Spectator-V5 --- */
-
-// IMPORTANT: l'endpoint s'appelle "by-summoner" mais ici on lui passe le PUUID,
-// ce qui est ce que tu as deja teste avec succes dans ton debug.
 export async function obtenirPartieActiveParPuuid(
   plateforme: RoutagePlateforme,
   puuid: string

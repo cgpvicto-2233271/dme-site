@@ -1,511 +1,461 @@
+"use client";
+
 // src/app/equipes/league-of-legends/page.tsx
-import type { Metadata } from "next";
+
 import Image from "next/image";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Équipes League of Legends | DeathMark E-Sports",
-};
+import { useEffect, useState } from "react";
+import type { StandingsPayload, ConferenceData } from "@/app/api/avl-standings/route";
 
 /* =========================================================
    CONFIG
-   - Saison terminée : on masque TOUT pour les joueurs Semi-Pro
-   (nom, pseudo, role, pays, drapeaux, lien X, photo)
-   - Le staff (manager + coach) reste visible
 ========================================================= */
 
-const SAISON_TERMINEE_SEMI_PRO = true;
+const SAISON_TERMINEE = false;
 
-/* --- Sponsors --- */
+const SHEET_ID   = "1ZSjlkYc-08xuwQfATS_aIEyNuGEmFe9XZ4jfiuPNvMM";
+const SHEET_GID  = "402880902";
+const SHEET_LINK = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=${SHEET_GID}`;
+
 const sponsorLogos = [
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
 ];
 
-/* --- TYPES --- */
-type Niveau = "Semi-Pro" | "Académie";
+/* =========================================================
+   TYPES APP
+========================================================= */
 
-type Joueur = {
-  id: string;
-  pseudo: string;
-  nom: string;
-  role?: string;
-  pays?: string;
-  drapeauSrc?: string;
-  drapeaux?: { src: string; label?: string }[];
-  photoSrc?: string;
-  xUrl?: string;
-};
+type Role = "TOP" | "JUNGLE" | "MID" | "ADC" | "SUPPORT";
 
-type Roster = {
-  id: string;
-  nom: string;
-  niveau: Niveau;
-  ligue?: string;
-  statut?: string;
-  description: string;
-  joueurs?: Joueur[];
-  staff?: Joueur[];
-};
+interface Joueur {
+  id:         string;
+  pseudo:     string;
+  role:       Role;
+  pays:       string;
+  drapeauSrc: string;
+  /**
+   * PNG fond transparent (via remove.bg) = rendu parfait sur fond noir.
+   * JPG avec fond = utilisé tel quel avec object-contain, centré sur noir.
+   * null = placeholder "Photo à venir".
+   */
+  photoSrc:   string | null;
+  xUrl?:      string;
+}
+
+interface Manager {
+  pseudo:     string;
+  photoSrc:   string | null;
+  pays:       string;
+  drapeauSrc: string;
+  xUrl?:      string;
+}
+
+interface Roster {
+  id:      string;
+  tag:     string;
+  ligue:   string;
+  label:   string;
+  saison:  string;
+  joueurs: Joueur[];
+  manager: Manager;
+}
 
 /* =========================================================
-   ROSTERS SEMI-PRO
+   DATA
 ========================================================= */
 
 const rosters: Roster[] = [
   {
-    id: "lol-acl",
-    nom: "DeathMark E-Sports",
-    niveau: "Semi-Pro",
-    ligue: "Aegis Challenger League (ACL)",
-    statut: "Saison terminée",
-    description:
-      "Roster principal League of Legends orienté haut niveau amateur NA, avec objectif séries ACL et participations régulières aux NACL Open Qualifiers.",
+    id:     "avl-1",
+    tag:    "DeathMark E-sport Voltigeurs",
+    ligue:  "Aegis Vanguard League — Hextech",
+    label:  "Voltigeurs",
+    saison: "Spring 2026",
+    manager: {
+      pseudo: "Coussinho", photoSrc: null,
+      pays: "FR", drapeauSrc: "/medias/flags/fr.png",
+      xUrl: "https://x.com/coussinhoo",
+    },
     joueurs: [
-      {
-        id: "acl-top",
-        pseudo: "Karsiak",
-        nom: "Vincent Grenier",
-        role: "TOP",
-        pays: "CAN",
-        drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/Karsiakk",
-      },
-      {
-        id: "acl-jgl",
-        pseudo: "Bibiswag",
-        nom: "Rayane Bendjazia",
-        role: "JUNGLE",
-        pays: "CAN",
-        drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/Daimonz_",
-      },
-      {
-        id: "acl-mid",
-        pseudo: "Reppy",
-        nom: "Ethan Fu",
-        role: "MID",
-        pays: "USA",
-        drapeauSrc: "/medias/flags/us.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/lolreppy",
-      },
-      {
-        id: "acl-adc",
-        pseudo: "SageWabe",
-        nom: "Kevin Tran",
-        role: "ADC",
-        pays: "USA",
-        drapeauSrc: "/medias/flags/us.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/SageWabelol",
-      },
-      {
-        id: "acl-supp",
-        pseudo: "Alcalamity",
-        nom: "Joseph Schaffer",
-        role: "SUPPORT",
-        pays: "USA",
-        drapeauSrc: "/medias/flags/us.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/lol_Alcalamity",
-      },
-    ],
-    staff: [
-      {
-        id: "acl-manager",
-        pseudo: "Coussinho",
-        nom: "Team Manager",
-        role: "MANAGER",
-        pays: "FRANCE",
-        drapeauSrc: "/medias/flags/fr.png",
-        photoSrc: "/logo/logo-dme.png",
-        xUrl: "https://x.com/MathCous",
-      },
-      {
-        id: "acl-coach",
-        pseudo: "À confirmer",
-        nom: "Head Coach",
-        role: "COACH",
-        pays: "—",
-        photoSrc: "/logo/logo-dme.png",
-        // xUrl: "https://x.com/...",
-      },
+      { id: "j1-top",  pseudo: "Nuteh",    role: "TOP",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/cam_card.png",     xUrl: "https://x.com/Nutehhh"   },
+      { id: "j1-jgl",  pseudo: "Kripsus",  role: "JUNGLE",  pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/udyr_card.png",    xUrl: "https://x.com/Kripsus09" },
+      { id: "j1-mid",  pseudo: "Wazabiee", role: "MID",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/leblanc_card.png", xUrl: "https://x.com/Wazabiee"  },
+      { id: "j1-adc",  pseudo: "Pewpew",   role: "ADC",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/yunara_card.png",  xUrl: "https://x.com/pewpew"     },
+      { id: "j1-supp", pseudo: "Campo",    role: "SUPPORT", pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/tresh_card.png",   xUrl: "https://x.com/Xz8_Campo" },
     ],
   },
-
   {
-    id: "lol-avl",
-    nom: "DeathMark E'Sports",
-    niveau: "Semi-Pro",
-    ligue: "Aegis Vanguard League (AVL)",
-    statut: "Saison terminée",
-    description:
-      "Équipe compétitive bâtie autour de joueurs d’expérience, axée sur la progression collective et les performances en ligues francophones et nord-américaines.",
+    id:     "avl-2",
+    tag:    "DeathMark E-sport NPC",
+    ligue:  "Aegis Vanguard League — Chemtech",
+    label:  "NPC",
+    saison: "Spring 2026",
+    manager: {
+      pseudo: "Coussinho", photoSrc: null,
+      pays: "FR", drapeauSrc: "/medias/flags/fr.png",
+      xUrl: "https://x.com/coussinhoo",
+    },
     joueurs: [
-      {
-        id: "avl-top",
-        pseudo: "JBear",
-        nom: "Jesse",
-        role: "TOP",
-        pays: "CAN",
-        drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/JbearL0L",
-      },
-      {
-        id: "avl-jgl",
-        pseudo: "Kripsus",
-        nom: "Serban Mihai",
-        role: "JUNGLE",
-        pays: "CAN/ROM",
-        drapeaux: [
-          { src: "/medias/flags/ca.png", label: "Canada" },
-          { src: "/medias/flags/rom.png", label: "ROM" },
-        ],
-        photoSrc: "/logo/kri.png",
-        xUrl: "https://x.com/Kripsus09",
-      },
-      {
-        id: "avl-mid",
-        pseudo: "wazabiee",
-        nom: "Vincent Palardy",
-        role: "MID",
-        pays: "CAN",
-        drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/wazapro.png",
-        xUrl: "https://x.com/Wazabiee",
-      },
-      {
-        id: "avl-adc",
-        pseudo: "raynerz",
-        nom: "Samuel Vachon",
-        role: "ADC",
-        pays: "CAN",
-        drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/image_player.png",
-        xUrl: "https://x.com/Raynarzz",
-      },
-      {
-        id: "avl-supp",
-        pseudo: "SPY",
-        nom: "Olivier Carrier-Giguère",
-        role: "SUPPORT",
-        pays: "CAN",
-        drapeauSrc: "/medias/flags/ca.png",
-        photoSrc: "/logo/spypro.png",
-        xUrl: "https://x.com/lol_spy1",
-      },
-    ],
-    staff: [
-      {
-        id: "avl-manager",
-        pseudo: "Coussinho",
-        nom: "Team Manager",
-        role: "MANAGER",
-        pays: "FRANCE",
-        drapeauSrc: "/medias/flags/fr.png",
-        photoSrc: "/logo/logo-dme.png",
-        xUrl: "https://x.com/MathCous",
-      },
-      {
-        id: "avl-coach",
-        pseudo: "À confirmer",
-        nom: "Head Coach",
-        role: "COACH",
-        pays: "—",
-        photoSrc: "/logo/logo-dme.png",
-        // xUrl: "https://x.com/...",
-      },
+      { id: "j2-top",  pseudo: "Vallex",    role: "TOP",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/ambessa_card.png", xUrl: "https://x.com/lolVallex"     },
+      { id: "j2-jgl",  pseudo: "Nostalgia", role: "JUNGLE",  pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/diana_card (1).png",   xUrl: "https://x.com/lol_nostalgie" },
+      { id: "j2-mid",  pseudo: "Paradox",   role: "MID",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/taliyah_card.png", xUrl: "https://x.com/Paradox__QC"   },
+      { id: "j2-adc",  pseudo: "Monkey",    role: "ADC",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/ezreal_card.png",  xUrl: "https://x.com/monkeyy"        },
+      { id: "j2-supp", pseudo: "Grey",      role: "SUPPORT", pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/pyke_card.png",    xUrl: "https://x.com/eglor195"       },
     ],
   },
 ];
 
 /* =========================================================
-   HELPERS
+   HOOK standings
 ========================================================= */
 
-function estManager(personne: Joueur) {
-  return (personne.role || "").toUpperCase() === "MANAGER";
+interface StandingsState {
+  data:    StandingsPayload | null;
+  loading: boolean;
+  error:   string | null;
 }
-function estCoach(personne: Joueur) {
-  return (personne.role || "").toUpperCase() === "COACH";
+
+function useAVLStandings(): StandingsState {
+  const [state, setState] = useState<StandingsState>({
+    data: null, loading: true, error: null,
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchStandings(): Promise<void> {
+      try {
+        const res = await fetch("/api/avl-standings", { cache: "no-store" });
+        if (!res.ok) {
+          const body = await res.json() as { error?: string };
+          throw new Error(body.error ?? `HTTP ${res.status}`);
+        }
+        const payload = await res.json() as StandingsPayload;
+        if (!cancelled) setState({ data: payload, loading: false, error: null });
+      } catch (err) {
+        if (!cancelled) setState((prev) => ({
+          ...prev, loading: false,
+          error: err instanceof Error ? err.message : "Erreur inconnue",
+        }));
+      }
+    }
+
+    fetchStandings();
+    const interval = setInterval(fetchStandings, 5 * 60 * 1000);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, []);
+
+  return state;
 }
 
 /* =========================================================
-   CARTE PERSONNE (Joueur / Staff) – Semi-Pro
-   - Saison terminée : on masque TOUT pour les joueurs
-   - Staff visible
+   TABLEAU CONFÉRENCE
 ========================================================= */
 
-function CartePersonne({
-  personne,
-  masquerTout = false,
-}: {
-  personne: Joueur;
-  masquerTout?: boolean;
-}) {
-  const roleUpper = (personne.role || "").toUpperCase();
-  const estStaff = roleUpper === "MANAGER" || roleUpper === "COACH";
-  const masquer = masquerTout && !estStaff;
+function TableauConference({ conf }: { conf: ConferenceData }) {
+  return (
+    <div className="flex flex-col">
+      <div className="border-b border-white/[0.07] bg-[#111113] px-5 py-2.5">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+          Conférence {conf.name}
+        </p>
+      </div>
+      <div className="grid grid-cols-[2rem_1fr_5rem_6rem_3.5rem] border-b border-white/[0.04] px-5 py-2">
+        {(["#", "Équipe", "Match", "Games", "GD"] as const).map((h) => (
+          <span key={h} className="text-[9px] font-black uppercase tracking-[0.22em] text-white/20 last:text-right">
+            {h}
+          </span>
+        ))}
+      </div>
+      {conf.teams.map((row) => (
+        <div
+          key={row.team}
+          className={`grid grid-cols-[2rem_1fr_5rem_6rem_3.5rem] items-center border-b border-white/[0.03] px-5 py-2.5 transition-colors last:border-0 ${
+            row.isDME ? "bg-red-500/[0.07] hover:bg-red-500/10" : "hover:bg-white/[0.02]"
+          }`}
+        >
+          <span className={`text-[11px] font-black ${row.rank <= 4 ? "text-emerald-400" : row.isDME ? "text-red-400" : "text-white/25"}`}>
+            {row.rank}
+          </span>
+          <span className={`truncate text-[12px] font-bold ${row.isDME ? "text-white" : "text-white/55"}`}>
+            {row.isDME && (
+              <span className="mr-2 inline-block rounded-sm bg-red-600 px-1.5 py-[1px] text-[8px] font-black uppercase tracking-[0.12em] text-white">
+                DME
+              </span>
+            )}
+            {row.team}
+          </span>
+          <span className={`text-[11px] font-bold ${row.isDME ? "text-white" : "text-white/40"}`}>
+            {row.matchW} – {row.matchL}
+          </span>
+          <span className="text-[11px] text-white/30">{row.gameW} – {row.gameL}</span>
+          <span className={`text-right text-[11px] font-black ${row.gd > 0 ? "text-emerald-400" : row.gd === 0 ? "text-white/25" : "text-red-400/70"}`}>
+            {row.gd > 0 ? `+${row.gd}` : row.gd}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* =========================================================
+   CLASSEMENT LIVE
+========================================================= */
+
+function ClassementAVL() {
+  const { data, loading, error } = useAVLStandings();
+  const lastUpdated = data?.fetchedAt
+    ? new Date(data.fetchedAt).toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })
+    : null;
 
   return (
-    <article
-      className="group relative flex h-[340px] flex-col overflow-hidden rounded-3xl
-                 border border-red-500/20 bg-black/65 shadow-[0_18px_60px_rgba(0,0,0,0.58)]
-                 backdrop-blur-xl transition hover:-translate-y-1 hover:border-red-500/40"
-    >
-      {/* accents */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/14 blur-3xl" />
-        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
+    <section className="flex flex-col gap-5">
+      <div className="flex items-center gap-4">
+        <div className="h-px flex-1 bg-white/[0.06]" />
+        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25">Classement AVL Spring 2026</p>
+        <div className="h-px flex-1 bg-white/[0.06]" />
       </div>
-
-      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
-
-      {/* VISUEL (plus de carre marque) */}
-      <div className="relative mb-4 flex items-center justify-center px-5 pt-6">
-        {!masquer ? (
-          <div className="relative flex h-[180px] w-full items-center justify-center">
-            {/* halo discret */}
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500/12 blur-2xl" />
-            </div>
-
-            {/* avatar rond (pro) */}
-            <div className="relative h-44 w-44 overflow-hidden rounded-full ring-1 ring-white/10 shadow-[0_18px_55px_rgba(0,0,0,0.55)]">
-              <Image
-                src={personne.photoSrc || "/logo/logo-dme.png"}
-                alt={personne.pseudo}
-                fill
-                className="object-cover"
-                sizes="176px"
-              />
-            </div>
+      <div className="border border-white/[0.07] bg-[#0f0f11]">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.07] px-5 py-4">
+          <div className="flex items-center gap-3">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/60">
+              Live · Aegis Vanguard League · Spring 2026
+            </p>
           </div>
-        ) : (
-          <div className="relative flex h-[180px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black/30 ring-1 ring-white/10">
-            <div className="absolute inset-0">
-              <Image
-                src="/logo/logo-dme.png"
-                alt="DME"
-                fill
-                className="object-contain blur-md opacity-65"
-              />
+          <div className="flex items-center gap-3">
+            {lastUpdated && <span className="text-[9px] text-white/25">Mis à jour {lastUpdated}</span>}
+            <Link href={SHEET_LINK} target="_blank" rel="noopener noreferrer"
+              className="border border-white/8 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white/35 transition-colors hover:border-white/20 hover:text-white/70">
+              Sheet officiel →
+            </Link>
+          </div>
+        </div>
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="flex items-center gap-3 text-white/30">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white/60" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Chargement...</span>
             </div>
-
-            <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
-                COMING SOON
-              </p>
-              <p className="mt-1 text-[11px] text-white/60">
-                Visuels et roster dévoilés prochainement
-              </p>
-            </div>
-
-            <div className="pointer-events-none absolute inset-0 bg-black/35" />
           </div>
         )}
-      </div>
-
-      {/* Infos */}
-      <div className="relative flex flex-1 flex-col justify-between px-5 pb-6">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/65">
-            {masquer ? "JOUEUR" : personne.role}
-          </p>
-
-          <p className="mt-1 text-base font-extrabold uppercase text-white">
-            {masquer ? "COMING SOON" : personne.pseudo}
-          </p>
-
-          <p className="mt-1 text-[11px] italic text-white/70">
-            {masquer ? "—" : personne.nom}
-          </p>
-
-          {!masquer && (estManager(personne) || estCoach(personne)) && (
-            <div className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">
-              {estManager(personne) ? "Staff DME" : "Coaching Staff"}
-            </div>
-          )}
-        </div>
-
-        {/* Pays / drapeaux */}
-        {!masquer &&
-          (personne.pays || personne.drapeauSrc || personne.drapeaux?.length) && (
-            <div className="mt-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
-              {personne.drapeaux?.length
-                ? personne.drapeaux.map((d) => (
-                    <Image
-                      key={d.src}
-                      src={d.src}
-                      alt={d.label || "drapeau"}
-                      width={18}
-                      height={12}
-                      className="h-3 w-auto rounded-[2px] object-cover"
-                    />
-                  ))
-                : personne.drapeauSrc && (
-                    <Image
-                      src={personne.drapeauSrc}
-                      alt={personne.pays || "drapeau"}
-                      width={18}
-                      height={12}
-                      className="h-3 w-auto rounded-[2px] object-cover"
-                    />
-                  )}
-
-              {personne.pays && <span>{personne.pays}</span>}
-            </div>
-          )}
-
-        {/* X (toujours visible si présent) */}
-        {personne.xUrl && !masquer && (
-          <div className="mt-5">
-            <Link
-              href={personne.xUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full
-                         border border-white/10 bg-black/45 px-3 py-2 text-[11px]
-                         font-semibold uppercase tracking-[0.15em] text-white/80
-                         transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-white"
-            >
-              <span className="text-sm">𝕏</span>
-              <span>X/Twitter</span>
+        {error && !loading && (
+          <div className="flex flex-col items-center gap-3 px-6 py-10 text-center">
+            <p className="text-[11px] text-white/30">Impossible de charger le classement.</p>
+            <Link href={SHEET_LINK} target="_blank" rel="noopener noreferrer"
+              className="text-[10px] font-bold uppercase tracking-[0.2em] text-red-400/60 transition-colors hover:text-red-400">
+              Voir le sheet Aegis directement →
             </Link>
           </div>
         )}
+        {!loading && !error && data && (
+          <div className="grid grid-cols-1 divide-y divide-white/[0.05] lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+            {data.conferences.map((conf) => (
+              <TableauConference key={conf.name} conf={conf} />
+            ))}
+          </div>
+        )}
+        <div className="border-t border-white/[0.05] px-5 py-3">
+          <p className="text-[8px] text-white/20">
+            Source : Sheet officiel Aegis Esports · Rafraîchissement automatique toutes les 5 min
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =========================================================
+   CARTE JOUEUR
+   — Photo centrée, object-contain sur fond noir pur #0a0a0c
+   — PNG fond transparent : rendu parfait (perso découpé)
+   — JPG avec fond   : centré proprement, pas de rognage
+   — null            : placeholder sobre
+========================================================= */
+
+function CarteJoueur({ joueur, masquer }: { joueur: Joueur; masquer: boolean }) {
+  return (
+    <article className="group flex flex-col overflow-hidden">
+
+      {/* ── ZONE PHOTO ──
+          Fond noir pur. object-contain pour ne jamais rogner.
+          Le personnage est positionné en bas de la carte
+          pour que les pieds touchent la barre d'infos — style splash art. */}
+      <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#0e0a0a]">
+
+        {/* badge rôle */}
+        <span className="absolute left-0 top-0 z-10 bg-red-600 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.22em] text-white">
+          {masquer ? "—" : joueur.role}
+        </span>
+
+        {masquer || !joueur.photoSrc ? (
+          /* Placeholder */
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#0a0a0c]">
+            <div className="relative h-10 w-10 opacity-[0.07]">
+              <Image src="/logo/logo-dme.png" alt="DME" fill className="object-contain" />
+            </div>
+            <p className="text-[8px] font-bold uppercase tracking-[0.3em] text-white/15">
+              Photo à venir
+            </p>
+          </div>
+        ) : (
+          /* Photo joueur — cover pleine carte, fond rouge sombre
+             mix-blend-multiply fusionne le fond blanc de l'image avec le bg rouge */
+          <>
+            <Image
+              src={joueur.photoSrc}
+              alt={joueur.pseudo}
+              fill
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+              sizes="(max-width: 640px) 50vw, 20vw"
+            />
+            {/* overlay rouge identité DME */}
+            <div className="pointer-events-none absolute inset-0 bg-red-900/30 mix-blend-multiply" />
+            {/* vignette bords */}
+            <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.65)_100%)]" />
+            {/* fondu bas */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#111113] to-transparent" />
+          </>
+        )}
+      </div>
+
+      {/* ── INFOS BAS ── */}
+      <div className="border-t-2 border-red-600 bg-[#111113] px-3 py-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="truncate text-[15px] font-black uppercase leading-tight tracking-[0.04em] text-white">
+              {masquer ? "???" : joueur.pseudo}
+            </p>
+            {joueur.xUrl && !masquer && (
+              <Link
+                href={joueur.xUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-0.5 block truncate text-[10px] font-semibold text-white/30 transition-colors hover:text-red-400"
+              >
+                𝕏 @{joueur.xUrl.split("/").pop()}
+              </Link>
+            )}
+          </div>
+          {!masquer && (
+            <div className="flex shrink-0 items-center gap-1.5 pt-0.5">
+              <Image src={joueur.drapeauSrc} alt={joueur.pays} width={18} height={13} className="rounded-[2px]" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">
+                {joueur.pays}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </article>
   );
 }
 
 /* =========================================================
-   RESUME ROSTER – Semi-Pro
+   CARTE MANAGER
 ========================================================= */
 
-function ResumeRoster({ roster }: { roster: Roster }) {
+function CarteManager({ manager }: { manager: Manager }) {
   return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-      <div className="max-w-3xl">
-        <div className="mb-3 flex flex-wrap gap-2">
-          <span className="rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-red-100">
-            {roster.niveau}
+    <div className="flex items-center gap-5 border border-red-500/20 bg-[#111113] px-6 py-5">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-red-600/50 bg-[#0e0e10]">
+        {manager.photoSrc ? (
+          <Image src={manager.photoSrc} alt={manager.pseudo} fill className="object-cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-red-900/40 to-[#0e0e10]">
+            <span className="text-2xl font-black text-red-500/80">
+              {manager.pseudo[0].toUpperCase()}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/70">Team Manager</p>
+        <p className="mt-0.5 text-lg font-black uppercase tracking-[0.04em] text-white">{manager.pseudo}</p>
+        <div className="mt-1 flex items-center gap-2">
+          <Image src={manager.drapeauSrc} alt={manager.pays} width={18} height={13} className="rounded-[2px]" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">{manager.pays}</span>
+        </div>
+      </div>
+      {manager.xUrl && (
+        <Link
+          href={manager.xUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex shrink-0 items-center gap-2 border border-white/10 bg-white/[0.04] px-5 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-white/60 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+        >
+          <span className="text-base">𝕏</span>
+          <span>@{manager.xUrl.split("/").pop()}</span>
+        </Link>
+      )}
+    </div>
+  );
+}
+
+/* =========================================================
+   BLOC ROSTER
+========================================================= */
+
+function BlocRoster({ roster, index }: { roster: Roster; index: number }) {
+  return (
+    <section className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500/70">
+            {roster.label} · {roster.ligue}
+          </p>
+          <h2 className="mt-1 text-xl font-black uppercase tracking-tight text-white">{roster.tag}</h2>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="border border-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
+            {roster.saison}
           </span>
-
-          {roster.ligue && (
-            <span className="rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[11px] font-semibold text-white/80">
-              {roster.ligue}
-            </span>
-          )}
-
-          {roster.statut && (
-            <span className="rounded-full border border-emerald-300/25 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-100">
-              {roster.statut}
-            </span>
-          )}
-        </div>
-
-        <h2 className="text-2xl font-extrabold text-white">{roster.nom}</h2>
-        <p className="mt-2 text-sm leading-relaxed text-white/80">
-          {roster.description}
-        </p>
-      </div>
-
-      <div className="mt-3 lg:mt-0">
-        <div className="inline-flex items-center rounded-2xl border border-white/10 bg-black/45 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
-          Bloc Semi-Pro
+          <span className="border border-emerald-500/25 bg-emerald-500/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400/70">
+            ● Actif
+          </span>
         </div>
       </div>
-    </div>
+      <CarteManager manager={roster.manager} />
+      <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25">Joueurs</p>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {roster.joueurs.map((joueur) => (
+          <CarteJoueur key={joueur.id} joueur={joueur} masquer={SAISON_TERMINEE} />
+        ))}
+      </div>
+    </section>
   );
 }
 
 /* =========================================================
-   BOUTON RETOUR AUX JEUX
+   PAGE
 ========================================================= */
 
-function BoutonRetourJeux() {
-  return (
-    <div className="mb-6">
-      <Link
-        href="/equipes"
-        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 transition hover:border-red-500/40 hover:bg-red-500/10"
-      >
-        ← Retour aux jeux
-      </Link>
-    </div>
-  );
-}
-
-/* =========================================================
-   PAGE PRINCIPALE
-========================================================= */
-
-type Props = {
-  searchParams?: {
-    niveau?: string; // "semi-pro" | "academie"
-  };
-};
-
-export default function LeagueOfLegendsPage({ searchParams }: Props) {
-  const niveauParam = (searchParams?.niveau ?? "").toLowerCase();
-
-  // vue par défaut : Semi-Pro
-  const vue: "semi-pro" | "academie" =
-    niveauParam === "academie" ? "academie" : "semi-pro";
-
-  const rostersSemi = rosters.filter((r) => r.niveau === "Semi-Pro");
+export default function LeagueOfLegendsPage() {
   const track = [...sponsorLogos, ...sponsorLogos];
 
   return (
-    <div className="bg-black text-white">
-      {/* ===== SPONSORS ===== */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#0a0a0c] text-white">
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
@@ -515,129 +465,84 @@ export default function LeagueOfLegendsPage({ searchParams }: Props) {
         </div>
       </div>
 
-      {/* ===== BACKGROUND (copie exacte de la page academie) ===== */}
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.78),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.22),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.14),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.06),transparent_55%)]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        <div className="pt-[64px]" />
-
-        {/* ========================= SEMI-PRO (vue par défaut) ========================= */}
-        {vue === "semi-pro" && (
-          <main className="relative mx-auto w-full max-w-[100rem] px-6 pb-24 pt-10 sm:px-10">
-            <BoutonRetourJeux />
-
-            <header className="mb-12 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
-                  League of Legends – Semi-Pro
-                </p>
-
-                <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                  Rosters <span className="text-red-400">Semi-Pro</span>
-                </h1>
-
-                <p className="mt-2 max-w-2xl text-sm text-white/80">
-                  Présentation de nos équipes alignées dans les ligues majeures
-                  (ACL, AVL, NACL OQ). Staff complet, cadre sérieux et objectifs
-                  de haut de tableau.
-                </p>
-
-                {SAISON_TERMINEE_SEMI_PRO && (
-                  <p className="mt-3 max-w-2xl text-xs text-white/60">
-                    Saison terminée : les informations joueurs sont masquées. Le
-                    roster sera dévoilé prochainement.
-                  </p>
-                )}
-              </div>
-
-              <Link
-                href="/equipes/league-of-legends/academie"
-                className="inline-flex items-center gap-2 rounded-full border border-red-500/35 bg-red-500/10 px-4 py-2
-                           text-xs font-semibold uppercase tracking-[0.18em] text-red-100
-                           transition hover:border-red-500/55 hover:bg-red-500/15 hover:text-white"
-              >
-                Voir les rosters Académie →
-              </Link>
-            </header>
-
-            <section className="space-y-6">
-              {rostersSemi.map((roster) => (
-                <article
-                  key={roster.id}
-                  className="group relative overflow-hidden rounded-3xl border border-red-500/20 bg-black/65
-                             shadow-[0_18px_60px_rgba(0,0,0,0.58)] backdrop-blur-xl"
-                >
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-red-500/12 blur-3xl" />
-                    <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-                    <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
-                  </div>
-
-                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-transparent transition group-hover:ring-red-500/35" />
-
-                  <div className="relative px-6 pb-12 pt-8 sm:px-10">
-                    <ResumeRoster roster={roster} />
-
-                    {/* JOUEURS */}
-                    {roster.joueurs && (
-                      <div className="mt-10 mx-auto max-w-6xl">
-                        <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
-                          Joueurs
-                        </h3>
-
-                        <div className="grid place-items-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                          {roster.joueurs.map((p) => (
-                            <CartePersonne
-                              key={p.id}
-                              personne={p}
-                              masquerTout={SAISON_TERMINEE_SEMI_PRO}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* STAFF (coach + manager collés) */}
-                    {roster.staff && (
-                      <div className="mt-14 mx-auto max-w-5xl">
-                        <h3 className="mb-4 text-center text-sm uppercase tracking-[0.25em] text-white/70">
-                          Staff
-                        </h3>
-
-                        <div className="grid place-items-center gap-6 sm:grid-cols-2">
-                          {roster.staff.map((s) => (
-                            <CartePersonne
-                              key={s.id}
-                              personne={s}
-                              masquerTout={false}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </section>
-          </main>
-        )}
-
-        {/* Placeholder academie si jamais */}
-        {vue === "academie" && (
-          <main className="relative mx-auto w-full max-w-[110rem] px-6 pb-24 pt-10 sm:px-10">
-            <BoutonRetourJeux />
-
-            <div className="rounded-3xl border border-white/10 bg-black/55 p-6 text-sm text-white/80">
-              Page académie: /equipes/league-of-legends/academie
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-[100rem] px-6 py-14 sm:px-10">
+          <div className="mb-8 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]">
+            <Link href="/equipes" className="text-white/30 transition-colors hover:text-white/60">Équipes</Link>
+            <span className="text-white/15">/</span>
+            <span className="text-red-400/80">League of Legends</span>
+          </div>
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="mb-3 text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                Semi-Pro · Aegis Vanguard League · Spring 2026
+              </p>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl">
+                League of <span className="text-red-500">Legends</span>
+              </h1>
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
+                Deux rosters engagés en AVL. Mentalité compétitive, encadrement pro — on représente le Québec.
+              </p>
             </div>
-          </main>
-        )}
-      </section>
+            <div className="flex divide-x divide-white/[0.07] border border-white/[0.07]">
+              {([
+                { val: "02", label: "Rosters" },
+                { val: "10", label: "Joueurs" },
+                { val: "QC", label: "Région" },
+              ] as const).map((s) => (
+                <div key={s.label} className="px-7 py-5 text-center">
+                  <p className="text-2xl font-black text-white">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-10 flex items-center gap-8 border-t border-white/[0.06] pt-6">
+            <span className="border-b-2 border-red-500 pb-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-white">Semi-Pro</span>
+            <Link href="/equipes/league-of-legends/academie"
+              className="pb-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/30 transition-colors hover:text-white/70">
+              Académie
+            </Link>
+            <Link href="/recrutement"
+              className="ml-auto text-[11px] font-bold uppercase tracking-[0.25em] text-red-500/60 transition-colors hover:text-red-400">
+              Tryouts →
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
+        <div className="flex flex-col gap-20">
+          {rosters.map((roster, i) => (
+            <BlocRoster key={roster.id} roster={roster} index={i} />
+          ))}
+        </div>
+        <div className="mt-20">
+          <ClassementAVL />
+        </div>
+        <div className="my-16 border-t border-white/[0.06]" />
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500/70">Recrutement</p>
+            <h2 className="mt-1.5 text-2xl font-black uppercase tracking-tight text-white">Tu veux jouer pour DME ?</h2>
+            <p className="mt-2 max-w-sm text-sm text-white/35">
+              Tryouts ouverts selon les besoins. Profils sérieux, constants, bonne communication.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/recrutement"
+              className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500 hover:shadow-[0_0_40px_rgba(239,68,68,0.55)]">
+              Postuler
+            </Link>
+            <Link href="/contact"
+              className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/50 transition-all hover:border-white/25 hover:text-white">
+              Contact
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -7,323 +7,310 @@ export const metadata: Metadata = {
   title: "Shop | DeathMark E-Sports",
 };
 
-/* --- Sponsors defilants --- */
 const sponsorLogos = [
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/tuninclub.png",
-  "/medias/sponsors/rogue1.png",
-  "/medias/sponsors/tnt1.png",
-  "/medias/sponsors/ig1.png",
   "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
+  "/medias/sponsors/passion.png",
+  "/medias/sponsors/arene1.png",
+  "/medias/sponsors/guru1.png",
   "/medias/sponsors/passion.png",
 ];
 
-/* --- Articles du shop (facile a modifier) --- */
-type ArticleShop = {
-  id: string;
-  nom: string;
-  type: string;
-  prix: string;
-  tag: string;
-  description: string;
-  imageSrc: string;
-};
+/* =========================================================
+   PRODUITS
+========================================================= */
 
-const articlesShop: ArticleShop[] = [
+const produits = [
   {
-    id: "maillot-2025",
-    nom: "Maillot Officiel DME 2025",
-    type: "Maillot joueur",
-    prix: "59,99 $",
-    tag: "Drop principal",
-    description:
-      "Le maillot officiel porte par nos rosters. Noir & rouge, logos partenaires, confort LAN et sessions longues.",
-    imageSrc: "/medias/shop/maillot-2025.png",
+    id:    "maillot-2025",
+    nom:   "Maillot Officiel DME 2025",
+    type:  "Maillot joueur",
+    prix:  "59,99 $",
+    tag:   "Drop principal",
+    desc:  "Le maillot officiel porté par nos rosters. Noir & rouge, logos partenaires, confort LAN.",
+    img:   "/medias/shop/maillot-2025.png",
   },
   {
-    id: "hoodie-elite",
-    nom: "Hoodie DeathMark Elite",
-    type: "Hoodie",
-    prix: "69,99 $",
-    tag: "Edition limitee",
-    description:
-      "Hoodie epais, coupe street, branding propre. Parfait pour scrims tardives et sorties LAN.",
-    imageSrc: "/medias/shop/hoodie-elite.png",
+    id:    "hoodie-elite",
+    nom:   "Hoodie DeathMark Elite",
+    type:  "Hoodie",
+    prix:  "69,99 $",
+    tag:   "Édition limitée",
+    desc:  "Hoodie épais, coupe street, branding propre. Parfait pour les scrims tardives et les LANs.",
+    img:   "/medias/shop/hoodie-elite.png",
   },
   {
-    id: "tapis-souris-xl",
-    nom: "Tapis de souris XL DME",
-    type: "Tapis de souris",
-    prix: "39,99 $",
-    tag: "Setup",
-    description:
-      "Surface lisse, base anti-derapante, DA DME full size. Pour un setup propre et precis.",
-    imageSrc: "/medias/shop/tapis-xl.png",
+    id:    "tapis-xl",
+    nom:   "Tapis de souris XL DME",
+    type:  "Setup",
+    prix:  "39,99 $",
+    tag:   "Setup",
+    desc:  "Surface lisse, base anti-dérapante, DA DME full size. Pour un setup propre et précis.",
+    img:   "/medias/shop/tapis-xl.png",
   },
   {
-    id: "casquette-core",
-    nom: "Casquette DeathMark Core",
-    type: "Casquette",
-    prix: "29,99 $",
-    tag: "Streetwear",
-    description:
-      "Casquette sobre, logo DME brode, style clean. Pour representer hors match.",
-    imageSrc: "/medias/shop/casquette-core.png",
+    id:    "casquette-core",
+    nom:   "Casquette DeathMark Core",
+    type:  "Casquette",
+    prix:  "29,99 $",
+    tag:   "Streetwear",
+    desc:  "Casquette sobre, logo DME brodé, style clean. Pour représenter hors match.",
+    img:   "/medias/shop/casquette-core.png",
   },
   {
-    id: "bundle-fan",
-    nom: "Bundle Fan Pack",
-    type: "Bundle",
-    prix: "99,99 $",
-    tag: "Pack",
-    description:
-      "Pack fan avec goodies (stickers, bracelet, affiches, etc.) pour soutenir la structure.",
-    imageSrc: "/medias/shop/bundle-fan.png",
+    id:    "bundle-fan",
+    nom:   "Bundle Fan Pack",
+    type:  "Bundle",
+    prix:  "99,99 $",
+    tag:   "Pack",
+    desc:  "Pack fan avec goodies (stickers, bracelet, affiches) pour soutenir la structure.",
+    img:   "/medias/shop/bundle-fan.png",
   },
   {
-    id: "poster-lql",
-    nom: "Poster LQL Champions",
-    type: "Affiche",
-    prix: "19,99 $",
-    tag: "Collector",
-    description:
-      "Affiche commemo de la run LQL. Pour decorer ton setup et marquer l histoire.",
-    imageSrc: "/medias/shop/poster-lql.png",
+    id:    "poster-avl",
+    nom:   "Poster Champions AVL",
+    type:  "Affiche",
+    prix:  "19,99 $",
+    tag:   "Collector",
+    desc:  "Affiche commémorative de la victoire AVL. Pour marquer l'histoire sur ton setup.",
+    img:   "/medias/shop/poster-lql.png",
   },
-];
+] as const;
 
-/* --- UI helpers --- */
-function Badge({ children }: { children: string }) {
+/* =========================================================
+   CARTE PRODUIT (floutée)
+========================================================= */
+
+function CarteProduit({ p }: { p: typeof produits[number] }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-red-200">
-      {children}
-    </span>
+    <article className="flex flex-col overflow-hidden bg-[#0d0d0f]">
+      <div className="h-[2px] w-full bg-white/[0.05]" />
+
+      {/* image */}
+      <div className="relative h-[220px] w-full bg-black">
+        <Image
+          src={p.img}
+          alt={p.nom}
+          fill
+          className="object-contain p-8 opacity-60"
+        />
+      </div>
+
+      {/* infos */}
+      <div className="flex flex-1 flex-col gap-3 px-5 py-5">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.22em] text-white/25">{p.type}</p>
+            <h3 className="text-[14px] font-black uppercase leading-tight tracking-tight text-white/50">{p.nom}</h3>
+          </div>
+          <span className="shrink-0 border border-emerald-500/20 bg-emerald-500/[0.05] px-2 py-[2px] text-[8px] font-black uppercase tracking-[0.18em] text-emerald-400/40">
+            {p.prix}
+          </span>
+        </div>
+        <span className="w-fit border border-red-500/15 bg-red-500/[0.04] px-2 py-[2px] text-[8px] font-black uppercase tracking-[0.18em] text-red-300/30">
+          {p.tag}
+        </span>
+        <p className="text-[11px] leading-relaxed text-white/20 line-clamp-2">{p.desc}</p>
+        <div className="mt-auto border border-white/[0.06] py-2 text-center text-[9px] font-black uppercase tracking-[0.22em] text-white/15">
+          Disponible bientôt
+        </div>
+      </div>
+    </article>
   );
 }
 
-function PricePill({ children }: { children: string }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
-      {children}
-    </span>
-  );
-}
-
-function ChipMini({ children }: { children: string }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
-      {children}
-    </span>
-  );
-}
+/* =========================================================
+   PAGE
+========================================================= */
 
 export default function ShopPage() {
   const track = [...sponsorLogos, ...sponsorLogos];
 
   return (
-    <div className="bg-black text-white">
-      {/* ===== Sponsors ===== */}
-      <div className="marquee border-y border-red-600/70 bg-black">
+    <div className="min-h-screen bg-[#07070a] text-white">
+
+      {/* marquee */}
+      <div className="marquee border-y border-red-600/50 bg-black">
         <div className="marquee-track">
           {track.map((src, i) => (
             <div className="marquee-item" key={i}>
-              <Image src={src} alt={`Sponsor ${i + 1}`} width={120} height={60} />
+              <Image src={src} alt="sponsor" width={120} height={60} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* ===== Background premium ===== */}
-      <section className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,14,0.70),rgba(0,0,0,0.96))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_22%_8%,rgba(239,68,68,0.22),transparent_55%),radial-gradient(900px_520px_at_85%_0%,rgba(255,255,255,0.08),transparent_55%),radial-gradient(900px_520px_at_70%_85%,rgba(239,68,68,0.12),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:56px_56px]" />
-        </div>
+      <div className="pt-[64px]" />
 
-        <div className="pt-[64px]" />
-
-        {/* ===== HERO ===== */}
-        <header className="relative mx-auto max-w-7xl px-6 pt-10 pb-8 lg:px-10">
-          <div className="flex flex-col items-center gap-6 text-center">
-            <div className="inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-black/55 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.26em] text-red-200 backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-red-500" />
-              DeathMark Shop
+      {/* ── HERO ── */}
+      <header className="border-b border-white/[0.06]">
+        <div className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10 sm:py-20">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="mb-5 flex items-center gap-3">
+                <div className="h-[2px] w-8 bg-red-500" />
+                <span className="text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
+                  Shop Officiel · Bientôt
+                </span>
+              </div>
+              <h1 className="text-5xl font-black uppercase leading-none tracking-[-0.02em] text-white sm:text-6xl lg:text-[5rem]">
+                Le shop<br />
+                <span className="text-red-500">arrive.</span>
+              </h1>
+              <p className="mt-6 max-w-lg text-sm leading-relaxed text-white/45 sm:text-base">
+                Maillots, hoodies, setup, streetwear et éditions collector.
+                Ouverture annoncée en avant-première sur Discord et X.
+              </p>
             </div>
 
-            <h1 className="text-4xl font-extrabold leading-tight md:text-5xl lg:text-[3.4rem]">
-              Le <span className="text-red-500">Shop officiel</span> arrive.
-            </h1>
-
-            <p className="max-w-3xl text-sm md:text-base text-white/85">
-              Drops maillots, hoodies, accessoires setup, affiches et packs fans.
-              Ouverture annoncee sur nos reseaux lors du premier lancement.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-2">
-              <ChipMini>Maillots</ChipMini>
-              <ChipMini>Streetwear</ChipMini>
-              <ChipMini>Setup</ChipMini>
-              <ChipMini>Collector</ChipMini>
-              <ChipMini>Fan packs</ChipMini>
-            </div>
-
-            <div className="mt-2 flex flex-wrap justify-center gap-3">
-              <Link
-                href="https://x.com/DeathMarkEsport"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-red-600 px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white
-                           shadow-[0_0_22px_rgba(239,68,68,0.9)] transition
-                           hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
-              >
-                Suivre les drops sur X
-              </Link>
-
-              <Link
-                href="https://discord.gg/Zu4FP5pU9M"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                           transition hover:border-red-500/45 hover:text-red-200"
-              >
-                Rejoindre le Discord
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* ===== CONTENT ===== */}
-        <main className="relative mx-auto w-full max-w-[110rem] px-6 pb-24 lg:px-12">
-          <div className="relative">
-            {/* ===== Grid produits ===== */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {articlesShop.map((article) => (
-                <article
-                  key={article.id}
-                  className="group relative overflow-hidden rounded-3xl border border-red-500/18 bg-black/60
-                             shadow-[0_18px_60px_rgba(0,0,0,0.60)] backdrop-blur-xl transition
-                             hover:-translate-y-0.5 hover:border-red-500/40"
-                >
-                  {/* glow */}
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-red-500/14 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                    <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.10)_1px,transparent_1px)] [background-size:64px_64px]" />
-                  </div>
-
-                  {/* image */}
-                  <div className="relative h-64 w-full border-b border-white/10 bg-black/55">
-                    <Image
-                      src={article.imageSrc}
-                      alt={article.nom}
-                      fill
-                      className="object-contain p-7 transition-transform duration-300 group-hover:scale-[1.03]"
-                    />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-600/40 to-transparent" />
-                  </div>
-
-                  {/* contenu */}
-                  <div className="relative flex flex-1 flex-col px-6 pb-6 pt-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/55">
-                          {article.type}
-                        </p>
-                        <h2 className="mt-1 truncate text-lg font-extrabold">
-                          {article.nom}
-                        </h2>
-                      </div>
-                      <PricePill>{article.prix}</PricePill>
-                    </div>
-
-                    <div className="mt-3">
-                      <Badge>{article.tag}</Badge>
-                    </div>
-
-                    <p className="mt-4 text-sm leading-relaxed text-white/85">
-                      {article.description}
-                    </p>
-
-                    <div className="mt-6">
-                      <button
-                        disabled
-                        className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-full
-                                   border border-white/12 bg-white/[0.04] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.22em]
-                                   text-white/65"
-                      >
-                        Coming soon
-                      </button>
-                    </div>
-                  </div>
-                </article>
+            <div className="flex divide-x divide-white/[0.07] border border-white/[0.07]">
+              {[
+                { val: "6",      label: "Produits"   },
+                { val: "Soon",   label: "Lancement"  },
+                { val: "DME",    label: "Exclusif"   },
+              ].map((s) => (
+                <div key={s.label} className="px-7 py-6 text-center">
+                  <p className="text-2xl font-black text-white/30">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/20">{s.label}</p>
+                </div>
               ))}
             </div>
-
-            {/* ===== Overlay clean (non agressif) ===== */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="mx-auto w-full max-w-2xl px-4">
-                <div className="relative overflow-hidden rounded-3xl border border-red-500/22 bg-black/70 p-8 text-center shadow-[0_18px_60px_rgba(0,0,0,0.70)] backdrop-blur-xl">
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-red-500/14 blur-3xl" />
-                    <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-white/8 blur-3xl" />
-                  </div>
-
-                  <div className="relative">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-red-300">
-                      Coming soon
-                    </p>
-                    <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                      Ouverture du shop bientot
-                    </h2>
-                    <p className="mt-4 text-sm md:text-base text-white/85">
-                      La boutique est en preparation. Les premiers drops seront
-                      annonces sur nos reseaux (dates, quantites, tailles et
-                      livraison).
-                    </p>
-
-                    <div className="mt-7 flex flex-wrap justify-center gap-3">
-                      <Link
-                        href="https://x.com/DeathMarkEsport"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center rounded-full bg-red-600 px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white
-                                   shadow-[0_0_22px_rgba(239,68,68,0.9)] transition
-                                   hover:bg-red-500 hover:shadow-[0_0_30px_rgba(248,113,113,1)]"
-                      >
-                        Activer les annonces sur X
-                      </Link>
-
-                      <Link
-                        href="https://discord.gg/Zu4FP5pU9M"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/90
-                                   transition hover:border-red-500/45 hover:text-red-200"
-                      >
-                        Rejoindre Discord
-                      </Link>
-                    </div>
-
-                    <p className="mt-6 text-[11px] text-white/55">
-                      Conseil : annonce drop + codes promo + tailles en avant-premiere sur Discord.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* voile global pour calmer le grid derriere l overlay */}
-            <div className="pointer-events-none absolute inset-0 bg-black/55 backdrop-blur-[2px]" />
           </div>
-        </main>
-      </section>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
+
+        {/* ── GRILLE PRODUITS + OVERLAY ── */}
+        <div className="relative">
+
+          {/* label */}
+          <div className="mb-8 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/15">
+              Aperçu des produits
+            </span>
+            <div className="h-px flex-1 bg-white/[0.04]" />
+          </div>
+
+          {/* grille floutée */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 blur-[2px] select-none pointer-events-none">
+            {produits.map((p) => <CarteProduit key={p.id} p={p} />)}
+          </div>
+
+          {/* overlay central coming soon */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="mx-auto w-full max-w-xl bg-[#0d0d0f] px-10 py-12 text-center shadow-[0_0_80px_rgba(0,0,0,0.9)]">
+              <div className="h-[2px] w-full bg-red-500 mb-8" />
+
+              <p className="text-[10px] font-black uppercase tracking-[0.38em] text-red-500/70 mb-4">
+                Coming Soon
+              </p>
+              <h2 className="text-3xl font-black uppercase leading-none tracking-tight text-white sm:text-4xl">
+                Ouverture<br />du shop bientôt
+              </h2>
+              <p className="mt-5 text-sm leading-relaxed text-white/40">
+                La boutique est en préparation. Premiers drops annoncés en
+                avant-première sur nos réseaux — dates, quantités, tailles et livraison.
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <Link
+                  href="https://x.com/DeathMarkEsport"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.25em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500"
+                >
+                  Activer les notifs sur X
+                </Link>
+                <Link
+                  href="https://discord.gg/Zu4FP5pU9M"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.25em] text-white/50 transition-all hover:border-white/25 hover:text-white"
+                >
+                  Rejoindre Discord
+                </Link>
+              </div>
+
+              <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.22em] text-white/20">
+                Codes promo & tailles en avant-première sur Discord
+              </p>
+
+              <div className="mt-8 h-[2px] w-full bg-white/[0.05]" />
+            </div>
+          </div>
+
+          {/* voile sur le blur */}
+          <div className="pointer-events-none absolute inset-0 bg-black/40" />
+        </div>
+
+        <div className="my-16 border-t border-white/[0.06]" />
+
+        {/* ── CE QUI ARRIVE ── */}
+        <div className="mb-16">
+          <div className="mb-10 flex items-center gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
+              Ce qui arrive
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
+
+          <div className="grid gap-px bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { num: "01", titre: "Maillots",     texte: "Maillot officiel DME porté par les rosters. Édition 2026." },
+              { num: "02", titre: "Streetwear",   texte: "Hoodies, casquettes et vêtements à l'identité DME." },
+              { num: "03", titre: "Setup",         texte: "Tapis XL, accessoires et produits pour ton poste de jeu." },
+              { num: "04", titre: "Collector",     texte: "Affiches et éditions limitées pour marquer les résultats DME." },
+            ].map((b) => (
+              <div key={b.num} className="bg-[#0a0a0c] px-6 py-8">
+                <p className="font-mono text-[10px] font-black text-red-500/30 mb-4">{b.num}</p>
+                <h3 className="text-[14px] font-black uppercase tracking-tight text-white/40 mb-2">{b.titre}</h3>
+                <p className="text-sm leading-relaxed text-white/25">{b.texte}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── CTA FINAL ── */}
+        <div className="flex flex-col gap-6 border border-white/[0.06] bg-[#0d0d0f] px-10 py-10 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500/50 mb-2">
+              Sois le premier informé
+            </p>
+            <h2 className="text-xl font-black uppercase tracking-tight text-white/60 sm:text-2xl">
+              Annonces drop en avant-première.
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="https://discord.gg/Zu4FP5pU9M"
+              target="_blank" rel="noopener noreferrer"
+              className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_24px_rgba(239,68,68,0.25)] transition-all hover:bg-red-500"
+            >
+              Discord
+            </Link>
+            <Link
+              href="https://x.com/DeathMarkEsport"
+              target="_blank" rel="noopener noreferrer"
+              className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/40 transition-all hover:border-white/25 hover:text-white"
+            >
+              X / Twitter
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
