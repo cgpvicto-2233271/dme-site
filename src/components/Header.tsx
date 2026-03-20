@@ -48,7 +48,7 @@ export default function Header({ role }: Props) {
     { href: "/equipes",      label: "Équipes"     },
     { href: "/hall-of-fame", label: "Résultats"   },
     { href: "/recrutement",  label: "Recrutement" },
-    { href: "/social-media", label: "Social"      },
+    { href: "/social", label: "Social"      },
     { href: "/shop",         label: "Shop"        },
     { href: "/contact",      label: "Contact"     },
   ] as const, []);

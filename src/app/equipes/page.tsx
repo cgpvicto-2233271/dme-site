@@ -69,8 +69,8 @@ const GAMES: GameItem[] = [
     src:     "/medias/commun/banner-rocketleague.png",
     label:   "Rocket League",
     sub:     "Compétitif",
-    rosters: 1,
-    players: 3,
+    rosters: 4,
+    players: 12,
   },
   {
     href:    "/equipes/marvel-rivals",
@@ -78,7 +78,7 @@ const GAMES: GameItem[] = [
     label:   "Marvel Rivals",
     sub:     "Compétitif",
     rosters: 1,
-    players: 5,
+    players: 7,
   },
 ];
 

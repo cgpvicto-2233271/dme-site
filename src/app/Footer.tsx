@@ -22,7 +22,7 @@ const navLinks = [
   { href: "/equipes",      label: "Équipes"     },
   { href: "/hall-of-fame", label: "Résultats"   },
   { href: "/recrutement",  label: "Recrutement" },
-  { href: "/social-media", label: "Social"      },
+  { href: "/social", label: "Social"      },
   { href: "/shop",         label: "Shop"        },
   { href: "/staff",        label: "Staff"       },
   { href: "/contact",      label: "Contact"     },

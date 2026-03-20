@@ -116,16 +116,16 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(800px_500px_at_15%_10%,rgba(239,68,68,0.20),transparent_55%)]" />
 
         {/* contenu hero — ancré en bas */}
-        <div className="relative z-10 mx-auto flex min-h-screen max-w-[100rem] flex-col justify-end px-6 pb-20 sm:px-10">
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-[120rem] flex-col justify-end px-6 pb-20 sm:px-10">
 
-          <div className="mb-5 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-3">
             <div className="h-[2px] w-10 bg-red-500" />
             <span className="text-[11px] font-black uppercase tracking-[0.35em] text-red-500">
               DeathMark E-Sports · Québec · 2026
             </span>
           </div>
 
-          <h1 className="max-w-5xl text-6xl font-black uppercase leading-none tracking-[-0.02em] text-white sm:text-7xl lg:text-[6.5rem]">
+          <h1 className="max-w-5xl text-6xl font-black uppercase leading-none tracking-[-0.02em] text-white sm:text-7xl lg:text-[4.3rem]">
             Une structure<br />
             faite pour<br />
             <span className="text-red-500">gagner.</span>
@@ -251,7 +251,7 @@ export default function Home() {
               {
                 num:   "03",
                 titre: "Identité Québec",
-                texte: "On représente le Québec sur la scène NA avec fierté. DME veut devenir la référence locale — une org reconnue, respectée, qui rivalise au plus haut niveau.",
+                texte: "On représente le Québec sur la scène NA avec fierté. DME veut devenir la référence national — une org reconnue, respectée, qui rivalise au plus haut niveau.",
               },
             ].map((b) => (
               <div key={b.num} className="bg-[#0a0a0c] px-8 py-12">
@@ -266,7 +266,7 @@ export default function Home() {
 
           <div className="mt-px bg-[#0d0d0f] px-8 py-10">
             <p className="text-center text-xl font-black uppercase tracking-tight text-white/15 sm:text-2xl">
-              &ldquo; Discipline · Progression · Constance · Résultats &rdquo;
+              &ldquo; Discipline · Loyauté · Progression · Constance · Résultats  &rdquo;
             </p>
           </div>
         </div>
