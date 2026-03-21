@@ -297,7 +297,7 @@ export default function Home() {
 
             <div className="flex flex-col gap-6">
               {[
-                { titre: "Dominer les circuits semi-pro NA",  texte: "AVL, LQL, Aegis — on vise le sommet de chaque ligue où on joue. Les résultats suivent le travail." },
+                { titre: "Dominer les circuits semi-pro NA",  texte: "NACL, RLCS, Contenders — on vise le sommet de chaque ligue où on joue. Les résultats suivent le travail." },
                 { titre: "Bâtir une filière complète",        texte: "De l'Académie au Semi-Pro : un pipeline pour que les meilleurs talents QC puissent évoluer et se dépasser." },
                 { titre: "Rayonner en dehors du jeu",         texte: "Contenu, LAN, partenariats — DME construit une marque forte. On veut être reconnus partout où ça compte." },
               ].map((item) => (
