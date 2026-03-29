@@ -92,30 +92,72 @@ const feed = [
 ] as const;
 
 /* =========================================================
+   6MANS — données live depuis l'API
+========================================================= */
+
+type Joueur6Mans = {
+  discord_id: number;
+  username: string;
+  mmr: number;
+  wins: number;
+  losses: number;
+};
+
+async function getTop6Mans(): Promise<Joueur6Mans[]> {
+  try {
+    // L'URL est relative — fonctionne en SSR Next.js avec NEXT_PUBLIC_SITE_URL
+    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const res = await fetch(`${base}/api/6mans/leaderboard?limit=5`, {
+      next: { revalidate: 60 }, // revalide toutes les 60s
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
+function getRangDme(mmr: number, wins: number): { nom: string; couleur: string } {
+  const paliers = [
+    { mmrMin: 2100, winsMin: 200, nom: "SS",          couleur: "#f59e0b" },
+    { mmrMin: 1900, winsMin: 150, nom: "S",           couleur: "#63b3ed" },
+    { mmrMin: 1700, winsMin: 100, nom: "A",           couleur: "#a78bfa" },
+    { mmrMin: 1500, winsMin: 75,  nom: "B",           couleur: "#60a5fa" },
+    { mmrMin: 1350, winsMin: 50,  nom: "C",           couleur: "#34d399" },
+    { mmrMin: 1200, winsMin: 30,  nom: "D",           couleur: "#fb923c" },
+    { mmrMin: 1050, winsMin: 15,  nom: "E",           couleur: "#f87171" },
+    { mmrMin: 900,  winsMin: 5,   nom: "F",           couleur: "#9ca3af" },
+  ];
+  for (const p of paliers) {
+    if (wins >= p.winsMin && mmr >= p.mmrMin) return p;
+  }
+  return { nom: "NC", couleur: "#4b5563" };
+}
+
+/* =========================================================
    PAGE
 ========================================================= */
 
-export default function Home() {
+export default async function Home() {
+  const top6mans = await getTop6Mans();
+
   return (
     <div className="min-h-screen bg-[#07070a] text-white">
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative min-h-screen overflow-hidden pt-[0px]">
 
-        {/* vidéo — object-position descendue */}
         <video
-  className="absolute inset-0 h-full w-full object-cover"
-  style={{ objectPosition: "center 100%" }}
-  src="/medias/alchimie-dme-fixed.mp4"
-  autoPlay muted loop playsInline preload="auto"
-/>
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: "center 100%" }}
+          src="/medias/alchimie-dme-fixed.mp4"
+          autoPlay muted loop playsInline preload="auto"
+        />
 
-        {/* overlays */}
         <div className="absolute inset-0 bg-black/60" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#07070a]" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(800px_500px_at_15%_10%,rgba(239,68,68,0.20),transparent_55%)]" />
 
-        {/* contenu hero — ancré en bas */}
         <div className="relative z-10 mx-auto flex min-h-screen max-w-[120rem] flex-col justify-end px-6 pb-20 sm:px-10">
 
           <div className="mb-6 flex items-center gap-3">
@@ -155,12 +197,17 @@ export default function Home() {
             >
               Résultats
             </Link>
+            <Link
+              href="/6mans"
+              className="border border-red-500/40 px-10 py-4 text-[12px] font-black uppercase tracking-[0.25em] text-red-400/80 transition-all hover:border-red-500 hover:text-red-400"
+            >
+              6Mans RL →
+            </Link>
           </div>
 
-          {/* stats */}
           <div className="mt-14 flex flex-wrap gap-10">
             {[
-              { val: "15+",  label: "Rosters actifs" },
+              { val: "15+", label: "Rosters actifs" },
               { val: "4",   label: "Jeux"           },
               { val: "QC",  label: "Représente"     },
             ].map((s) => (
@@ -169,6 +216,102 @@ export default function Home() {
                 <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.25em] text-white/30">{s.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6MANS SNAPSHOT ───────────────────────────────── */}
+      <section className="border-y border-white/[0.06] bg-[#09090c]">
+        <div className="mx-auto max-w-[100rem] px-6 py-12 sm:px-10">
+
+          <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-4">
+              <div className="h-[2px] w-8 bg-red-500" />
+              <span className="text-[10px] font-black uppercase tracking-[0.38em] text-red-500">
+                DME 6Mans · Rocket League
+              </span>
+              <span className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-white/25">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                Live
+              </span>
+            </div>
+            <Link
+              href="/6mans"
+              className="text-[10px] font-black uppercase tracking-[0.25em] text-red-500/60 transition-colors hover:text-red-400"
+            >
+              Voir le classement complet →
+            </Link>
+          </div>
+
+          {top6mans.length === 0 ? (
+            /* Pas encore de joueurs — placeholder */
+            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              {[1,2,3,4,5].map((n) => (
+                <div key={n} className="bg-[#0d0d0f] px-5 py-6 opacity-30 animate-pulse">
+                  <div className="h-3 w-16 bg-white/10 mb-3 rounded" />
+                  <div className="h-4 w-24 bg-white/10 mb-2 rounded" />
+                  <div className="h-6 w-12 bg-white/10 rounded" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid gap-px bg-white/[0.04] sm:grid-cols-3 lg:grid-cols-5">
+              {top6mans.map((joueur, idx) => {
+                const rang = getRangDme(joueur.mmr, joueur.wins);
+                const total = joueur.wins + joueur.losses;
+                const wr = total ? Math.round((joueur.wins / total) * 100) : 0;
+                return (
+                  <div key={joueur.discord_id} className="group bg-[#0a0a0c] px-5 py-6 transition-all hover:bg-[#0d0d0f]">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span
+                        className="text-[9px] font-black uppercase tracking-[0.2em]"
+                        style={{ color: idx === 0 ? "#f59e0b" : idx === 1 ? "#94a3b8" : idx === 2 ? "#cd7c4e" : "#ffffff30" }}
+                      >
+                        #{idx + 1}
+                      </span>
+                      <span
+                        className="text-[9px] font-black uppercase tracking-[0.15em] px-2 py-0.5"
+                        style={{ color: rang.couleur, background: `${rang.couleur}18` }}
+                      >
+                        {rang.nom}
+                      </span>
+                    </div>
+                    <p className="mb-1 text-sm font-black uppercase tracking-tight text-white truncate">
+                      {joueur.username}
+                    </p>
+                    <p className="text-2xl font-black text-white">{joueur.mmr}</p>
+                    <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white/25">MMR</p>
+                    <div className="mt-3 flex items-center gap-2">
+                      <div className="h-[2px] flex-1 bg-white/[0.06]">
+                        <div className="h-full bg-red-600" style={{ width: `${wr}%` }} />
+                      </div>
+                      <span className="text-[9px] text-white/30">{wr}%</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Files actives */}
+          <div className="mt-4 grid gap-2 sm:grid-cols-4">
+            {(["open","champion","gc","ssl"] as const).map((q) => {
+              const labels: Record<string, string> = { open: "Open", champion: "Champion+", gc: "GC+", ssl: "SSL" };
+              const mins:   Record<string, string> = { open: "0",    champion: "1300",       gc: "1500", ssl: "1700" };
+              return (
+                <Link
+                  key={q}
+                  href={`/6mans?queue=${q}`}
+                  className="group flex items-center justify-between border border-white/[0.04] bg-[#0d0d0f] px-4 py-3 transition-all hover:border-red-500/20 hover:bg-[#111]"
+                >
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white">{labels[q]}</p>
+                    <p className="text-[9px] text-white/25 tracking-[0.1em]">min {mins[q]} MMR</p>
+                  </div>
+                  <span className="text-[10px] font-black text-red-500/40 transition-colors group-hover:text-red-400">→</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -333,7 +476,6 @@ export default function Home() {
               >
                 <div className={`w-full shrink-0 sm:w-[3px] ${item.highlight ? "h-[2px] sm:h-auto bg-red-500" : "h-[2px] sm:h-auto bg-white/[0.06]"}`} />
                 <div className="flex flex-1 flex-col gap-3 p-7 sm:flex-row sm:items-start sm:gap-8">
-                  {/* méta */}
                   <div className="shrink-0 sm:w-48">
                     <span className="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/70">
                       {item.kicker}
@@ -342,7 +484,6 @@ export default function Home() {
                       {item.tag}
                     </div>
                   </div>
-                  {/* contenu */}
                   <div className="flex flex-1 flex-col gap-2">
                     <h3 className="text-base font-black uppercase leading-tight tracking-tight text-white sm:text-lg">
                       {item.titre}
@@ -385,7 +526,6 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="group relative block overflow-hidden bg-[#0d0d0f] transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(239,68,68,0.08)]"
                 >
-                  {/* thumbnail */}
                   <div className="relative aspect-video w-full overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -395,7 +535,6 @@ export default function Home() {
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/15" />
-                    {/* play */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="flex h-12 w-12 items-center justify-center bg-red-600/90 transition-transform duration-300 group-hover:scale-110">
                         <div className="ml-1 border-y-[7px] border-l-[12px] border-y-transparent border-l-white" />
@@ -405,7 +544,6 @@ export default function Home() {
                       VOD
                     </span>
                   </div>
-                  {/* infos */}
                   <div className="border-t border-white/[0.06] px-4 py-4">
                     <p className="text-[9px] font-black uppercase tracking-[0.25em] text-red-500/60 mb-1">
                       {v.ligue}
@@ -463,7 +601,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* bouton fixe */}
       <Link
         href="/equipes"
         className="fixed bottom-4 right-4 z-30 border border-white/20 bg-black/70 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white/80 backdrop-blur transition hover:border-red-500/40 hover:text-white"
