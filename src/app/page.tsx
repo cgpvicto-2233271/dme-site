@@ -297,7 +297,7 @@ export default async function Home() {
           <div className="mt-4 grid gap-2 sm:grid-cols-4">
             {(["open","champion","gc","ssl"] as const).map((q) => {
               const labels: Record<string, string> = { open: "Open", champion: "Champion+", gc: "GC+", ssl: "SSL" };
-              const mins:   Record<string, string> = { open: "0",    champion: "1300",       gc: "1500", ssl: "1700" };
+              const mins:   Record<string, string> = { open: "0",    champion: "1100+",       gc: "1500+", ssl: "1900+" };
               return (
                 <Link
                   key={q}
