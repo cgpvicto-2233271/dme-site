@@ -44,13 +44,14 @@ export default function Header({ role }: Props) {
   }
 
   const liensNav = useMemo(() => [
-    { href: "/",             label: "Accueil"     },
-    { href: "/equipes",      label: "Équipes"     },
-    { href: "/hall-of-fame", label: "Résultats"   },
-    { href: "/recrutement",  label: "Recrutement" },
-    { href: "/social", label: "Social"      },
-    { href: "/shop",         label: "Shop"        },
-    { href: "/contact",      label: "Contact"     },
+    { href: "/",             label: "Accueil"    },
+    { href: "/equipes",      label: "Équipes"    },
+    { href: "/hall-of-fame", label: "Résultats"  },
+    { href: "/na-premier",   label: "NA Premier" },
+    { href: "/recrutement",  label: "Recrutement"},
+    { href: "/social-media", label: "Social"     },
+    { href: "/shop",         label: "Shop"       },
+    { href: "/contact",      label: "Contact"    },
   ] as const, []);
 
   return (
@@ -59,7 +60,7 @@ export default function Header({ role }: Props) {
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
           scrolled
             ? "bg-black/85 backdrop-blur-2xl border-b border-red-600/50 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
-            : "bg-black/50 backdrop-blur-x2 border-b border-red-600/25"
+            : "bg-black/50 backdrop-blur-xl border-b border-red-600/25"
         }`}
       >
         <div className="mx-auto flex h-[74px] w-full max-w-[2000px] items-center gap-8 px-5 md:px-10">
@@ -93,7 +94,7 @@ export default function Header({ role }: Props) {
               >
                 {item.label}
                 {isActive(item.href) && (
-                  <span className="absolute inset-x-4 bottom-0 h-[1.5px] bg-red-500 rounded-full" />
+                  <span className="absolute inset-x-4 bottom-0 h-[1.5px] rounded-full bg-red-500" />
                 )}
               </Link>
             ))}
@@ -106,7 +107,7 @@ export default function Header({ role }: Props) {
               >
                 Scouting
                 {isActive("/scouting") && (
-                  <span className="absolute inset-x-4 bottom-0 h-[1.5px] bg-red-500 rounded-full" />
+                  <span className="absolute inset-x-4 bottom-0 h-[1.5px] rounded-full bg-red-500" />
                 )}
               </Link>
             )}
@@ -201,8 +202,8 @@ export default function Header({ role }: Props) {
 
       {/* MENU MOBILE */}
       <div
-        className={`fixed inset-x-0 top-[64px] z-40 overflow-hidden border-b border-white/[0.06] bg-black/95 backdrop-blur-2xl transition-all duration-300 md:hidden ${
-          mobileOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+        className={`fixed inset-x-0 top-[74px] z-40 overflow-hidden border-b border-white/[0.06] bg-black/95 backdrop-blur-2xl transition-all duration-300 md:hidden ${
+          mobileOpen ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <nav className="flex flex-col px-2 py-3">
@@ -217,7 +218,7 @@ export default function Header({ role }: Props) {
               }`}
             >
               {isActive(item.href) && (
-                <span className="h-4 w-[2px] bg-red-500 rounded-full shrink-0" />
+                <span className="h-4 w-[2px] shrink-0 rounded-full bg-red-500" />
               )}
               {item.label}
             </Link>
@@ -225,7 +226,7 @@ export default function Header({ role }: Props) {
           {voirScouting && (
             <Link
               href="/scouting"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-white/40 hover:text-white/70 transition-colors"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-white/40 transition-colors hover:text-white/70"
             >
               Scouting
             </Link>
@@ -237,7 +238,7 @@ export default function Header({ role }: Props) {
             {!estConnecte ? (
               <Link
                 href="/connexion"
-                className="text-[11px] font-black uppercase tracking-[0.18em] text-white/30 hover:text-white/60 transition-colors"
+                className="text-[11px] font-black uppercase tracking-[0.18em] text-white/30 transition-colors hover:text-white/60"
               >
                 Connexion
               </Link>
@@ -245,7 +246,7 @@ export default function Header({ role }: Props) {
               <button
                 type="button"
                 onClick={() => logout()}
-                className="text-[11px] font-black uppercase tracking-[0.18em] text-red-400/50 hover:text-red-400 transition-colors"
+                className="text-[11px] font-black uppercase tracking-[0.18em] text-red-400/50 transition-colors hover:text-red-400"
               >
                 Déconnexion
               </button>
