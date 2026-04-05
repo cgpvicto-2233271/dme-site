@@ -105,13 +105,13 @@ type Joueur6Mans = {
 
 async function getTop6Mans(): Promise<Joueur6Mans[]> {
   try {
-    // L'URL est relative — fonctionne en SSR Next.js avec NEXT_PUBLIC_SITE_URL
     const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
     const res = await fetch(`${base}/api/6mans/leaderboard?limit=5`, {
-      next: { revalidate: 60 }, // revalide toutes les 60s
+      next: { revalidate: 60 },
     });
     if (!res.ok) return [];
-    return res.json();
+    const data = await res.json();
+    return data.joueurs ?? [];  // ← extraire le bon champ
   } catch {
     return [];
   }
