@@ -105,7 +105,7 @@ type Joueur6Mans = {
 
 async function getTop6Mans(): Promise<Joueur6Mans[]> {
   try {
-    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://deathmarkesport.com";
     const res = await fetch(`${base}/api/6mans/leaderboard?limit=5`, {
       next: { revalidate: 60 },
     });
