@@ -44,9 +44,9 @@ function ResultRow({ item, index }: { item: Achievement; index: number }) {
       transition={{ duration: 0.55, delay: (index % 6) * 0.05, ease }}
     >
       {item.bannerSrc && (
-        <div className="relative h-[200px] w-full overflow-hidden bg-[#050505]">
+        <div className="relative aspect-video w-full overflow-hidden bg-[#050505]">
           <Image src={item.bannerSrc} alt={item.bannerAlt ?? item.titre} fill
-            className="object-contain object-center brightness-[0.82] transition duration-500 group-hover:brightness-[1.0]" />
+            className="object-cover object-center brightness-[0.82] transition duration-500 group-hover:brightness-[1.0]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
           <div className="absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
         </div>

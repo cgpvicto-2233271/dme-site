@@ -232,14 +232,14 @@ function CarteManager({ manager }: { manager: Manager }) {
 
 function TableauConference({ conf }: { conf: ConferenceData }) {
   return (
-    <div className="flex flex-col">
-      <div className="bg-[#0f0d0d] px-5 py-3 border-b border-white/[0.05]">
+    <div className="flex flex-col overflow-x-auto">
+      <div className="bg-[#0f0d0d] px-5 py-3 border-b border-white/[0.05] min-w-[320px]">
         <p className="text-[9px] font-black uppercase tracking-[0.32em] text-white/25">
           Conférence {conf.name}
         </p>
       </div>
       {/* col headers */}
-      <div className="grid grid-cols-[2rem_1fr_5rem_6rem_3.5rem] border-b border-white/[0.04] px-5 py-2">
+      <div className="grid grid-cols-[2rem_1fr_5rem_6rem_3.5rem] border-b border-white/[0.04] px-5 py-2 min-w-[320px]">
         {["#", "Équipe", "Match", "Games", "GD"].map((h) => (
           <span key={h} className="text-[8px] font-black uppercase tracking-[0.2em] text-white/15 last:text-right">{h}</span>
         ))}
@@ -248,7 +248,7 @@ function TableauConference({ conf }: { conf: ConferenceData }) {
       {conf.teams.map((row) => (
         <div
           key={row.team}
-          className={`grid grid-cols-[2rem_1fr_5rem_6rem_3.5rem] items-center border-b border-white/[0.03] px-5 py-2.5 last:border-0 transition-colors ${
+          className={`grid grid-cols-[2rem_1fr_5rem_6rem_3.5rem] items-center border-b border-white/[0.03] px-5 py-2.5 last:border-0 transition-colors min-w-[320px] ${
             row.isDME ? "bg-red-600/[0.07] hover:bg-red-600/10" : "hover:bg-white/[0.015]"
           }`}
         >

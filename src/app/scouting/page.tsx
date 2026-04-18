@@ -309,13 +309,17 @@ function PlayerCard({
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden mt-2 border border-white/[0.04]"
                 >
-                  {/* col headers */}
-                  <div className="grid grid-cols-[3rem_1fr_5rem_6rem_5rem_4rem_3.5rem] items-center gap-2 px-4 py-1.5 bg-black/30">
-                    {["Résultat","Champion","Rôle","Score","KDA","CS/m","Durée"].map((h) => (
-                      <span key={h} className="text-[8px] font-black uppercase tracking-[0.15em] text-white/15 last:text-right">{h}</span>
-                    ))}
+                  <div className="overflow-x-auto">
+                    {/* col headers */}
+                    <div className="grid grid-cols-[3rem_1fr_5rem_6rem_5rem_4rem_3.5rem] items-center gap-2 px-4 py-1.5 bg-black/30 min-w-[480px]">
+                      {["Résultat","Champion","Rôle","Score","KDA","CS/m","Durée"].map((h) => (
+                        <span key={h} className="text-[8px] font-black uppercase tracking-[0.15em] text-white/15 last:text-right">{h}</span>
+                      ))}
+                    </div>
+                    <div className="min-w-[480px]">
+                      {player.matches.map((m) => <MatchRow key={m.matchId} match={m} />)}
+                    </div>
                   </div>
-                  {player.matches.map((m) => <MatchRow key={m.matchId} match={m} />)}
                 </motion.div>
               )}
             </AnimatePresence>
