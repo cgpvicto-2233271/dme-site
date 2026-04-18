@@ -1,340 +1,246 @@
-// src/app/staff/page.tsx
-import type { Metadata } from "next";
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { useLang } from "@/components/LanguageContext";
 
-export const metadata: Metadata = {
-  title: "Staff | DeathMark E-Sports",
-};
+const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
-const sponsorLogos = [
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/passion.png",
-];
-
-/* =========================================================
-   STAFF
-========================================================= */
+type Tier = "direction" | "management" | "ca";
 
 interface StaffMember {
-  id:          string;
-  role:        string;
-  tier:        "direction" | "management" | "ca";
-  prenom:      string;
-  pseudo:      string;
-  nom:         string;
-  email:       string;
-  desc:        string;
-  tags:        string[];
+  id:     string;
+  role:   string;
+  tier:   Tier;
+  prenom: string;
+  pseudo: string;
+  nom:    string;
+  email:  string;
+  descFr: string;
+  descEn: string;
+  tags:   string[];
 }
 
-const staff: StaffMember[] = [
-  /* ── DIRECTION ── */
+const STAFF: StaffMember[] = [
   {
-    id:     "pierre",
-    role:   "Owner",
-    tier:   "direction",
-    prenom: "Pierre",
-    pseudo: "Seanflex",
-    nom:    "Lavoie",
-    email:  "diablos.qc@gmail.com",
-    desc:   "Pilote la vision globale de DME — décisions stratégiques, direction et stabilité de l'organisation. Présent autant sur le terrain qu'en coulisses.",
-    tags:   ["Direction", "Stratégie", "Vision"],
+    id:"pierre", role:"Owner", tier:"direction",
+    prenom:"Pierre", pseudo:"Seanflex", nom:"Lavoie",
+    email:"diablos.qc@gmail.com",
+    descFr:"Pilote la vision globale de DME — décisions stratégiques, direction et stabilité de l'organisation. Présent autant sur le terrain qu'en coulisses.",
+    descEn:"Drives DME's global vision — strategic decisions, direction and organizational stability. Present both on the field and behind the scenes.",
+    tags:["Direction","Stratégie","Vision"],
   },
   {
-    id:     "alex",
-    role:   "Co-Owner",
-    tier:   "direction",
-    prenom: "Alex",
-    pseudo: "Zeus",
-    nom:    "Lallemand",
-    email:  "deathmarkesport@gmail.com",
-    desc:   "Supporte la direction sur les opérations et l'exécution au quotidien. Oriente les priorités et accompagne les projets.",
-    tags:   ["Opérations", "Support", "Structuration"],
+    id:"alex", role:"Co-Owner", tier:"direction",
+    prenom:"Alex", pseudo:"Zeus", nom:"Lallemand",
+    email:"deathmarkesport@gmail.com",
+    descFr:"Supporte la direction sur les opérations et l'exécution au quotidien. Oriente les priorités et accompagne les projets.",
+    descEn:"Supports leadership on daily operations and execution. Shapes priorities and accompanies projects.",
+    tags:["Opérations","Support","Structuration"],
   },
   {
-    id:     "mathieu",
-    role:   "CEO",
-    tier:   "direction",
-    prenom: "Mathieu",
-    pseudo: "Coussinho",
-    nom:    "Cousança",
-    email:  "mathcousanca@gmail.com",
-    desc:   "Coordonne le développement de DME, le management des rosters et l'image globale. Focus sur la croissance et les opportunités compétitives.",
-    tags:   ["Management", "Développement", "Rosters"],
-  },
-
-  /* ── MANAGEMENT ── */
-  {
-    id:     "zachary",
-    role:   "Admin",
-    tier:   "management",
-    prenom: "Zachary",
-    pseudo: "Jarsiss",
-    nom:    "Larocque",
-    email:  "zachary.larocque.pro@gmail.com",
-    desc:   "Assure le bon fonctionnement interne — suivi, organisation, support aux équipes et gestion des besoins au quotidien.",
-    tags:   ["Administration", "Suivi", "Support"],
+    id:"mathieu", role:"CEO", tier:"direction",
+    prenom:"Mathieu", pseudo:"Coussinho", nom:"Cousança",
+    email:"mathcousanca@gmail.com",
+    descFr:"Coordonne le développement de DME, le management des rosters et l'image globale. Focus sur la croissance et les opportunités compétitives.",
+    descEn:"Coordinates DME's development, roster management and global image. Focus on growth and competitive opportunities.",
+    tags:["Management","Développement","Rosters"],
   },
   {
-    id:     "etienne",
-    role:   "Admin · Casteur",
-    tier:   "management",
-    prenom: "Étienne",
-    pseudo: "Etirock",
-    nom:    "Landry",
-    email:  "etienne.landry@hotmail.com",
-    desc:   "Gère l'organisation et contribue à la mise en valeur des matchs via le cast. Rend les événements plus propres, plus vivants et plus professionnels.",
-    tags:   ["Administration", "Casting", "Événements"],
+    id:"zachary", role:"Admin", tier:"management",
+    prenom:"Zachary", pseudo:"Jarsiss", nom:"Larocque",
+    email:"zachary.larocque.pro@gmail.com",
+    descFr:"Assure le bon fonctionnement interne — suivi, organisation, support aux équipes et gestion des besoins au quotidien.",
+    descEn:"Ensures smooth internal operations — tracking, organization, team support and daily needs management.",
+    tags:["Administration","Suivi","Support"],
   },
-
-  /* ── CA & EXPERTISE ── */
   {
-    id:     "benoit",
-    role:   "Comptable · CA",
-    tier:   "ca",
-    prenom: "Benoit",
-    pseudo: "Ben",
-    nom:    "Bouthillier",
-    email:  "deathmarkesport@gmail.com",
-    desc:   "Assure la gestion comptable, les finances et les communications officielles au sein du conseil d'administration. Garant de la rigueur financière et de la conformité de la structure.",
-    tags:   ["Comptabilité", "CA", "Communications", "Finances"],
+    id:"etienne", role:"Admin · Casteur", tier:"management",
+    prenom:"Étienne", pseudo:"Etirock", nom:"Landry",
+    email:"etienne.landry@hotmail.com",
+    descFr:"Gère l'organisation et contribue à la mise en valeur des matchs via le cast. Rend les événements plus propres, plus vivants et plus professionnels.",
+    descEn:"Manages organization and contributes to match presentation through casting. Makes events cleaner, more lively and more professional.",
+    tags:["Administration","Casting","Événements"],
+  },
+  {
+    id:"benoit", role:"Comptable · CA", tier:"ca",
+    prenom:"Benoit", pseudo:"Ben", nom:"Bouthillier",
+    email:"deathmarkesport@gmail.com",
+    descFr:"Assure la gestion comptable, les finances et les communications officielles. Garant de la rigueur financière et de la conformité de la structure.",
+    descEn:"Manages accounting, finances and official communications. Ensures financial rigor and organizational compliance.",
+    tags:["Comptabilité","CA","Communications","Finances"],
   },
 ];
 
-/* =========================================================
-   PAGE
-========================================================= */
-
-export default function StaffPage() {
-  const track = [...sponsorLogos, ...sponsorLogos];
-
-  const direction  = staff.filter((m) => m.tier === "direction");
-  const management = staff.filter((m) => m.tier === "management");
-  const ca         = staff.filter((m) => m.tier === "ca");
-
+function MembreRow({ m, index, accent }: { m: StaffMember; index: number; accent?: boolean }) {
+  const { t } = useLang();
+  const initials = `${m.prenom[0]}${m.nom[0]}`;
   return (
-    <div className="min-h-screen bg-[#07070a] text-white">
+    <motion.article
+      className="group relative flex items-start gap-6 overflow-hidden border-b border-white/[0.05] bg-[#080808] px-8 py-7"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, delay: index * 0.07, ease }}
+    >
+      <div className="absolute left-0 top-0 h-full w-[1px] origin-top scale-y-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-y-100" />
 
-      {/* marquee */}
-      <div className="marquee border-y border-red-600/50 bg-black">
-        <div className="marquee-track">
-          {track.map((src, i) => (
-            <div className="marquee-item" key={i}>
-              <Image src={src} alt="sponsor" width={120} height={60} />
-            </div>
+      <div className={`flex h-12 w-12 shrink-0 items-center justify-center text-[13px] font-black border ${
+        accent ? "border-red-600/30 bg-red-600/[0.07] text-red-500" : "border-white/[0.07] bg-white/[0.03] text-white/30"
+      }`}>
+        {initials}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex flex-wrap items-baseline gap-3">
+          <p className={`font-mono text-[9px] font-black uppercase tracking-[0.35em] ${accent ? "text-red-600/60" : "text-white/20"}`}>{m.role}</p>
+        </div>
+        <h3 className="mb-2 font-display text-[1.5rem] uppercase leading-tight text-white">
+          {m.prenom}{" "}
+          <span className="text-white/35 normal-case font-mono text-[1rem]">&ldquo;{m.pseudo}&rdquo;</span>{" "}
+          {m.nom}
+        </h3>
+        <p className="mb-4 text-[0.82rem] leading-relaxed text-white/28">{t(m.descFr, m.descEn)}</p>
+        <div className="flex flex-wrap gap-2">
+          {m.tags.map((tag) => (
+            <span key={tag} className="border border-white/[0.05] px-2.5 py-[3px] font-mono text-[8px] font-black uppercase tracking-[0.2em] text-white/18">
+              {tag}
+            </span>
           ))}
         </div>
       </div>
 
-      <div className="pt-[64px]" />
+      <a
+        href={`mailto:${m.email}?subject=${encodeURIComponent(`DME — ${m.role} — ${m.prenom} ${m.nom}`)}`}
+        className="hidden shrink-0 self-center text-[8px] font-black uppercase tracking-[0.3em] text-white/18 transition-all duration-300 hover:text-red-600/70 sm:block"
+      >
+        {t("Écrire →", "Write →")}
+      </a>
+    </motion.article>
+  );
+}
 
-      {/* ── HERO ── */}
-      <header className="border-b border-white/[0.06]">
-        <div className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10 sm:py-20">
-          <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="h-[2px] w-8 bg-red-500" />
-                <span className="text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
-                  Staff DeathMark · 2026
-                </span>
-              </div>
-              <h1 className="text-5xl font-black uppercase leading-none tracking-[-0.02em] text-white sm:text-6xl lg:text-[5rem]">
-                Les gens<br />
-                <span className="text-red-500">derrière DME.</span>
-              </h1>
-              <p className="mt-6 max-w-lg text-sm leading-relaxed text-white/45 sm:text-base">
-                Direction, management et conseil d&apos;administration — le noyau qui
-                construit DeathMark au quotidien, split après split.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-3 divide-x divide-white/[0.07] border border-white/[0.07]">
-              {[
-                { val: "3", label: "Direction"  },
-                { val: "2", label: "Management" },
-                { val: "1", label: "CA"         },
-              ].map((s) => (
-                <div key={s.label} className="px-7 py-6 text-center">
-                  <p className="text-3xl font-black text-white">{s.val}</p>
-                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-[100rem] px-6 py-16 sm:px-10">
-
-        {/* ── DIRECTION ── */}
-        <div className="mb-16">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-red-500/60">
-              Direction
-            </span>
-            <div className="h-px flex-1 bg-red-500/20" />
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-3">
-            {direction.map((m) => <CarteMembre key={m.id} m={m} />)}
-          </div>
-        </div>
-
-        {/* ── MANAGEMENT ── */}
-        <div className="mb-16">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
-              Management & Administration
-            </span>
-            <div className="h-px flex-1 bg-white/[0.05]" />
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2">
-            {management.map((m) => <CarteMembre key={m.id} m={m} />)}
-          </div>
-        </div>
-
-        {/* ── CA ── */}
-        <div className="mb-16">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="text-[10px] font-black uppercase tracking-[0.38em] text-white/20">
-              Conseil d&apos;Administration & Expertise
-            </span>
-            <div className="h-px flex-1 bg-white/[0.05]" />
-          </div>
-
-          <div className="max-w-md">
-            {ca.map((m) => <CarteMembre key={m.id} m={m} />)}
-          </div>
-        </div>
-
-        <div className="my-16 border-t border-white/[0.06]" />
-
-        {/* ── CTA ── */}
-        <div className="flex flex-col gap-8 border border-white/[0.06] bg-[#0d0d0f] px-10 py-12 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="mb-3 flex items-center gap-3">
-              <div className="h-[2px] w-5 bg-red-500" />
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">
-                Contacter DME
-              </span>
-            </div>
-            <h2 className="text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
-              Une question ? On est là.
-            </h2>
-            <p className="mt-2 max-w-md text-sm text-white/35">
-              Pour les partenariats, médias ou demandes générales — passe par la
-              page Contact pour un tri interne rapide.
-              <br />
-              <span className="mt-1 block text-[11px] text-white/20">
-                deathmarkesport@gmail.com
-              </span>
-            </p>
-          </div>
-          <div className="flex shrink-0 flex-wrap gap-3">
-            <Link
-              href="/contact"
-              className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_28px_rgba(239,68,68,0.35)] transition-all hover:bg-red-500"
-            >
-              Page Contact
-            </Link>
-            <Link
-              href="/recrutement"
-              className="border border-white/12 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/50 transition-all hover:border-white/25 hover:text-white"
-            >
-              Recrutement
-            </Link>
-          </div>
-        </div>
-      </main>
+function SectionLabel({ label, accent }: { label: string; accent?: boolean }) {
+  return (
+    <div className="mb-0 flex items-center gap-4 border-b border-white/[0.05] px-8 py-4">
+      <div className={`h-px w-6 ${accent ? "bg-red-600" : "bg-white/15"}`} />
+      <span className={`font-mono text-[9px] font-black uppercase tracking-[0.45em] ${accent ? "text-red-600/60" : "text-white/18"}`}>
+        {label}
+      </span>
     </div>
   );
 }
 
-/* =========================================================
-   CARTE MEMBRE
-========================================================= */
+export default function StaffPage() {
+  const { t } = useLang();
 
-function CarteMembre({ m }: { m: StaffMember }) {
-  const isDirection = m.tier === "direction";
-  const hasPseudo   = m.pseudo !== "—";
+  const direction  = STAFF.filter((m) => m.tier === "direction");
+  const management = STAFF.filter((m) => m.tier === "management");
+  const ca         = STAFF.filter((m) => m.tier === "ca");
+
+  const ctaRef  = useRef<HTMLDivElement>(null);
+  const ctaView = useInView(ctaRef, { once: true, margin: "-60px" });
 
   return (
-    <article className="group flex flex-col overflow-hidden bg-[#0d0d0f] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(239,68,68,0.08)]">
-      <div className={`h-[2px] w-full origin-left transition-transform duration-500 group-hover:scale-x-100 ${
-        isDirection ? "scale-x-50 bg-red-600" : "scale-x-0 bg-white/20"
-      }`} />
+    <div className="min-h-screen bg-[#080808] text-white">
 
-      <div className="flex flex-1 flex-col gap-4 px-6 py-6">
+      {/* ── HERO ── */}
+      <section className="relative overflow-hidden border-b border-white/[0.05] pb-20 pt-28">
+        <div className="pointer-events-none absolute -top-32 left-0 h-[500px] w-[600px] bg-[radial-gradient(ellipse,rgba(220,38,38,0.07),transparent_65%)]" />
+        <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none text-[clamp(8rem,18vw,16rem)] font-display uppercase leading-none text-white/[0.025]">DME</div>
 
-        {/* header */}
-        <div className="flex items-start justify-between gap-3">
-          {/* avatar initiales */}
-          <div className="flex items-center gap-4">
-            <div className={`flex h-12 w-12 shrink-0 items-center justify-center border font-black text-base ${
-              isDirection
-                ? "border-red-500/40 bg-red-500/[0.08] text-red-400"
-                : "border-white/10 bg-white/[0.04] text-white/40"
-            }`}>
-              {m.prenom[0]}{m.nom[0]}
-            </div>
-            <div>
-              <span className={`text-[8px] font-black uppercase tracking-[0.28em] ${
-                isDirection ? "text-red-500/70" : "text-white/25"
-              }`}>
-                {m.role}
-              </span>
-              <h3 className="text-[15px] font-black uppercase leading-tight tracking-tight text-white">
-                {hasPseudo ? (
-                  <>{m.prenom} <span className="text-red-400/80">&ldquo;{m.pseudo}&rdquo;</span> {m.nom}</>
-                ) : (
-                  <>{m.prenom} {m.nom}</>
-                )}
-              </h3>
-            </div>
+        <div className="relative mx-auto max-w-[120rem] px-6 sm:px-10">
+          <motion.div className="mb-10 flex items-center gap-4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease }}>
+            <div className="h-px w-8 bg-red-600" />
+            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Staff DeathMark · 2026", "DeathMark Staff · 2026")}</span>
+          </motion.div>
+
+          <div className="overflow-hidden mb-6">
+            <motion.h1 className="text-[clamp(3.5rem,9vw,8.5rem)] font-black uppercase leading-[0.88] tracking-tight" initial={{ opacity: 0, y: 80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease }}>
+              <span className="block text-white">{t("Les gens", "The people")}</span>
+              <span className="block text-white/15">{t("derrière", "behind")}</span>
+              <span className="block text-red-600">DME.</span>
+            </motion.h1>
+          </div>
+
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <motion.p className="max-w-md text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/30" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
+              {t(
+                "Direction, management et conseil d'administration — le noyau qui construit DeathMark au quotidien, split après split.",
+                "Leadership, management and board — the core that builds DeathMark daily, split after split."
+              )}
+            </motion.p>
+
+            <motion.div className="flex divide-x divide-white/[0.06] border border-white/[0.06]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease }}>
+              {[
+                { val: String(direction.length),  labelFr: "Direction",  labelEn: "Direction"  },
+                { val: String(management.length), labelFr: "Management", labelEn: "Management" },
+                { val: String(ca.length),         labelFr: "CA",         labelEn: "Board"      },
+              ].map((s) => (
+                <div key={s.val + s.labelFr} className="px-8 py-5 text-center">
+                  <p className="text-[2rem] font-black tabular-nums leading-none text-white">{s.val}</p>
+                  <p className="mt-1.5 text-[8px] font-black uppercase tracking-[0.35em] text-white/20">{t(s.labelFr, s.labelEn)}</p>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
+      </section>
 
-        {/* description */}
-        <p className="text-sm leading-relaxed text-white/40 flex-1">
-          {m.desc}
-        </p>
-
-        {/* tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {m.tags.map((t) => (
-            <span key={t} className="border border-white/[0.06] bg-white/[0.02] px-2.5 py-[3px] text-[8px] font-black uppercase tracking-[0.18em] text-white/25">
-              {t}
-            </span>
-          ))}
+      {/* ── DIRECTION ── */}
+      <section className="py-12">
+        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
+          <SectionLabel label={t("Direction", "Leadership") as string} accent />
+          <div className="border border-white/[0.05]">
+            {direction.map((m, i) => <MembreRow key={m.id} m={m} index={i} accent />)}
+          </div>
         </div>
+      </section>
 
-        {/* email */}
-        <div className="border-t border-white/[0.05] pt-4 flex items-center justify-between gap-3">
-          <p className="text-[10px] text-white/20 truncate">{m.email}</p>
-          <a
-            href={`mailto:${m.email}?subject=${encodeURIComponent(`DME — ${m.role} — ${m.prenom} ${m.nom}`)}`}
-            className="shrink-0 border border-white/10 px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-white/35 transition-all hover:border-red-500/30 hover:text-red-400"
-          >
-            Écrire →
-          </a>
+      {/* ── MANAGEMENT ── */}
+      <section className="border-t border-white/[0.04] py-12">
+        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
+          <SectionLabel label={t("Management & Administration", "Management & Administration") as string} />
+          <div className="border border-white/[0.05]">
+            {management.map((m, i) => <MembreRow key={m.id} m={m} index={i} />)}
+          </div>
         </div>
-      </div>
-    </article>
+      </section>
+
+      {/* ── CA ── */}
+      <section className="border-t border-white/[0.04] py-12">
+        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
+          <SectionLabel label={t("Conseil d'Administration & Expertise", "Board & Expertise") as string} />
+          <div className="border border-white/[0.05]">
+            {ca.map((m, i) => <MembreRow key={m.id} m={m} index={i} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section ref={ctaRef} className="border-t border-white/[0.04] py-28">
+        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
+          <motion.div className="relative overflow-hidden" initial={{ opacity: 0, y: 32 }} animate={ctaView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, ease }}>
+            <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none text-[clamp(7rem,16vw,14rem)] font-display uppercase leading-none text-white/[0.02]">DME</div>
+            <div className="relative">
+              <div className="mb-4 flex items-center gap-4">
+                <div className="h-px w-8 bg-red-600" />
+                <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Contacter DME", "Contact DME")}</span>
+              </div>
+              <h2 className="font-display mb-10 text-[clamp(2.5rem,6vw,5rem)] uppercase leading-[0.9]">
+                <span className="block text-white">{t("Une question ?", "A question?")}</span>
+                <span className="block text-red-600">{t("On est là.", "We're here.")}</span>
+              </h2>
+              <div className="flex flex-wrap gap-8">
+                <Link href="/contact" className="text-[9px] font-black uppercase tracking-[0.4em] text-red-600 transition-all duration-300 hover:text-red-500">{t("Page Contact →", "Contact Page →")}</Link>
+                <Link href="/recrutement" className="text-[9px] font-black uppercase tracking-[0.4em] text-white/25 transition-all duration-300 hover:text-white/60">{t("Recrutement →", "Recruitment →")}</Link>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+    </div>
   );
 }

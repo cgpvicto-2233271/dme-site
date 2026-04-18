@@ -70,7 +70,7 @@ function CarteResultat({ item }: { item: Achievement }) {
           )}
         </div>
 
-        <h3 className="text-[14px] font-black uppercase leading-tight tracking-tight text-white">
+        <h3 className="font-display text-[14px] uppercase leading-tight text-white">
           {item.titre}
         </h3>
         <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-red-500/60">
@@ -135,8 +135,10 @@ export default function HallOfFameRocketLeaguePage() {
                   Résultats · Rocket League
                 </span>
               </div>
-              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl">
-                Rocket <span className="text-red-500">League</span>
+              <h1 className="text-[clamp(3rem,8vw,7.5rem)] font-black uppercase leading-[0.88] tracking-tight">
+                <span className="block text-white">Rocket</span>
+                <span className="block text-white/15">League</span>
+                <span className="block text-red-600">.</span>
               </h1>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
                 LANs et ligues en ligne — les résultats qui construisent le projet RL de DME.
@@ -203,7 +205,7 @@ export default function HallOfFameRocketLeaguePage() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500/70">Voir aussi</p>
-            <h2 className="mt-1.5 text-2xl font-black uppercase tracking-tight text-white">L&apos;équipe DME RL</h2>
+            <h2 className="font-display mt-1.5 text-2xl uppercase text-white">L&apos;équipe DME RL</h2>
             <p className="mt-2 max-w-sm text-sm text-white/35">
               DME Busch (GC3) et DME Prime (GC2-3) — deux rosters actifs.
             </p>

@@ -59,7 +59,7 @@ export default function NaPremierPage() {
                   Projet Québécois · LoL NA · Saison 1
                 </span>
               </div>
-              <h1 className="text-5xl font-black uppercase leading-none tracking-[-0.02em] text-white sm:text-6xl lg:text-[5rem]">
+              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-[5rem]">
                 NA Premier<br />
                 <span className="text-red-500">&amp; NA Rise.</span>
               </h1>
@@ -124,7 +124,7 @@ export default function NaPremierPage() {
               <div className="flex flex-1 flex-col gap-5 px-8 py-8">
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-[0.32em] text-white/25">La fondation</p>
-                  <h2 className="mt-2 text-2xl font-black uppercase tracking-tight text-white">
+                  <h2 className="font-display mt-2 text-2xl uppercase text-white">
                     NA <span className="text-white/40">Rise</span>
                   </h2>
                 </div>
@@ -160,7 +160,7 @@ export default function NaPremierPage() {
               <div className="flex flex-1 flex-col gap-5 px-8 py-8">
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-[0.32em] text-red-500/60">Le showcase</p>
-                  <h2 className="mt-2 text-2xl font-black uppercase tracking-tight text-white">
+                  <h2 className="font-display mt-2 text-2xl uppercase text-white">
                     NA <span className="text-red-500">Premier</span>
                   </h2>
                 </div>
@@ -222,7 +222,7 @@ export default function NaPremierPage() {
             ].map((b) => (
               <div key={b.num} className="bg-[#0a0a0c] px-7 py-9">
                 <p className="mb-3 text-[9px] font-black uppercase tracking-[0.3em] text-red-500/40">{b.num}</p>
-                <h3 className="mb-3 text-[15px] font-black uppercase tracking-tight text-white">{b.titre}</h3>
+                <h3 className="font-display mb-3 text-[15px] uppercase text-white">{b.titre}</h3>
                 <p className="text-sm leading-relaxed text-white/35">{b.texte}</p>
               </div>
             ))}
@@ -254,7 +254,7 @@ export default function NaPremierPage() {
               },
             ].map((bloc) => (
               <div key={bloc.titre} className="bg-[#0a0a0c] px-7 py-8">
-                <h3 className="mb-5 text-[13px] font-black uppercase tracking-tight text-white">{bloc.titre}</h3>
+                <h3 className="font-display mb-5 text-[13px] uppercase text-white">{bloc.titre}</h3>
                 <div className="flex flex-col gap-2.5">
                   {bloc.items.map((item) => (
                     <div key={item} className="flex items-start gap-3">
@@ -285,7 +285,7 @@ export default function NaPremierPage() {
                   Notre position
                 </span>
               </div>
-              <h2 className="mb-5 text-2xl font-black uppercase leading-tight tracking-tight text-white sm:text-3xl">
+              <h2 className="font-display mb-5 text-2xl uppercase leading-tight text-white sm:text-3xl">
                 DME suit ce projet<br />de près.
               </h2>
               <p className="max-w-lg text-sm leading-relaxed text-white/40">
@@ -325,7 +325,7 @@ export default function NaPremierPage() {
                 Intéressé par NA Premier ?
               </span>
             </div>
-            <h2 className="text-3xl font-black uppercase leading-none tracking-tight text-white sm:text-4xl">
+            <h2 className="font-display text-3xl uppercase leading-none text-white sm:text-4xl">
               Parlons-en.<br />
               <span className="text-red-500">On est là.</span>
             </h2>

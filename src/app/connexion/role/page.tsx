@@ -50,7 +50,7 @@ export default function ChoixRolePage() {
             Onboarding accès
           </div>
 
-          <h1 className="mt-4 text-3xl md:text-4xl font-extrabold">
+          <h1 className="font-display mt-4 text-3xl md:text-4xl uppercase">
             Tu es <span className="text-red-500">Joueur</span> ou <span className="text-red-500">Staff</span> ?
           </h1>
 

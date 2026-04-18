@@ -7,7 +7,7 @@ export default function StaffPendingPage() {
     <main className="min-h-screen text-white pt-24 pb-24">
       <div className="w-full max-w-xl mx-auto px-4">
         <section className="rounded-3xl border border-red-600/25 bg-white/5 backdrop-blur p-8">
-          <h1 className="text-3xl font-extrabold">
+          <h1 className="font-display text-3xl uppercase">
             Acces staff <span className="text-red-500">en attente</span>
           </h1>
 

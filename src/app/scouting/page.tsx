@@ -1,542 +1,604 @@
-// src/app/scouting/page.tsx
 "use client";
+// src/app/scouting/lol/page.tsx
+// ─── Outil de scouting interne DME — League of Legends ───────────────────────
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-/* =========================================================
-   ROSTER DME LOL COMPLET
-========================================================= */
+/* ── Types ───────────────────────────────────────────────────────────────── */
 
-interface Player {
-  pseudo:   string;   // gameName Riot
-  tag:      string;   // tagLine (ex: NA1, QC1...)
-  region:   string;   // NA1, EUW1...
-  role:     string;
-  roster:   string;   // DME Voltigeurs, DME NPC, DME AML...
-  rosterTag: string;  // AVL, AML, ADL, AEL, LQL
+interface RankedEntry {
+  queueType:    string;
+  tier:         string;
+  rank:         string;
+  leaguePoints: number;
+  wins:         number;
+  losses:       number;
 }
 
-const PLAYERS: Player[] = [
-  // ── Roster 1 — Voltigeurs (AVL) ──
-  { pseudo: "Nuteh",    tag: "NA1",   region: "NA1", role: "TOP",     roster: "DME Voltigeurs", rosterTag: "AVL" },
-  { pseudo: "Kripsus",  tag: "NA1",   region: "NA1", role: "JUNGLE",  roster: "DME Voltigeurs", rosterTag: "AVL" },
-  { pseudo: "Wazabiee", tag: "NA1",   region: "NA1", role: "MID",     roster: "DME Voltigeurs", rosterTag: "AVL" },
-  { pseudo: "pewpew",   tag: "NA1",   region: "NA1", role: "ADC",     roster: "DME Voltigeurs", rosterTag: "AVL" },
-  { pseudo: "Campo",    tag: "NA1",   region: "NA1", role: "SUPPORT", roster: "DME Voltigeurs", rosterTag: "AVL" },
-  // ── Roster 2 — NPC (AVL) ──
-  { pseudo: "Vallex",   tag: "NA1",   region: "NA1", role: "TOP",     roster: "DME NPC",        rosterTag: "AVL" },
-  { pseudo: "Nostalgia",tag: "NA1",   region: "NA1", role: "JUNGLE",  roster: "DME NPC",        rosterTag: "AVL" },
-  { pseudo: "Paradox",  tag: "QC",    region: "NA1", role: "MID",     roster: "DME NPC",        rosterTag: "AVL" },
-  { pseudo: "monkeyy",  tag: "NA1",   region: "NA1", role: "ADC",     roster: "DME NPC",        rosterTag: "AVL" },
-  { pseudo: "eglor195", tag: "NA1",   region: "NA1", role: "SUPPORT", roster: "DME NPC",        rosterTag: "AVL" },
-  // ── LQL — WiiSport ──
-  { pseudo: "Bakx",     tag: "NA1",   region: "NA1", role: "TOP",     roster: "DME WiiSport",   rosterTag: "LQL" },
-  { pseudo: "SeanFlex", tag: "NA1",   region: "NA1", role: "JUNGLE",  roster: "DME WiiSport",   rosterTag: "LQL" },
-  { pseudo: "Aeri",     tag: "NA1",   region: "NA1", role: "MID",     roster: "DME WiiSport",   rosterTag: "LQL" },
-  { pseudo: "Rizerrh",  tag: "NA1",   region: "NA1", role: "ADC",     roster: "DME WiiSport",   rosterTag: "LQL" },
-  { pseudo: "DeadliestHook", tag: "NA1", region: "NA1", role: "SUPPORT", roster: "DME WiiSport", rosterTag: "LQL" },
-  // ── AML ──
-  { pseudo: "xAzorD",       tag: "2443", region: "NA1", role: "TOP",     roster: "DME AML", rosterTag: "AML" },
-  { pseudo: "Chrovos",      tag: "1503", region: "NA1", role: "JUNGLE",  roster: "DME AML", rosterTag: "AML" },
-  { pseudo: "Excessif",     tag: "NA1",  region: "NA1", role: "MID",     roster: "DME AML", rosterTag: "AML" },
-  { pseudo: "Blyos",        tag: "2509", region: "NA1", role: "ADC",     roster: "DME AML", rosterTag: "AML" },
-  { pseudo: "Tié un tigre", tag: "tv4k", region: "NA1", role: "SUPPORT", roster: "DME AML", rosterTag: "AML" },
-  // ── ADL ──
-  { pseudo: "Rorschàch",  tag: "5130",  region: "NA1", role: "TOP",     roster: "DME ADL", rosterTag: "ADL" },
-  { pseudo: "Tupapa",      tag: "QC1",   region: "NA1", role: "JUNGLE",  roster: "DME ADL", rosterTag: "ADL" },
-  { pseudo: "gqb",         tag: "notag", region: "NA1", role: "MID",     roster: "DME ADL", rosterTag: "ADL" },
-  { pseudo: "Bizoune",     tag: "NA2",   region: "NA1", role: "ADC",     roster: "DME ADL", rosterTag: "ADL" },
-  { pseudo: "xavifizz12",  tag: "NA1",   region: "NA1", role: "SUPPORT", roster: "DME ADL", rosterTag: "ADL" },
-  // ── AEL ──
-  { pseudo: "Leeran",         tag: "NA1",  region: "NA1", role: "TOP",     roster: "DME AEL", rosterTag: "AEL" },
-  { pseudo: "stormgaud04",    tag: "NA1",  region: "NA1", role: "JUNGLE",  roster: "DME AEL", rosterTag: "AEL" },
-  { pseudo: "M1N3UR",         tag: "NA1",  region: "NA1", role: "MID",     roster: "DME AEL", rosterTag: "AEL" },
-  { pseudo: "TheBaconTactic", tag: "1203", region: "NA1", role: "ADC",     roster: "DME AEL", rosterTag: "AEL" },
-  { pseudo: "Canadianwhale",  tag: "apex", region: "NA1", role: "SUPPORT", roster: "DME AEL", rosterTag: "AEL" },
-];
-
-/* =========================================================
-   TYPES API
-========================================================= */
-
-interface RankData {
-  gameName:      string;
-  tagLine:       string;
-  puuid:         string;
-  summonerLevel: number;
-  profileIconId: number;
-  solo:  RankEntry | null;
-  flex:  RankEntry | null;
-  error?: string;
+interface MasteryEntry {
+  championId:     number;
+  championLevel:  number;
+  championPoints: number;
 }
 
-interface RankEntry {
-  tier:    string;
-  rank:    string;
-  lp:      number;
-  wins:    number;
-  losses:  number;
-  winrate: number;
-}
-
-interface MatchSummary {
-  matchId:     string;
-  champion:    string;
-  championId:  number;
-  win:         boolean;
-  kills:       number;
-  deaths:      number;
-  assists:     number;
-  cs:          number;
-  csPerMin:    number;
-  duration:    number;
-  gameMode:    string;
-  position:    string;
-  timestamp:   number;
-  damage:      number;
-  visionScore: number;
-}
-
-interface LiveData {
-  inGame:     boolean;
-  gameMode?:  string;
-  gameLength?: number;
-  champion?:  number;
-  error?:     string;
+interface MatchEntry {
+  matchId:   string;
+  champion:  string;
+  kills:     number;
+  deaths:    number;
+  assists:   number;
+  win:       boolean;
+  cs:        number;
+  vision:    number;
+  position:  string;
+  duration:  number;
+  timestamp: number;
 }
 
 interface PlayerData {
-  player:  Player;
-  rank:    RankData | null;
-  matches: MatchSummary[];
-  live:    LiveData | null;
-  loading: boolean;
-  error:   string | null;
+  account:  { gameName: string; tagLine: string; puuid: string };
+  summoner: { id: string; name: string; summonerLevel: number; profileIconId: number };
+  soloQ:    RankedEntry | null;
+  flex:     RankedEntry | null;
+  mastery:  MasteryEntry[];
+  matches:  MatchEntry[];
 }
 
-/* =========================================================
-   HELPERS
-========================================================= */
+interface ScoutedPlayer extends PlayerData {
+  lft:   boolean;
+  notes: string;
+  addedAt: string;
+}
 
-const TIER_ORDER: Record<string, number> = {
-  CHALLENGER: 9, GRANDMASTER: 8, MASTER: 7,
-  DIAMOND: 6, EMERALD: 5, PLATINUM: 4,
-  GOLD: 3, SILVER: 2, BRONZE: 1, IRON: 0, UNRANKED: -1,
-};
+/* ── Constants ───────────────────────────────────────────────────────────── */
+
+const E = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+const TIER_ORDER = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
 
 const TIER_COLOR: Record<string, string> = {
-  CHALLENGER:  "text-yellow-300",
-  GRANDMASTER: "text-red-300",
-  MASTER:      "text-purple-300",
-  DIAMOND:     "text-blue-300",
-  EMERALD:     "text-emerald-300",
-  PLATINUM:    "text-cyan-300",
-  GOLD:        "text-yellow-400",
-  SILVER:      "text-slate-300",
-  BRONZE:      "text-orange-400",
-  IRON:        "text-stone-400",
+  IRON:          "#6b6b6b",
+  BRONZE:        "#cd7c4e",
+  SILVER:        "#94a3b8",
+  GOLD:          "#f59e0b",
+  PLATINUM:      "#34d399",
+  EMERALD:       "#10b981",
+  DIAMOND:       "#60a5fa",
+  MASTER:        "#a78bfa",
+  GRANDMASTER:   "#f87171",
+  CHALLENGER:    "#fbbf24",
 };
 
-const RANK_LABEL: Record<string, string> = {
-  I: "I", II: "II", III: "III", IV: "IV",
+const POSITION_LABEL: Record<string, string> = {
+  TOP:     "Top",
+  JUNGLE:  "Jgl",
+  MIDDLE:  "Mid",
+  BOTTOM:  "ADC",
+  UTILITY: "Sup",
+  INVALID: "?",
 };
 
-function tierLabel(solo: RankEntry | null | undefined): string {
-  if (!solo) return "Unranked";
-  const r = RANK_LABEL[solo.rank] ?? solo.rank;
-  if (["CHALLENGER","GRANDMASTER","MASTER"].includes(solo.tier))
-    return `${solo.tier} (${solo.lp} LP)`;
-  return `${solo.tier} ${r} — ${solo.lp} LP`;
-}
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
 
-function kda(k: number, d: number, a: number): string {
-  if (d === 0) return "Perfect";
-  return ((k + a) / d).toFixed(2);
-}
-
-function fmtDuration(s: number): string {
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return `${m}:${String(sec).padStart(2, "0")}`;
-}
-
-function fmtTimeAgo(ts: number): string {
-  const diff = Date.now() - ts;
-  const h = Math.floor(diff / 3_600_000);
-  if (h < 1) return "< 1h";
-  if (h < 24) return `${h}h`;
-  return `${Math.floor(h / 24)}j`;
-}
-
-/* =========================================================
-   HOOK FETCH PLAYER
-========================================================= */
-
-function usePlayerData(player: Player, enabled: boolean): PlayerData {
-  const [state, setState] = useState<PlayerData>({
-    player, rank: null, matches: [], live: null, loading: true, error: null,
-  });
-
-  const load = useCallback(async () => {
-    if (!enabled) return;
-    setState((s) => ({ ...s, loading: true, error: null }));
-    try {
-      const rankRes = await fetch(
-        `/api/scouting/rank?gameName=${encodeURIComponent(player.pseudo)}&tagLine=${encodeURIComponent(player.tag)}&region=${player.region}`
-      );
-      const rank: RankData = await rankRes.json();
-
-      if (rank.error) {
-        setState((s) => ({ ...s, loading: false, error: rank.error ?? "Erreur API" }));
-        return;
-      }
-
-      // matches + live en parallèle
-      const [matchRes, liveRes] = await Promise.all([
-        fetch(`/api/scouting/matches?puuid=${rank.puuid}&region=${player.region}&count=20`),
-        fetch(`/api/scouting/live?puuid=${rank.puuid}&region=${player.region}`),
-      ]);
-
-      const matchData = await matchRes.json();
-      const liveData: LiveData = await liveRes.json();
-
-      setState({ player, rank, matches: matchData.matches ?? [], live: liveData, loading: false, error: null });
-    } catch (err) {
-      setState((s) => ({ ...s, loading: false, error: err instanceof Error ? err.message : "Erreur" }));
-    }
-  }, [player, enabled]);
-
-  useEffect(() => { load(); }, [load]);
-
-  return state;
-}
-
-/* =========================================================
-   COMPOSANT CARTE JOUEUR
-========================================================= */
-
-function CarteJoueur({ player }: { player: Player }) {
-  const [expanded, setExpanded] = useState(false);
-  const data = usePlayerData(player, true);
-  const { rank, matches, live, loading, error } = data;
-
-  const solo = rank?.solo;
-  const tierColor = solo ? (TIER_COLOR[solo.tier] ?? "text-white/60") : "text-white/30";
-
-  // Stats sur les 20 derniers matchs
-  const totalGames = matches.length;
-  const wins       = matches.filter((m) => m.win).length;
-  const recentWR   = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
-  const avgKills   = totalGames > 0 ? (matches.reduce((s, m) => s + m.kills, 0) / totalGames).toFixed(1) : "—";
-  const avgDeaths  = totalGames > 0 ? (matches.reduce((s, m) => s + m.deaths, 0) / totalGames).toFixed(1) : "—";
-  const avgAssists = totalGames > 0 ? (matches.reduce((s, m) => s + m.assists, 0) / totalGames).toFixed(1) : "—";
-  const avgCS      = totalGames > 0 ? Math.round(matches.reduce((s, m) => s + m.csPerMin, 0) / totalGames * 10) / 10 : 0;
-  const avgKDA     = totalGames > 0
-    ? ((matches.reduce((s, m) => s + m.kills + m.assists, 0) / totalGames) /
-       Math.max(matches.reduce((s, m) => s + m.deaths, 0) / totalGames, 0.1)).toFixed(2)
-    : "—";
-
-  // Top 3 champions sur les 20 matchs
-  const champCount: Record<string, { n: number; w: number }> = {};
-  for (const m of matches) {
-    if (!champCount[m.champion]) champCount[m.champion] = { n: 0, w: 0 };
-    champCount[m.champion].n++;
-    if (m.win) champCount[m.champion].w++;
+function rankLabel(entry: RankedEntry | null): string {
+  if (!entry) return "Unranked";
+  if (["MASTER","GRANDMASTER","CHALLENGER"].includes(entry.tier)) {
+    return `${entry.tier} ${entry.leaguePoints} LP`;
   }
-  const topChamps = Object.entries(champCount)
-    .sort((a, b) => b[1].n - a[1].n)
-    .slice(0, 3);
+  return `${entry.tier} ${entry.rank} · ${entry.leaguePoints} LP`;
+}
+
+function winrate(w: number, l: number): number {
+  const total = w + l;
+  return total ? Math.round((w / total) * 100) : 0;
+}
+
+function kda(kills: number, deaths: number, assists: number): string {
+  if (deaths === 0) return "Perfect";
+  return ((kills + assists) / deaths).toFixed(2);
+}
+
+function formatDuration(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function iconUrl(iconId: number): string {
+  return `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/${iconId}.png`;
+}
+
+function tierScore(entry: RankedEntry | null): number {
+  if (!entry) return -1;
+  const base = TIER_ORDER.indexOf(entry.tier) * 400;
+  const ranks: Record<string, number> = { I: 300, II: 200, III: 100, IV: 0 };
+  return base + (ranks[entry.rank] ?? 0) + entry.leaguePoints;
+}
+
+/* ── Sub-components ──────────────────────────────────────────────────────── */
+
+function RankedBadge({ entry, label }: { entry: RankedEntry | null; label: string }) {
+  if (!entry) return (
+    <div className="flex flex-col gap-0.5">
+      <p className="text-[8px] font-black uppercase tracking-[0.2em] text-white/20">{label}</p>
+      <p className="text-[12px] font-black text-white/25">Unranked</p>
+    </div>
+  );
+
+  const wr = winrate(entry.wins, entry.losses);
+  const color = TIER_COLOR[entry.tier] ?? "#fff";
 
   return (
-    <article className="flex flex-col overflow-hidden bg-[#0d0d0f]">
-      <div className="h-[2px] w-full bg-red-600" />
-
-      {/* header */}
-      <div className="flex items-start justify-between gap-3 px-5 py-4">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            {live?.inGame && (
-              <span className="flex items-center gap-1 text-[8px] font-black uppercase tracking-[0.2em] text-emerald-400">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                En jeu
-              </span>
-            )}
-          </div>
-          <p className="mt-0.5 text-[15px] font-black uppercase leading-tight tracking-tight text-white truncate">
-            {player.pseudo}
-            <span className="ml-1 text-[10px] font-normal text-white/25">#{player.tag}</span>
-          </p>
-          <p className="text-[9px] font-bold text-white/25">{player.roster}</p>
-        </div>
-        <div className="flex shrink-0 flex-col items-end gap-1">
-          <span className="border border-red-500/25 bg-red-500/[0.06] px-2 py-[2px] text-[8px] font-black uppercase tracking-[0.2em] text-red-300/70">
-            {player.rosterTag}
-          </span>
-          <span className="text-[9px] font-black uppercase tracking-[0.15em] text-white/20">
-            {player.role}
-          </span>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <p className="text-[9px] font-black uppercase tracking-[0.25em] text-white/20">Chargement...</p>
-        </div>
-      ) : error ? (
-        <div className="px-5 py-4">
-          <p className="text-[9px] text-red-400/60">{error}</p>
-        </div>
-      ) : (
-        <>
-          {/* rang */}
-          <div className="border-t border-white/[0.05] px-5 py-4">
-            <p className="mb-2 text-[8px] font-black uppercase tracking-[0.3em] text-white/20">Rang Solo/Duo</p>
-            {solo ? (
-              <div className="flex items-center justify-between">
-                <p className={`text-[13px] font-black uppercase ${tierColor}`}>
-                  {tierLabel(solo)}
-                </p>
-                <p className="text-[10px] text-white/30">{solo.winrate}% WR</p>
-              </div>
-            ) : (
-              <p className="text-[12px] font-black text-white/20">Unranked</p>
-            )}
-            {solo && (
-              <div className="mt-1.5 flex items-center gap-3 text-[10px] text-white/30">
-                <span className="text-emerald-400/70">{solo.wins}W</span>
-                <span className="text-red-400/60">{solo.losses}L</span>
-                <span>{solo.wins + solo.losses} games</span>
-              </div>
-            )}
-          </div>
-
-          {/* stats 20 matchs */}
-          {totalGames > 0 && (
-            <div className="border-t border-white/[0.05] px-5 py-4">
-              <p className="mb-3 text-[8px] font-black uppercase tracking-[0.3em] text-white/20">
-                {totalGames} derniers matchs (Ranked)
-              </p>
-              <div className="grid grid-cols-4 gap-2">
-                {[
-                  { label: "WR",   val: `${recentWR}%`, color: recentWR >= 55 ? "text-emerald-400" : recentWR >= 45 ? "text-white/60" : "text-red-400/70" },
-                  { label: "KDA",  val: avgKDA,          color: "text-white/70" },
-                  { label: "K/D/A",val: `${avgKills}/${avgDeaths}/${avgAssists}`, color: "text-white/50" },
-                  { label: "CS/m", val: String(avgCS),   color: "text-white/50" },
-                ].map((s) => (
-                  <div key={s.label} className="bg-[#111113] px-2 py-2 text-center">
-                    <p className={`text-[12px] font-black ${s.color}`}>{s.val}</p>
-                    <p className="text-[7px] font-bold uppercase tracking-[0.18em] text-white/20">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* top champs */}
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {topChamps.map(([champ, { n, w }]) => (
-                  <div key={champ} className="flex items-center gap-1.5 border border-white/[0.06] bg-[#111113] px-2 py-1">
-                    <Image
-                      src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${champ}.png`}
-                      alt={champ}
-                      width={16} height={16}
-                      className="h-4 w-4 rounded-sm"
-                    />
-                    <span className="text-[9px] font-bold text-white/50">{champ}</span>
-                    <span className="text-[8px] text-white/25">{n}G · {Math.round(w/n*100)}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* toggle matchs détaillés */}
-          <div className="border-t border-white/[0.05]">
-            <button
-              onClick={() => setExpanded((v) => !v)}
-              className="w-full px-5 py-3 text-left text-[9px] font-black uppercase tracking-[0.25em] text-white/25 transition-colors hover:text-white/50"
-            >
-              {expanded ? "Masquer les matchs ▲" : "Voir les matchs ▼"}
-            </button>
-
-            {expanded && (
-              <div className="flex flex-col border-t border-white/[0.04]">
-                {/* header */}
-                <div className="grid grid-cols-[1fr_56px_56px_40px_32px] gap-1 bg-[#111113] px-4 py-2">
-                  {["Champion","KDA","CS/m","Dur.",""].map((h) => (
-                    <span key={h} className="text-[7px] font-black uppercase tracking-[0.18em] text-white/20">{h}</span>
-                  ))}
-                </div>
-                {matches.map((m) => (
-                  <div
-                    key={m.matchId}
-                    className={`grid grid-cols-[1fr_56px_56px_40px_32px] gap-1 items-center border-b border-white/[0.03] px-4 py-2 last:border-0 ${
-                      m.win ? "border-l-2 border-l-emerald-500/40" : "border-l-2 border-l-red-500/40"
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <Image
-                        src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${m.champion}.png`}
-                        alt={m.champion}
-                        width={18} height={18}
-                        className="h-[18px] w-[18px] shrink-0 rounded-sm"
-                      />
-                      <span className="truncate text-[10px] font-bold text-white/60">{m.champion}</span>
-                    </div>
-                    <span className="text-[10px] text-white/50">{kda(m.kills, m.deaths, m.assists)}</span>
-                    <span className="text-[10px] text-white/40">{m.csPerMin}</span>
-                    <span className="text-[9px] text-white/30">{fmtDuration(m.duration)}</span>
-                    <span className="text-[8px] text-white/20">{fmtTimeAgo(m.timestamp)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      )}
-    </article>
+    <div className="flex flex-col gap-0.5">
+      <p className="text-[8px] font-black uppercase tracking-[0.2em] text-white/25">{label}</p>
+      <p className="text-[13px] font-black uppercase" style={{ color }}>{rankLabel(entry)}</p>
+      <p className="text-[9px] text-white/30">
+        {entry.wins}W {entry.losses}L · <span style={{ color: wr >= 55 ? "#4ade80" : wr <= 45 ? "#f87171" : "#94a3b8" }}>{wr}%</span>
+      </p>
+    </div>
   );
 }
 
-/* =========================================================
-   PAGE
-========================================================= */
-
-const ROSTER_TAGS = ["TOUS", "AVL", "LQL", "AML", "ADL", "AEL"];
-const ROLES       = ["TOUS", "TOP", "JUNGLE", "MID", "ADC", "SUPPORT"];
-
-export default function ScoutingPage() {
-  const [filterRoster, setFilterRoster] = useState("TOUS");
-  const [filterRole,   setFilterRole]   = useState("TOUS");
-  const [search,       setSearch]       = useState("");
-  const [sortBy,       setSortBy]       = useState<"roster" | "role" | "pseudo">("roster");
-
-  const filtered = PLAYERS
-    .filter((p) => filterRoster === "TOUS" || p.rosterTag === filterRoster)
-    .filter((p) => filterRole   === "TOUS" || p.role      === filterRole)
-    .filter((p) => !search || p.pseudo.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => {
-      if (sortBy === "roster") return a.rosterTag.localeCompare(b.rosterTag) || a.role.localeCompare(b.role);
-      if (sortBy === "role")   return a.role.localeCompare(b.role);
-      return a.pseudo.localeCompare(b.pseudo);
-    });
+function MatchRow({ match }: { match: MatchEntry }) {
+  const kdaVal = kda(match.kills, match.deaths, match.assists);
+  const csMin  = match.duration > 0 ? (match.cs / (match.duration / 60)).toFixed(1) : "0";
+  const pos    = POSITION_LABEL[match.position] ?? match.position;
 
   return (
-    <div className="min-h-screen bg-[#07070a] text-white">
-      <div className="pt-[64px]" />
+    <div className={`grid grid-cols-[3rem_1fr_5rem_6rem_5rem_4rem_3.5rem] items-center gap-2 border-b border-white/[0.03] px-4 py-2.5 last:border-0 text-[11px] ${
+      match.win ? "bg-red-900/[0.04]" : "bg-black/20"
+    }`}>
+      <span className={`font-black text-[10px] uppercase tracking-wide ${match.win ? "text-red-400" : "text-white/25"}`}>
+        {match.win ? "WIN" : "DEF"}
+      </span>
+      <span className="font-bold text-white/70 truncate">{match.champion}</span>
+      <span className="text-white/40 text-center">{pos}</span>
+      <span className="text-white/60 text-center font-bold">
+        {match.kills}/{match.deaths}/{match.assists}
+      </span>
+      <span className={`text-center font-black ${
+        parseFloat(kdaVal) >= 4 ? "text-red-400" : parseFloat(kdaVal) >= 2.5 ? "text-white/60" : "text-white/30"
+      }`}>
+        {kdaVal}
+      </span>
+      <span className="text-white/35 text-center">{csMin}/m</span>
+      <span className="text-white/30 text-right">{formatDuration(match.duration)}</span>
+    </div>
+  );
+}
 
-      {/* ── HERO ── */}
-      <header className="border-b border-white/[0.06]">
-        <div className="mx-auto max-w-[100rem] px-6 py-14 sm:px-10">
+function PlayerCard({
+  player,
+  onToggleLft,
+  onUpdateNote,
+  onRemove,
+}: {
+  player:        ScoutedPlayer;
+  onToggleLft:   () => void;
+  onUpdateNote:  (note: string) => void;
+  onRemove:      () => void;
+}) {
+  const [editNote, setEditNote] = useState(false);
+  const [noteVal,  setNoteVal]  = useState(player.notes);
+  const [showMatches, setShowMatches] = useState(false);
+
+  const tierColor = TIER_COLOR[player.soloQ?.tier ?? ""] ?? "#ffffff40";
+
+  // Avg KDA last 5
+  const avgKda = player.matches.length
+    ? (player.matches.reduce((s, m) => s + (m.deaths === 0 ? (m.kills + m.assists) : (m.kills + m.assists) / m.deaths), 0) / player.matches.length).toFixed(2)
+    : "—";
+  const winCount = player.matches.filter((m) => m.win).length;
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10, scale: 0.97 }}
+      transition={{ duration: 0.4, ease: E }}
+      className="relative overflow-hidden border border-white/[0.05] bg-[#0d0b0b]"
+    >
+      {/* tier accent top */}
+      <div className="h-[2px] w-full" style={{ background: tierColor, boxShadow: `0 0 12px ${tierColor}60` }} />
+
+      <div className="p-5">
+        {/* ── TOP ROW ── */}
+        <div className="flex items-start gap-4">
+
+          {/* avatar */}
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2" style={{ borderColor: `${tierColor}60` }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={iconUrl(player.summoner.profileIconId)} alt="icon" className="h-full w-full object-cover" />
+          </div>
+
+          {/* identity */}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-[15px] font-black uppercase tracking-wide text-white">
+                {player.account.gameName}
+                <span className="text-white/30 font-bold">#{player.account.tagLine}</span>
+              </p>
+              {/* LFT toggle */}
+              <button
+                onClick={onToggleLft}
+                className={`flex items-center gap-1.5 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] border transition-all ${
+                  player.lft
+                    ? "border-red-500/50 bg-red-500/[0.1] text-red-400"
+                    : "border-white/[0.08] bg-white/[0.02] text-white/25 hover:border-white/20"
+                }`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${player.lft ? "bg-red-500 animate-pulse" : "bg-white/20"}`} />
+                {player.lft ? "LFT" : "Non LFT"}
+              </button>
+            </div>
+            <p className="text-[9px] text-white/25 mt-0.5">
+              Niveau {player.summoner.summonerLevel} · Ajouté {new Date(player.addedAt).toLocaleDateString("fr-CA")}
+            </p>
+          </div>
+
+          {/* remove */}
+          <button onClick={onRemove} className="shrink-0 text-white/15 hover:text-red-400 transition-colors text-lg leading-none">×</button>
+        </div>
+
+        {/* ── RANKED ── */}
+        <div className="mt-4 grid grid-cols-2 gap-4 border-t border-white/[0.04] pt-4">
+          <RankedBadge entry={player.soloQ} label="Solo/Duo" />
+          <RankedBadge entry={player.flex}  label="Flex"     />
+        </div>
+
+        {/* ── QUICK STATS ── */}
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          {[
+            { label: "KDA moy.",    val: avgKda },
+            { label: `${winCount}/${player.matches.length} wins`, val: `${player.matches.length ? Math.round((winCount / player.matches.length) * 100) : 0}%` },
+            { label: "Parties",     val: player.soloQ ? String(player.soloQ.wins + player.soloQ.losses) : "—" },
+          ].map((s) => (
+            <div key={s.label} className="bg-black/20 px-3 py-2 text-center">
+              <p className="text-[13px] font-black text-white">{s.val}</p>
+              <p className="text-[8px] text-white/25 uppercase tracking-[0.15em]">{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* ── NOTES ── */}
+        <div className="mt-3">
+          {editNote ? (
+            <div className="flex gap-2">
+              <input
+                value={noteVal}
+                onChange={(e) => setNoteVal(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { onUpdateNote(noteVal); setEditNote(false); } }}
+                placeholder="Notes scouting..."
+                className="flex-1 bg-black/40 border border-white/[0.08] px-3 py-1.5 text-[11px] text-white placeholder-white/20 outline-none focus:border-red-500/40"
+                autoFocus
+              />
+              <button onClick={() => { onUpdateNote(noteVal); setEditNote(false); }}
+                className="px-3 py-1.5 bg-red-600 text-[10px] font-black text-white hover:bg-red-500 transition-colors">
+                OK
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setEditNote(true)}
+              className="w-full text-left px-3 py-2 border border-white/[0.04] bg-black/10 text-[10px] text-white/30 hover:text-white/50 hover:border-white/10 transition-all">
+              {player.notes || "Ajouter des notes..."}
+            </button>
+          )}
+        </div>
+
+        {/* ── MATCH HISTORY TOGGLE ── */}
+        {player.matches.length > 0 && (
+          <div className="mt-3">
+            <button
+              onClick={() => setShowMatches((v) => !v)}
+              className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/25 hover:text-white/50 transition-colors"
+            >
+              <span>{showMatches ? "▲" : "▼"}</span>
+              Historique ({player.matches.length} parties)
+            </button>
+
+            <AnimatePresence>
+              {showMatches && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden mt-2 border border-white/[0.04]"
+                >
+                  {/* col headers */}
+                  <div className="grid grid-cols-[3rem_1fr_5rem_6rem_5rem_4rem_3.5rem] items-center gap-2 px-4 py-1.5 bg-black/30">
+                    {["Résultat","Champion","Rôle","Score","KDA","CS/m","Durée"].map((h) => (
+                      <span key={h} className="text-[8px] font-black uppercase tracking-[0.15em] text-white/15 last:text-right">{h}</span>
+                    ))}
+                  </div>
+                  {player.matches.map((m) => <MatchRow key={m.matchId} match={m} />)}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Main Page ───────────────────────────────────────────────────────────── */
+
+export default function ScoutingLolPage() {
+  const [query,    setQuery]    = useState("");
+  const [loading,  setLoading]  = useState(false);
+  const [error,    setError]    = useState<string | null>(null);
+  const [players,  setPlayers]  = useState<ScoutedPlayer[]>([]);
+  const [sortBy,   setSortBy]   = useState<"added" | "rank" | "lft">("added");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function handleSearch() {
+    const raw = query.trim();
+    if (!raw) return;
+
+    // Parse "GameName#TAG" ou "GameName TAG"
+    const parts = raw.includes("#") ? raw.split("#") : raw.split(" ");
+    const gameName = parts[0]?.trim();
+    const tagLine  = (parts[1] ?? "NA1").trim();
+
+    if (!gameName) return;
+
+    // Check doublon
+    const exists = players.find(
+      (p) => p.account.gameName.toLowerCase() === gameName.toLowerCase() &&
+             p.account.tagLine.toLowerCase()  === tagLine.toLowerCase()
+    );
+    if (exists) { setError("Ce joueur est déjà dans la liste."); return; }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res  = await fetch(`/api/scouting?action=search&gameName=${encodeURIComponent(gameName)}&tagLine=${encodeURIComponent(tagLine)}`);
+      const json = await res.json();
+
+      if (!json.ok) throw new Error(json.error ?? "Erreur inconnue");
+
+      const newPlayer: ScoutedPlayer = {
+        ...json.data,
+        lft:     false,
+        notes:   "",
+        addedAt: new Date().toISOString(),
+      };
+
+      setPlayers((prev) => [newPlayer, ...prev]);
+      setQuery("");
+    } catch (err: unknown) {
+      const e = err as Error;
+      setError(e.message ?? "Joueur introuvable.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") handleSearch();
+  }
+
+  function toggleLft(puuid: string) {
+    setPlayers((prev) => prev.map((p) => p.account.puuid === puuid ? { ...p, lft: !p.lft } : p));
+  }
+
+  function updateNote(puuid: string, note: string) {
+    setPlayers((prev) => prev.map((p) => p.account.puuid === puuid ? { ...p, notes: note } : p));
+  }
+
+  function removePlayer(puuid: string) {
+    setPlayers((prev) => prev.filter((p) => p.account.puuid !== puuid));
+  }
+
+  const sorted = [...players].sort((a, b) => {
+    if (sortBy === "rank")  return tierScore(b.soloQ) - tierScore(a.soloQ);
+    if (sortBy === "lft")   return (b.lft ? 1 : 0) - (a.lft ? 1 : 0);
+    return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
+  });
+
+  const lftCount = players.filter((p) => p.lft).length;
+
+  return (
+    <div className="min-h-screen bg-[#09080a] text-white">
+
+      {/* HERO HEADER */}
+      <header className="relative overflow-hidden border-b border-white/[0.05]">
+        <div className="pointer-events-none absolute -left-40 -top-20 h-[500px] w-[600px] rounded-full bg-red-900/10 blur-[120px]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(700px_400px_at_5%_0%,rgba(239,68,68,0.08),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.01]" style={{ backgroundImage: "repeating-linear-gradient(0deg,#fff 0px,#fff 1px,transparent 1px,transparent 5px)" }} />
+
+        <div className="relative mx-auto max-w-[100rem] px-6 py-12 sm:px-10">
+          <motion.div className="mb-6 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em]"
+            initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: E }}>
+            <Link href="/" className="text-white/22 hover:text-white/50 transition-colors">DME</Link>
+            <span className="text-white/10">/</span>
+            <span className="text-red-400/65">Scouting · LoL</span>
+          </motion.div>
+
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="mb-4 flex items-center gap-3">
-                <div className="h-[2px] w-8 bg-red-500" />
-                <span className="text-[11px] font-black uppercase tracking-[0.32em] text-red-500">
-                  Staff & Coaching · Accès restreint
-                </span>
-              </div>
-              <h1 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl">
-                Scouting <span className="text-red-500">DME</span>
-              </h1>
-              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/40">
-                Données Riot en temps réel — rang, KDA, CS/min, historique matchs et statut live
-                pour tous les joueurs DME LoL.
-              </p>
+              <motion.div className="mb-4 flex items-center gap-3"
+                initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.55, delay: 0.08, ease: E }}>
+                <div className="h-[2px] w-8 bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)]" />
+                <span className="text-[10px] font-black uppercase tracking-[0.32em] text-red-500">Outil interne · Staff DME</span>
+              </motion.div>
+
+              <motion.h1
+                className="font-display text-[2.8rem] uppercase leading-[0.88] text-white sm:text-[4rem]"
+                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.15, ease: E }}>
+                Scouting<br /><span className="text-red-500">League of Legends</span>
+              </motion.h1>
+
+              <motion.p className="mt-4 max-w-md text-sm leading-relaxed text-white/32"
+                initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.35, ease: E }}>
+                Recherche et analyse les profils. Marque les joueurs LFT pour le recrutement.
+                Données live via l&apos;API Riot.
+              </motion.p>
             </div>
-            <div className="flex divide-x divide-white/[0.07] border border-white/[0.07]">
+
+            {/* Stats */}
+            <motion.div className="grid grid-cols-3 divide-x divide-white/[0.06] border border-white/[0.06]"
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: E }}>
               {[
-                { val: String(PLAYERS.length), label: "Joueurs" },
-                { val: "6",                    label: "Rosters" },
-                { val: "Live",                 label: "Data"    },
+                { val: String(players.length), label: "Profils"  },
+                { val: String(lftCount),        label: "LFT"      },
+                { val: "NA1",                   label: "Serveur"  },
               ].map((s) => (
-                <div key={s.label} className="px-7 py-5 text-center">
-                  <p className="text-2xl font-black text-white">{s.val}</p>
-                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">{s.label}</p>
+                <div key={s.label} className="px-6 py-5 text-center">
+                  <p className="text-[1.8rem] font-black tabular-nums text-white">{s.val}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-white/20">{s.label}</p>
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[100rem] px-6 py-12 sm:px-10">
+      {/* MAIN */}
+      <main className="mx-auto max-w-[100rem] px-6 py-10 sm:px-10">
 
-        {/* ── FILTRES ── */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {/* roster */}
-            <div className="flex gap-1">
-              {ROSTER_TAGS.map((t) => (
-                <button key={t} onClick={() => setFilterRoster(t)}
-                  className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] transition-all ${
-                    filterRoster === t
-                      ? "bg-red-600 text-white"
-                      : "border border-white/[0.08] text-white/30 hover:border-white/20 hover:text-white/60"
-                  }`}>
-                  {t}
-                </button>
-              ))}
+        {/* SEARCH BAR */}
+        <motion.div className="mb-8"
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4, ease: E }}>
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Summoner Name  (ex: Nuteh  ou  DME Poubelle)"
+                className="w-full border border-white/[0.08] bg-[#0d0b0b] px-5 py-3.5 pr-12 text-[13px] text-white placeholder-white/20 outline-none focus:border-red-500/40 transition-colors"
+              />
+              {loading && (
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-red-500/60" />
+              )}
             </div>
-            {/* role */}
-            <div className="flex gap-1">
-              {ROLES.map((r) => (
-                <button key={r} onClick={() => setFilterRole(r)}
-                  className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] transition-all ${
-                    filterRole === r
-                      ? "bg-white/10 text-white"
-                      : "border border-white/[0.08] text-white/30 hover:border-white/20 hover:text-white/60"
-                  }`}>
-                  {r}
-                </button>
-              ))}
-            </div>
+            <button
+              onClick={handleSearch}
+              disabled={loading || !query.trim()}
+              className="bg-red-600 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.22em] text-white shadow-[0_0_24px_rgba(239,68,68,0.3)] transition-all hover:bg-red-500 hover:shadow-[0_0_36px_rgba(239,68,68,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {loading ? "..." : "Scout"}
+            </button>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* search */}
-            <input
-              type="text"
-              placeholder="Rechercher..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-[11px] text-white/70 placeholder:text-white/20 focus:border-white/20 focus:outline-none"
-            />
-            {/* sort */}
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="border border-white/[0.08] bg-[#0d0d0f] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 focus:outline-none">
-              <option value="roster">Roster</option>
-              <option value="role">Rôle</option>
-              <option value="pseudo">Pseudo</option>
-            </select>
-          </div>
-        </div>
+          {/* error */}
+          <AnimatePresence>
+            {error && (
+              <motion.p
+                initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                className="mt-2 text-[11px] text-red-400/80"
+              >
+                ⚠ {error}
+              </motion.p>
+            )}
+          </AnimatePresence>
 
-        {/* compte */}
-        <div className="mb-6 flex items-center gap-4">
-          <span className="text-[10px] font-black uppercase tracking-[0.35em] text-white/20">
-            {filtered.length} joueur{filtered.length > 1 ? "s" : ""}
-          </span>
-          <div className="h-px flex-1 bg-white/[0.05]" />
-        </div>
-
-        {/* grille */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-          {filtered.map((p) => (
-            <CarteJoueur key={`${p.pseudo}-${p.tag}`} player={p} />
-          ))}
-        </div>
-
-        <div className="mt-16 border-t border-white/[0.05] pt-8">
-          <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/15">
-            Source : Riot Games API · Rafraîchissement automatique toutes les 5 min ·
-            Données Solo/Duo Ranked uniquement pour le rang · 20 derniers matchs Ranked
+          {/* hint */}
+          <p className="mt-2 text-[10px] text-white/15">
+            Entre le <span className="text-white/30">Summoner Name</span> (NA1) — ex: <span className="text-white/30">Nuteh</span> ou <span className="text-white/30">DME Poubelle</span> · Données : Solo/Duo, Flex, Maîtrise, Historique
           </p>
-          <p className="mt-2 text-[9px] text-white/10">
-            Clé API Riot à configurer dans <code className="text-white/20">.env.local</code> → <code className="text-white/20">RIOT_API_KEY=RGAPI-xxxx</code>
+        </motion.div>
+
+        {/* CONTROLS */}
+        {players.length > 0 && (
+          <motion.div
+            className="mb-6 flex flex-wrap items-center gap-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}>
+            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20">
+              Trier par
+            </span>
+            {[
+              { val: "added", label: "Ajouté" },
+              { val: "rank",  label: "Rang"   },
+              { val: "lft",   label: "LFT"    },
+            ].map((opt) => (
+              <button
+                key={opt.val}
+                onClick={() => setSortBy(opt.val as typeof sortBy)}
+                className={`px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${
+                  sortBy === opt.val
+                    ? "border-red-500/40 bg-red-500/[0.08] text-red-400"
+                    : "border-white/[0.06] text-white/25 hover:border-white/15"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+
+            {lftCount > 0 && (
+              <div className="ml-auto flex items-center gap-2 border border-red-500/20 bg-red-500/[0.06] px-3 py-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-red-400/70">
+                  {lftCount} LFT
+                </span>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* PLAYER LIST */}
+        <AnimatePresence mode="popLayout">
+          {sorted.length === 0 && (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center gap-4 py-24 text-center"
+            >
+              <div className="relative h-16 w-16 opacity-[0.06]">
+                <Image src="/logo/logo-dme.png" alt="DME" fill className="object-contain" />
+              </div>
+              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/15">
+                Aucun joueur scouted
+              </p>
+              <p className="text-[10px] text-white/10 max-w-sm">
+                Entre un Summoner Name NA1 ci-dessus pour commencer l&apos;analyse. Ex : <span className="text-white/20">Nuteh</span>
+              </p>
+            </motion.div>
+          )}
+
+          <div className="grid gap-px bg-white/[0.03] md:grid-cols-2 xl:grid-cols-3">
+            {sorted.map((player) => (
+              <PlayerCard
+                key={player.account.puuid}
+                player={player}
+                onToggleLft={() => toggleLft(player.account.puuid)}
+                onUpdateNote={(note) => updateNote(player.account.puuid, note)}
+                onRemove={() => removePlayer(player.account.puuid)}
+              />
+            ))}
+          </div>
+        </AnimatePresence>
+
+        {/* DISCLAIMER */}
+        <div className="mt-12 border-t border-white/[0.04] pt-6">
+          <p className="text-[9px] text-white/12 max-w-2xl">
+            Outil interne DeathMark E-Sports · Données via Riot Games API · Usage strictement réservé au staff DME ·
+            Les données ne sont pas stockées — session uniquement · Riot Games n&apos;est pas affilié à DME
           </p>
         </div>
       </main>
+
+      <style jsx global>{`
+        @keyframes dme-marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,20 +1,17 @@
 // src/app/api/avl-standings/route.ts
 //
-// Parsing basé sur la structure RÉELLE du sheet Aegis AVL Spring 2026 :
+// Mapping réel des colonnes gviz (vérifié sur les données live) :
 //
-// Colonnes (index gviz) :
-//   idx 2  = Rank        (string "1".."8")
-//   idx 3  = Team name   (string)
-//   idx 4  = Match Record (string "W - L")
-//   idx 7  = Game Record  (string "W - L")
-//   idx 11 = GD           (number, ex: 2, -1, 0)
-//
-// Structure des rows :
-//   Rows 0-7  → Hextech (pas de ligne titre — titre dans le label de colonne)
-//   Row  8    → "Chemtech Standings" (titre)
-//   Row  9    → header Chemtech
-//   Rows 10-16 → Chemtech data
-//   Row  17+  → Schedule (à ignorer — col 3 = "Streamed Match", "Week X"...)
+//   idx 2  (C) = Rank          string "1".."8"
+//   idx 3  (D) = Team name     string
+//   idx 4  (E) = null          ← Match Record N'EST PAS ICI
+//   idx 7  (H) = Game Record   string "8 - 1"
+//   idx 8  (I) = GD string     " [+7]"  (ignoré — on prend idx 11)
+//   idx 9  (J) = MW            string "4"
+//   idx 10 (K) = ML            string "0"
+//   idx 11 (L) = GD number     7.0      ← utiliser .f ("+7") ou .v (7.0)
+//   idx 13 (N) = GW number     8.0
+//   idx 14 (O) = GL number     1.0
 
 import { NextResponse } from "next/server";
 
@@ -23,39 +20,16 @@ const SHEET_GID = "402880902";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${SHEET_GID}`;
 const SHEET_LINK = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=${SHEET_GID}`;
 
-/* =========================================================
-   TYPES gviz
-========================================================= */
+/* ── Types gviz ──────────────────────────────────────────────────────────── */
 
 type GvizCellValue = string | number | boolean | null;
 
-interface GvizCell {
-  v: GvizCellValue;
-  f?: string;
-}
+interface GvizCell  { v: GvizCellValue; f?: string; }
+interface GvizRow   { c: (GvizCell | null)[]; }
+interface GvizTable { cols: { id: string; label: string; type: string }[]; rows: GvizRow[]; }
+interface GvizResp  { table: GvizTable; }
 
-interface GvizRow {
-  c: (GvizCell | null)[];
-}
-
-interface GvizColumn {
-  id:    string;
-  label: string;
-  type:  string;
-}
-
-interface GvizTable {
-  cols: GvizColumn[];
-  rows: GvizRow[];
-}
-
-interface GvizResponse {
-  table: GvizTable;
-}
-
-/* =========================================================
-   TYPES résultat exportés
-========================================================= */
+/* ── Types exportés ──────────────────────────────────────────────────────── */
 
 export interface TeamRow {
   rank:   number;
@@ -79,134 +53,138 @@ export interface StandingsPayload {
   sheetLink:   string;
 }
 
-/* =========================================================
-   HELPERS
-========================================================= */
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
 
-function cellStr(cell: GvizCell | null | undefined): string {
+function str(cell: GvizCell | null | undefined): string {
   if (!cell) return "";
   if (typeof cell.v === "string") return cell.v.trim();
   if (cell.f) return cell.f.trim();
   return "";
 }
 
-function cellNum(cell: GvizCell | null | undefined): number {
+function num(cell: GvizCell | null | undefined): number {
   if (!cell) return 0;
   if (typeof cell.v === "number") return cell.v;
+  // fallback: tenter de parser le formatted value
+  if (cell.f) {
+    const n = parseFloat(cell.f.replace(/[^0-9.-]/g, ""));
+    if (!isNaN(n)) return n;
+  }
   return 0;
 }
 
-function parseRecord(raw: string): [number, number] {
-  const m = raw.match(/(\d+)\s*[-–]\s*(\d+)/);
-  return m ? [parseInt(m[1], 10), parseInt(m[2], 10)] : [0, 0];
+function numStr(cell: GvizCell | null | undefined): number {
+  // Pour MW/ML qui sont des strings "4", "0"
+  const s = str(cell);
+  const n = parseInt(s, 10);
+  return isNaN(n) ? 0 : n;
 }
 
-function parseGviz(raw: string): GvizResponse | null {
+function parseGviz(raw: string): GvizResp | null {
   try {
     const m = raw.match(/google\.visualization\.Query\.setResponse\((\{[\s\S]*\})\)/);
     if (!m?.[1]) return null;
-    return JSON.parse(m[1]) as GvizResponse;
+    return JSON.parse(m[1]) as GvizResp;
   } catch {
     return null;
   }
 }
 
-/**
- * Vérifie si une row est une ligne de données valide :
- * - idx 2 = rank (string "1".."15")
- * - idx 3 = team name (string non vide, pas un URL, pas un header)
- * - idx 4 = match record format "N - N"
- */
-function isDataRow(cells: (GvizCell | null)[]): boolean {
-  const rank     = cellStr(cells[2]);
-  const team     = cellStr(cells[3]);
-  const matchRec = cellStr(cells[4]);
+/* ── Détection ligne de données valide ───────────────────────────────────── */
+//
+// Une ligne valide a :
+//   - idx 2 : rank entier 1-15
+//   - idx 3 : team name non vide, pas un header/url/titre
+//   - idx 9 : MW parseable comme entier (peut être "0")
+//
+function isDataRow(c: (GvizCell | null)[]): boolean {
+  const rank = str(c[2]);
+  const team = str(c[3]);
+  const mw   = str(c[9]);
 
   if (!rank || !team) return false;
 
-  // Rank doit être un entier entre 1 et 15
-  const rankNum = parseInt(rank, 10);
-  if (isNaN(rankNum) || rankNum < 1 || rankNum > 15) return false;
-  if (String(rankNum) !== rank) return false; // ex: "8:00pm" → false
+  const rankN = parseInt(rank, 10);
+  if (isNaN(rankN) || rankN < 1 || rankN > 15) return false;
+  if (String(rankN) !== rank) return false;
 
-  // Team ne doit pas être une URL, un header, ou "Streamed Match"
-  if (team.startsWith("http")) return false;
-  if (team.toLowerCase().includes("standing")) return false;
-  if (team.toLowerCase().includes("streamed")) return false;
-  if (team.toLowerCase() === "blue side" || team.toLowerCase() === "red side") return false;
+  // Exclure les headers et titres
+  const teamLow = team.toLowerCase();
+  if (teamLow.includes("standing"))    return false;
+  if (teamLow.includes("streamed"))    return false;
+  if (teamLow.includes("blue side"))   return false;
+  if (teamLow.includes("red side"))    return false;
+  if (teamLow.includes("week "))       return false;
+  if (teamLow.startsWith("http"))      return false;
+  if (teamLow === "teamm")             return false; // header chemtech
 
-  // Match record doit être au format "N - N"
-  if (!/^\d+\s*-\s*\d+$/.test(matchRec)) return false;
+  // MW doit être un entier (peut être "0")
+  if (!/^\d+$/.test(mw)) return false;
 
   return true;
 }
 
-/**
- * Détecte si une row est le titre "Chemtech Standings"
- */
-function isChemtechTitle(cells: (GvizCell | null)[]): boolean {
-  const t = cellStr(cells[3]).toLowerCase();
+function isChemtechTitle(c: (GvizCell | null)[]): boolean {
+  const t = str(c[3]).toLowerCase();
   return t.includes("chemtech") && t.includes("standing");
 }
 
-/**
- * Extrait les deux conférences.
- *
- * Hextech  = rows avant "Chemtech Standings"
- * Chemtech = rows après "Chemtech Standings"
- * On arrête dès qu'on trouve "Streamed Match" ou une date (col 1 = date).
- */
+function isScheduleStart(c: (GvizCell | null)[]): boolean {
+  const t = str(c[3]).toLowerCase();
+  return (
+    t.includes("streamed match") ||
+    t.includes("week ") ||
+    t.includes("seeding") ||
+    t.includes("decider")
+  );
+}
+
+/* ── Extraction des deux conférences ─────────────────────────────────────── */
+
 function extractConferences(rows: GvizRow[]): ConferenceData[] {
   const hextech:  ConferenceData = { name: "Hextech",  teams: [] };
   const chemtech: ConferenceData = { name: "Chemtech", teams: [] };
 
   let inChemtech = false;
-  let scheduleStarted = false;
+  let done       = false;
 
   for (const row of rows) {
-    const cells = row.c;
-    if (!cells) continue;
+    if (done) break;
+    const c = row.c;
+    if (!c) continue;
 
-    // Fin du classement : on arrive dans le schedule
-    const col3 = cellStr(cells[3]).toLowerCase();
-    if (col3.includes("streamed match") || col3.includes("week ")) {
-      scheduleStarted = true;
-    }
-    if (scheduleStarted) continue;
+    if (isScheduleStart(c)) { done = true; break; }
+    if (isChemtechTitle(c)) { inChemtech = true; continue; }
+    if (!isDataRow(c)) continue;
 
-    // Détection titre Chemtech
-    if (isChemtechTitle(cells)) {
-      inChemtech = true;
-      continue;
-    }
+    const rank  = parseInt(str(c[2]), 10);
+    const team  = str(c[3]);
 
-    // Ligne de données ?
-    if (!isDataRow(cells)) continue;
+    // Game record — idx 7 : "8 - 1"
+    const gameStr = str(c[7]);
+    const gameM   = gameStr.match(/(\d+)\s*[-–]\s*(\d+)/);
+    const gameW   = gameM ? parseInt(gameM[1], 10) : Math.round(num(c[13]));
+    const gameL   = gameM ? parseInt(gameM[2], 10) : Math.round(num(c[14]));
 
-    const rank     = parseInt(cellStr(cells[2]), 10);
-    const team     = cellStr(cells[3]);
-    const [matchW, matchL] = parseRecord(cellStr(cells[4]));
-    const [gameW,  gameL]  = parseRecord(cellStr(cells[7]));
-    // GD est stocké en number à idx 11
-    const gd = cellNum(cells[11]);
+    // Match record — idx 9 (MW string) + idx 10 (ML string)
+    const matchW = numStr(c[9]);
+    const matchL = numStr(c[10]);
+
+    // GD — idx 11 est un number (ex: 7.0, -4.0)
+    const gd = Math.round(num(c[11]));
+
     const isDME = team.toLowerCase().includes("deathmark");
 
     const teamRow: TeamRow = { rank, team, matchW, matchL, gameW, gameL, gd, isDME };
 
-    if (inChemtech) {
-      chemtech.teams.push(teamRow);
-    } else {
-      hextech.teams.push(teamRow);
-    }
+    if (inChemtech) chemtech.teams.push(teamRow);
+    else            hextech.teams.push(teamRow);
   }
 
-  // Ne retourner que les conférences qui ont des équipes
-  return [hextech, chemtech].filter((c) => c.teams.length > 0);
+  return [hextech, chemtech].filter((conf) => conf.teams.length > 0);
 }
 
-/* =========================================================
-   HANDLER
-========================================================= */
+/* ── Handler ─────────────────────────────────────────────────────────────── */
 
 export async function GET(): Promise<NextResponse> {
   try {
@@ -224,7 +202,7 @@ export async function GET(): Promise<NextResponse> {
 
     if (!gviz?.table?.rows) {
       return NextResponse.json(
-        { error: "Format gviz invalide" },
+        { error: "Format gviz invalide ou sheet inaccessible" },
         { status: 502 }
       );
     }
@@ -233,7 +211,7 @@ export async function GET(): Promise<NextResponse> {
 
     if (conferences.length === 0) {
       return NextResponse.json(
-        { error: "Aucune équipe trouvée dans le sheet" },
+        { error: "Aucune équipe trouvée — vérifier la structure du sheet" },
         { status: 404 }
       );
     }
@@ -251,7 +229,9 @@ export async function GET(): Promise<NextResponse> {
     });
 
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Unknown error" },
+      { status: 500 }
+    );
   }
 }
