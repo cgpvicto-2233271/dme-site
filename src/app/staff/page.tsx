@@ -78,7 +78,7 @@ function MembreRow({ m, index, accent }: { m: StaffMember; index: number; accent
   const initials = `${m.prenom[0]}${m.nom[0]}`;
   return (
     <motion.article
-      className="group relative flex items-start gap-6 overflow-hidden border-b border-white/[0.05] bg-[#080808] px-8 py-7"
+      className="group relative overflow-hidden border-b border-white/[0.05] bg-[#080808] px-5 py-6 sm:px-8 sm:py-7"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
@@ -86,37 +86,38 @@ function MembreRow({ m, index, accent }: { m: StaffMember; index: number; accent
     >
       <div className="absolute left-0 top-0 h-full w-[1px] origin-top scale-y-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-y-100" />
 
-      <div className={`flex h-12 w-12 shrink-0 items-center justify-center text-[13px] font-black border ${
-        accent ? "border-red-600/30 bg-red-600/[0.07] text-red-500" : "border-white/[0.07] bg-white/[0.03] text-white/30"
-      }`}>
-        {initials}
-      </div>
-
-      <div className="min-w-0 flex-1">
-        <div className="mb-1 flex flex-wrap items-baseline gap-3">
-          <p className={`font-mono text-[9px] font-black uppercase tracking-[0.35em] ${accent ? "text-red-600/60" : "text-white/20"}`}>{m.role}</p>
+      <div className="flex items-start gap-4">
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center text-[12px] font-black border sm:h-12 sm:w-12 sm:text-[13px] ${
+          accent ? "border-red-600/30 bg-red-600/[0.07] text-red-500" : "border-white/[0.07] bg-white/[0.03] text-white/30"
+        }`}>
+          {initials}
         </div>
-        <h3 className="mb-2 font-display text-[1.5rem] uppercase leading-tight text-white">
-          {m.prenom}{" "}
-          <span className="text-white/35 normal-case font-mono text-[1rem]">&ldquo;{m.pseudo}&rdquo;</span>{" "}
-          {m.nom}
-        </h3>
-        <p className="mb-4 text-[0.82rem] leading-relaxed text-white/28">{t(m.descFr, m.descEn)}</p>
-        <div className="flex flex-wrap gap-2">
-          {m.tags.map((tag) => (
-            <span key={tag} className="border border-white/[0.05] px-2.5 py-[3px] font-mono text-[8px] font-black uppercase tracking-[0.2em] text-white/18">
-              {tag}
-            </span>
-          ))}
+
+        <div className="min-w-0 flex-1">
+          <p className={`mb-1 font-mono text-[9px] font-black uppercase tracking-[0.3em] ${accent ? "text-red-600/60" : "text-white/22"}`}>{m.role}</p>
+          <h3 className="mb-2 font-display text-[1.3rem] uppercase leading-tight text-white sm:text-[1.5rem]">
+            {m.prenom}{" "}
+            <span className="text-white/32 normal-case font-mono text-[0.85rem] sm:text-[1rem]">&ldquo;{m.pseudo}&rdquo;</span>{" "}
+            {m.nom}
+          </h3>
+          <p className="mb-3 text-[0.8rem] leading-relaxed text-white/42 sm:text-[0.82rem]">{t(m.descFr, m.descEn)}</p>
+          <div className="flex flex-wrap items-center justify-between gap-y-2">
+            <div className="flex flex-wrap gap-1.5">
+              {m.tags.map((tag) => (
+                <span key={tag} className="border border-white/[0.05] px-2 py-[3px] font-mono text-[7px] font-black uppercase tracking-[0.15em] text-white/18 sm:text-[8px]">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <a
+              href={`mailto:${m.email}?subject=${encodeURIComponent(`DME — ${m.role} — ${m.prenom} ${m.nom}`)}`}
+              className="shrink-0 text-[8px] font-black uppercase tracking-[0.25em] text-white/18 transition-all duration-300 hover:text-red-600/70"
+            >
+              {t("Écrire →", "Write →")}
+            </a>
+          </div>
         </div>
       </div>
-
-      <a
-        href={`mailto:${m.email}?subject=${encodeURIComponent(`DME — ${m.role} — ${m.prenom} ${m.nom}`)}`}
-        className="hidden shrink-0 self-center text-[8px] font-black uppercase tracking-[0.3em] text-white/18 transition-all duration-300 hover:text-red-600/70 sm:block"
-      >
-        {t("Écrire →", "Write →")}
-      </a>
     </motion.article>
   );
 }
@@ -165,7 +166,7 @@ export default function StaffPage() {
           </div>
 
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <motion.p className="max-w-md text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/30" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
+            <motion.p className="max-w-md text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/42" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
               {t(
                 "Direction, management et conseil d'administration — le noyau qui construit DeathMark au quotidien, split après split.",
                 "Leadership, management and board — the core that builds DeathMark daily, split after split."
@@ -178,9 +179,9 @@ export default function StaffPage() {
                 { val: String(management.length), labelFr: "Management", labelEn: "Management" },
                 { val: String(ca.length),         labelFr: "CA",         labelEn: "Board"      },
               ].map((s) => (
-                <div key={s.val + s.labelFr} className="px-8 py-5 text-center">
-                  <p className="text-[2rem] font-black tabular-nums leading-none text-white">{s.val}</p>
-                  <p className="mt-1.5 text-[8px] font-black uppercase tracking-[0.35em] text-white/20">{t(s.labelFr, s.labelEn)}</p>
+                <div key={s.val + s.labelFr} className="px-4 py-4 text-center sm:px-8 sm:py-5">
+                  <p className="text-[1.6rem] font-black tabular-nums leading-none text-white sm:text-[2rem]">{s.val}</p>
+                  <p className="mt-1.5 text-[7px] font-black uppercase tracking-[0.25em] text-white/25 sm:text-[8px] sm:tracking-[0.35em]">{t(s.labelFr, s.labelEn)}</p>
                 </div>
               ))}
             </motion.div>

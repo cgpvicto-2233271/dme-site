@@ -10,44 +10,48 @@ const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const JEUX = [
   {
-    id:     "lol",
-    nom:    "League of Legends",
-    sub:    "Semi-Pro · AVL · LQL · Aegis",
-    subEn:  "Semi-Pro · AVL · LQL · Aegis",
-    desc:   "6 rosters actifs de l'Emerald au niveau Semi-Pro / Challenger. Encadrement structuré, scrims réguliers, ligues francophones et NA.",
-    descEn: "6 active rosters from Emerald to Semi-Pro / Challenger. Structured coaching, regular scrims, francophone and NA leagues.",
-    lien:   "https://docs.google.com/forms/d/e/1FAIpQLScfbd24P68d4kXh_YYOHju1XZtZVjhPgS3_qTNM2auefj367A/viewform?usp=publish-editor",
-    logo:   "/medias/commun/lol-logo.png",
+    id:      "lol",
+    nom:     "League of Legends",
+    sub:     "Semi-Pro · AVL · LQL · Aegis",
+    subEn:   "Semi-Pro · AVL · LQL · Aegis",
+    desc:    "6 rosters actifs de l'Emerald au niveau Semi-Pro / Challenger. Encadrement structuré, scrims réguliers, ligues francophones et NA.",
+    descEn:  "6 active rosters from Emerald to Semi-Pro / Challenger. Structured coaching, regular scrims, francophone and NA leagues.",
+    lien:    "https://docs.google.com/forms/d/e/1FAIpQLScfbd24P68d4kXh_YYOHju1XZtZVjhPgS3_qTNM2auefj367A/viewform?usp=publish-editor",
+    banner:  "/medias/commun/banner-leagueoflegends.png",
+    accent:  "#C89B3C",
   },
   {
-    id:     "valorant",
-    nom:    "Valorant",
-    sub:    "Semi-Pro · Contenders & Elite 4",
-    subEn:  "Semi-Pro · Contenders & Elite 4",
-    desc:   "Deux rosters Semi-Pro actifs. On cherche des profils pour renforcer les line-ups, structurer les scrims et viser les tournois compétitifs.",
-    descEn: "Two active Semi-Pro rosters. We're looking for players to strengthen line-ups, structure scrims, and target competitive tournaments.",
-    lien:   "https://docs.google.com/forms/d/e/1FAIpQLSfJSsPpkQK4KiJBeSKHCL861BG41d9K8HMGD74f7X6AoVK-fw/viewform?usp=publish-editor",
-    logo:   "/medias/commun/logo-valorant2.png",
+    id:      "valorant",
+    nom:     "Valorant",
+    sub:     "Semi-Pro · Contenders & Elite 4",
+    subEn:   "Semi-Pro · Contenders & Elite 4",
+    desc:    "Deux rosters Semi-Pro actifs. On cherche des profils pour renforcer les line-ups, structurer les scrims et viser les tournois compétitifs.",
+    descEn:  "Two active Semi-Pro rosters. We're looking for players to strengthen line-ups, structure scrims, and target competitive tournaments.",
+    lien:    "https://docs.google.com/forms/d/e/1FAIpQLSfJSsPpkQK4KiJBeSKHCL861BG41d9K8HMGD74f7X6AoVK-fw/viewform?usp=publish-editor",
+    banner:  "/medias/commun/banner-valorant.png",
+    accent:  "#FF4655",
   },
   {
-    id:     "rocket-league",
-    nom:    "Rocket League",
-    sub:    "Grand Champion · 3v3",
-    subEn:  "Grand Champion · 3v3",
-    desc:   "Six rosters GC+/SSL actifs. Pôle en croissance pour joueurs réguliers et motivés — progresser en équipe, enchaîner les tournois.",
-    descEn: "Six active GC+/SSL rosters. A growing hub for motivated players — grow as a team, compete in back-to-back tournaments.",
-    lien:   "https://docs.google.com/forms/d/e/1FAIpQLSdX_TjLQR0GrI8oErHzerN5B84zWyXv7EHV3JFonzvgu701Ww/viewform?usp=publish-editor",
-    logo:   "/medias/commun/rll-logo.png",
+    id:      "rocket-league",
+    nom:     "Rocket League",
+    sub:     "Grand Champion · 3v3",
+    subEn:   "Grand Champion · 3v3",
+    desc:    "Six rosters GC+/SSL actifs. Pôle en croissance pour joueurs réguliers et motivés — progresser en équipe, enchaîner les tournois.",
+    descEn:  "Six active GC+/SSL rosters. A growing hub for motivated players — grow as a team, compete in back-to-back tournaments.",
+    lien:    "https://docs.google.com/forms/d/e/1FAIpQLSdX_TjLQR0GrI8oErHzerN5B84zWyXv7EHV3JFonzvgu701Ww/viewform?usp=publish-editor",
+    banner:  "/medias/commun/banner-rocketleague.png",
+    accent:  "#0082C8",
   },
   {
-    id:     "marvel-rivals",
-    nom:    "Marvel Rivals",
-    sub:    "Compétitif · Top 256 Americas",
-    subEn:  "Competitive · Top 256 Americas",
-    desc:   "DME Street — 3× Top 256 Americas. On cherche des profils sérieux pour renforcer le roster et maintenir notre niveau sur la scène NA.",
-    descEn: "DME Street — 3× Top 256 Americas. Looking for serious players to reinforce the roster and maintain our level on the NA scene.",
-    lien:   "https://docs.google.com/forms/d/e/1FAIpQLSdvsWzhDudCCinp_5EQgTGW3IqIYIfqFMP05IUCt5dIRQ9J5g/viewform?usp=publish-editor",
-    logo:   "/medias/commun/logo-marvel.png",
+    id:      "marvel-rivals",
+    nom:     "Marvel Rivals",
+    sub:     "Compétitif · Top 256 Americas",
+    subEn:   "Competitive · Top 256 Americas",
+    desc:    "DME Street — 3× Top 256 Americas. On cherche des profils sérieux pour renforcer le roster et maintenir notre niveau sur la scène NA.",
+    descEn:  "DME Street — 3× Top 256 Americas. Looking for serious players to reinforce the roster and maintain our level on the NA scene.",
+    lien:    "https://docs.google.com/forms/d/e/1FAIpQLSdvsWzhDudCCinp_5EQgTGW3IqIYIfqFMP05IUCt5dIRQ9J5g/viewform?usp=publish-editor",
+    banner:  "/medias/commun/banner-marvelrivals.png",
+    accent:  "#E61515",
   },
 ] as const;
 
@@ -84,20 +88,18 @@ export default function RecrutementPage() {
       {/* ── HERO ── */}
       <section className="relative overflow-hidden border-b border-white/[0.05] pb-20 pt-28">
         <div className="pointer-events-none absolute -top-32 left-0 h-[500px] w-[600px] bg-[radial-gradient(ellipse,rgba(220,38,38,0.07),transparent_65%)]" />
-        <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none text-[clamp(8rem,18vw,16rem)] font-display uppercase leading-none text-white/[0.025]">
-          DME
-        </div>
+        <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none font-display uppercase leading-none text-white/[0.025]" style={{ fontSize: "clamp(8rem,18vw,16rem)" }}>DME</div>
 
         <div className="relative mx-auto max-w-[120rem] px-6 sm:px-10">
           <motion.div className="mb-10 flex items-center gap-4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease }}>
             <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">
+            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/30">
               {t("Recrutement ouvert · 2026", "Open Recruitment · 2026")}
             </span>
           </motion.div>
 
           <div className="overflow-hidden mb-6">
-            <motion.h1 className="text-[clamp(3.5rem,9vw,8.5rem)] font-black uppercase leading-[0.88] tracking-tight" initial={{ opacity: 0, y: 80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease }}>
+            <motion.h1 className="font-display font-black uppercase leading-[0.88] tracking-tight" style={{ fontSize: "clamp(3.5rem,9vw,8.5rem)" }} initial={{ opacity: 0, y: 80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease }}>
               <span className="block text-white">{t("Rejoins", "Join")}</span>
               <span className="block text-white/15">DeathMark</span>
               <span className="block text-red-600">.</span>
@@ -105,22 +107,22 @@ export default function RecrutementPage() {
           </div>
 
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <motion.p className="max-w-md text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/30" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
+            <motion.p className="max-w-md text-[14px] leading-relaxed text-white/45" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
               {t(
                 "On cherche des joueurs sérieux, constants et communicatifs sur tous nos jeux. Si tu veux progresser dans une structure pro — c'est ici.",
                 "We're looking for serious, consistent, and communicative players across all our games. If you want to grow within a professional structure — this is the place."
               )}
             </motion.p>
 
-            <motion.div className="flex divide-x divide-white/[0.06] border border-white/[0.06]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease }}>
+            <motion.div className="flex divide-x divide-white/[0.07] border border-white/[0.08]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease }}>
               {([
                 { val: "04",  labelFr: "Jeux",    labelEn: "Games"   },
                 { val: "15+", labelFr: "Rosters",  labelEn: "Rosters" },
                 { val: "NA",  labelFr: "Région",   labelEn: "Region"  },
               ] as const).map((s) => (
                 <div key={s.val} className="px-8 py-5 text-center">
-                  <p className="text-[2rem] font-black tabular-nums leading-none text-white">{s.val}</p>
-                  <p className="mt-1.5 text-[8px] font-black uppercase tracking-[0.35em] text-white/20">{t(s.labelFr, s.labelEn)}</p>
+                  <p className="font-display text-[2rem] font-black tabular-nums leading-none text-white">{s.val}</p>
+                  <p className="mt-1.5 text-[8px] font-black uppercase tracking-[0.35em] text-white/28">{t(s.labelFr, s.labelEn)}</p>
                 </div>
               ))}
             </motion.div>
@@ -131,55 +133,92 @@ export default function RecrutementPage() {
       {/* ── PROCESSUS ── */}
       <section ref={processRef} className="border-b border-white/[0.04] py-20">
         <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
-          <motion.div className="mb-10 flex items-center gap-4" initial={{ opacity: 0 }} animate={processView ? { opacity: 1 } : {}} transition={{ duration: 0.5, ease }}>
+          <motion.div className="mb-12 flex items-center gap-4" initial={{ opacity: 0 }} animate={processView ? { opacity: 1 } : {}} transition={{ duration: 0.5, ease }}>
             <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Le processus", "The Process")}</span>
+            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/30">{t("Le processus", "The Process")}</span>
             <div className="h-px flex-1 bg-white/[0.04]" />
           </motion.div>
 
-          <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-[1px] bg-white/[0.05] sm:grid-cols-2 lg:grid-cols-4">
             {PROCESSUS.map((b, i) => (
-              <motion.div key={b.num} className="group relative overflow-hidden bg-[#080808] px-8 py-10" initial={{ opacity: 0, y: 28 }} animate={processView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.09, ease }}>
-                <div className="absolute left-0 right-0 top-0 h-[1px] origin-left scale-x-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-x-100" />
-                <p className="mb-6 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/30">{b.num}</p>
-                <h3 className="mb-3 font-display text-[1.6rem] uppercase leading-tight text-white">{t(b.titre, b.titreEn)}</h3>
-                <p className="text-[0.82rem] leading-relaxed text-white/28">{t(b.texte, b.texteEn)}</p>
+              <motion.div key={b.num}
+                className="group relative overflow-hidden bg-[#080808] px-8 py-10"
+                initial={{ opacity: 0, y: 28 }} animate={processView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.09, ease }}
+              >
+                <div className="absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
+                <div className="absolute inset-0 bg-gradient-to-b from-red-950/0 to-transparent transition-all duration-500 group-hover:from-red-950/[0.12]" />
+
+                {/* Step number — large ghost */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute right-4 top-4 select-none font-display font-black text-white/[0.04] leading-none"
+                  style={{ fontSize: "5rem" }}
+                >
+                  {b.num}
+                </div>
+
+                <p className="relative mb-6 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/45">{b.num}</p>
+                <h3 className="relative mb-4 font-display text-[1.6rem] uppercase leading-tight text-white">{t(b.titre, b.titreEn)}</h3>
+                <p className="relative text-[13px] leading-relaxed text-white/45">{t(b.texte, b.texteEn)}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── JEUX ── */}
+      {/* ── JEUX — with full banner images ── */}
       <section ref={jeuxRef} className="py-20">
         <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
-          <motion.div className="mb-10 flex items-center gap-4" initial={{ opacity: 0 }} animate={jeuxView ? { opacity: 1 } : {}} transition={{ duration: 0.5, ease }}>
+          <motion.div className="mb-12 flex items-center gap-4" initial={{ opacity: 0 }} animate={jeuxView ? { opacity: 1 } : {}} transition={{ duration: 0.5, ease }}>
             <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Choisir un jeu", "Choose a Game")}</span>
+            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/30">{t("Choisir un jeu", "Choose a Game")}</span>
             <div className="h-px flex-1 bg-white/[0.04]" />
           </motion.div>
 
-          <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-[1px] bg-white/[0.05] sm:grid-cols-2 xl:grid-cols-4">
             {JEUX.map((jeu, i) => (
-              <motion.div key={jeu.id} className="group relative flex flex-col overflow-hidden bg-[#080808]" initial={{ opacity: 0, y: 32 }} animate={jeuxView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.65, delay: i * 0.08, ease }}>
-                <div className="absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
-                <div className="relative flex h-[160px] items-center justify-center overflow-hidden border-b border-white/[0.04] bg-[#050505]">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(300px_200px_at_50%_50%,rgba(220,38,38,0.05),transparent)]" />
-                  <Image src={jeu.logo} alt={jeu.nom} width={240} height={120} className="max-h-[100px] w-auto object-contain opacity-70 transition duration-500 group-hover:opacity-100" />
+              <motion.div key={jeu.id}
+                className="group relative flex flex-col overflow-hidden bg-[#080808]"
+                initial={{ opacity: 0, y: 32 }} animate={jeuxView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.65, delay: i * 0.08, ease }}
+              >
+                <div className="absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" style={{ background: jeu.accent }} />
+
+                {/* Banner image with gradient overlay */}
+                <div className="relative h-[180px] overflow-hidden bg-[#050505]">
+                  <Image
+                    src={jeu.banner}
+                    alt={jeu.nom}
+                    fill
+                    sizes="(max-width:640px) 100vw,(max-width:1280px) 50vw,25vw"
+                    className="object-cover object-center brightness-60 transition-all duration-600 group-hover:scale-[1.04] group-hover:brightness-75"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/40 to-transparent" />
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ background: `radial-gradient(ellipse 80% 60% at 50% 100%, ${jeu.accent}18, transparent)` }}
+                  />
                 </div>
+
                 <div className="flex flex-1 flex-col gap-4 p-6">
                   <div>
-                    <p className="mb-1 text-[9px] font-black uppercase tracking-[0.3em] text-red-600/55">{t(jeu.sub, jeu.subEn)}</p>
+                    <p className="mb-1 text-[9px] font-black uppercase tracking-[0.3em] text-red-500/65">{t(jeu.sub, jeu.subEn)}</p>
                     <h3 className="font-display text-[1.35rem] uppercase leading-tight text-white">{jeu.nom}</h3>
                   </div>
-                  <p className="flex-1 text-[0.82rem] leading-relaxed text-white/28">{t(jeu.desc, jeu.descEn)}</p>
-                  <div className="flex items-center justify-between gap-3 border-t border-white/[0.05] pt-4">
+                  <p className="flex-1 text-[13px] leading-relaxed text-white/45">{t(jeu.desc, jeu.descEn)}</p>
+                  <div className="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
                     <div className="flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-600" />
-                      <span className="text-[8px] font-black uppercase tracking-[0.25em] text-red-600/50">{t("Spots ouverts", "Open Spots")}</span>
+                      <span className="h-[5px] w-[5px] animate-pulse rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.8)]" />
+                      <span className="text-[8px] font-black uppercase tracking-[0.25em] text-red-500/60">{t("Spots ouverts", "Open Spots")}</span>
                     </div>
-                    <Link href={jeu.lien} target="_blank" rel="noopener noreferrer" className="text-[9px] font-black uppercase tracking-[0.3em] text-red-600 transition-all duration-300 hover:text-red-500">
-                      {t("Postuler →", "Apply →")}
+                    <Link
+                      href={jeu.lien}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[9px] font-black uppercase tracking-[0.3em] text-red-600 transition-all duration-300 hover:text-red-500 hover:gap-3 flex items-center gap-2"
+                    >
+                      {t("Postuler", "Apply")} →
                     </Link>
                   </div>
                 </div>
@@ -195,7 +234,7 @@ export default function RecrutementPage() {
           <motion.div className="mb-14" initial={{ opacity: 0, y: 24 }} animate={pillarsView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, ease }}>
             <div className="mb-4 flex items-center gap-4">
               <div className="h-px w-8 bg-red-600" />
-              <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Pourquoi rejoindre DME", "Why Join DME")}</span>
+              <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/30">{t("Pourquoi rejoindre DME", "Why Join DME")}</span>
             </div>
             <h2 className="font-display text-[clamp(2rem,5vw,4rem)] uppercase leading-tight">
               <span className="text-white">{t("Une structure", "A structure")}</span>{" "}
@@ -203,13 +242,21 @@ export default function RecrutementPage() {
             </h2>
           </motion.div>
 
-          <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-[1px] bg-white/[0.05] sm:grid-cols-2 lg:grid-cols-4">
             {PILLARS.map((b, i) => (
-              <motion.div key={b.num} className="group relative overflow-hidden bg-[#060606] px-7 py-10" initial={{ opacity: 0, y: 28 }} animate={pillarsView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.09, ease }}>
-                <div className="absolute left-0 right-0 top-0 h-[1px] origin-left scale-x-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-x-100" />
-                <p className="mb-5 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/30">{b.num}</p>
-                <h3 className="mb-3 font-display text-[1.3rem] uppercase leading-tight text-white">{t(b.titre, b.titreEn)}</h3>
-                <p className="text-[0.82rem] leading-relaxed text-white/28">{t(b.texte, b.texteEn)}</p>
+              <motion.div key={b.num}
+                className="group relative overflow-hidden bg-[#060606] px-7 py-10"
+                initial={{ opacity: 0, y: 28 }} animate={pillarsView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.09, ease }}
+              >
+                <div className="absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 bg-red-600/60 transition-transform duration-500 group-hover:scale-x-100" />
+                <div className="absolute inset-0 bg-gradient-to-b from-red-900/0 to-transparent transition-all duration-500 group-hover:from-red-900/[0.07]" />
+                <div aria-hidden className="pointer-events-none absolute right-4 top-4 select-none font-display font-black text-white/[0.03] leading-none" style={{ fontSize: "4.5rem" }}>
+                  {b.num}
+                </div>
+                <p className="relative mb-5 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/40">{b.num}</p>
+                <h3 className="relative mb-3 font-display text-[1.3rem] uppercase leading-tight text-white">{t(b.titre, b.titreEn)}</h3>
+                <p className="relative text-[13px] leading-relaxed text-white/45">{t(b.texte, b.texteEn)}</p>
               </motion.div>
             ))}
           </div>
@@ -220,19 +267,19 @@ export default function RecrutementPage() {
       <section ref={ctaRef} className="border-t border-white/[0.04] py-28">
         <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
           <motion.div className="relative overflow-hidden" initial={{ opacity: 0, y: 32 }} animate={ctaView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, ease }}>
-            <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none text-[clamp(7rem,16vw,14rem)] font-display uppercase leading-none text-white/[0.02]">DME</div>
+            <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none font-display uppercase leading-none text-white/[0.02]" style={{ fontSize: "clamp(7rem,16vw,14rem)" }}>DME</div>
             <div className="relative">
               <div className="mb-4 flex items-center gap-4">
                 <div className="h-px w-8 bg-red-600" />
-                <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Une question ?", "A question?")}</span>
+                <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/28">{t("Une question ?", "A question?")}</span>
               </div>
-              <h2 className="font-display mb-10 text-[clamp(2.5rem,6vw,5rem)] uppercase leading-[0.9]">
+              <h2 className="font-display mb-10 uppercase leading-[0.9]" style={{ fontSize: "clamp(2.5rem,6vw,5rem)" }}>
                 <span className="block text-white">{t("On répond à", "We respond to")}</span>
                 <span className="block" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.18)", color: "transparent" }}>{t("chaque candidature.", "every application.")}</span>
               </h2>
               <div className="flex flex-wrap gap-8">
-                <Link href="/contact" className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 transition-all duration-300 hover:text-white/70">{t("Nous contacter →", "Contact us →")}</Link>
-                <Link href="/equipes" className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 transition-all duration-300 hover:text-white/70">{t("Voir les équipes →", "View teams →")}</Link>
+                <Link href="/contact" className="text-[9px] font-black uppercase tracking-[0.4em] text-white/35 transition-all duration-300 hover:text-white/75">{t("Nous contacter →", "Contact us →")}</Link>
+                <Link href="/equipes" className="text-[9px] font-black uppercase tracking-[0.4em] text-white/35 transition-all duration-300 hover:text-white/75">{t("Voir les équipes →", "View teams →")}</Link>
               </div>
             </div>
           </motion.div>

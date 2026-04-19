@@ -36,21 +36,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, message: "Email invalide." }, { status: 400 });
   }
 
-  const allowed = parseListeEmails(process.env.DME_ALLOWED_EMAILS);
   const staff = parseListeEmails(process.env.DME_STAFF_EMAILS);
 
-  const estAllowed = allowed.includes(email) || staff.includes(email);
-  if (!estAllowed) {
-    return NextResponse.json(
-      { ok: false, message: "Email non autorise. Demande l'acces a DME." },
-      { status: 403 }
-    );
-  }
-
   let role: RoleAcces = "joueur";
+
   if (choixRole === "staff") {
-    role = staff.includes(email) ? "staff" : "pending_staff";
+    // Staff path: whitelist required
+    if (!staff.includes(email)) {
+      return NextResponse.json(
+        { ok: false, message: "Acces staff refuse. Email non autorise. Contacte un admin DME." },
+        { status: 403 }
+      );
+    }
+    role = "staff";
   }
+  // joueur path: open registration — no whitelist needed
 
   const valeur = `${email}|${role}|${Date.now()}`;
 

@@ -82,7 +82,7 @@ export default function ContactPage() {
 
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-lg">
-              <motion.p className="mb-8 text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/30" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
+              <motion.p className="mb-8 text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/42" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
                 {t(
                   "DeathMark E-Sports construit sur le long terme — rosters compétitifs, présence LAN, contenu et communauté active. Pour une marque, un média ou un projet esport : on répond vite et proprement.",
                   "DeathMark E-Sports builds for the long term — competitive rosters, LAN presence, content and active community. For a brand, media outlet or esports project: we respond quickly and professionally."
@@ -96,13 +96,13 @@ export default function ContactPage() {
 
             <motion.div className="flex divide-x divide-white/[0.06] border border-white/[0.06]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease }}>
               {([
-                { val: "15+",     labelFr: "Rosters actifs",   labelEn: "Active Rosters"   },
-                { val: "6 500$+", labelFr: "Cashprize cumulé", labelEn: "Cumulative Prize"  },
-                { val: "AVL",     labelFr: "Champions",        labelEn: "Champions"         },
+                { val: "15+",    labelFr: "Rosters actifs",   labelEn: "Active Rosters"   },
+                { val: "6500$+", labelFr: "Cashprize cumulé", labelEn: "Cumulative Prize"  },
+                { val: "AVL",    labelFr: "Champions",        labelEn: "Champions"         },
               ] as const).map((s) => (
-                <div key={s.val} className="px-8 py-5 text-center">
-                  <p className="text-[1.8rem] font-black tabular-nums leading-none text-white">{s.val}</p>
-                  <p className="mt-1.5 text-[8px] font-black uppercase tracking-[0.35em] text-white/20">{t(s.labelFr, s.labelEn)}</p>
+                <div key={s.val} className="px-4 py-4 text-center sm:px-8 sm:py-5">
+                  <p className="text-[1.4rem] font-black tabular-nums leading-none text-white sm:text-[1.8rem]">{s.val}</p>
+                  <p className="mt-1.5 text-[7px] font-black uppercase tracking-[0.25em] text-white/25 sm:text-[8px] sm:tracking-[0.35em]">{t(s.labelFr, s.labelEn)}</p>
                 </div>
               ))}
             </motion.div>
@@ -121,11 +121,11 @@ export default function ContactPage() {
 
           <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-3">
             {CANAUX.map((c, i) => (
-              <motion.article key={c.id} className="group relative flex flex-col overflow-hidden bg-[#080808] p-8" initial={{ opacity: 0, y: 32 }} animate={canauxView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.1, ease }}>
+              <motion.article key={c.id} className="group relative flex flex-col overflow-hidden bg-[#080808] p-6 sm:p-8" initial={{ opacity: 0, y: 32 }} animate={canauxView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.1, ease }}>
                 <div className="absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 bg-red-600 transition-transform duration-500 group-hover:scale-x-100" />
                 <p className="mb-4 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/30">{c.num}</p>
                 <h3 className="mb-4 font-display text-[1.6rem] uppercase leading-tight text-white">{t(c.titre, c.titreEn)}</h3>
-                <p className="mb-8 flex-1 text-[0.85rem] leading-relaxed text-white/28">{t(c.desc, c.descEn)}</p>
+                <p className="mb-8 flex-1 text-[0.85rem] leading-relaxed text-white/42">{t(c.desc, c.descEn)}</p>
                 <a href={`mailto:deathmarkesport@gmail.com?subject=${encodeURIComponent(c.subject)}`} className="inline-flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.4em] text-red-600 transition-all duration-300 hover:gap-5 hover:text-red-500">
                   <span>{t("Écrire", "Write")}</span>
                   <span>→</span>
@@ -156,7 +156,7 @@ export default function ContactPage() {
                 <div className="absolute left-0 right-0 top-0 h-[1px] origin-left scale-x-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-x-100" />
                 <p className="mb-5 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/30">{b.num}</p>
                 <h3 className="mb-3 font-display text-[1.3rem] uppercase leading-tight text-white">{t(b.titre, b.titreEn)}</h3>
-                <p className="text-[0.82rem] leading-relaxed text-white/28">{t(b.texte, b.texteEn)}</p>
+                <p className="text-[0.82rem] leading-relaxed text-white/42">{t(b.texte, b.texteEn)}</p>
               </motion.div>
             ))}
           </div>
@@ -182,7 +182,7 @@ export default function ContactPage() {
                 <div className="absolute left-0 right-0 top-0 h-[1px] origin-left scale-x-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-x-100" />
                 <p className="mb-5 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/30">{b.num}</p>
                 <h3 className="mb-3 font-display text-[1.3rem] uppercase leading-tight text-white">{t(b.titre, b.titreEn)}</h3>
-                <p className="text-[0.82rem] leading-relaxed text-white/28">{t(b.texte, b.texteEn)}</p>
+                <p className="text-[0.82rem] leading-relaxed text-white/42">{t(b.texte, b.texteEn)}</p>
               </motion.div>
             ))}
           </div>
@@ -229,7 +229,7 @@ export default function ContactPage() {
                 <span className="block text-white">{t("On est là.", "We're here.")}</span>
                 <span className="block text-red-600">{t("Écris-nous.", "Write to us.")}</span>
               </h2>
-              <p className="mb-10 max-w-md text-[0.88rem] leading-relaxed text-white/28">
+              <p className="mb-10 max-w-md text-[0.88rem] leading-relaxed text-white/42">
                 {t(
                   "Partenariat, média, activation ou demande générale — un email avec contexte + objectif + deadline et on s'occupe du reste.",
                   "Partnership, media, activation or general request — an email with context + objective + deadline and we handle the rest."

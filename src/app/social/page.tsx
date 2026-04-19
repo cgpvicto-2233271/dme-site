@@ -60,7 +60,7 @@ export default function SocialMediaPage() {
     <div className="min-h-screen bg-[#080808] text-white">
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden border-b border-white/[0.05] pb-12 pt-24">
+      <section className="relative overflow-hidden border-b border-white/[0.05] pb-10 pt-24 sm:pb-12">
         <div className="pointer-events-none absolute -top-32 left-0 h-[500px] w-[600px] bg-[radial-gradient(ellipse,rgba(220,38,38,0.07),transparent_65%)]" />
         <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none text-[clamp(8rem,18vw,16rem)] font-display uppercase leading-none text-white/[0.025]">DME</div>
 
@@ -82,7 +82,7 @@ export default function SocialMediaPage() {
                   <span className="block text-red-600">.</span>
                 </motion.h1>
               </div>
-              <motion.p className="max-w-md text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/30" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
+              <motion.p className="max-w-md text-[clamp(0.8rem,1.5vw,0.95rem)] leading-relaxed text-white/42" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
                 {t(
                   "Annonces, matchdays, lives et coulisses — une présence claire et cohérente pour suivre la structure au quotidien.",
                   "Announcements, matchdays, streams and behind-the-scenes — a clear, consistent presence to follow the organization daily."
@@ -138,7 +138,7 @@ export default function SocialMediaPage() {
                 </div>
                 <h3 className="mb-1 font-display text-[1.6rem] uppercase leading-tight text-white">{p.nom}</h3>
                 <p className="mb-4 text-[9px] font-black uppercase tracking-[0.25em] text-white/22">{p.handle}</p>
-                <p className="flex-1 text-[0.82rem] leading-relaxed text-white/28">{t(p.descFr, p.descEn)}</p>
+                <p className="flex-1 text-[0.82rem] leading-relaxed text-white/42">{t(p.descFr, p.descEn)}</p>
                 <div className="mt-6 flex items-center gap-3 border-t border-white/[0.05] pt-5">
                   <span className="text-[9px] font-black uppercase tracking-[0.4em] text-red-600/60 transition-all duration-300 group-hover:text-red-500">{t("Rejoindre →", "Join →")}</span>
                 </div>

@@ -65,21 +65,21 @@ export default function Footer() {
 
       {/* ── Statement band ── */}
       <div className="relative overflow-hidden border-b border-white/[0.04]">
-        <div className="pointer-events-none absolute -left-32 top-1/2 h-[300px] w-[400px] -translate-y-1/2 bg-[radial-gradient(ellipse,rgba(220,38,38,0.08),transparent_70%)]" />
+        <div className="pointer-events-none absolute -left-32 top-1/2 h-[400px] w-[500px] -translate-y-1/2 bg-[radial-gradient(ellipse,rgba(220,38,38,0.09),transparent_65%)]" />
         <div
           aria-hidden
-          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none font-black text-[clamp(5rem,12vw,10rem)] uppercase leading-none text-white/[0.018]"
+          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none font-display font-black text-[clamp(5rem,12vw,10rem)] uppercase leading-none text-white/[0.022]"
         >
           DEATHMARK
         </div>
-        <div className="relative mx-auto max-w-[120rem] px-6 sm:px-10 py-10">
-          <p className="font-display text-[clamp(1.6rem,4vw,3rem)] uppercase leading-none text-white/80">
+        <div className="relative mx-auto max-w-[120rem] px-6 sm:px-10 py-12">
+          <p className="font-display text-[clamp(1.6rem,4vw,3rem)] uppercase leading-none text-white/85">
             {t(
               "Discipline · Constance · Résultats",
               "Discipline · Consistency · Results"
             )}
           </p>
-          <p className="mt-3 font-mono text-[9px] font-black uppercase tracking-[0.45em] text-red-600/50">
+          <p className="mt-4 font-mono text-[9px] font-black uppercase tracking-[0.45em] text-red-600/55">
             {t(
               "DeathMark E-Sports · Québec · Scène NA compétitive",
               "DeathMark E-Sports · Québec · NA Competitive Scene"
@@ -107,7 +107,7 @@ export default function Footer() {
               </span>
             </Link>
 
-            <p className="mb-6 text-[12px] leading-relaxed text-white/22">
+            <p className="mb-6 text-[13px] leading-relaxed text-white/38">
               {t(
                 "Organisation esport compétitive du Québec. On représente la scène francophone sur NA — avec rigueur, ambition et identité.",
                 "Competitive esports organization from Québec. Representing the francophone scene on NA — with rigor, ambition, and identity."
@@ -135,7 +135,7 @@ export default function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/28 transition-colors duration-300 hover:text-white/75"
+                      className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/38 transition-colors duration-300 hover:text-white/80"
                     >
                       <span className="h-px w-0 bg-red-600 transition-all duration-300 group-hover:w-4" />
                       {t(l.labelFr, l.labelEn)}
@@ -161,10 +161,10 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group flex items-baseline gap-2"
               >
-                <span className="text-[9px] font-black uppercase tracking-[0.22em] text-white/28 transition-colors duration-300 group-hover:text-white/70">
+                <span className="text-[9px] font-black uppercase tracking-[0.22em] text-white/40 transition-colors duration-300 group-hover:text-white/78">
                   {s.name}
                 </span>
-                <span className="text-[8px] text-white/12 transition-colors duration-300 group-hover:text-white/28">
+                <span className="text-[8px] text-white/22 transition-colors duration-300 group-hover:text-white/42">
                   {s.handle}
                 </span>
               </Link>
@@ -175,18 +175,18 @@ export default function Footer() {
 
       {/* ── Partner strip ── */}
       <div className="border-y border-white/[0.04] bg-[#040404]">
-        <div className="mx-auto flex max-w-[120rem] flex-wrap items-center justify-between gap-6 px-6 sm:px-10 py-6">
+        <div className="mx-auto flex max-w-[120rem] flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 py-6">
           <p className="shrink-0 text-[8px] font-black uppercase tracking-[0.45em] text-white/12">
             {t("Partenaires officiels", "Official Partners")}
           </p>
-          <div className="flex flex-wrap items-center gap-8 sm:gap-14">
+          <div className="flex flex-wrap items-center gap-6 sm:gap-14">
             {PARTNERS.map((p) => (
               <Link
                 key={p.name}
                 href={p.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="opacity-22 transition-opacity duration-300 hover:opacity-55"
+                className="opacity-25 transition-opacity duration-300 hover:opacity-65"
                 title={p.name}
               >
                 <Image
