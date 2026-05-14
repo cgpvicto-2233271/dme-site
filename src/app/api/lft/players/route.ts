@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { PublicPlayerListItem } from "@/lib/lft/types";
-import type { Region, Role } from "@prisma/client";
+import type { Role } from "@prisma/client";
+
+type Region =
+  | "NA"
+  | "EUW"
+  | "EUNE"
+  | "KR"
+  | "BR"
+  | "LAN"
+  | "LAS"
+  | "OCE"
+  | "TR"
+  | "JP";
 
 const PAGE_SIZE = 20;
 
