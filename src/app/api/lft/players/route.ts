@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { PublicPlayerListItem } from "@/lib/lft/types";
-import type { Role } from "@prisma/client";
+
+type LftPlayerFindManyArgs = Parameters<
+  typeof prisma.lftPlayer.findMany
+>[0];
+
+type LftPlayerWhereInput = NonNullable<LftPlayerFindManyArgs>["where"];
 
 type Region =
   | "NA"
@@ -15,6 +20,14 @@ type Region =
   | "TR"
   | "JP";
 
+type Role =
+  | "TOP"
+  | "JUNGLE"
+  | "MID"
+  | "ADC"
+  | "SUPPORT"
+  | "COACH";
+
 const PAGE_SIZE = 20;
 
 export async function GET(req: NextRequest) {
@@ -26,29 +39,32 @@ export async function GET(req: NextRequest) {
   const experience = p.get("experience");
   const availability = p.get("availability");
   const search = p.get("search");
+
   const limit = Math.min(Number(p.get("limit") ?? PAGE_SIZE), 100);
   const offset = Number(p.get("offset") ?? 0);
 
   try {
+    const where: LftPlayerWhereInput = {
+      isLft: true,
+      isVisible: true,
+      ...(region ? { region } : {}),
+      ...(role ? { role } : {}),
+      ...(tier ? { tier } : {}),
+      ...(experience ? { experience } : {}),
+      ...(availability ? { availability } : {}),
+      ...(search
+        ? {
+            OR: [
+              { gameName: { contains: search, mode: "insensitive" } },
+              { tagLine: { contains: search, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    };
+
     const [players, total] = await prisma.$transaction([
       prisma.lftPlayer.findMany({
-        where: {
-          isLft: true,
-          isVisible: true,
-          ...(region ? { region } : {}),
-          ...(role ? { role } : {}),
-          ...(tier ? { tier } : {}),
-          ...(experience ? { experience } : {}),
-          ...(availability ? { availability } : {}),
-          ...(search
-            ? {
-                OR: [
-                  { gameName: { contains: search, mode: "insensitive" } },
-                  { tagLine: { contains: search, mode: "insensitive" } },
-                ],
-              }
-            : {}),
-        },
+        where,
         orderBy: { createdAt: "desc" },
         take: limit,
         skip: offset,
@@ -71,27 +87,11 @@ export async function GET(req: NextRequest) {
           languages: true,
           isVerified: true,
           createdAt: true,
-          // staffRecord intentionally excluded
         },
       }),
+
       prisma.lftPlayer.count({
-        where: {
-          isLft: true,
-          isVisible: true,
-          ...(region ? { region } : {}),
-          ...(role ? { role } : {}),
-          ...(tier ? { tier } : {}),
-          ...(experience ? { experience } : {}),
-          ...(availability ? { availability } : {}),
-          ...(search
-            ? {
-                OR: [
-                  { gameName: { contains: search, mode: "insensitive" } },
-                  { tagLine: { contains: search, mode: "insensitive" } },
-                ],
-              }
-            : {}),
-        },
+        where,
       }),
     ]);
 
@@ -100,9 +100,15 @@ export async function GET(req: NextRequest) {
       createdAt: player.createdAt.toISOString(),
     }));
 
-    return NextResponse.json({ players: items, total, limit, offset });
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({
+      players: items,
+      total,
+      limit,
+      offset,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
