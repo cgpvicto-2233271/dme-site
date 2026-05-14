@@ -4,206 +4,153 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const EASE_EXPO   = [0.76, 0, 0.24, 1] as [number, number, number, number];
-const EASE_SPRING = [0.16, 1,  0.3, 1] as [number, number, number, number];
+const EXPO   = [0.76, 0, 0.24, 1] as [number, number, number, number];
+const SPRING = [0.16, 1, 0.3, 1]  as [number, number, number, number];
+
+type Phase = "pending" | "running" | "done";
 
 export function IntroReveal() {
-  const [show,    setShow]    = useState(false);
-  const [line1,   setLine1]   = useState(false);
-  const [line2,   setLine2]   = useState(false);
-  const [brand,   setBrand]   = useState(false);
+  const [phase,   setPhase]   = useState<Phase>("pending");
+  const [content, setContent] = useState(false);
   const [opening, setOpening] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
-
-  // Prevents double-fire in React StrictMode (dev double-invoke)
   const hasRun = useRef(false);
 
   useEffect(() => {
     if (hasRun.current) return;
-    if (sessionStorage.getItem("dme_intro")) return;
-
     hasRun.current = true;
+
+    // Already played this session — remove black screen instantly
+    if (sessionStorage.getItem("dme_intro")) {
+      setPhase("done");
+      return;
+    }
+
     sessionStorage.setItem("dme_intro", "1");
-    setShow(true);
+    setPhase("running");
 
-    // Staggered content reveal
-    const t1 = setTimeout(() => setLine1(true),    350);
-    const t2 = setTimeout(() => setLine2(true),    720);
-    const t3 = setTimeout(() => setBrand(true),   1600);
-    // Panels open
-    const t4 = setTimeout(() => setOpening(true), 3500);
-    // Fade whole overlay once panels are clear (~1.3s panel anim)
-    const t5 = setTimeout(() => setFadeOut(true), 4600);
-    // Unmount
-    const t6 = setTimeout(() => setShow(false),   5100);
+    const t1 = setTimeout(() => setContent(true),  80);
+    const t2 = setTimeout(() => setOpening(true), 1050);
+    const t3 = setTimeout(() => setFadeOut(true), 1800);
+    const t4 = setTimeout(() => setPhase("done"),  2100);
 
-    return () => [t1, t2, t3, t4, t5, t6].forEach(clearTimeout);
+    return () => [t1, t2, t3, t4].forEach(clearTimeout);
   }, []);
 
-  if (!show) return null;
+  // Done — nothing
+  if (phase === "done") return null;
 
+  // Pending — plain black cover so content never flashes before useEffect
+  if (phase === "pending") {
+    return (
+      <div
+        style={{ position: "fixed", inset: 0, zIndex: 500, background: "#050505" }}
+        aria-hidden
+      />
+    );
+  }
+
+  // Running — full intro
   return (
     <motion.div
       className="fixed inset-0 overflow-hidden"
       style={{ zIndex: 500 }}
       animate={{ opacity: fadeOut ? 0 : 1 }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
+      transition={{ duration: 0.32, ease: "easeOut" }}
       aria-hidden
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-[#020202]" />
+      <div className="absolute inset-0 bg-[#050505]" />
 
-      {/* Ambient red pulse — stays subtle, no opacity > 1 */}
-      <motion.div
+      <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(220,38,38,0.11), transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.07), transparent 70%)",
         }}
-        animate={{ opacity: [0.45, 0.9, 0.55, 0.95, 0.6] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* ── TOP PANEL — z:20, covers homepage ────────────────────────── */}
+      {/* Top panel */}
       <motion.div
         className="absolute inset-x-0 top-0 h-1/2"
-        style={{
-          zIndex: 20,
-          background: "linear-gradient(to top, #060606, #020202)",
-        }}
+        style={{ zIndex: 20, background: "#050505" }}
         animate={{ y: opening ? "-100%" : "0%" }}
-        transition={{ duration: 1.3, ease: EASE_EXPO }}
+        transition={{ duration: 0.9, ease: EXPO }}
       />
 
-      {/* ── BOTTOM PANEL — z:20 ──────────────────────────────────────── */}
+      {/* Bottom panel */}
       <motion.div
         className="absolute inset-x-0 bottom-0 h-1/2"
-        style={{
-          zIndex: 20,
-          background: "linear-gradient(to bottom, #060606, #020202)",
-        }}
+        style={{ zIndex: 20, background: "#050505" }}
         animate={{ y: opening ? "100%" : "0%" }}
-        transition={{ duration: 1.3, ease: EASE_EXPO }}
+        transition={{ duration: 0.9, ease: EXPO }}
       />
 
-      {/* ── CENTER CONTENT — z:30, above panels ──────────────────────── */}
+      {/* Center content */}
       <div
-        className="absolute inset-0 flex flex-col items-center justify-center px-8"
+        className="absolute inset-0 flex flex-col items-center justify-center"
         style={{ zIndex: 30 }}
       >
-        {/* FORGED */}
-        <div style={{ overflow: "hidden", lineHeight: 1 }}>
-          <motion.span
-            className="block font-display font-black uppercase text-red-600 select-none"
-            style={{
-              fontSize: "clamp(3.2rem, 11vw, 9rem)",
-              letterSpacing: "0.04em",
-              lineHeight: 0.88,
-            }}
-            initial={{ y: "110%" }}
-            animate={{ y: line1 ? "0%" : "110%" }}
-            transition={{ duration: 0.7, ease: EASE_SPRING }}
-          >
-            FORGED
-          </motion.span>
-        </div>
-
-        {/* TO COMPETE. */}
-        <div style={{ overflow: "hidden", lineHeight: 1, marginBottom: "2.25rem" }}>
-          <motion.span
-            className="block font-display font-black uppercase text-white select-none"
-            style={{
-              fontSize: "clamp(3.2rem, 11vw, 9rem)",
-              letterSpacing: "0.04em",
-              lineHeight: 0.88,
-            }}
-            initial={{ y: "110%" }}
-            animate={{ y: line2 ? "0%" : "110%" }}
-            transition={{ duration: 0.75, ease: EASE_SPRING }}
-          >
-            TO COMPETE<span className="text-red-600">.</span>
-          </motion.span>
-        </div>
-
-        {/* Brand mark */}
         <motion.div
-          className="flex flex-col items-center gap-3"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: brand ? 1 : 0, y: brand ? 0 : 12 }}
-          transition={{ duration: 0.85, ease: EASE_SPRING }}
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={{ opacity: content ? 1 : 0, scale: content ? 1 : 0.88 }}
+          transition={{ duration: 0.55, ease: SPRING }}
         >
-          {/* Logo with red halo */}
-          <div className="relative">
-            <div
-              className="pointer-events-none absolute inset-0 rounded-full"
-              style={{
-                boxShadow:
-                  "0 0 50px rgba(220,38,38,0.35), 0 0 100px rgba(220,38,38,0.12)",
-              }}
-            />
-            <Image
-              src="/logo/logo-dme.png"
-              alt="DeathMark Esports"
-              width={52}
-              height={52}
-              priority
-              className="relative opacity-90"
-            />
-          </div>
-
-          {/* Red separator */}
-          <motion.div
-            className="bg-red-600"
-            style={{ height: 1 }}
-            initial={{ width: 0 }}
-            animate={{ width: brand ? 48 : 0 }}
-            transition={{ duration: 0.5, delay: 0.2, ease: EASE_SPRING }}
+          <Image
+            src="/logo/logo-dme.png"
+            alt="DeathMark E-Sports"
+            width={56}
+            height={56}
+            priority
+            className="object-contain"
           />
-
-          {/* Brand name */}
-          <div className="flex flex-col items-center gap-0.5">
-            <div style={{ overflow: "hidden" }}>
-              <motion.span
-                className="block text-[8px] font-black uppercase tracking-[0.65em] text-white/30"
-                initial={{ y: 18 }}
-                animate={{ y: brand ? 0 : 18 }}
-                transition={{ duration: 0.6, delay: 0.25, ease: EASE_SPRING }}
-              >
-                DeathMark
-              </motion.span>
-            </div>
-            <div style={{ overflow: "hidden" }}>
-              <motion.span
-                className="font-display block font-black uppercase text-white leading-none"
-                style={{
-                  fontSize: "clamp(1.2rem, 3.5vw, 1.8rem)",
-                  letterSpacing: "0.08em",
-                }}
-                initial={{ y: 28 }}
-                animate={{ y: brand ? 0 : 28 }}
-                transition={{ duration: 0.65, delay: 0.32, ease: EASE_SPRING }}
-              >
-                ESPORTS
-              </motion.span>
-            </div>
-          </div>
-
-          {/* Geo label */}
-          <motion.span
-            className="font-mono text-[7px] font-black uppercase tracking-[0.5em] text-red-600/50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: brand ? 1 : 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            Québec · NA · 2026
-          </motion.span>
         </motion.div>
+
+        <motion.div
+          className="bg-[#e1192d]"
+          style={{ height: 1, marginTop: 20, marginBottom: 16 }}
+          initial={{ width: 0 }}
+          animate={{ width: content ? 40 : 0 }}
+          transition={{ duration: 0.4, delay: 0.18, ease: SPRING }}
+        />
+
+        <div style={{ overflow: "hidden" }}>
+          <motion.span
+            className="block font-abolition text-white select-none"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", lineHeight: 1, letterSpacing: "0.06em" }}
+            initial={{ y: "110%" }}
+            animate={{ y: content ? "0%" : "110%" }}
+            transition={{ duration: 0.55, delay: 0.22, ease: SPRING }}
+          >
+            DEATHMARK
+          </motion.span>
+        </div>
+
+        <div style={{ overflow: "hidden" }}>
+          <motion.span
+            className="block font-abolition text-white/55 select-none"
+            style={{ fontSize: "clamp(0.75rem, 1.8vw, 1.05rem)", lineHeight: 1, letterSpacing: "0.22em", marginTop: 6 }}
+            initial={{ y: "110%" }}
+            animate={{ y: content ? "0%" : "110%" }}
+            transition={{ duration: 0.5, delay: 0.32, ease: SPRING }}
+          >
+            E-SPORTS
+          </motion.span>
+        </div>
+
+        <motion.span
+          className="font-mono font-bold uppercase text-white/20 select-none"
+          style={{ fontSize: "0.55rem", letterSpacing: "0.45em", marginTop: 14 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: content ? 1 : 0 }}
+          transition={{ duration: 0.4, delay: 0.52 }}
+        >
+          Québec · North America
+        </motion.span>
       </div>
 
-      {/* Film grain — topmost layer */}
       <div
         className="film-grain pointer-events-none absolute inset-0"
-        style={{ zIndex: 40 }}
+        style={{ zIndex: 40, opacity: 0.4 }}
       />
     </motion.div>
   );

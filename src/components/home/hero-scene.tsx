@@ -1,102 +1,93 @@
 "use client";
-// src/components/home/hero-scene.tsx — DA rouge/noir, élégant
 
-import { useRef, useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
+import { Line, Points, PointMaterial } from "@react-three/drei";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
+import { useScroll } from "framer-motion";
 import * as THREE from "three";
 
-/* Particules — rouges, peu denses, très subtiles */
-function ParticleField() {
-  const ref = useRef<THREE.Points>(null);
+function TacticalConstellation() {
+  const group = useRef<THREE.Group>(null);
+  const points = useRef<THREE.Points>(null);
+  const { scrollYProgress } = useScroll();
 
   const positions = useMemo(() => {
-    const count = 1200;
-    const arr   = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      const r     = 5 + Math.random() * 9;
-      const theta = Math.random() * Math.PI * 2;
-      const phi   = Math.acos(2 * Math.random() - 1);
-      arr[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      arr[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      arr[i * 3 + 2] = r * Math.cos(phi) - 2;
+    const count = 96;
+    const arr = new Float32Array(count * 3);
+    for (let index = 0; index < count; index += 1) {
+      const lane = index % 6;
+      const row = Math.floor(index / 6);
+      arr[index * 3] = (lane - 2.5) * 0.82 + Math.sin(row * 1.4) * 0.22;
+      arr[index * 3 + 1] = (row - 8) * 0.34;
+      arr[index * 3 + 2] = -1.4 - Math.cos(index * 0.7) * 1.8;
     }
     return arr;
   }, []);
 
   useFrame(({ clock }) => {
-    if (!ref.current) return;
-    ref.current.rotation.y = clock.getElapsedTime() * 0.025;
-    ref.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.01) * 0.05;
+    const elapsed = clock.getElapsedTime();
+    const scroll = scrollYProgress.get();
+    if (group.current) {
+      group.current.rotation.y = -0.36 + Math.sin(elapsed * 0.18) * 0.045 + scroll * 0.22;
+      group.current.rotation.x = -0.08 + Math.cos(elapsed * 0.12) * 0.025;
+      group.current.position.x = 1.15 - scroll * 0.35;
+    }
+    if (points.current?.material instanceof THREE.PointsMaterial) {
+      points.current.material.opacity = Math.max(0.08, 0.42 - scroll * 0.32);
+    }
   });
 
   return (
-    <Points ref={ref} positions={positions} stride={3}>
-      <PointMaterial
-        transparent
-        color="#dc2626"
-        size={0.014}
-        sizeAttenuation
-        depthWrite={false}
-        opacity={0.32}
-      />
-    </Points>
-  );
-}
-
-/* Anneau unique — lent, élégant */
-function Ring() {
-  const ref = useRef<THREE.Mesh>(null);
-
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    const t = clock.getElapsedTime();
-    ref.current.rotation.x = t * 0.07;
-    ref.current.rotation.z = t * 0.04;
-    ref.current.position.y = Math.sin(t * 0.25) * 0.12;
-  });
-
-  return (
-    <mesh ref={ref} position={[0, 0, -1]}>
-      <torusGeometry args={[2.6, 0.006, 8, 140]} />
-      <meshBasicMaterial color="#dc2626" transparent opacity={0.18} />
-    </mesh>
-  );
-}
-
-/* Deuxième anneau — encore plus discret */
-function Ring2() {
-  const ref = useRef<THREE.Mesh>(null);
-
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    const t = clock.getElapsedTime();
-    ref.current.rotation.x = -t * 0.055;
-    ref.current.rotation.y = t * 0.03;
-    ref.current.position.y = Math.sin(t * 0.2 + 1) * 0.08;
-  });
-
-  return (
-    <mesh ref={ref} position={[0, 0, -1]}>
-      <torusGeometry args={[3.8, 0.004, 8, 140]} />
-      <meshBasicMaterial color="#7f1d1d" transparent opacity={0.10} />
-    </mesh>
+    <group ref={group}>
+      <Points ref={points} positions={positions} stride={3}>
+        <PointMaterial
+          transparent
+          color="#ef4444"
+          size={0.045}
+          sizeAttenuation
+          depthWrite={false}
+          opacity={0.42}
+        />
+      </Points>
+      {[-1.65, -0.82, 0, 0.82, 1.65].map((x) => (
+        <Line
+          key={x}
+          points={[
+            [x, -3.1, -1.4],
+            [x + 0.28, 3.0, -2.2],
+          ]}
+          color="rgba(255,255,255,0.16)"
+          lineWidth={0.75}
+          transparent
+          opacity={0.32}
+        />
+      ))}
+      {[0.95, 1.65, 2.35].map((radius, index) => (
+        <mesh key={radius} position={[0, -0.15, -1.9]} rotation={[1.2 + index * 0.16, 0.12, 0.12]}>
+          <torusGeometry args={[radius, 0.004, 6, 180]} />
+          <meshBasicMaterial color={index === 0 ? "#ef4444" : "#ffffff"} transparent opacity={index === 0 ? 0.32 : 0.1} />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
 export function HeroScene() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 7], fov: 50 }}
+      camera={{ position: [0, 0, 6.2], fov: 45 }}
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-      gl={{ antialias: true, alpha: true }}
-      dpr={[1, 1.5]}
+      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      dpr={[1, 1.35]}
     >
       <ambientLight intensity={0.2} />
-      <pointLight position={[-2, 1, 2]} color="#dc2626" intensity={1.8} distance={14} />
-      <ParticleField />
-      <Ring />
-      <Ring2 />
+      <pointLight position={[2.2, 0.2, 2.4]} color="#ef4444" intensity={1.5} distance={8} />
+      <TacticalConstellation />
+      <EffectComposer multisampling={0}>
+        <Bloom intensity={0.18} luminanceThreshold={0.55} luminanceSmoothing={0.8} mipmapBlur />
+        <Vignette eskil={false} offset={0.22} darkness={0.7} />
+      </EffectComposer>
     </Canvas>
   );
 }

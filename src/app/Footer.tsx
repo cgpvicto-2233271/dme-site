@@ -1,200 +1,186 @@
-"use client";
-// src/app/Footer.tsx — AAA+ redesign · bilingual · DA rouge/noir
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useLang } from "@/components/LanguageContext";
+import { ArrowUpRight } from "lucide-react";
+import { useLang, type Lang } from "@/components/LanguageContext";
+
+type Copy = { fr: string; en: string };
+type FooterLink = { href: string; label: Copy };
 
 const PARTNERS = [
-  { name: "Arène des Dieux", logo: "/medias/sponsors/arene1.png",  url: "https://www.godsarena.com/"  },
-  { name: "GURU",            logo: "/medias/sponsors/guru1.png",   url: "https://guruenergy.com/fr"   },
-  { name: "Passion Sim",     logo: "/medias/sponsors/passion.png", url: "https://www.passionsim.com/" },
-  { name: "EcoNext",         logo: "/medias/sponsors/econext.webp",url: "#"                           },
+  { name: "Arene des Dieux", logo: "/medias/sponsors/arene1.png", url: "https://www.godsarena.com/" },
+  { name: "GURU", logo: "/medias/sponsors/guru1.png", url: "https://guruenergy.com/fr" },
+  { name: "Passion Sim", logo: "/medias/sponsors/passion.png", url: "https://www.passionsim.com/" },
+  { name: "EcoNext", logo: "/medias/sponsors/econext.webp", url: "#" },
 ] as const;
 
 const SOCIALS = [
-  { name: "X / Twitter", handle: "@DeathMarkEsport",  url: "https://x.com/DeathMarkEsport"               },
-  { name: "Discord",     handle: "Serveur DME",       url: "https://discord.gg/Zu4FP5pU9M"               },
-  { name: "Twitch",      handle: "deathmarkesport",   url: "https://www.twitch.tv/deathmarkesport"        },
-  { name: "Instagram",   handle: "@deathmarkesports", url: "https://www.instagram.com/deathmarkesports/"  },
-  { name: "YouTube",     handle: "DeathMark E-Sports",url: "https://www.youtube.com/@DeathMarkEsport"     },
-  { name: "TikTok",      handle: "@deathmarkesport",  url: "https://tiktok.com/@deathmarkesport"          },
+  { name: "Discord", url: "https://discord.gg/Zu4FP5pU9M" },
+  { name: "X", url: "https://x.com/DeathMarkEsport" },
+  { name: "Twitch", url: "https://www.twitch.tv/deathmarkesport" },
+  { name: "Instagram", url: "https://www.instagram.com/deathmarkesports/" },
+  { name: "YouTube", url: "https://www.youtube.com/@DeathMarkEsport" },
+  { name: "TikTok", url: "https://tiktok.com/@deathmarkesport" },
 ] as const;
 
-const NAV_COLS = [
+const NAV_GROUPS: { title: Copy; links: FooterLink[] }[] = [
   {
-    idFr: "Organisation", idEn: "Organization",
+    title: { fr: "Organisation", en: "Organization" },
     links: [
-      { href: "/equipes",     labelFr: "Équipes",      labelEn: "Teams"       },
-      { href: "/staff",       labelFr: "Staff",        labelEn: "Staff"       },
-      { href: "/contact",     labelFr: "Contact",      labelEn: "Contact"     },
+      { href: "/equipes", label: { fr: "Équipes", en: "Teams" } },
+      { href: "/staff", label: { fr: "Staff", en: "Staff" } },
+      { href: "/contact", label: { fr: "Contact", en: "Contact" } },
     ],
   },
   {
-    idFr: "Compétitif", idEn: "Competitive",
+    title: { fr: "Compétition", en: "Competition" },
     links: [
-      { href: "/hall-of-fame", labelFr: "Résultats",   labelEn: "Results"     },
-      { href: "/recrutement",  labelFr: "Recrutement", labelEn: "Recruitment" },
-      { href: "/6mans",        labelFr: "6Mans RL",    labelEn: "6Mans RL"    },
-      { href: "/scouting",     labelFr: "Scouting",    labelEn: "Scouting"    },
+      { href: "/hall-of-fame", label: { fr: "Résultats", en: "Results" } },
+      { href: "/recrutement", label: { fr: "Recrutement", en: "Tryouts" } },
+      { href: "/6mans", label: { fr: "6Mans", en: "6Mans" } },
     ],
   },
   {
-    idFr: "Communauté", idEn: "Community",
+    title: { fr: "Communauté", en: "Community" },
     links: [
-      { href: "/social", labelFr: "Réseaux", labelEn: "Socials" },
-      { href: "/shop",   labelFr: "Shop",    labelEn: "Shop"    },
+      { href: "/social", label: { fr: "Réseaux", en: "Socials" } },
+      { href: "/shop", label: { fr: "Shop", en: "Shop" } },
+      { href: "/connexion", label: { fr: "Connexion", en: "Login" } },
     ],
   },
-] as const;
+];
 
-const LEGAL = [
-  { href: "/mentions-legales",       labelFr: "Mentions légales",         labelEn: "Legal Notice" },
-  { href: "/confidentialite",        labelFr: "Confidentialité",          labelEn: "Privacy"      },
-  { href: "/conditions-utilisation", labelFr: "Conditions d'utilisation", labelEn: "Terms"        },
-] as const;
+const LEGAL_LINKS: FooterLink[] = [
+  { href: "/mentions-legales", label: { fr: "Mentions légales", en: "Legal notice" } },
+  { href: "/confidentialite", label: { fr: "Confidentialité", en: "Privacy" } },
+  { href: "/conditions-utilisation", label: { fr: "Conditions", en: "Terms" } },
+];
+
+function pick(copy: Copy, lang: Lang) {
+  return lang === "en" ? copy.en : copy.fr;
+}
 
 export default function Footer() {
-  const { t } = useLang();
+  const { lang } = useLang();
 
   return (
-    <footer className="bg-[#050505]">
+    <footer className="border-t border-white/[0.07] bg-[#050505] text-white">
 
-      {/* ── Gradient separator ── */}
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-red-600/60 to-transparent" />
+      {/* ── MAIN GRID ────────────────────────────────────────────────── */}
+      <div className="px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1fr_repeat(3,minmax(0,1fr))_minmax(160px,200px)] lg:gap-x-10 lg:py-16">
 
-      {/* ── Statement band ── */}
-      <div className="relative overflow-hidden border-b border-white/[0.04]">
-        <div className="pointer-events-none absolute -left-32 top-1/2 h-[400px] w-[500px] -translate-y-1/2 bg-[radial-gradient(ellipse,rgba(220,38,38,0.09),transparent_65%)]" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none font-display font-black text-[clamp(5rem,12vw,10rem)] uppercase leading-none text-white/[0.022]"
-        >
-          DEATHMARK
-        </div>
-        <div className="relative mx-auto max-w-[120rem] px-6 sm:px-10 py-12">
-          <p className="font-display text-[clamp(1.6rem,4vw,3rem)] uppercase leading-none text-white/85">
-            {t(
-              "Discipline · Constance · Résultats",
-              "Discipline · Consistency · Results"
-            )}
-          </p>
-          <p className="mt-4 font-mono text-[9px] font-black uppercase tracking-[0.45em] text-red-600/55">
-            {t(
-              "DeathMark E-Sports · Québec · Scène NA compétitive",
-              "DeathMark E-Sports · Québec · NA Competitive Scene"
-            )}
-          </p>
-        </div>
-      </div>
-
-      {/* ── Main grid ── */}
-      <div className="mx-auto max-w-[120rem] px-6 sm:px-10 pt-14 pb-12">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
-
-          {/* Col 1: Identity */}
-          <div>
-            <Link href="/" className="group mb-8 inline-flex items-center gap-3">
+          {/* ── Brand ──────────────────────────────────────────────── */}
+          <div className="sm:col-span-2 lg:col-span-1 flex flex-col gap-5">
+            <Link href="/" className="inline-flex items-center gap-3 self-start">
               <Image
                 src="/logo/logo-dme.png"
                 alt="DeathMark E-Sports"
-                width={32}
-                height={32}
-                className="h-7 w-7 object-contain opacity-80 transition-opacity group-hover:opacity-100"
+                width={36}
+                height={36}
+                className="h-8 w-8 object-contain"
               />
-              <span className="text-[10px] font-black uppercase tracking-[0.22em] text-white/45 transition-colors duration-300 group-hover:text-white/80">
-                DeathMark E-Sports
-              </span>
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-[0.22em]">DeathMark E-Sports</p>
+                <p className="mt-0.5 font-mono text-[8px] font-bold uppercase tracking-[0.26em] text-white/28">
+                  Quebec / North America · est. 2025
+                </p>
+              </div>
             </Link>
 
-            <p className="mb-6 text-[13px] leading-relaxed text-white/38">
-              {t(
-                "Organisation esport compétitive du Québec. On représente la scène francophone sur NA — avec rigueur, ambition et identité.",
-                "Competitive esports organization from Québec. Representing the francophone scene on NA — with rigor, ambition, and identity."
-              )}
+            <p className="text-[13px] leading-6 text-white/40 max-w-[240px]">
+              {lang === "en"
+                ? "Quebec esports. North American ambition. Built for pressure."
+                : "Esport québécois. Ambition nord-américaine. Fait pour la pression."}
             </p>
 
-            <div className="flex flex-col gap-1.5">
-              <p className="text-[8px] font-black uppercase tracking-[0.35em] text-white/18">
-                LoL · Valorant · Rocket League · Marvel Rivals
-              </p>
-              <p className="text-[8px] font-black uppercase tracking-[0.35em] text-white/10">
-                Québec · Canada · North America
-              </p>
+            {/* Inline stats row */}
+            <div className="flex gap-px border border-white/[0.07] self-start">
+              {[
+                { value: "05", label: { fr: "Titres", en: "Titles" } },
+                { value: "NA", label: { fr: "Région", en: "Region" } },
+                { value: "QC", label: { fr: "Base", en: "Home" } },
+              ].map((item) => (
+                <div key={item.value} className="bg-white/[0.03] px-4 py-3 text-center">
+                  <p className="font-abolition text-white leading-none" style={{ fontSize: "1.4rem" }}>{item.value}</p>
+                  <p className="mt-1 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-white/28">
+                    {pick(item.label, lang)}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Nav columns */}
-          {NAV_COLS.map((col) => (
-            <div key={col.idFr}>
-              <p className="mb-5 text-[8px] font-black uppercase tracking-[0.45em] text-red-600/45">
-                {t(col.idFr, col.idEn)}
+          {/* ── Nav groups ─────────────────────────────────────────── */}
+          {NAV_GROUPS.map((group) => (
+            <div key={group.title.fr}>
+              <p className="mb-5 font-mono text-[8px] font-bold uppercase tracking-[0.30em] text-[#e1192d]/60">
+                {pick(group.title, lang)}
               </p>
-              <ul className="flex flex-col gap-3.5">
-                {col.links.map((l) => (
-                  <li key={l.href}>
+              <ul className="space-y-3.5">
+                {group.links.map((link) => (
+                  <li key={link.href}>
                     <Link
-                      href={l.href}
-                      className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/38 transition-colors duration-300 hover:text-white/80"
+                      href={link.href}
+                      className="group inline-flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white/36 transition-colors duration-200 hover:text-white"
                     >
-                      <span className="h-px w-0 bg-red-600 transition-all duration-300 group-hover:w-4" />
-                      {t(l.labelFr, l.labelEn)}
+                      <span className="h-px w-0 bg-[#e1192d] transition-all duration-300 group-hover:w-3" />
+                      {pick(link.label, lang)}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
-        </div>
 
-        {/* Socials row */}
-        <div className="mt-12 border-t border-white/[0.04] pt-8">
-          <p className="mb-5 text-[8px] font-black uppercase tracking-[0.45em] text-white/15">
-            {t("Nos réseaux", "Our socials")}
-          </p>
-          <div className="flex flex-wrap gap-x-8 gap-y-3">
-            {SOCIALS.map((s) => (
-              <Link
-                key={s.name}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-baseline gap-2"
-              >
-                <span className="text-[9px] font-black uppercase tracking-[0.22em] text-white/40 transition-colors duration-300 group-hover:text-white/78">
-                  {s.name}
-                </span>
-                <span className="text-[8px] text-white/22 transition-colors duration-300 group-hover:text-white/42">
-                  {s.handle}
-                </span>
-              </Link>
-            ))}
+          {/* ── Socials column ─────────────────────────────────────── */}
+          <div>
+            <p className="mb-5 font-mono text-[8px] font-bold uppercase tracking-[0.30em] text-white/22">
+              {lang === "en" ? "Follow" : "Suivre"}
+            </p>
+            <ul className="space-y-3">
+              {SOCIALS.map((social) => (
+                <li key={social.name}>
+                  <Link
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white/36 transition-colors duration-200 hover:text-white"
+                  >
+                    <ArrowUpRight className="h-2.5 w-2.5 text-white/20" />
+                    {social.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
+
         </div>
       </div>
 
-      {/* ── Partner strip ── */}
-      <div className="border-y border-white/[0.04] bg-[#040404]">
-        <div className="mx-auto flex max-w-[120rem] flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 py-6">
-          <p className="shrink-0 text-[8px] font-black uppercase tracking-[0.45em] text-white/12">
-            {t("Partenaires officiels", "Official Partners")}
+      {/* ── PARTNERS ─────────────────────────────────────────────────── */}
+      <div className="border-t border-white/[0.06] px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className="flex flex-col gap-5 py-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-mono text-[8px] font-bold uppercase tracking-[0.30em] text-white/18">
+            {lang === "en" ? "Official partners" : "Partenaires officiels"}
           </p>
-          <div className="flex flex-wrap items-center gap-6 sm:gap-14">
-            {PARTNERS.map((p) => (
+          <div className="flex flex-wrap items-center gap-8 sm:gap-10">
+            {PARTNERS.map((partner) => (
               <Link
-                key={p.name}
-                href={p.url}
+                key={partner.name}
+                href={partner.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="opacity-25 transition-opacity duration-300 hover:opacity-65"
-                title={p.name}
+                className="opacity-28 transition hover:opacity-60"
+                aria-label={partner.name}
               >
                 <Image
-                  src={p.logo}
-                  alt={p.name}
-                  width={100}
-                  height={40}
-                  className="h-8 w-auto object-contain"
+                  src={partner.logo}
+                  alt={partner.name}
+                  width={96}
+                  height={36}
+                  className="h-7 w-auto object-contain"
                 />
               </Link>
             ))}
@@ -202,25 +188,24 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Legal bar ── */}
-      <div className="mx-auto flex max-w-[120rem] flex-col gap-3 px-6 sm:px-10 py-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/15">
+      {/* ── BOTTOM BAR ───────────────────────────────────────────────── */}
+      <div className="border-t border-white/[0.06] px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-white/16">
             © 2026 DeathMark E-Sports
           </span>
-          {LEGAL.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="text-[8px] font-black uppercase tracking-[0.3em] text-white/10 transition-colors duration-300 hover:text-white/30"
-            >
-              {t(l.labelFr, l.labelEn)}
-            </Link>
-          ))}
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {LEGAL_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-white/18 transition hover:text-white/45"
+              >
+                {pick(link.label, lang)}
+              </Link>
+            ))}
+          </div>
         </div>
-        <span className="text-[8px] font-black uppercase tracking-[0.5em] text-red-600/18">
-          #DMEONTOP
-        </span>
       </div>
 
     </footer>

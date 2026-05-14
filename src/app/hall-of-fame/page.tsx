@@ -1,288 +1,243 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { achievements } from "./_data";
-import type { Achievement } from "./_data";
-import { useLang } from "@/components/LanguageContext";
+import { motion } from "framer-motion";
+import { achievements, GAME_LABELS, type Achievement, type GameKey } from "./_data";
+import { useLang, type Lang } from "@/components/LanguageContext";
+import { fadeUp, viewport } from "@/lib/motion";
 
-const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
-
-function normalize(s: string) {
-  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-function includesAny(hay: string, needles: string[]) {
-  const h = normalize(hay);
-  return needles.some((n) => h.includes(normalize(n)));
-}
-function labelJeu(jeu: string) {
-  const j = normalize(jeu);
-  if (j === "lol" || j === "league-of-legends") return "League of Legends";
-  if (j === "valorant")      return "Valorant";
-  if (j === "rocket-league") return "Rocket League";
-  if (j === "marvel-rivals") return "Marvel Rivals";
-  return jeu;
-}
-function haystack(item: Pick<Achievement, "badge" | "titre" | "sousTitre" | "description">) {
-  return normalize(`${item.badge ?? ""} ${item.titre ?? ""} ${item.sousTitre ?? ""} ${item.description ?? ""}`);
-}
-function isAcl(item: Achievement) {
-  return includesAny(haystack(item), ["acl","aegis challenger league","challenger league","nacl open qualifier","open qualifier","nacl oq"]);
-}
-function isTop3(item: Achievement) {
-  const h = haystack(item);
-  const has45 = ["top 4","top4","4e","4eme","4ème","4th","top 5","top5","5e","5eme","5ème","5th","6e","6ème","6th"].some(x => h.includes(x));
-  if (has45) return false;
-  return (
-    h.includes("top 1")||h.includes("top1")||h.includes("top 2")||h.includes("top2")||h.includes("top 3")||h.includes("top3")||
-    h.includes("1re")||h.includes("1ere")||h.includes("1ère")||h.includes("1er")||h.includes("2e")||h.includes("2eme")||h.includes("2ème")||
-    h.includes("3e")||h.includes("3eme")||h.includes("3ème")||h.includes("1st")||h.includes("2nd")||h.includes("3rd")||
-    h.includes("champion")||h.includes("winner")||h.includes("vainqueur")||h.includes("victoire")||
-    h.includes("podium")||h.includes("finaliste")||h.includes("runner up")||h.includes("vice")
-  );
-}
-function podiumRank(item: Achievement): number {
-  const h = haystack(item);
-  if (h.includes("1re")||h.includes("1ere")||h.includes("1ère")||h.includes("1er")||h.includes("1st")||h.includes("winner")||h.includes("champion")||h.includes("vainqueur")||h.includes("victoire")) return 1;
-  if (h.includes("2eme")||h.includes("2ème")||h.includes("2e")||h.includes("2nd")||h.includes("finaliste")||h.includes("runner up")||h.includes("vice")) return 2;
-  if (h.includes("3eme")||h.includes("3ème")||h.includes("3e")||h.includes("3rd")) return 3;
-  return 99;
-}
-function rankLabel(rank: number) {
-  if (rank === 1) return "1re place";
-  if (rank === 2) return "2e place";
-  if (rank === 3) return "3e place";
-  return null;
-}
-
-const HOF_MANUAL: Achievement[] = [
-  {
-    id: "hof-csf-valo-2", type: "LAN", jeu: "valorant", category: "LAN",
-    titre: "Finalistes — LAN CSF", sousTitre: "Valorant",
-    description: "Un run solide en LAN : une 2e place méritée et un résultat marquant pour le pôle Valorant.",
-    cashprize: "300$", badge: "2e place",
-    bannerSrc: "/medias/commun/valo.png", bannerAlt: "LAN CSF Valorant — 2e place",
-  },
-  {
-    id: "hof-csf-lol-3", type: "LAN", jeu: "lol", category: "LAN",
-    titre: "Podium — LAN CSF", sousTitre: "League of Legends",
-    description: "Top 3 en LAN : podium confirmé et performance qui renforce la crédibilité de DeathMark E-Sports.",
-    cashprize: "600$", badge: "3e place",
-    bannerSrc: "/medias/commun/Lan_CSF.png", bannerAlt: "LAN CSF LoL — 3e place",
-  },
+const GAME_LINKS: Array<{ href: string; key: GameKey; short: string }> = [
+  { href: "/hall-of-fame/lol", key: "lol", short: "LoL" },
+  { href: "/hall-of-fame/valorant", key: "valorant", short: "VLR" },
+  { href: "/hall-of-fame/rocket-league", key: "rocket-league", short: "RL" },
+  { href: "/hall-of-fame/marvel-rivals", key: "marvel-rivals", short: "MR" },
 ];
 
-function ResultRow({ item, index }: { item: Achievement; index: number }) {
-  const rank = podiumRank(item);
-  const rl   = rankLabel(rank);
-  const isFirst = rank === 1;
+const cleanPairs: Array<[string, string]> = [
+  ["Ã©", "e"],
+  ["Ã¨", "e"],
+  ["Ãª", "e"],
+  ["Ã ", "a"],
+  ["Ã¢", "a"],
+  ["Ã´", "o"],
+  ["Ã®", "i"],
+  ["Ã¯", "i"],
+  ["Ã§", "c"],
+  ["Ã‰", "E"],
+  ["Â·", "/"],
+  ["Â", ""],
+  ["â€“", "-"],
+  ["â€”", "-"],
+  ["â†’", "->"],
+  ["Ã", "a"],
+];
+
+function clean(value: string) {
+  return cleanPairs.reduce((text, [from, to]) => text.replaceAll(from, to), value);
+}
+
+function pick(fr: string, en: string, lang: Lang) {
+  return lang === "en" ? en : fr;
+}
+
+function scoreRank(item: Achievement) {
+  const h = clean(`${item.titre} ${item.badge ?? ""} ${item.sousTitre}`).toLowerCase();
+  if (h.includes("1re") || h.includes("1er") || h.includes("1st") || h.includes("champion")) return 1;
+  if (h.includes("2e") || h.includes("2nd") || h.includes("finaliste")) return 2;
+  if (h.includes("3e") || h.includes("3rd") || h.includes("podium")) return 3;
+  if (h.includes("top 8")) return 8;
+  if (h.includes("top 18")) return 18;
+  if (h.includes("top 38")) return 38;
+  if (h.includes("top 256")) return 256;
+  return 99;
+}
+
+function ResultCard({ item, index }: { item: Achievement; index: number }) {
+  const rank = scoreRank(item);
+  const isMajor = rank <= 3;
+  const [imgError, setImgError] = useState(false);
 
   return (
     <motion.article
-      className="group relative flex flex-col gap-0 overflow-hidden bg-[#080808]"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.55, delay: (index % 6) * 0.05, ease }}
+      variants={fadeUp(index * 0.035, 16)}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewport.once}
+      className="dme-card group overflow-hidden"
     >
-      {/* Top accent line */}
-      <div className={`absolute left-0 right-0 top-0 h-[2px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100 ${isFirst ? "bg-red-600" : "bg-white/20"}`} />
-
-      {item.bannerSrc && (
-        <div className="relative aspect-video w-full overflow-hidden bg-[#050505]">
-          <Image src={item.bannerSrc} alt={item.bannerAlt ?? item.titre} fill className="object-cover object-center brightness-70 transition duration-600 group-hover:brightness-85 group-hover:scale-[1.02]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/35 to-transparent" />
+      {item.bannerSrc && !imgError ? (
+        <div className="relative aspect-[16/9] overflow-hidden">
+          <Image
+            src={item.bannerSrc}
+            alt={clean(item.bannerAlt ?? item.titre)}
+            fill
+            sizes="(min-width: 1280px) 33vw, 100vw"
+            className="object-cover opacity-72 transition duration-500 group-hover:scale-[1.025] group-hover:opacity-92"
+            onError={() => setImgError(true)}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
+        </div>
+      ) : (
+        <div className="relative flex aspect-[16/9] items-center justify-center border-b border-white/[0.06] bg-white/[0.025]">
+          <Image src="/logo/logo-dme.png" alt="DeathMark E-Sports" width={48} height={48} className="opacity-18 object-contain" />
+          <span className="absolute bottom-3 font-mono text-[8px] font-bold uppercase tracking-[0.26em] text-white/14">
+            Photo à venir
+          </span>
         </div>
       )}
 
-      <div className="flex flex-col gap-3 p-6 flex-1 transition-colors duration-300 group-hover:bg-white/[0.015]">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`border px-2 py-[2px] text-[8px] font-black uppercase tracking-[0.2em] ${item.type === "LAN" ? "border-orange-400/25 text-orange-300/70" : "border-blue-400/22 text-blue-300/65"}`}>
-            {item.type === "LAN" ? "LAN" : "Ligue"}
+      <div className="p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <span
+            className={`border px-2 py-1 font-mono text-[8px] font-black uppercase tracking-[0.18em] ${
+              isMajor ? "border-red-500/28 text-red-100/68" : "border-white/[0.1] text-white/34"
+            }`}
+          >
+            {clean(item.badge ?? item.type)}
           </span>
-          <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/32">{labelJeu(item.jeu)}</span>
-          {item.cashprize && <span className="ml-auto text-[8px] font-black uppercase tracking-[0.2em] text-red-500/65">{item.cashprize}</span>}
+          <span className="font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/28">
+            {GAME_LABELS[item.jeu]}
+          </span>
+          {item.cashprize ? (
+            <span className="ml-auto font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/30">
+              {clean(item.cashprize)}
+            </span>
+          ) : null}
         </div>
-
-        <div>
-          <h3 className="font-display text-[1.35rem] uppercase leading-tight text-white">{item.titre}</h3>
-          <p className="mt-1 text-[9px] font-black uppercase tracking-[0.25em] text-red-500/60">{item.sousTitre}</p>
-        </div>
-
-        {rl && (
-          <span className={`w-fit px-2.5 py-[3px] text-[8px] font-black uppercase tracking-[0.25em] border ${
-            rank === 1 ? "border-red-600/35 text-red-500/80 bg-red-600/8" :
-            rank === 2 ? "border-white/15 text-white/45" :
-            "border-white/10 text-white/35"
-          }`}>{rl}</span>
-        )}
-        <p className="line-clamp-2 text-[13px] leading-relaxed text-white/42">{item.description}</p>
+        <h2 className="text-xl font-black leading-tight tracking-[-0.03em] text-white">
+          {clean(item.titre)}
+        </h2>
+        <p className="mt-2 font-mono text-[8px] font-black uppercase tracking-[0.2em] text-red-200/45">
+          {clean(item.sousTitre)}
+        </p>
+        <p className="mt-4 line-clamp-2 text-sm leading-6 text-white/42">
+          {clean(item.description)}
+        </p>
       </div>
     </motion.article>
   );
 }
 
 export default function HallOfFamePage() {
-  const { t } = useLang();
-
-  const hofFromData  = achievements.filter((a) => isTop3(a) && !isAcl(a));
-  const autresAll    = achievements.filter((a) => !isTop3(a) || isAcl(a));
-  const manualSorted = [...HOF_MANUAL].sort((a, b) => podiumRank(a) - podiumRank(b));
-  const hofAll       = [...manualSorted, ...hofFromData].sort((a, b) => podiumRank(a) - podiumRank(b));
-
-  const exploreRef  = useRef<HTMLDivElement>(null);
-  const exploreView = useInView(exploreRef, { once: true, margin: "-60px" });
+  const { lang } = useLang();
+  const featured = (achievements.find((item) => item.id === "avl-champions") ?? achievements[0]) as Achievement;
+  const sorted = [...achievements].sort((a, b) => scoreRank(a) - scoreRank(b));
+  const topResults = sorted.slice(0, 12);
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
-
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden border-b border-white/[0.05] pb-20 pt-28">
-        <div className="pointer-events-none absolute -top-32 left-0 h-[500px] w-[600px] bg-[radial-gradient(ellipse,rgba(220,38,38,0.07),transparent_65%)]" />
-        <div aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none text-[clamp(8rem,18vw,16rem)] font-display uppercase leading-none text-white/[0.025]">HOF</div>
-
-        <div className="relative mx-auto max-w-[120rem] px-6 sm:px-10">
-          <motion.div className="mb-10 flex items-center gap-4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease }}>
-            <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Résultats & Palmarès", "Results & Achievements")}</span>
-          </motion.div>
-
-          <div className="overflow-hidden mb-6">
-            <motion.h1 className="text-[clamp(3.5rem,9vw,8.5rem)] font-black uppercase leading-[0.88] tracking-tight" initial={{ opacity: 0, y: 80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease }}>
-              <span className="block text-white">Hall of</span>
-              <span className="block text-white/15">Fame</span>
-              <span className="block text-red-600">.</span>
-            </motion.h1>
-          </div>
-
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <motion.p className="max-w-md text-[14px] leading-relaxed text-white/45" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease }}>
-              {t(
-                "LANs, ligues en ligne, Aegis, NACL — tous les résultats qui construisent l'histoire compétitive de DeathMark E-Sports.",
-                "LANs, online leagues, Aegis, NACL — all the results that build DeathMark E-Sports' competitive history."
+    <div className="dme-page">
+      <section className="dme-section">
+        <div className="dme-wrap grid gap-12 lg:grid-cols-[1fr_minmax(300px,420px)] lg:items-end">
+          <div>
+            <p className="dme-eyebrow mb-5">
+              {pick("Résultats / palmarès", "Results / achievements", lang)}
+            </p>
+            <h1 className="dme-title max-w-5xl text-[clamp(3rem,7vw,6.8rem)]">
+              Hall of Fame.
+            </h1>
+            <p className="dme-lead mt-6">
+              {pick(
+                "Les résultats qui donnent du poids à l'ambition DME.",
+                "The results that give weight to DME ambition.",
+                lang
               )}
-            </motion.p>
-
-            <motion.div className="flex divide-x divide-white/[0.06] border border-white/[0.06]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease }}>
-              {([
-                { val: "6 200$+", labelFr: "Cashprize",  labelEn: "Prize Pool" },
-                { val: String(hofAll.length), labelFr: "Podiums", labelEn: "Podiums" },
-                { val: "04",      labelFr: "Jeux",        labelEn: "Games"     },
-              ] as const).map((s) => (
-                <div key={s.val} className="px-8 py-5 text-center">
-                  <p className="text-[1.8rem] font-black tabular-nums leading-none text-white">{s.val}</p>
-                  <p className="mt-1.5 text-[8px] font-black uppercase tracking-[0.35em] text-white/28">{t(s.labelFr, s.labelEn)}</p>
-                </div>
-              ))}
-            </motion.div>
+            </p>
           </div>
 
-          <motion.div className="mt-12 flex flex-wrap items-center gap-6 border-t border-white/[0.05] pt-6" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.55, ease }}>
+          <div className="dme-gridline grid grid-cols-3 lg:grid-cols-1">
             {[
-              { href: "/hall-of-fame/lol",          label: "LoL"           },
-              { href: "/hall-of-fame/valorant",      label: "Valorant"      },
-              { href: "/hall-of-fame/rocket-league", label: "Rocket League" },
-              { href: "/hall-of-fame/marvel-rivals", label: "Marvel Rivals" },
-            ].map((tab) => (
-              <Link key={tab.href} href={tab.href} className="text-[9px] font-black uppercase tracking-[0.35em] text-white/30 transition-colors duration-300 hover:text-white/70">{tab.label}</Link>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── FEATURED ── */}
-      <section className="border-b border-white/[0.04] py-16">
-        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
-          <div className="mb-8 flex items-center gap-4">
-            <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-red-600/60">{t("Résultat phare", "Featured Result")}</span>
-            <div className="h-px flex-1 bg-white/[0.04]" />
-          </div>
-
-          <motion.div className="group relative overflow-hidden" initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease }}>
-            <div className="absolute left-0 right-0 top-0 h-[2px] bg-red-600" />
-            <div className="relative h-[480px] w-full overflow-hidden bg-[#050505] sm:h-[640px]">
-              <Image src="/medias/commun/avl.png" alt="Champions AVL" fill className="object-cover object-center brightness-75 transition duration-700 group-hover:brightness-90 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/30 to-transparent" />
-            </div>
-            <div className="relative border-t border-white/[0.05] px-8 py-7">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="mb-2 text-[9px] font-black uppercase tracking-[0.35em] text-red-600/55">League of Legends · {t("Ligue en ligne", "Online League")}</p>
-                  <h2 className="font-display text-[clamp(1.4rem,3vw,2.5rem)] uppercase leading-tight text-white">{t("Champions — Aegis Vanguard League", "Champions — Aegis Vanguard League")}</h2>
-                  <p className="mt-1.5 text-[14px] text-white/45">{t("Première victoire d'une structure québécoise en circuit Aegis.", "First victory by a Quebec organization in the Aegis circuit.")}</p>
-                </div>
-                <span className="shrink-0 border border-red-600/20 px-5 py-2.5 text-[9px] font-black uppercase tracking-[0.3em] text-red-600/60">Cashprize : 2 450$</span>
+              { value: "06", label: { fr: "Titres winners", en: "Titles won" } },
+              { value: "7 000$+", label: { fr: "Cashprize en 1 an", en: "Prize in 1 year" } },
+              { value: "2025", label: { fr: "Est.", en: "Est." } },
+            ].map((stat) => (
+              <div key={stat.value} className="p-5">
+                <p className="font-display text-[clamp(2.1rem,4vw,3.3rem)] leading-none">
+                  {stat.value}
+                </p>
+                <p className="mt-2 font-mono text-[8px] font-black uppercase tracking-[0.2em] text-white/32">
+                  {pick(stat.label.fr, stat.label.en, lang)}
+                </p>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── PODIUMS ── */}
-      <section className="py-16">
-        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
-          <div className="mb-8 flex items-center gap-4">
-            <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Podiums & victoires", "Podiums & Victories")}</span>
-            <div className="h-px flex-1 bg-white/[0.04]" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.25em] text-white/15">{hofAll.length} {t("résultats", "results")}</span>
-          </div>
-          <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-3">
-            {hofAll.map((item, i) => <ResultRow key={item.id} item={item} index={i} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ── AUTRES ── */}
-      {autresAll.length > 0 && (
-        <section className="border-t border-white/[0.04] bg-[#060606] py-16">
-          <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="h-px w-8 bg-white/20" />
-              <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Autres performances & Aegis / NACL", "Other Performances & Aegis / NACL")}</span>
-              <div className="h-px flex-1 bg-white/[0.04]" />
-              <span className="font-mono text-[9px] font-black uppercase tracking-[0.25em] text-white/15">{autresAll.length} {t("résultats", "results")}</span>
-            </div>
-            <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-3">
-              {autresAll.map((item, i) => <ResultRow key={item.id} item={item} index={i} />)}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── EXPLORER PAR JEU ── */}
-      <section ref={exploreRef} className="border-t border-white/[0.04] py-20">
-        <div className="mx-auto max-w-[120rem] px-6 sm:px-10">
-          <div className="mb-10 flex items-center gap-4">
-            <div className="h-px flex-1 bg-white/[0.04]" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/15">{t("Explorer par jeu", "Browse by game")}</span>
-            <div className="h-px flex-1 bg-white/[0.04]" />
-          </div>
-          <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { href: "/hall-of-fame/lol",          label: "League of Legends", sub: "LoL" },
-              { href: "/hall-of-fame/valorant",      label: "Valorant",          sub: "VLR" },
-              { href: "/hall-of-fame/rocket-league", label: "Rocket League",     sub: "RL"  },
-              { href: "/hall-of-fame/marvel-rivals", label: "Marvel Rivals",     sub: "MR"  },
-            ].map((tab, i) => (
-              <motion.div key={tab.href} initial={{ opacity: 0, y: 20 }} animate={exploreView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55, delay: i * 0.08, ease }}>
-                <Link href={tab.href} className="group relative flex items-center justify-between overflow-hidden bg-[#080808] px-6 py-7 transition-colors hover:bg-[#0d0d0d]">
-                  <div className="absolute left-0 right-0 top-0 h-[1px] origin-left scale-x-0 bg-red-600/50 transition-transform duration-500 group-hover:scale-x-100" />
-                  <div>
-                    <p className="mb-1 text-[9px] font-black uppercase tracking-[0.3em] text-red-600/40">{tab.sub}</p>
-                    <p className="font-display text-[1.3rem] uppercase leading-tight text-white">{tab.label}</p>
-                  </div>
-                  <span className="text-white/18 transition-colors group-hover:text-red-500">→</span>
-                </Link>
-              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
+      <section className="dme-section">
+        <div className="dme-wrap">
+          <div className="mb-8 flex items-center gap-4">
+            <span className="h-px w-8 bg-[#e1192d]" />
+            <p className="font-mono text-[9px] font-black uppercase tracking-[0.3em] text-white/32">
+              {pick("Résultat phare", "Featured result", lang)}
+            </p>
+          </div>
+
+          <Link href="/hall-of-fame/lol" className="dme-panel group grid overflow-hidden lg:grid-cols-[1fr_0.6fr]">
+            {featured.bannerSrc ? (
+              <div className="relative min-h-[520px] overflow-hidden">
+                <Image
+                  src={featured.bannerSrc}
+                  alt={clean(featured.bannerAlt ?? featured.titre)}
+                  fill
+                  priority
+                  className="object-cover object-bottom opacity-78 transition duration-700 group-hover:scale-[1.02] group-hover:opacity-95"
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
+              </div>
+            ) : (
+              <div className="relative flex min-h-[520px] items-center justify-center border-r border-white/[0.06] bg-white/[0.02]">
+                <Image src="/logo/logo-dme.png" alt="DeathMark E-Sports" width={80} height={80} className="opacity-12 object-contain" />
+                <span className="absolute bottom-5 font-mono text-[8px] font-bold uppercase tracking-[0.28em] text-white/14">
+                  Photo à venir
+                </span>
+              </div>
+            )}
+            <div className="flex flex-col justify-end p-7">
+              <p className="dme-eyebrow mb-4">{GAME_LABELS[featured.jeu]}</p>
+              <h2 className="dme-title text-[clamp(2.2rem,4.6vw,4.6rem)]">
+                {clean(featured.titre)}
+              </h2>
+              <p className="mt-5 max-w-xl text-sm leading-6 text-white/48">
+                {clean(featured.description)}
+              </p>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      <section className="dme-section">
+        <div className="dme-wrap">
+          <div className="mb-8 flex items-center gap-4">
+            <span className="h-px w-8 bg-white/20" />
+            <p className="font-mono text-[9px] font-black uppercase tracking-[0.3em] text-white/32">
+              {pick("Podiums et preuves", "Podiums and proof", lang)}
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {topResults.map((item, index) => (
+              <ResultCard key={item.id} item={item} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="dme-section-tight border-b-0">
+        <div className="dme-wrap grid gap-4 md:grid-cols-4">
+          {GAME_LINKS.map((game) => (
+            <Link key={game.href} href={game.href} className="dme-card p-5 transition hover:border-red-500/24">
+              <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-red-200/46">
+                {game.short}
+              </p>
+              <p className="mt-4 text-2xl font-black tracking-[-0.03em] text-white">
+                {GAME_LABELS[game.key]}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

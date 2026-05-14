@@ -1,80 +1,106 @@
 "use client";
-// src/components/Header.tsx
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ChevronRight,
+  Languages,
+  LogOut,
+  Menu,
+  Shield,
+  ShoppingBag,
+  User,
+  X,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useLang } from "./LanguageContext";
+import { useLang, type Lang } from "./LanguageContext";
 
 export type RoleAcces = "joueur" | "staff" | "coach" | "pending_staff" | "public";
 
 type Props = { role: RoleAcces };
 
-const NAV_ITEMS_FR = [
-  { href: "/",             label: "Accueil"     },
-  { href: "/equipes",      label: "Équipes"     },
-  { href: "/hall-of-fame", label: "Résultats"   },
-  { href: "/recrutement",  label: "Recrutement" },
-  { href: "/social",       label: "Social"      },
-  { href: "/shop",         label: "Shop"        },
-  { href: "/contact",      label: "Contact"     },
-] as const;
+type Copy = {
+  fr: string;
+  en: string;
+};
 
-const NAV_ITEMS_EN = [
-  { href: "/",             label: "Home"        },
-  { href: "/equipes",      label: "Teams"       },
-  { href: "/hall-of-fame", label: "Results"     },
-  { href: "/recrutement",  label: "Join"        },
-  { href: "/social",       label: "Social"      },
-  { href: "/shop",         label: "Shop"        },
-  { href: "/contact",      label: "Contact"     },
-] as const;
+type NavItem = {
+  href: string;
+  label: Copy;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { href: "/", label: { fr: "Accueil", en: "Home" } },
+  { href: "/equipes", label: { fr: "Équipes", en: "Teams" } },
+  { href: "/hall-of-fame", label: { fr: "Résultats", en: "Results" } },
+  { href: "/recrutement", label: { fr: "Recrutement", en: "Tryouts" } },
+  { href: "/social", label: { fr: "Communauté", en: "Community" } },
+  { href: "/staff", label: { fr: "Staff", en: "Staff" } },
+  { href: "/contact", label: { fr: "Contact", en: "Contact" } },
+];
+
+const ACCOUNT_LINKS: NavItem[] = [
+  { href: "/connexion", label: { fr: "Connexion", en: "Login" } },
+  { href: "/shop", label: { fr: "Shop", en: "Shop" } },
+];
+
+function pick(copy: Copy, lang: Lang) {
+  return lang === "en" ? copy.en : copy.fr;
+}
+
+function isPathActive(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+}
 
 export default function Header({ role }: Props) {
-  const pathname   = usePathname();
+  const pathname = usePathname() ?? "/";
   const { lang, setLang } = useLang();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [userOpen,   setUserOpen]   = useState(false);
-  const [scrolled,   setScrolled]   = useState(false);
-  const refUser = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
 
-  const estConnecte  = role !== "public";
-  const estStaff     = role === "staff" || role === "coach";
-  const voirScouting = estStaff;
-  const NAV_ITEMS    = lang === "en" ? NAV_ITEMS_EN : NAV_ITEMS_FR;
+  const isConnected = role !== "public";
+  const canScout = role === "staff" || role === "coach";
+  const accountLabel = isConnected
+    ? lang === "en"
+      ? "Account"
+      : "Compte"
+    : lang === "en"
+      ? "Login"
+      : "Connexion";
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 8);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const fn = (e: MouseEvent) => {
-      if (!userOpen) return;
-      if (refUser.current && !refUser.current.contains(e.target as Node))
-        setUserOpen(false);
-    };
-    window.addEventListener("mousedown", fn);
-    return () => window.removeEventListener("mousedown", fn);
-  }, [userOpen]);
-
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
+    setIsOpen(false);
+    setAccountOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
       document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
+    };
+  }, [isOpen]);
 
-  function isActive(href: string) {
-    return href === "/" ? pathname === "/" : pathname.startsWith(href);
-  }
+  useEffect(() => {
+    const closeAccount = (event: MouseEvent) => {
+      if (!accountOpen) return;
+      if (!accountRef.current?.contains(event.target as Node)) {
+        setAccountOpen(false);
+      }
+    };
+    window.addEventListener("mousedown", closeAccount);
+    return () => window.removeEventListener("mousedown", closeAccount);
+  }, [accountOpen]);
 
   async function logout() {
     await fetch("/api/acces/logout", { method: "POST" });
@@ -83,372 +109,301 @@ export default function Header({ role }: Props) {
 
   return (
     <>
-      {/* ── HEADER ────────────────────────────────────────────────────────── */}
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        className={`fixed inset-x-0 top-0 z-50 border-b transition duration-300 ${
           scrolled
-            ? "bg-[#050505]/96 backdrop-blur-2xl border-b border-red-600/30 shadow-[0_1px_0_rgba(220,38,38,0.08),0_8px_48px_rgba(0,0,0,0.7)]"
-            : "bg-transparent border-b border-white/[0.04]"
+            ? "border-white/[0.08] bg-[#050505]/92 backdrop-blur-xl"
+            : "border-white/[0.045] bg-[#050505]/42 backdrop-blur-sm"
         }`}
       >
-        <div className="mx-auto flex h-[70px] w-full max-w-[120rem] items-center gap-6 px-5 md:px-10">
-
-          {/* ── LOGO ─────────────────────────────────────────────────────── */}
-          <Link href="/" className="flex shrink-0 items-center gap-3 group">
-            <div className="relative">
-              <Image
-                src="/logo/logo-dme.png"
-                alt="DME"
-                width={32}
-                height={32}
-                priority
-                className="h-[32px] w-[32px] object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]"
-              />
-            </div>
-            <div className="hidden sm:flex flex-col leading-none gap-[2px]">
-              <span className="font-display text-[15px] tracking-[0.06em] text-white leading-none">
-                DEATHMARK<span className="text-red-500"> ESPORTS</span>
-              </span>
-              <span className="font-mono text-[7px] tracking-[0.35em] text-white/25 leading-none uppercase">
-                Québec · NA
-              </span>
+        <div className="mx-auto grid h-[70px] max-w-[118rem] grid-cols-[auto_1fr_auto] items-center gap-4 px-4 sm:px-6 lg:px-10">
+          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="DME">
+            <Image
+              src="/logo/logo-dme.png"
+              alt="DeathMark E-Sports"
+              width={36}
+              height={36}
+              priority
+              className="h-8 w-8 shrink-0 object-contain"
+            />
+            <div className="hidden leading-none sm:block">
+              <p className="text-[12px] font-black uppercase tracking-[0.18em] text-white">
+                DeathMark
+              </p>
+              <p className="mt-1 font-mono text-[8px] font-bold uppercase tracking-[0.28em] text-white/35">
+                Quebec / NA
+              </p>
             </div>
           </Link>
 
-          {/* ── NAV DESKTOP ──────────────────────────────────────────────── */}
-          <nav className="hidden md:flex items-center flex-1 ml-2" aria-label="Navigation principale">
+          <nav className="hidden items-center justify-center gap-1 lg:flex" aria-label={lang === "en" ? "Main navigation" : "Navigation principale"}>
             {NAV_ITEMS.map((item) => {
-              const active = isActive(item.href);
+              const active = isPathActive(pathname, item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`relative px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-colors duration-200 ${
-                    active ? "text-white" : "text-white/50 hover:text-white/80"
+                  className={`relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition ${
+                    active ? "text-white" : "text-white/44 hover:text-white/78"
                   }`}
                 >
-                  {item.label}
-                  {active && (
+                  {pick(item.label, lang)}
+                  {active ? (
                     <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute inset-x-3.5 bottom-0 h-[1.5px] bg-red-500"
-                      transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                      layoutId="dme-nav-line"
+                      className="absolute inset-x-3 bottom-0 h-px bg-red-500"
+                      transition={{ type: "spring", stiffness: 420, damping: 36 }}
                     />
-                  )}
+                  ) : null}
                 </Link>
               );
             })}
-
-            {voirScouting && (
-              <Link
-                href="/scouting/lol"
-                className={`relative px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-colors duration-200 ${
-                  isActive("/scouting") ? "text-white" : "text-white/50 hover:text-white/80"
-                }`}
-              >
-                Scouting
-                {isActive("/scouting") && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute inset-x-3.5 bottom-0 h-[1.5px] bg-red-500"
-                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                  />
-                )}
-              </Link>
-            )}
+            {canScout ? (
+              <>
+                <Link
+                  href="/scouting/lol"
+                  className={`relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition ${
+                    isPathActive(pathname, "/scouting") ? "text-red-200" : "text-red-300/52 hover:text-red-100"
+                  }`}
+                >
+                  Scouting
+                  {isPathActive(pathname, "/scouting") ? (
+                    <motion.span
+                      layoutId="dme-nav-line"
+                      className="absolute inset-x-3 bottom-0 h-px bg-red-500"
+                      transition={{ type: "spring", stiffness: 420, damping: 36 }}
+                    />
+                  ) : null}
+                </Link>
+                <Link
+                  href="/coaching"
+                  className={`relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition ${
+                    isPathActive(pathname, "/coaching") ? "text-red-200" : "text-red-300/52 hover:text-red-100"
+                  }`}
+                >
+                  Coaching
+                  {isPathActive(pathname, "/coaching") ? (
+                    <motion.span
+                      layoutId="dme-nav-line"
+                      className="absolute inset-x-3 bottom-0 h-px bg-red-500"
+                      transition={{ type: "spring", stiffness: 420, damping: 36 }}
+                    />
+                  ) : null}
+                </Link>
+              </>
+            ) : null}
           </nav>
 
-          {/* ── RIGHT CLUSTER ────────────────────────────────────────────── */}
-          <div className="ml-auto flex items-center gap-2">
-
-            {/* Language toggle — desktop */}
-            <div className="hidden md:flex items-center h-7 border border-white/[0.08] bg-white/[0.02]">
-              {(["fr", "en"] as const).map((l, i) => (
+          <div className="flex items-center justify-end gap-2">
+            <div className="hidden items-center border border-white/[0.1] bg-white/[0.025] md:flex">
+              {(["fr", "en"] as const).map((candidate) => (
                 <button
-                  key={l}
+                  key={candidate}
                   type="button"
-                  onClick={() => setLang(l)}
-                  className={`h-full px-3 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-200 ${
-                    lang === l
-                      ? "bg-red-600 text-white"
-                      : "text-white/40 hover:text-white/65"
-                  } ${i === 0 ? "border-r border-white/[0.06]" : ""}`}
-                  aria-label={l === "fr" ? "Français" : "English"}
+                  onClick={() => setLang(candidate)}
+                  className={`h-8 px-3 font-mono text-[9px] font-black uppercase tracking-[0.18em] transition ${
+                    lang === candidate
+                      ? "bg-white text-black"
+                      : "text-white/38 hover:text-white/72"
+                  }`}
+                  aria-label={candidate === "fr" ? "Francais" : "English"}
                 >
-                  {l}
+                  {candidate}
                 </button>
               ))}
             </div>
 
-            {/* Cart icon — desktop */}
             <Link
               href="/shop"
-              className="hidden h-7 w-7 items-center justify-center border border-white/[0.08] bg-white/[0.03] text-white/38 transition-all duration-200 hover:border-white/18 hover:text-white/68 md:flex"
-              aria-label={lang === "en" ? "Shop" : "Boutique"}
+              className="hidden h-9 w-9 items-center justify-center border border-white/[0.1] bg-white/[0.025] text-white/45 transition hover:border-white/20 hover:text-white md:flex"
+              aria-label="Shop"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-              </svg>
+              <ShoppingBag className="h-4 w-4" />
             </Link>
 
-            {/* Profile dropdown — desktop */}
-            <div className="relative hidden md:block" ref={refUser}>
+            <div ref={accountRef} className="relative hidden md:block">
               <button
                 type="button"
-                onClick={() => setUserOpen((v) => !v)}
-                className={`flex h-7 w-7 items-center justify-center border transition-all duration-200 ${
-                  userOpen || estConnecte
-                    ? "border-red-500/60 bg-red-500/12 text-red-400"
-                    : "border-white/[0.08] bg-white/[0.03] text-white/40 hover:border-white/18 hover:text-white/70"
+                onClick={() => setAccountOpen((value) => !value)}
+                className={`flex h-9 w-9 items-center justify-center border transition ${
+                  accountOpen || isConnected
+                    ? "border-red-500/45 bg-red-500/[0.08] text-red-200"
+                    : "border-white/[0.1] bg-white/[0.025] text-white/45 hover:border-white/20 hover:text-white"
                 }`}
-                aria-label={lang === "en" ? "Account" : "Compte"}
+                aria-label={accountLabel}
+                aria-expanded={accountOpen}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="8" r="4"/>
-                  <path d="M4 20c0-3.5 3.6-6 8-6s8 2.5 8 6"/>
-                </svg>
+                <User className="h-4 w-4" />
               </button>
 
               <AnimatePresence>
-                {userOpen && (
+                {accountOpen ? (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 4, scale: 0.97 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-44 overflow-hidden border border-white/[0.08] bg-[#090909]/97 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.16 }}
+                    className="absolute right-0 mt-2 w-56 border border-white/[0.09] bg-[#070707]/98 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.7)] backdrop-blur-xl"
                   >
-                    <div className="border-b border-white/[0.06] px-4 py-2.5">
-                      <p className="text-[8px] font-black uppercase tracking-[0.25em] text-white/28">
-                        {estConnecte
-                          ? (role === "joueur" ? (lang === "en" ? "Member" : "Membre") : role)
-                          : (lang === "en" ? "Not connected" : "Non connecté")}
-                      </p>
-                    </div>
-
-                    <div className="p-1.5 flex flex-col gap-0.5">
-                      {estConnecte && (
-                        <Link href="/shop" onClick={() => setUserOpen(false)}
-                          className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-white/45 hover:bg-white/[0.05] hover:text-white/75 transition-colors">
-                          {lang === "en" ? "My orders" : "Mes commandes"}
+                    <p className="border-b border-white/[0.07] px-3 pb-2 pt-1 font-mono text-[8px] font-black uppercase tracking-[0.28em] text-white/28">
+                      {isConnected
+                        ? lang === "en"
+                          ? `Access: ${role}`
+                          : `Acces: ${role}`
+                        : lang === "en"
+                          ? "Public session"
+                          : "Session publique"}
+                    </p>
+                    <div className="mt-1 flex flex-col">
+                      {ACCOUNT_LINKS.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/46 transition hover:bg-white/[0.045] hover:text-white"
+                        >
+                          {pick(item.label, lang)}
                         </Link>
-                      )}
-                      <Link href="/shop" onClick={() => setUserOpen(false)}
-                        className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-white/45 hover:bg-white/[0.05] hover:text-white/75 transition-colors">
-                        Shop
-                      </Link>
-                      {voirScouting && (
-                        <Link href="/scouting/lol" onClick={() => setUserOpen(false)}
-                          className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-red-400/55 hover:bg-red-600/[0.06] hover:text-red-300 transition-colors">
-                          Scouting
-                        </Link>
-                      )}
-                      <div className="my-1 mx-2 h-px bg-white/[0.06]" />
-                      {!estConnecte ? (
-                        <Link href="/connexion" onClick={() => setUserOpen(false)}
-                          className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-white/45 hover:bg-white/[0.05] hover:text-white/75 transition-colors">
-                          {lang === "en" ? "Login / Register" : "Connexion / Créer un compte"}
-                        </Link>
-                      ) : (
-                        <button type="button"
-                          onClick={async () => { setUserOpen(false); await logout(); }}
-                          className="text-left px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-red-400/55 hover:bg-red-500/[0.08] hover:text-red-300 transition-colors">
-                          {lang === "en" ? "Sign out" : "Déconnexion"}
+                      ))}
+                      {canScout ? (
+                        <>
+                          <Link
+                            href="/scouting/lol"
+                            className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-red-200/62 transition hover:bg-red-500/[0.06] hover:text-red-100"
+                          >
+                            <Shield className="h-3.5 w-3.5" />
+                            Scouting
+                          </Link>
+                          <Link
+                            href="/coaching"
+                            className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-red-200/62 transition hover:bg-red-500/[0.06] hover:text-red-100"
+                          >
+                            <Shield className="h-3.5 w-3.5" />
+                            Coaching
+                          </Link>
+                        </>
+                      ) : null}
+                      {isConnected ? (
+                        <button
+                          type="button"
+                          onClick={() => void logout()}
+                          className="mt-1 flex items-center gap-2 border-t border-white/[0.07] px-3 py-2 text-left text-[10px] font-black uppercase tracking-[0.16em] text-red-200/55 transition hover:bg-red-500/[0.06] hover:text-red-100"
+                        >
+                          <LogOut className="h-3.5 w-3.5" />
+                          {lang === "en" ? "Sign out" : "Deconnexion"}
                         </button>
-                      )}
+                      ) : null}
                     </div>
                   </motion.div>
-                )}
+                ) : null}
               </AnimatePresence>
             </div>
 
-            {/* CTA — desktop */}
             <Link
               href="/recrutement"
-              className="hidden md:flex items-center gap-2 border border-red-500/40 bg-red-500/[0.08] px-5 py-[7px] text-[9px] font-black uppercase tracking-[0.22em] text-red-300/80 transition-all duration-200 hover:border-red-500/70 hover:bg-red-500/14 hover:text-red-200 hover:shadow-[0_0_20px_rgba(220,38,38,0.15)]"
+              className="hidden items-center gap-2 border border-red-500/45 bg-red-600 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-red-500 xl:flex"
             >
-              <span className="h-[5px] w-[5px] rounded-full bg-red-500 animate-pulse shadow-[0_0_6px_rgba(220,38,38,0.9)]" />
               {lang === "en" ? "Apply" : "Rejoindre"}
+              <ChevronRight className="h-3.5 w-3.5" />
             </Link>
 
-            {/* Cart icon — mobile */}
-            <Link
-              href="/shop"
-              className="flex h-8 w-8 items-center justify-center border border-white/[0.1] bg-white/[0.03] text-white/38 transition-all duration-200 hover:border-white/18 hover:text-white/68 md:hidden"
-              aria-label={lang === "en" ? "Shop" : "Boutique"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-              </svg>
-            </Link>
-
-            {/* Account icon — mobile */}
-            <Link
-              href={estStaff ? "/scouting/lol" : estConnecte ? "/shop" : "/connexion"}
-              className={`flex h-8 w-8 items-center justify-center border transition-all duration-200 md:hidden ${
-                estConnecte
-                  ? "border-red-500/30 bg-red-500/[0.06] text-red-400/70"
-                  : "border-white/[0.1] bg-white/[0.03] text-white/45 hover:border-white/18 hover:text-white/70"
-              }`}
-              aria-label={lang === "en" ? "Account" : "Compte"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 20c0-3.5 3.6-6 8-6s8 2.5 8 6"/>
-              </svg>
-            </Link>
-
-            {/* Burger — mobile */}
             <button
               type="button"
-              onClick={() => setMobileOpen((v) => !v)}
-              className="relative flex h-8 w-8 items-center justify-center border border-white/[0.1] bg-white/[0.03] text-white/50 transition-all hover:border-white/18 hover:text-white/80 md:hidden"
+              onClick={() => setIsOpen((value) => !value)}
+              className="flex h-10 w-10 items-center justify-center border border-white/[0.1] bg-white/[0.025] text-white/70 transition hover:border-white/22 hover:text-white lg:hidden"
               aria-label="Menu"
-              aria-expanded={mobileOpen}
+              aria-expanded={isOpen}
             >
-              <motion.span
-                key={mobileOpen ? "close" : "open"}
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                transition={{ duration: 0.18 }}
-                className="text-[14px] leading-none font-black"
-              >
-                {mobileOpen ? "✕" : "≡"}
-              </motion.span>
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* ── MOBILE MENU — full-screen overlay ─────────────────────────────── */}
       <AnimatePresence>
-        {mobileOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
-              onClick={() => setMobileOpen(false)}
-            />
-
-            {/* Panel */}
-            <motion.div
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: "0%" }}
-              exit={{ opacity: 0, x: "100%" }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-[min(85vw,360px)] bg-[#060606] border-l border-white/[0.06] shadow-[-20px_0_80px_rgba(0,0,0,0.8)] md:hidden flex flex-col"
+        {isOpen ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/72 backdrop-blur-sm lg:hidden"
+          >
+            <motion.aside
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+              className="ml-auto flex h-full w-[min(92vw,420px)] flex-col border-l border-white/[0.08] bg-[#060606]"
             >
-              {/* Top bar */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-white/[0.05]">
-                <div className="flex items-center gap-2.5">
-                  <Image src="/logo/logo-dme.png" alt="DME" width={24} height={24} className="h-6 w-6 object-contain" />
-                  <span className="font-display text-[13px] tracking-[0.06em] text-white">DEATHMARK</span>
+              <div className="flex h-[70px] items-center justify-between border-b border-white/[0.07] px-5">
+                <div className="flex items-center gap-3">
+                  <Image src="/logo/logo-dme.png" alt="DME" width={28} height={28} className="h-7 w-7 object-contain" />
+                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white">DeathMark</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex h-8 w-8 items-center justify-center text-white/40 hover:text-white/80 transition-colors"
-                  aria-label="Fermer"
-                >
-                  <span className="text-[16px] font-black">✕</span>
+                <button type="button" onClick={() => setIsOpen(false)} className="text-white/54 hover:text-white" aria-label="Close menu">
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
-              {/* Nav links */}
-              <nav className="flex-1 overflow-y-auto px-4 py-4">
-                {NAV_ITEMS.map((item, i) => {
-                  const active = isActive(item.href);
-                  return (
-                    <motion.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: i * 0.04 }}
-                    >
-                      <Link href={item.href}
-                        className={`flex items-center gap-4 px-3 py-4 text-[12px] font-black uppercase tracking-[0.18em] border-b border-white/[0.04] transition-colors last:border-0 ${
-                          active
-                            ? "text-white"
-                            : "text-white/40 hover:text-white/75"
+              <div className="flex-1 overflow-y-auto px-5 py-6">
+                <nav className="flex flex-col gap-1" aria-label={lang === "en" ? "Mobile navigation" : "Navigation mobile"}>
+                  {[...NAV_ITEMS, ...(canScout ? [{ href: "/scouting/lol", label: { fr: "Scouting", en: "Scouting" } }, { href: "/coaching", label: { fr: "Coaching", en: "Coaching" } }] : [])].map((item, index) => {
+                    const active = isPathActive(pathname, item.href);
+                    return (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.24, delay: index * 0.025 }}
+                      >
+                        <Link
+                          href={item.href}
+                          className={`flex items-center justify-between border-b border-white/[0.055] py-4 text-sm font-black uppercase tracking-[0.16em] ${
+                            active ? "text-white" : "text-white/45"
+                          }`}
+                        >
+                          {pick(item.label, lang)}
+                          {active ? <span className="h-px w-8 bg-red-500" /> : <ChevronRight className="h-4 w-4 text-white/20" />}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              <div className="border-t border-white/[0.07] p-5">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.24em] text-white/28">
+                    <Languages className="h-3.5 w-3.5" />
+                    {lang === "en" ? "Language" : "Langue"}
+                  </div>
+                  <div className="flex border border-white/[0.1]">
+                    {(["fr", "en"] as const).map((candidate) => (
+                      <button
+                        key={candidate}
+                        type="button"
+                        onClick={() => setLang(candidate)}
+                        className={`h-8 w-12 font-mono text-[9px] font-black uppercase tracking-[0.18em] ${
+                          lang === candidate ? "bg-white text-black" : "text-white/42"
                         }`}
                       >
-                        {active && (
-                          <span className="h-4 w-[2px] shrink-0 bg-red-500 rounded-full" />
-                        )}
-                        {!active && <span className="h-4 w-[2px] shrink-0 opacity-0" />}
-                        {item.label}
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-
-                {voirScouting && (
-                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: NAV_ITEMS.length * 0.04 }}>
-                    <Link href="/scouting/lol"
-                      className="flex items-center gap-4 px-3 py-4 text-[12px] font-black uppercase tracking-[0.18em] text-white/40 hover:text-white/75 transition-colors">
-                      <span className="h-4 w-[2px] shrink-0 opacity-0" />
-                      Scouting
-                    </Link>
-                  </motion.div>
-                )}
-              </nav>
-
-              {/* Bottom cluster */}
-              <div className="border-t border-white/[0.05] px-6 py-5 space-y-4">
-                {/* Language */}
-                <div className="flex items-center gap-3">
-                  <span className="text-[8px] font-black uppercase tracking-[0.35em] text-white/22 flex-1">
-                    {lang === "en" ? "Language" : "Langue"}
-                  </span>
-                  <div className="flex">
-                    {(["fr", "en"] as const).map((l, i) => (
-                      <button
-                        key={l}
-                        type="button"
-                        onClick={() => setLang(l)}
-                        className={`h-7 w-10 text-[9px] font-black uppercase tracking-[0.15em] border transition-all duration-200 ${
-                          lang === l
-                            ? "border-red-600/70 bg-red-600/20 text-red-300"
-                            : "border-white/[0.08] text-white/35 hover:text-white/60"
-                        } ${i === 0 ? "border-r-0" : ""}`}
-                      >
-                        {l}
+                        {candidate}
                       </button>
                     ))}
                   </div>
                 </div>
-
-                {/* Auth + CTA */}
-                <div className="flex items-center gap-3">
-                  {!estConnecte ? (
-                    <Link href="/connexion"
-                      className="text-[10px] font-black uppercase tracking-[0.18em] text-white/35 hover:text-white/65 transition-colors flex-1">
-                      {lang === "en" ? "Login" : "Connexion"}
-                    </Link>
-                  ) : (
-                    <button type="button" onClick={() => logout()}
-                      className="text-[10px] font-black uppercase tracking-[0.18em] text-red-400/55 hover:text-red-400 transition-colors flex-1">
-                      {lang === "en" ? "Sign out" : "Déconnexion"}
-                    </button>
-                  )}
-                  <Link href="/recrutement"
-                    className="flex items-center gap-2 border border-red-500/40 bg-red-500/[0.08] px-5 py-2.5 text-[9px] font-black uppercase tracking-[0.2em] text-red-300/80 hover:bg-red-500/14 hover:text-red-200 transition-all">
-                    <span className="h-[5px] w-[5px] rounded-full bg-red-500 animate-pulse" />
+                <div className="grid grid-cols-2 gap-2">
+                  <Link href="/connexion" className="border border-white/[0.1] px-4 py-3 text-center text-[10px] font-black uppercase tracking-[0.16em] text-white/56">
+                    {lang === "en" ? "Login" : "Connexion"}
+                  </Link>
+                  <Link href="/recrutement" className="border border-red-500/45 bg-red-600 px-4 py-3 text-center text-[10px] font-black uppercase tracking-[0.16em] text-white">
                     {lang === "en" ? "Apply" : "Rejoindre"}
                   </Link>
                 </div>
               </div>
-            </motion.div>
-          </>
-        )}
+            </motion.aside>
+          </motion.div>
+        ) : null}
       </AnimatePresence>
     </>
   );

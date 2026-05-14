@@ -87,11 +87,39 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
+  // LAN — LoL (nouveaux résultats)
+  // ================================================================
+  {
+    id:          "lan-cfpr-lol",
+    titre:       "LAN CFPR – 1re place (League of Legends)",
+    sousTitre:   "Victoire League of Legends — 500 $",
+    type:        "LAN",
+    category:    "LAN",
+    jeu:         "lol",
+    cashprize:   "500 $",
+    badge:       "1re place",
+    description:
+      "DME remporte la LAN CFPR en League of Legends — un titre supplémentaire qui confirme la régularité du roster sur les événements LAN québécois.",
+  },
+
+  // ================================================================
   // LAN — Rocket League
   // ================================================================
   {
+    id:          "lan-parro-rl",
+    titre:       "LAN Parro – 1re place (Rocket League)",
+    sousTitre:   "Victoire Rocket League — 300 $",
+    type:        "LAN",
+    category:    "LAN",
+    jeu:         "rocket-league",
+    cashprize:   "300 $",
+    badge:       "1re place",
+    description:
+      "DME remporte la LAN Parro Rocket League — une victoire qui marque l'entrée du programme RL dans le palmarès compétitif de l'organisation.",
+  },
+  {
     id:          "lan-cfpr",
-    titre:       "LAN CFPR – 6e place",
+    titre:       "LAN CFPR – 6e place (Rocket League)",
     sousTitre:   "Résultat brut, expérience précieuse",
     type:        "LAN",
     category:    "LAN",
@@ -207,6 +235,67 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
+  // AVL — LoL (résultat phare)
+  // ================================================================
+  {
+    id:          "avl-champions",
+    titre:       "Aegis Vanguard League – Champions",
+    sousTitre:   "1re place AVL — Spring 2026",
+    type:        "Ligue",
+    category:    "AEGIS",
+    jeu:         "lol",
+    cashprize:   "2 450 $",
+    badge:       "Champions",
+    description:
+      "DME remporte l'Aegis Vanguard League Spring 2026 — un titre qui couronne une saison dominante et positionne l'organisation parmi les meilleures structures de la scène LoL NA amateur.",
+    bannerSrc: "/medias/commun/avl.png",
+    bannerAlt: "DME — Champions AVL Spring 2026",
+  },
+
+  // ================================================================
+  // Aegis — LoL académie Spring 2026
+  // ================================================================
+  {
+    id:          "ael-spring-2026",
+    titre:       "Aegis Executioner League – Top 8 Playoffs",
+    sousTitre:   "Spring 2026 — Coach : SAI",
+    type:        "Ligue",
+    category:    "AEGIS",
+    jeu:         "lol",
+    badge:       "Top 8",
+    description:
+      "L'équipe AEL de DME décroche un Top 8 en playoffs de l'Aegis Executioner League Spring 2026. Lineup : Leeran, Stormgaude, Min3ur, Bacontactics, Canadianwhale.",
+    bannerSrc: "/medias/commun/AEL - Sping 2026.jfif",
+    bannerAlt: "Roster DME AEL Spring 2026",
+  },
+  {
+    id:          "adl-spring-2026",
+    titre:       "Aegis Defenders League – Top 8 Playoffs",
+    sousTitre:   "Spring 2026 — Coach : Ratonvoyer",
+    type:        "Ligue",
+    category:    "AEGIS",
+    jeu:         "lol",
+    badge:       "Top 8",
+    description:
+      "L'équipe ADL de DME atteint le Top 8 des playoffs de l'Aegis Defenders League Spring 2026. Lineup : Rorschach, Doku, Gab, Bizoune, Xavifizz.",
+    bannerSrc: "/medias/commun/ADL - Spring 2026.jfif",
+    bannerAlt: "Roster DME ADL Spring 2026",
+  },
+  {
+    id:          "aml-spring-2026",
+    titre:       "Aegis Marauders League – Top 8 Playoffs",
+    sousTitre:   "Spring 2026 — Coach : Monkey",
+    type:        "Ligue",
+    category:    "AEGIS",
+    jeu:         "lol",
+    badge:       "Top 8",
+    description:
+      "L'équipe AML de DME termine en Top 8 des playoffs de l'Aegis Marauders League Spring 2026. Lineup : Xazord, Chrovos, Hépaté, Elyos, Dear God.",
+    bannerSrc: "/medias/commun/AML - Spring 2026.jfif",
+    bannerAlt: "Roster DME AML Spring 2026",
+  },
+
+  // ================================================================
   // Aegis / NACL — LoL
   // ================================================================
   {
@@ -284,8 +373,6 @@ export const achievements: Achievement[] = [
     badge:       "NACL · Top 18",
     description:
       "Un Top 18 en NACL OQ de février 2026 — une performance significative sur le circuit semi-professionnel nord-américain qui confirme la progression de DeathMark E-Sports face aux meilleures structures du Tier 2.",
-    bannerSrc: "/medias/commun/Roster_ACL.png",
-    bannerAlt: "DME — NACL OQ Top 18 — Février 2026",
   },
   {
     id:          "nacl-oq-top38",
@@ -297,7 +384,5 @@ export const achievements: Achievement[] = [
     badge:       "NACL · Top 38",
     description:
       "Un Top 38 en NACL OQ de février 2026 — une deuxième équipe DME qui s'engage sur le circuit et représente l'organisation dans un des qualificatifs les plus compétitifs de la scène amateur NA.",
-    bannerSrc: "/medias/commun/Roster_ACL.png",
-    bannerAlt: "DME — NACL OQ Top 38 — Février 2026",
   },
 ];

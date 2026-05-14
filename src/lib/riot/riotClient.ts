@@ -78,6 +78,34 @@ export type LeagueEntryDTO = {
   losses: number;
 };
 
+// Strict aliases matching user-facing naming convention
+export type RiotAccountDto = RiotAccountDTO;
+export type RiotSummonerDto = SummonerDTO;
+export type RiotLeagueEntryDto = LeagueEntryDTO;
+export type RiotMatchDto = MatchDTO;
+
+/** Entry shape inside apex tier responses (LeagueItemDTO) — different from LeagueEntryDTO */
+export type RiotApexEntryDto = {
+  summonerId: string;
+  leaguePoints: number;
+  rank: string;
+  wins: number;
+  losses: number;
+  veteran: boolean;
+  hotStreak: boolean;
+  freshBlood: boolean;
+  inactive?: boolean;
+};
+
+/** Shape returned by apex tier endpoints (/challengerleagues/, /grandmasterleagues/, /masterleagues/) */
+export type RiotLeagueDto = {
+  tier: string;
+  leagueId: string;
+  queue: string;
+  name: string;
+  entries: RiotApexEntryDto[];
+};
+
 export type ChampionMasteryDTO = {
   championId: number;
   championLevel: number;
@@ -186,14 +214,16 @@ export function messageErreur(e: unknown): string {
 
 async function appelerRiot<T>(url: string): Promise<T> {
   const cle = lireCleRiot();
+  const path = url.split(".api.riotgames.com")[1] ?? url;
 
-  console.log("[Riot] key prefix:", cle.slice(0, 8), "len:", cle.length);
-  console.log("[Riot] url:", url);
+  console.log(`[RIOT] → ${path}`);
 
   const res = await fetch(url, {
     headers: { "X-Riot-Token": cle },
     cache: "no-store",
   });
+
+  console.log(`[RIOT] ← ${res.status} ${path}`);
 
   if (!res.ok) {
     const contentType = res.headers.get("content-type") ?? "";

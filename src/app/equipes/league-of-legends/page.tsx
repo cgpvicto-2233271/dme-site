@@ -1,102 +1,100 @@
-// src/app/equipes/league-of-legends/page.tsx
 import type { Metadata } from "next";
-import { LolClient } from "@/components/lol/lol-client";
+import { TeamProgramPage, type ProgramRoster } from "@/components/equipes/team-program-page";
 
 export const metadata: Metadata = {
   title: "League of Legends | DeathMark E-Sports",
 };
 
-export const SAISON_TERMINEE = false;
+const SHEET_ID = "1ZSjlkYc-08xuwQfATS_aIEyNuGEmFe9XZ4jfiuPNvMM";
+const SHEET_GID = "402880902";
+const SHEET_LINK = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=${SHEET_GID}`;
 
-export const SHEET_ID   = "1ZSjlkYc-08xuwQfATS_aIEyNuGEmFe9XZ4jfiuPNvMM";
-export const SHEET_GID  = "402880902";
-export const SHEET_LINK = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=${SHEET_GID}`;
+type Role = "TOP" | "JUNGLE" | "MID" | "ADC" | "SUPPORT";
 
-export const SPONSOR_LOGOS = [
-  "/medias/sponsors/arene1.png",
-  "/medias/sponsors/guru1.png",
-  "/medias/sponsors/passion.png",
-  "/medias/sponsors/econext.webp",
-] as const;
+type LoLPlayer = {
+  id: string;
+  name: string;
+  role: Role;
+  image: string | null;
+};
 
-export type Role = "TOP" | "JUNGLE" | "MID" | "ADC" | "SUPPORT";
+type LoLRoster = {
+  id: string;
+  name: string;
+  competition: string;
+  season: string;
+  manager: string;
+  players: LoLPlayer[];
+};
 
-export interface Joueur {
-  id:         string;
-  pseudo:     string;
-  role:       Role;
-  pays:       string;
-  drapeauSrc: string;
-  photoSrc:   string | null;
-  xUrl?:      string;
-}
-
-export interface Manager {
-  pseudo:     string;
-  photoSrc:   string | null;
-  pays:       string;
-  drapeauSrc: string;
-  xUrl?:      string;
-}
-
-export interface Roster {
-  id:      string;
-  tag:     string;
-  ligue:   string;
-  label:   string;
-  saison:  string;
-  joueurs: Joueur[];
-  manager: Manager;
-}
-
-export const rosters: Roster[] = [
+const rosters: LoLRoster[] = [
   {
-    id:     "avl-1",
-    tag:    "DeathMark E-sport Voltigeurs",
-    ligue:  "Aegis Vanguard League — Hextech",
-    label:  "Voltigeurs",
-    saison: "Spring 2026",
-    manager: {
-      pseudo: "Coussinho", photoSrc: null,
-      pays: "FR", drapeauSrc: "/medias/flags/fr.png",
-      xUrl: "https://x.com/coussinhoo",
-    },
-    joueurs: [
-      { id: "j1-top",  pseudo: "Nuteh",    role: "TOP",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/cam_card.png",     xUrl: "https://x.com/Nutehhh"    },
-      { id: "j1-jgl",  pseudo: "Kripsus",  role: "JUNGLE",  pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/udyr_card.png",    xUrl: "https://x.com/Kripsus09"  },
-      { id: "j1-mid",  pseudo: "Wazabiee", role: "MID",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/leblanc_card.png", xUrl: "https://x.com/Wazabiee"   },
-      { id: "j1-adc",  pseudo: "Pewpew",   role: "ADC",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/yunara_card.png",  xUrl: "https://x.com/pewpew"      },
-      { id: "j1-supp", pseudo: "Campo",    role: "SUPPORT", pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/tresh_card.png",   xUrl: "https://x.com/Xz8_Campo"  },
+    id: "avl-voltigeurs",
+    name: "Voltigeurs",
+    competition: "Aegis Vanguard League / Hextech",
+    season: "Spring 2026",
+    manager: "Coussinho",
+    players: [
+      { id: "v-top", name: "Nuteh", role: "TOP", image: "/medias/commun/cam_card.png" },
+      { id: "v-jgl", name: "Kripsus", role: "JUNGLE", image: "/medias/commun/udyr_card.png" },
+      { id: "v-mid", name: "Wazabiee", role: "MID", image: "/medias/commun/leblanc_card.png" },
+      { id: "v-adc", name: "Pewpew", role: "ADC", image: "/medias/commun/yunara_card.png" },
+      { id: "v-sup", name: "Campo", role: "SUPPORT", image: "/medias/commun/tresh_card.png" },
     ],
   },
   {
-    id:     "avl-2",
-    tag:    "DeathMark E-sport NPC",
-    ligue:  "Aegis Vanguard League — Chemtech",
-    label:  "NPC",
-    saison: "Spring 2026",
-    manager: {
-      pseudo: "Coussinho", photoSrc: null,
-      pays: "FR", drapeauSrc: "/medias/flags/fr.png",
-      xUrl: "https://x.com/coussinhoo",
-    },
-    joueurs: [
-      { id: "j2-top",  pseudo: "Vallex",    role: "TOP",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/ambessa_card.png",    xUrl: "https://x.com/lolVallex"     },
-      { id: "j2-jgl",  pseudo: "Nostalgia", role: "JUNGLE",  pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/diana_card (1).png",  xUrl: "https://x.com/lol_nostalgie" },
-      { id: "j2-mid",  pseudo: "Paradox",   role: "MID",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/taliyah_card.png",    xUrl: "https://x.com/Paradox__QC"   },
-      { id: "j2-adc",  pseudo: "Monkey",    role: "ADC",     pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/ezreal_card.png",     xUrl: "https://x.com/monkeyy"        },
-      { id: "j2-supp", pseudo: "Grey",      role: "SUPPORT", pays: "QC", drapeauSrc: "/medias/flags/ca.png", photoSrc: "/medias/commun/pyke_card.png",       xUrl: "https://x.com/eglor195"       },
+    id: "avl-npc",
+    name: "NPC",
+    competition: "Aegis Vanguard League / Chemtech",
+    season: "Spring 2026",
+    manager: "Coussinho",
+    players: [
+      { id: "n-top", name: "Vallex", role: "TOP", image: "/medias/commun/ambessa_card.png" },
+      { id: "n-jgl", name: "Nostalgia", role: "JUNGLE", image: "/medias/commun/diana_card (1).png" },
+      { id: "n-mid", name: "Paradox", role: "MID", image: "/medias/commun/taliyah_card.png" },
+      { id: "n-adc", name: "Monkey", role: "ADC", image: "/medias/commun/ezreal_card.png" },
+      { id: "n-sup", name: "Grey", role: "SUPPORT", image: "/medias/commun/pyke_card.png" },
     ],
   },
 ];
 
+function toProgramRoster(roster: LoLRoster): ProgramRoster {
+  return {
+    id: roster.id,
+    name: roster.name,
+    competition: roster.competition,
+    season: roster.season,
+    manager: roster.manager,
+    players: roster.players.map((player) => ({
+      id: player.id,
+      name: player.name,
+      role: player.role,
+      image: player.image,
+    })),
+  };
+}
+
 export default function LeagueOfLegendsPage() {
   return (
-    <LolClient
-      rosters={rosters}
-      sponsorLogos={SPONSOR_LOGOS as unknown as string[]}
-      sheetLink={SHEET_LINK}
-      saisonTerminee={SAISON_TERMINEE}
+    <TeamProgramPage
+      eyebrow={{ fr: "League of Legends / AVL", en: "League of Legends / AVL" }}
+      title={{ fr: "Deux rosters. Même pression.", en: "Two rosters. Same pressure." }}
+      lead={{
+        fr: "DME représente le Québec sur la scène LoL NA avec des lineups lisibles et un standard staff clair.",
+        en: "DME represents Quebec on the NA LoL scene with readable lineups and a clear staff standard.",
+      }}
+      heroImage="/medias/commun/banner-leagueoflegends.png"
+      stats={[
+        { value: "02", label: { fr: "Rosters", en: "Rosters" } },
+        { value: "10", label: { fr: "Joueurs", en: "Players" } },
+        { value: "AVL", label: { fr: "Ligue", en: "League" } },
+      ]}
+      rosters={rosters.map(toProgramRoster)}
+      primaryCta={{ href: "/recrutement", label: { fr: "Postuler LoL", en: "Apply LoL" } }}
+      secondaryCta={{ href: SHEET_LINK, label: { fr: "Classement AVL", en: "AVL standings" } }}
+      academieHref="/equipes/league-of-legends/academie"
+      academieLabel={{ fr: "La montée commence ici.", en: "The climb starts here." }}
+      backHref="/equipes"
     />
   );
 }

@@ -54,4 +54,8 @@ next-env.d.ts
 # Autres
 # ─────────────────────────────
 *.pem
+**/.claude/**
+inspirations/
 
+
+/src/generated/prisma

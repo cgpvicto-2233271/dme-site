@@ -1,0 +1,659 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum SourceType {
+  SELF_REGISTER
+  CSV_IMPORT
+  STAFF_ADD
+  RIOT_LADDER
+  LEAGUEPEDIA
+  ORACLE_ELIXIR
+  TWITTER_LFT
+  DISCORD_LFT
+  REDDIT_LFT
+}
+
+enum Region {
+  NA
+  EUW
+  EUNE
+  KR
+  BR
+  LAN
+  LAS
+  OCE
+  JP
+  TR
+  RU
+}
+
+enum Role {
+  TOP
+  JUNGLE
+  MID
+  BOT
+  SUPPORT
+}
+
+enum PipelineStage {
+  WATCHLIST
+  CONTACTED
+  TRYOUT_SCHEDULED
+  IN_TRYOUT
+  UNDER_REVIEW
+  OFFER_READY
+  SIGNED
+  REJECTED
+  PASSED
+}
+
+enum Grade {
+  S
+  A
+  B
+  C
+  D
+}
+
+// ─── LFT System (existing — used by /api/lft/* and /api/staff/lft/*) ─────────
+
+model LftPlayer {
+  id            String    @id @default(cuid())
+  puuid         String    @unique
+  gameName      String
+  tagLine       String
+  region        Region
+  role          Role?
+  secondaryRole Role?
+  summonerId    String?
+  profileIconId Int?
+  summonerLevel Int?
+  tier          String?
+  rank          String?
+  lp            Int?
+  wins          Int?
+  losses        Int?
+  topChampions  String[]  @default([])
+  lastRiotSync  DateTime?
+  availability  String?
+  experience    String?
+  languages     String[]  @default([])
+  discord       String?
+  twitter       String?
+  twitch        String?
+  bio           String?   @db.Text
+  lookingFor    String?   @db.Text
+  isLft         Boolean   @default(true)
+  isVerified    Boolean   @default(false)
+  isVisible     Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sources     PlayerSource[]
+  staffRecord StaffScoutingRecord?
+
+  @@index([region, role, isLft, isVisible])
+  @@index([isLft, isVisible, createdAt])
+}
+
+model PlayerSource {
+  id         String     @id @default(cuid())
+  playerId   String
+  sourceType SourceType
+  sourceUrl  String?
+  importedBy String?
+  confidence Float      @default(0.8)
+  rawData    Json?
+  createdAt  DateTime   @default(now())
+
+  player LftPlayer @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+}
+
+model StaffScoutingRecord {
+  id            String        @id @default(cuid())
+  playerId      String        @unique
+  dmeScore      Float?
+  grade         Grade?
+  pipelineStage PipelineStage @default(WATCHLIST)
+  priority      Int           @default(3)
+  assignedTo    String?
+  tags          String[]      @default([])
+  strengths     String[]      @default([])
+  weaknesses    String[]      @default([])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  player LftPlayer      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  notes  ScoutingNote[] @relation("LftStaffNotes")
+
+  @@index([pipelineStage, priority])
+  @@index([assignedTo])
+}
+
+model ScoutingNote {
+  id          String               @id @default(cuid())
+  recordId    String?
+  playerId    String?
+  authorId    String?
+  authorEmail String
+  content     String               @db.Text
+  noteType    String               @default("general")
+  isPrivate   Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  record StaffScoutingRecord? @relation("LftStaffNotes", fields: [recordId], references: [id], onDelete: Cascade)
+  player Player?              @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([recordId])
+  @@index([playerId])
+}
+
+model SyncJob {
+  id           String     @id @default(cuid())
+  sourceId     String?
+  dataSourceId String?
+  type         String     @default("riot_sync")
+  region       String?
+  limit        Int?
+  status       String     @default("pending")
+  playersFound Int        @default(0)
+  error        String?    @db.Text
+  result       Json?
+  startedAt    DateTime   @default(now())
+  finishedAt   DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  dataSource DataSource? @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
+
+  @@index([sourceId, startedAt])
+  @@index([dataSourceId, startedAt])
+  @@index([type, status, startedAt])
+}
+
+model CsvImport {
+  id           String   @id @default(cuid())
+  importedBy   String
+  filename     String?
+  rowCount     Int
+  successCount Int      @default(0)
+  failureCount Int      @default(0)
+  errors       Json?
+  createdAt    DateTime @default(now())
+}
+
+// ─── Scouting Data Platform (Player profiles, matches, rankings) ──────────────
+
+model Player {
+  id        String   @id @default(cuid())
+  puuid     String   @unique
+  gameName  String
+  tagLine   String
+  region    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  summonerAccounts     SummonerAccount[]
+  rankedSnapshots      RankedSnapshot[]
+  rankHistory          RankHistory[]
+  matchSnapshots       MatchSnapshot[]
+  championPerformances ChampionPerformance[]
+  championMasteries    ChampionMasterySnapshot[]
+  scoutingProfile      ScoutingProfile?
+  scoutingNotes        ScoutingNote[]
+  watchlistItem        WatchlistItem?
+  pipelineItem         PipelineItem?
+
+  @@index([region, gameName, tagLine])
+  @@index([updatedAt])
+}
+
+model SummonerAccount {
+  id            String    @id @default(cuid())
+  playerId      String
+  puuid         String
+  summonerId    String?
+  accountId     String?
+  platform      String
+  regional      String
+  profileIconId Int?
+  summonerLevel Int?
+  lastSyncedAt  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([puuid, platform])
+  @@index([playerId])
+  @@index([summonerId])
+}
+
+model RankedSnapshot {
+  id            String   @id @default(cuid())
+  playerId      String
+  puuid         String
+  queueType     String
+  tier          String?
+  rank          String?
+  leaguePoints  Int?
+  wins          Int?
+  losses        Int?
+  winrate       Float?
+  apiStatus     String
+  errorMessage  String?  @db.Text
+  fetchedAt     DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, queueType])
+  @@index([puuid, queueType])
+  @@index([queueType, tier, leaguePoints])
+}
+
+model RankHistory {
+  id           String   @id @default(cuid())
+  playerId     String
+  puuid        String
+  queueType    String
+  tier         String?
+  rank         String?
+  leaguePoints Int?
+  wins         Int?
+  losses       Int?
+  fetchedAt    DateTime
+  season       String   @default("CURRENT")
+  split        String   @default("CURRENT")
+  createdAt    DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, queueType, fetchedAt])
+  @@index([puuid, queueType])
+}
+
+model MatchSnapshot {
+  id              String    @id @default(cuid())
+  playerId        String
+  puuid           String
+  matchId         String
+  queueId         Int
+  queueType       String
+  championName    String
+  position        String?
+  win             Boolean
+  kills           Int
+  deaths          Int
+  assists         Int
+  kda             Float
+  cs              Int
+  csPerMin        Float
+  damage          Int
+  dpm             Float
+  visionScore     Int
+  visionPerMin    Float
+  durationSeconds Int
+  gameEndedAt     DateTime?
+  fetchedAt       DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, matchId])
+  @@index([puuid, queueId, gameEndedAt])
+  @@index([queueType, championName])
+}
+
+model ChampionMasterySnapshot {
+  id             String    @id @default(cuid())
+  playerId       String
+  puuid          String
+  championId     Int
+  championLevel  Int
+  championPoints Int
+  lastPlayTime   DateTime?
+  fetchedAt      DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, championId])
+  @@index([puuid, championPoints])
+}
+
+model ChampionPerformance {
+  id              String    @id @default(cuid())
+  playerId        String
+  queueType       String
+  championName    String
+  games           Int
+  wins            Int
+  losses          Int
+  winrate         Float
+  avgKda          Float
+  avgCsPerMin     Float
+  avgDpm          Float
+  avgVisionPerMin Float
+  mainRole        String?
+  lastPlayedAt    DateTime?
+  season          String    @default("CURRENT")
+  split           String    @default("CURRENT")
+  updatedAt       DateTime  @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, queueType, championName, season, split])
+  @@index([playerId, queueType, games])
+  @@index([queueType, championName])
+}
+
+model ScoutingProfile {
+  id           String    @id @default(cuid())
+  playerId     String    @unique
+  prospectScore Int?
+  primaryRole  String?
+  tags         String[]  @default([])
+  strengths    String[]  @default([])
+  weaknesses   String[]  @default([])
+  lastSyncedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([prospectScore])
+}
+
+model WatchlistItem {
+  id        String   @id @default(cuid())
+  playerId  String   @unique
+  priority  Int      @default(3)
+  tags      String[] @default([])
+  notes     String?  @db.Text
+  addedBy   String?
+  createdBy String?
+  reason    String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([priority, createdAt])
+}
+
+model PipelineItem {
+  id         String    @id @default(cuid())
+  playerId   String    @unique
+  status     String    @default("WATCHLIST")
+  stage      String    @default("WATCHLIST")
+  priority   Int       @default(3)
+  assignedTo String?
+  nextAction String?   @db.Text
+  dueDate    DateTime?
+  notes      String?   @db.Text
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([status, priority])
+  @@index([stage, priority])
+  @@index([assignedTo])
+}
+
+model DataSource {
+  id           String    @id @default(cuid())
+  key          String    @unique
+  type         String
+  region       String?
+  status       String    @default("idle")
+  playersFound Int       @default(0)
+  lastError    String?   @db.Text
+  lastSyncedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  jobs SyncJob[]
+
+  @@index([type, region])
+  @@index([status, updatedAt])
+}
+
+// ─── Scouting System (new — migrated from SQLite scout.db) ───────────────────
+
+model ScoutWatchlist {
+  puuid         String   @id
+  gameName      String
+  tagLine       String
+  region        String
+  role          String?
+  notes         String   @default("")
+  tags          String[] @default([])
+  lft           Boolean  @default(false)
+  addedAt       DateTime @default(now())
+  pipelineStage String   @default("watchlist")
+  priority      Int      @default(3)
+  dmeScore      Int?
+  assignedTo    String?
+
+  @@index([pipelineStage, priority])
+  @@index([priority, addedAt])
+}
+
+model RecentSearch {
+  id         Int      @id @default(autoincrement())
+  gameName   String
+  tagLine    String
+  region     String
+  searchedAt DateTime @default(now())
+
+  @@index([searchedAt])
+}
+
+model ProPlayer {
+  playerId   String    @id
+  realName   String?
+  role       String?
+  team       String?
+  teamLast   String?
+  league     String?
+  tier       Int       @default(2)
+  region     String?
+  residency  String?
+  soloqIds   Json      @default("[]")
+  status     String    @default("active")
+  puuid      String?
+  lastSynced DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([league, status])
+  @@index([tier, league])
+}
+
+model LftSignal {
+  id         Int      @id @default(autoincrement())
+  playerName String
+  playerId   String?
+  source     String
+  sourceUrl  String?
+  content    String?
+  confidence String   @default("rumor")
+  role       String?
+  region     String?
+  league     String?
+  detectedAt DateTime @default(now())
+  active     Boolean  @default(true)
+
+  @@index([active, detectedAt])
+  @@index([sourceUrl])
+}
+
+model NewsArticle {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String?
+  url         String    @unique
+  source      String
+  author      String?
+  publishedAt DateTime?
+  fetchedAt   DateTime  @default(now())
+  playerTags  String[]  @default([])
+  teamTags    String[]  @default([])
+  leagueTags  String[]  @default([])
+  articleType String    @default("general")
+  region      String?
+
+  @@index([publishedAt])
+  @@index([articleType, region])
+}
+
+model CacheEntry {
+  key       String @id
+  value     String @db.Text
+  expiresAt Float
+}
+
+model ScoutSource {
+  id           String    @id
+  name         String
+  type         String
+  region       String?
+  description  String?
+  enabled      Boolean   @default(true)
+  priority     Int       @default(5)
+  confidence   Float     @default(0.8)
+  available    Boolean   @default(true)
+  notes        String?
+  status       String    @default("idle")
+  lastSync     DateTime?
+  lastError    String?
+  playersFound Int       @default(0)
+  totalSyncs   Int       @default(0)
+  createdAt    DateTime  @default(now())
+
+  logs SourceLog[]
+
+  @@index([type, region])
+  @@index([status])
+}
+
+model SourceLog {
+  id             Int       @id @default(autoincrement())
+  sourceId       String
+  jobId          String?
+  startedAt      DateTime  @default(now())
+  finishedAt     DateTime?
+  status         String?
+  playersFound   Int       @default(0)
+  playersNew     Int       @default(0)
+  playersUpdated Int       @default(0)
+  errorMsg       String?
+  details        Json      @default("{}")
+
+  source ScoutSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId, startedAt])
+}
+
+model ScoutJob {
+  id         String    @id
+  type       String
+  status     String    @default("pending")
+  startedAt  DateTime?
+  finishedAt DateTime?
+  result     String?
+  error      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([type, status, createdAt])
+}
+
+model ScoutPlayer {
+  puuid         String    @id
+  summonerId    String?
+  gameName      String?
+  tagLine       String?
+  platform      String
+  region        String?
+  soloTier      String?
+  soloRank      String?
+  soloLp        Int?
+  wins          Int?
+  losses        Int?
+  role          String?
+  profileIcon   Int?
+  summonerLevel Int?
+  sources       String[]  @default([])
+  confidence    Float     @default(0.5)
+  verified      Boolean   @default(false)
+  lft           Boolean   @default(false)
+  lftSource     String?
+  lftDetectedAt DateTime?
+  rising        Boolean   @default(false)
+  firstSeen     DateTime  @default(now())
+  lastSynced    DateTime  @default(now())
+  lastActive    DateTime?
+  externalLinks Json      @default("{}")
+
+  history       PlayerHistory[]
+  playerSources ScoutPlayerSource[]
+
+  @@index([soloLp, lastSynced])
+  @@index([platform, soloTier])
+  @@index([lft])
+}
+
+model ScoutPlayerSource {
+  puuid       String
+  sourceId    String
+  externalId  String?
+  externalUrl String?
+  data        Json     @default("{}")
+  confidence  Float    @default(0.5)
+  syncedAt    DateTime @default(now())
+
+  player ScoutPlayer @relation(fields: [puuid], references: [puuid], onDelete: Cascade)
+
+  @@id([puuid, sourceId])
+}
+
+model PlayerHistory {
+  id        Int      @id @default(autoincrement())
+  puuid     String
+  field     String
+  oldValue  String?
+  newValue  String?
+  sourceId  String?
+  changedAt DateTime @default(now())
+
+  player ScoutPlayer @relation(fields: [puuid], references: [puuid], onDelete: Cascade)
+
+  @@index([puuid, changedAt])
+}
+
+model ScoutNote {
+  id        Int      @id @default(autoincrement())
+  puuid     String
+  noteType  String   @default("general")
+  content   String
+  author    String?
+  createdAt DateTime @default(now())
+
+  @@index([puuid, createdAt])
+}

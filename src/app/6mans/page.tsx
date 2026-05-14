@@ -23,7 +23,7 @@ async function getData(queue: string, sort: string, search: string) {
   try {
     const base   = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
     const params = new URLSearchParams({ limit: "200", queue, sort, search });
-    const res    = await fetch(`${base}/api/6mans/leaderboard?${params}`, { next: { revalidate: 30 } });
+    const res    = await fetch(`${base}/api/6mans/leaderboard?${params}`, { next: { revalidate: 15 } });
     if (!res.ok) return { joueurs: [] as Joueur[], stats: { totalJoueurs: 0, totalMatchs: 0, totalMmr: 0 } };
     return res.json() as Promise<{ joueurs: Joueur[]; stats: Stats }>;
   } catch {
