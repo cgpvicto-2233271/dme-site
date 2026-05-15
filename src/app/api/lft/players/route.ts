@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { PublicPlayerListItem } from "@/lib/lft/types";
 import type { Role } from "@prisma/client";
@@ -22,6 +22,31 @@ type Region =
   | "JP";
 
 const PAGE_SIZE = 20;
+
+const SELECT = {
+  id: true,
+  puuid: true,
+  gameName: true,
+  tagLine: true,
+  region: true,
+  role: true,
+  secondaryRole: true,
+  tier: true,
+  rank: true,
+  lp: true,
+  wins: true,
+  losses: true,
+  topChampions: true,
+  availability: true,
+  experience: true,
+  languages: true,
+  isVerified: true,
+  createdAt: true,
+} as const;
+
+type PlayerRow = Awaited<
+  ReturnType<typeof prisma.lftPlayer.findMany<{ select: typeof SELECT }>>
+>[number];
 
 export async function GET(req: NextRequest) {
   const p = req.nextUrl.searchParams;
@@ -61,47 +86,19 @@ export async function GET(req: NextRequest) {
         orderBy: { createdAt: "desc" },
         take: limit,
         skip: offset,
-        select: {
-          id: true,
-          puuid: true,
-          gameName: true,
-          tagLine: true,
-          region: true,
-          role: true,
-          secondaryRole: true,
-          tier: true,
-          rank: true,
-          lp: true,
-          wins: true,
-          losses: true,
-          topChampions: true,
-          availability: true,
-          experience: true,
-          languages: true,
-          isVerified: true,
-          createdAt: true,
-        },
+        select: SELECT,
       }),
-
-      prisma.lftPlayer.count({
-        where,
-      }),
+      prisma.lftPlayer.count({ where }),
     ]);
 
-    const items: PublicPlayerListItem[] = players.map((player) => ({
+    const items: PublicPlayerListItem[] = players.map((player: PlayerRow) => ({
       ...player,
       createdAt: player.createdAt.toISOString(),
     }));
 
-    return NextResponse.json({
-      players: items,
-      total,
-      limit,
-      offset,
-    });
+    return NextResponse.json({ players: items, total, limit, offset });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
