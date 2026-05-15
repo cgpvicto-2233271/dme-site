@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { PublicPlayerListItem } from "@/lib/lft/types";
+import type { Role } from "@prisma/client";
 
 type LftPlayerFindManyArgs = Parameters<
   typeof prisma.lftPlayer.findMany
@@ -19,14 +20,6 @@ type Region =
   | "OCE"
   | "TR"
   | "JP";
-
-type Role =
-  | "TOP"
-  | "JUNGLE"
-  | "MID"
-  | "ADC"
-  | "SUPPORT"
-  | "COACH";
 
 const PAGE_SIZE = 20;
 
@@ -62,7 +55,7 @@ export async function GET(req: NextRequest) {
         : {}),
     };
 
-    const [players, total] = await prisma.$transaction([
+    const [players, total] = await Promise.all([
       prisma.lftPlayer.findMany({
         where,
         orderBy: { createdAt: "desc" },
