@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { PublicPlayerListItem } from "@/lib/lft/types";
-import type { Role } from "@prisma/client";
 
 type LftPlayerFindManyArgs = Parameters<
   typeof prisma.lftPlayer.findMany
@@ -20,6 +19,9 @@ type Region =
   | "OCE"
   | "TR"
   | "JP";
+
+// Must match prisma/schema.prisma enum Role exactly
+type Role = "TOP" | "JUNGLE" | "MID" | "BOT" | "SUPPORT";
 
 const PAGE_SIZE = 20;
 
