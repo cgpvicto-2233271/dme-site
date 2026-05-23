@@ -1,4 +1,4 @@
-﻿import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import {
   Inter,
@@ -6,6 +6,7 @@ import {
   IBM_Plex_Mono,
   Bebas_Neue,
 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 import Header, { RoleAcces } from "../components/Header";
 import Footer from "./Footer";
@@ -121,6 +122,7 @@ export default async function RootLayout({
             </div>
           </Providers>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
