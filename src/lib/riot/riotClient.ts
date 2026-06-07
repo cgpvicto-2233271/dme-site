@@ -325,6 +325,17 @@ export async function obtenirIdsMatchsParPuuid(args: {
   return appelerRiot<string[]>(url);
 }
 
+export async function obtenirIdsParTournamentCode(
+  regional: RoutageRegional,
+  tournamentCode: string
+): Promise<string[]> {
+  const url = `https://${regional}.api.riotgames.com/lol/match/v5/matches/by-tournament-code/${encodeURIComponent(
+    tournamentCode
+  )}/ids`;
+
+  return appelerRiot<string[]>(url);
+}
+
 export async function obtenirMatch(
   regional: RoutageRegional,
   matchId: string

@@ -15,7 +15,7 @@ export function Cursor() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Hide on touch devices — check client-side only to avoid hydration mismatch
+    // Hide on touch devices, check client-side only to avoid hydration mismatch
     if (window.matchMedia("(pointer: coarse)").matches) return;
     setShow(true);
 
@@ -62,7 +62,7 @@ export function Cursor() {
 
   return (
     <>
-      {/* Outer ring — lagging */}
+      {/* Outer ring, lagging */}
       <motion.div
         ref={ringRef}
         className="pointer-events-none fixed z-[9999] top-0 left-0"
@@ -84,7 +84,7 @@ export function Cursor() {
         transition={spring.smooth}
       />
 
-      {/* Inner dot — instant */}
+      {/* Inner dot, instant */}
       <motion.div
         ref={dotRef}
         className="pointer-events-none fixed z-[9999] top-0 left-0"

@@ -149,7 +149,7 @@ export default function HallOfFamePage() {
           <div className="dme-gridline grid grid-cols-3 lg:grid-cols-1">
             {[
               { value: "06", label: { fr: "Titres winners", en: "Titles won" } },
-              { value: "7 000$+", label: { fr: "Cashprize en 1 an", en: "Prize in 1 year" } },
+              { value: "12 800$+", label: { fr: "Cashprize en 1 an", en: "Prize in 1 year" } },
               { value: "2025", label: { fr: "Est.", en: "Est." } },
             ].map((stat) => (
               <div key={stat.value} className="p-5">

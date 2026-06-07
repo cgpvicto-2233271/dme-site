@@ -35,7 +35,7 @@ function StatusDot({ status }: { status: string }) {
 }
 
 function fmt(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
   if (diff < 60000) return "À l'instant";

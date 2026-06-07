@@ -82,8 +82,8 @@ const CRITERIA = [
     num: "03",
     title: { fr: "Fit roster", en: "Roster fit" },
     text: {
-      fr: "Rôle, horaires, langue, objectifs — tout doit s'aligner. Le meilleur joueur individuel n'est pas toujours le bon pick.",
-      en: "Role, schedule, language, goals — everything must align. The best individual player is not always the right pick.",
+      fr: "Rôle, horaires, langue, objectifs, tout doit s'aligner. Le meilleur joueur individuel n'est pas toujours le bon pick.",
+      en: "Role, schedule, language, goals, everything must align. The best individual player is not always the right pick.",
     },
   },
 ] as const;

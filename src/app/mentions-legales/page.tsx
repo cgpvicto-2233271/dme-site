@@ -65,8 +65,8 @@ export default function MentionsLegales() {
               content: (
                 <p className="text-[0.85rem] leading-relaxed text-white/35">
                   {t(
-                    "© 2026 DME — Tous droits réservés. Les contenus, logos, images, textes et éléments visuels sont la propriété exclusive de DME ou de leurs propriétaires respectifs. Toute reproduction sans autorisation est interdite.",
-                    "© 2026 DME — All rights reserved. Contents, logos, images, texts and visual elements are the exclusive property of DME or their respective owners. Any reproduction without authorization is prohibited."
+                    "© 2026 DME, Tous droits réservés. Les contenus, logos, images, textes et éléments visuels sont la propriété exclusive de DME ou de leurs propriétaires respectifs. Toute reproduction sans autorisation est interdite.",
+                    "© 2026 DME, All rights reserved. Contents, logos, images, texts and visual elements are the exclusive property of DME or their respective owners. Any reproduction without authorization is prohibited."
                   )}
                 </p>
               ),

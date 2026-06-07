@@ -11,7 +11,7 @@ type SpotlightCardProps = {
 
 /**
  * Card that tracks mouse position and shows a radial red spotlight.
- * Uses CSS custom properties — no state update on every mouse move.
+ * Uses CSS custom properties, no state update on every mouse move.
  */
 export function SpotlightCard({
   children,

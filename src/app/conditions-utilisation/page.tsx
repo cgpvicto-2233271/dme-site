@@ -72,8 +72,8 @@ export default function ConditionsUtilisation() {
               content: (
                 <p className="text-[0.85rem] leading-relaxed text-white/35">
                   {t(
-                    "L'ensemble du contenu (textes, images, logos, identité visuelle, vidéos, noms des équipes, joueurs, etc.) est protégé par les lois sur le droit d'auteur. © 2026 DME — Reproduction interdite sans autorisation.",
-                    "All content (texts, images, logos, visual identity, videos, team names, players, etc.) is protected by copyright laws. © 2026 DME — Reproduction prohibited without authorization."
+                    "L'ensemble du contenu (textes, images, logos, identité visuelle, vidéos, noms des équipes, joueurs, etc.) est protégé par les lois sur le droit d'auteur. © 2026 DME, Reproduction interdite sans autorisation.",
+                    "All content (texts, images, logos, visual identity, videos, team names, players, etc.) is protected by copyright laws. © 2026 DME, Reproduction prohibited without authorization."
                   )}
                 </p>
               ),

@@ -24,7 +24,7 @@ const TYPE_COLOR: Record<string,string> = {
 const TYPES = ["transfer","contract","injury","performance","general"];
 
 function fmtDate(iso:string|null): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"2-digit"});
 }
 

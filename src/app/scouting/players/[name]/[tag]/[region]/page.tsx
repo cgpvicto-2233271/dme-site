@@ -75,7 +75,7 @@ export default function PlayerProfilePage() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview"|"stats"|"notes">("overview");
 
-  // Resolve player — watchlist first (real PUUID), then mock fallback
+  // Resolve player, watchlist first (real PUUID), then mock fallback
   useEffect(() => {
     fetch("/api/scouting/watchlist")
       .then(r => r.json())
@@ -204,7 +204,7 @@ export default function PlayerProfilePage() {
             <div className="flex flex-wrap items-center gap-2 mt-2">
               <span className="text-xs font-black px-2 py-1 border rounded"
                 style={{ color: posColor, borderColor: posColor + "40", background: posColor + "10" }}>
-                {data?.role ? (POS_LABEL[data.role] ?? data.role) : "—"}
+                {data?.role ? (POS_LABEL[data.role] ?? data.role) : "-"}
               </span>
               <span className="text-xs text-gray-600 font-bold">{region}</span>
               {data?.lft && (

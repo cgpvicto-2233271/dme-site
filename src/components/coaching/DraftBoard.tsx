@@ -5,6 +5,7 @@ import {
   ChevronLeft, RotateCcw, Save,
   Search, Trash2, X, Check,
 } from "lucide-react";
+import { DDRAGON_VERSION, LOL_PATCHES } from "@/lib/coaching-constants";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -27,24 +28,24 @@ interface SavedDraft {
 // ── Draft sequence (LCS/LEC competitive format) ───────────────────────────────
 
 const SEQUENCE: DraftStep[] = [
-  // Phase 1 — Bans
+  // Phase 1, Bans
   { type: "ban",  team: "blue" }, { type: "ban",  team: "red"  },
   { type: "ban",  team: "blue" }, { type: "ban",  team: "red"  },
   { type: "ban",  team: "blue" }, { type: "ban",  team: "red"  },
-  // Phase 1 — Picks (snake B R R B B R)
+  // Phase 1, Picks (snake B R R B B R)
   { type: "pick", team: "blue" }, { type: "pick", team: "red"  },
   { type: "pick", team: "red"  }, { type: "pick", team: "blue" },
   { type: "pick", team: "blue" }, { type: "pick", team: "red"  },
-  // Phase 2 — Bans
+  // Phase 2, Bans
   { type: "ban",  team: "red"  }, { type: "ban",  team: "blue" },
   { type: "ban",  team: "red"  }, { type: "ban",  team: "blue" },
-  // Phase 2 — Picks (R B B R R B)
+  // Phase 2, Picks (R B B R R B)
   { type: "pick", team: "red"  }, { type: "pick", team: "blue" },
   { type: "pick", team: "blue" }, { type: "pick", team: "red"  },
   { type: "pick", team: "red"  }, { type: "pick", team: "blue" },
 ];
 
-const PHASE_LABELS = ["Phase 1 — Bans", "Phase 1 — Picks", "Phase 2 — Bans", "Phase 2 — Picks"];
+const PHASE_LABELS = ["Phase 1, Bans", "Phase 1, Picks", "Phase 2, Bans", "Phase 2, Picks"];
 function getPhase(step: number) {
   if (step < 6)  return 0;
   if (step < 12) return 1;
@@ -54,7 +55,7 @@ function getPhase(step: number) {
 
 // ── Champion data ─────────────────────────────────────────────────────────────
 
-const DD = (key: string) => `https://ddragon.leagueoflegends.com/cdn/16.9.1/img/champion/${key}.png`;
+const DD = (key: string) => `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${key}.png`;
 
 interface Champ { name: string; key: string; role: Role; }
 
@@ -237,7 +238,7 @@ const CHAMPS: Champ[] = [
   { name: "Zyra",          key: "Zyra",         role: "SUP" },
 ];
 
-const PATCHES = ["16.09", "16.08", "16.07", "16.06", "16.05", "16.04", "16.03", "16.02", "16.01", "15.24", "15.23"];
+const PATCHES = LOL_PATCHES;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -271,7 +272,7 @@ function ChampPortrait({
         className={`border border-white/[0.09] bg-white/[0.03] flex items-center justify-center font-mono text-[7px] text-white/18 ${onClick && !disabled ? "cursor-pointer hover:border-white/20" : ""}`}
         style={{ width: size, height: size, minWidth: size }}
       >
-        {label || "—"}
+        {label || "-"}
       </div>
     );
   }
@@ -332,7 +333,7 @@ export function DraftBoard() {
   const isDone     = step >= SEQUENCE.length;
   const current    = isDone ? null : SEQUENCE[step];
 
-  // champion filter — deduplicate by key when showing all roles
+  // champion filter, deduplicate by key when showing all roles
   const filtered = (() => {
     const base = CHAMPS.filter(c => {
       const matchRole   = roleFilter === "ALL" || c.role === roleFilter;
@@ -460,7 +461,7 @@ export function DraftBoard() {
       <div className="flex flex-1 overflow-hidden">
 
         {/* ── Blue side ────────────────────────────────────────────── */}
-        <div className="flex w-[200px] shrink-0 flex-col border-r border-white/[0.07] bg-[#07090f]">
+        <div className="flex w-[clamp(300px,28vw,460px)] shrink-0 flex-col border-r border-white/[0.07] bg-[#07090f]">
           <div className="border-b border-white/[0.06] px-4 py-3">
             <p className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-blue-300/60">Blue side</p>
           </div>
@@ -475,7 +476,7 @@ export function DraftBoard() {
                 return (
                   <div key={i} className="relative">
                     <div className={isActive ? "ring-1 ring-blue-400/70 ring-offset-1 ring-offset-[#07090f]" : ""}>
-                      <ChampPortrait champKey={b.champ} name={b.champ ?? undefined} size={36} />
+                      <ChampPortrait champKey={b.champ} name={b.champ ?? undefined} size={42} />
                     </div>
                     {b.champ && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/60">
@@ -499,7 +500,7 @@ export function DraftBoard() {
                 <div key={i} className={`flex items-center gap-2.5 border px-2 py-1.5 transition ${
                   isActive ? "border-blue-400/50 bg-blue-500/[0.07]" : "border-white/[0.05] bg-transparent"
                 }`}>
-                  <ChampPortrait champKey={p.champ} name={p.champ ?? undefined} size={38} glow={p.champ ? "blue" : undefined} />
+                  <ChampPortrait champKey={p.champ} name={p.champ ?? undefined} size={50} glow={p.champ ? "blue" : undefined} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-mono text-[8px] font-bold text-white/70">
                       {p.champ ?? (isActive ? "← Choisir" : orderLabel)}
@@ -512,7 +513,7 @@ export function DraftBoard() {
           </div>
         </div>
 
-        {/* ── Centre — champion picker ──────────────────────────────── */}
+        {/* ── Centre, champion picker ──────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden">
 
           {/* Active step indicator */}
@@ -523,7 +524,7 @@ export function DraftBoard() {
               <p className={`font-mono text-[8px] font-bold uppercase tracking-[0.32em] ${
                 current.team === "blue" ? "text-blue-300/70" : "text-red-300/70"
               }`}>
-                {current.team === "blue" ? "Blue" : "Red"} — {current.type === "ban" ? "Ban" : "Pick"} #{
+                {current.team === "blue" ? "Blue" : "Red"}, {current.type === "ban" ? "Ban" : "Pick"} #{
                   current.type === "ban"
                     ? slots.slice(0, step + 1).filter(s => s.type === "ban"  && s.team === current.team).length
                     : slots.slice(0, step + 1).filter(s => s.type === "pick" && s.team === current.team).length
@@ -538,7 +539,7 @@ export function DraftBoard() {
           {isDone && (
             <div className="border-b border-[#22c55e]/20 bg-[#22c55e]/[0.04] px-4 py-2.5">
               <p className="font-mono text-[8px] font-bold uppercase tracking-[0.32em] text-[#22c55e]/70">
-                Draft complet — 10 bans · 10 picks
+                Draft complet, 10 bans · 10 picks
               </p>
             </div>
           )}
@@ -583,7 +584,7 @@ export function DraftBoard() {
               </div>
 
               {/* Grid */}
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(52px,1fr))] gap-0.5 overflow-y-auto p-2"
+              <div className="mx-auto grid w-full max-w-[680px] grid-cols-[repeat(auto-fill,minmax(46px,1fr))] gap-0.5 overflow-y-auto p-2"
                 data-lenis-prevent
                 style={{ scrollbarWidth: "thin", scrollbarColor: "#e1192d18 transparent" }}>
                 {filtered.map(c => (
@@ -657,7 +658,7 @@ export function DraftBoard() {
         </div>
 
         {/* ── Red side ─────────────────────────────────────────────── */}
-        <div className="flex w-[200px] shrink-0 flex-col border-l border-white/[0.07] bg-[#0f0707]">
+        <div className="flex w-[clamp(300px,28vw,460px)] shrink-0 flex-col border-l border-white/[0.07] bg-[#0f0707]">
           <div className="border-b border-white/[0.06] px-4 py-3">
             <p className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-red-300/60">Red side</p>
           </div>
@@ -672,7 +673,7 @@ export function DraftBoard() {
                 return (
                   <div key={i} className="relative">
                     <div className={isActive ? "ring-1 ring-red-400/70 ring-offset-1 ring-offset-[#0f0707]" : ""}>
-                      <ChampPortrait champKey={b.champ} name={b.champ ?? undefined} size={36} />
+                      <ChampPortrait champKey={b.champ} name={b.champ ?? undefined} size={42} />
                     </div>
                     {b.champ && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/60">
@@ -696,7 +697,7 @@ export function DraftBoard() {
                 <div key={i} className={`flex flex-row-reverse items-center gap-2.5 border px-2 py-1.5 transition ${
                   isActive ? "border-red-400/50 bg-red-500/[0.07]" : "border-white/[0.05] bg-transparent"
                 }`}>
-                  <ChampPortrait champKey={p.champ} name={p.champ ?? undefined} size={38} glow={p.champ ? "red" : undefined} />
+                  <ChampPortrait champKey={p.champ} name={p.champ ?? undefined} size={50} glow={p.champ ? "red" : undefined} />
                   <div className="min-w-0 flex-1 text-right">
                     <p className="truncate font-mono text-[8px] font-bold text-white/70">
                       {p.champ ?? (isActive ? "Choisir →" : orderLabel)}

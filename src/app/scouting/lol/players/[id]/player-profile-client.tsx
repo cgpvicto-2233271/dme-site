@@ -810,7 +810,7 @@ export function PlayerProfileClient({ initialPlayer }: { initialPlayer: PlayerPr
                 <span className="text-white/28">#{player.tagLine}</span>
               </h1>
               <p className="mt-1 font-mono text-[9px] text-white/28">
-                Niveau {player.summonerAccount?.summonerLevel ?? "—"} · Sync {displayDate(lastSync)}
+                Niveau {player.summonerAccount?.summonerLevel ?? "-"} · Sync {displayDate(lastSync)}
               </p>
             </div>
           </div>
@@ -819,7 +819,7 @@ export function PlayerProfileClient({ initialPlayer }: { initialPlayer: PlayerPr
           <div className="flex flex-wrap items-center gap-3">
             <div className="border border-white/[0.07] bg-[#0d0d0d] px-5 py-3 text-center">
               <p className="font-mono text-[7px] font-bold uppercase tracking-[0.3em] text-[#e1192d]/60">Score</p>
-              <p className="mt-1 font-display text-3xl font-black text-white">{score ?? "—"}</p>
+              <p className="mt-1 font-display text-3xl font-black text-white">{score ?? "-"}</p>
             </div>
             {soloRank && (
               <div className="border border-white/[0.07] bg-[#0d0d0d] px-5 py-3 text-center">
@@ -947,7 +947,7 @@ export function PlayerProfileClient({ initialPlayer }: { initialPlayer: PlayerPr
           <div className="space-y-5">
             <div className="border border-white/[0.07] bg-[#090909] p-4">
               <p className="font-mono text-[8px] font-bold uppercase tracking-[0.24em] text-white/30">Staff · Next Action</p>
-              <p className="mt-3 text-lg font-bold text-white">{nextAction || "—"}</p>
+              <p className="mt-3 text-lg font-bold text-white">{nextAction || "-"}</p>
               <p className="mt-1 font-mono text-[9px] text-white/30">Pipeline : {pipelineStatus.replaceAll("_", " ")}</p>
             </div>
             <MatchList matches={soloMatches.slice(0, 5)} title="SoloQ Récents" />
@@ -1005,7 +1005,7 @@ export function PlayerProfileClient({ initialPlayer }: { initialPlayer: PlayerPr
 }
 
 function MiniChampionList({ champions }: { champions: ChampionPerformance[] }) {
-  if (champions.length === 0) return <p className="mt-3 text-sm text-white/35">No champion data — resync to populate.</p>;
+  if (champions.length === 0) return <p className="mt-3 text-sm text-white/35">No champion data, resync to populate.</p>;
   return (
     <div className="mt-3 space-y-1.5">
       {champions.map((champion, i) => {

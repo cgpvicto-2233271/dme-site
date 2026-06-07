@@ -183,10 +183,10 @@ export default function VodsPage() {
   const exportReview = () => {
     if (!active) return;
     const lines = [
-      `VOD REVIEW — DME`,
+      `VOD REVIEW, DME`,
       `═══════════════════════════════`,
       `${fr ? "Match" : "Match"} : ${active.title}`,
-      `${fr ? "Adversaire" : "Opponent"} : ${active.opponent || "—"}`,
+      `${fr ? "Adversaire" : "Opponent"} : ${active.opponent || "-"}`,
       `${fr ? "Date" : "Date"} : ${active.date}`,
       `Patch : ${active.patch}`,
       `Game : ${active.gameNum}`,
@@ -198,7 +198,7 @@ export default function VodsPage() {
         const cat   = CATEGORIES.find(c => c.key === t.category);
         const catLabel = fr ? (cat?.label ?? t.category) : (cat?.labelEn ?? t.category);
         const tags  = t.playerTags.length > 0 ? ` [${t.playerTags.join(", ")}]` : "";
-        return `[${t.timeLabel}] ${t.severity.toUpperCase()} — ${catLabel}${tags}\n  ${t.note}`;
+        return `[${t.timeLabel}] ${t.severity.toUpperCase()}, ${catLabel}${tags}\n  ${t.note}`;
       }),
       ``,
       fr ? "NOTES GÉNÉRALES" : "GENERAL NOTES",
@@ -225,7 +225,7 @@ export default function VodsPage() {
   return (
     <div className="flex h-[calc(100vh-70px-49px)] overflow-hidden bg-[#060606]">
 
-      {/* ── Left — session list ──────────────────────────────────────── */}
+      {/* ── Left, session list ──────────────────────────────────────── */}
       <aside className="flex w-[220px] shrink-0 flex-col border-r border-white/[0.07] bg-[#080808]">
         <div className="flex items-center justify-between border-b border-white/[0.06] px-3 py-3">
           <p className="font-mono text-[8px] font-bold uppercase tracking-[0.28em] text-white/30">Sessions</p>
@@ -287,7 +287,7 @@ export default function VodsPage() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-[9px] font-bold text-white/70">{s.title}</p>
                   <p className="font-mono text-[7px] text-white/28">
-                    {s.opponent || "—"} · {s.gameNum}
+                    {s.opponent || "-"} · {s.gameNum}
                   </p>
                   <p className="font-mono text-[7px] text-white/20">
                     Patch {s.patch} · {s.timestamps.length} {fr ? "notes" : "notes"}
@@ -308,7 +308,7 @@ export default function VodsPage() {
         </div>
       </aside>
 
-      {/* ── Centre — video ───────────────────────────────────────────── */}
+      {/* ── Centre, video ───────────────────────────────────────────── */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {!active ? (
           <div className="flex flex-1 items-center justify-center">
@@ -326,7 +326,7 @@ export default function VodsPage() {
               <div className="min-w-0 flex-1">
                 <p className="truncate font-mono text-[9px] font-bold text-white/70">{active.title}</p>
                 <p className="font-mono text-[7px] text-white/28">
-                  vs {active.opponent || "—"} · {active.gameNum} · Patch {active.patch} · {active.date}
+                  vs {active.opponent || "-"} · {active.gameNum} · Patch {active.patch} · {active.date}
                 </p>
               </div>
               <button onClick={exportReview}
@@ -419,7 +419,7 @@ export default function VodsPage() {
         )}
       </div>
 
-      {/* ── Right — timestamp list ───────────────────────────────────── */}
+      {/* ── Right, timestamp list ───────────────────────────────────── */}
       {active && (
         <aside className="flex w-[280px] shrink-0 flex-col border-l border-white/[0.07] bg-[#080808]">
           {/* Filters */}

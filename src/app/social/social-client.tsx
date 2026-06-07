@@ -34,8 +34,8 @@ const ESSENTIAL: Platform[] = [
     handle: "@DeathMarkEsport",
     url: X_URL,
     desc: {
-      fr: "Résultats, annonces et temps réel. X est le fil officiel DME pour les nouvelles compétitives — roster changes, résultats de matchs, updates organisation.",
-      en: "Results, announcements and real time. X is DME's official feed for competitive news — roster changes, match results, org updates.",
+      fr: "Résultats, annonces et temps réel. X est le fil officiel DME pour les nouvelles compétitives, roster changes, résultats de matchs, updates organisation.",
+      en: "Results, announcements and real time. X is DME's official feed for competitive news, roster changes, match results, org updates.",
     },
     cta: { fr: "Suivre sur X", en: "Follow on X" },
   },
@@ -44,8 +44,8 @@ const ESSENTIAL: Platform[] = [
     handle: "twitch.tv/deathmarkesport",
     url: "https://www.twitch.tv/deathmarkesport",
     desc: {
-      fr: "Matchdays et watch parties en direct. Quand DME joue, Twitch est l'endroit pour regarder avec la communauté — comms, analyse et énergie live.",
-      en: "Matchdays and watch parties live. When DME plays, Twitch is the place to watch with the community — comms, analysis, and live energy.",
+      fr: "Matchdays et watch parties en direct. Quand DME joue, Twitch est l'endroit pour regarder avec la communauté, comms, analyse et énergie live.",
+      en: "Matchdays and watch parties live. When DME plays, Twitch is the place to watch with the community, comms, analysis, and live energy.",
     },
     cta: { fr: "Suivre sur Twitch", en: "Follow on Twitch" },
   },
@@ -111,8 +111,8 @@ export function SocialClient() {
               className="dme-lead mt-6"
             >
               {t(
-                "Annonces, matchdays, lives et coulisses — une présence claire et cohérente pour suivre la structure au quotidien.",
-                "Announcements, matchdays, live streams, and behind the scenes — a clear, consistent presence to follow the org daily."
+                "Annonces, matchdays, lives et coulisses, une présence claire et cohérente pour suivre la structure au quotidien.",
+                "Announcements, matchdays, live streams, and behind the scenes, a clear, consistent presence to follow the org daily."
               )}
             </motion.p>
           </div>

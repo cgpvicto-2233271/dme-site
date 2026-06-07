@@ -10,7 +10,7 @@ const ITEMS_FR = [
   "Valorant",
   "Rocket League",
   "Marvel Rivals",
-  "6 200$+ cashprize",
+  "12 800$+ cashprize",
   "Fait pour la pression",
   "Forged to Compete",
 ];
@@ -23,7 +23,7 @@ const ITEMS_EN = [
   "Valorant",
   "Rocket League",
   "Marvel Rivals",
-  "6 200$+ Prize",
+  "12 800$+ Prize",
   "Built for Pressure",
   "Forged to Compete",
 ];

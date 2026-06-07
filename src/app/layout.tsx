@@ -107,7 +107,7 @@ export default async function RootLayout({
         <LanguageProvider>
           <Providers>
             <Cursor />
-            {/* Cinematic intro — plays once per session */}
+            {/* Cinematic intro, plays once per session */}
             <IntroReveal />
 
             <Header role={role} />

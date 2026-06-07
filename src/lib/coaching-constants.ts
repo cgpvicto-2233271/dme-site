@@ -1,16 +1,20 @@
 // ── League of Legends patch constants ─────────────────────────────────────────
 // Update CURRENT_LOL_PATCH when a new patch ships.
 
-export const CURRENT_LOL_PATCH = "16.09";
+// ⚠️ Deux numéros distincts :
+//  - CURRENT_LOL_PATCH / LOL_PATCHES = numéro AFFICHÉ (schéma année.patch, ex. 26.11)
+//  - DDRAGON_VERSION = version réelle du CDN d'images Riot (schéma 16.x).
+//    Ne PAS aligner DDRAGON_VERSION sur 26.x : DDragon n'a pas de 26.x → images 404.
+export const CURRENT_LOL_PATCH = "26.11";
 
 export const LOL_PATCHES = [
-  "16.09", "16.08", "16.07", "16.06", "16.05",
-  "16.04", "16.03", "16.02", "16.01",
-  "15.24", "15.23", "15.22",
+  "26.11", "26.10", "26.09", "26.08", "26.07", "26.06", "26.05",
+  "26.04", "26.03", "26.02", "26.01",
+  "25.24", "25.23", "25.22",
 ];
 
-// DDragon version matching the current competitive patch
-export const DDRAGON_VERSION = "16.9.1";
+// DDragon version matching the current competitive patch (CDN images only)
+export const DDRAGON_VERSION = "16.11.1";
 
 export const DD_CHAMPION_IMG = (key: string) =>
   `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${key}.png`;

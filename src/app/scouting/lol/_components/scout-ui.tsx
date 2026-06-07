@@ -15,7 +15,7 @@ export const tierColor: Record<string, string> = {
   IRON:        "var(--rank-iron)",
 };
 
-// ── ScoutShell — page wrapper ─────────────────────────────────────────────────
+// ── ScoutShell, page wrapper ─────────────────────────────────────────────────
 export function ScoutShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="dme-page">
@@ -26,7 +26,7 @@ export function ScoutShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── ScoutCard — base card ─────────────────────────────────────────────────────
+// ── ScoutCard, base card ─────────────────────────────────────────────────────
 export function ScoutCard({
   children,
   className = "",
@@ -41,7 +41,7 @@ export function ScoutCard({
   );
 }
 
-// ── StatCard — metric tile ────────────────────────────────────────────────────
+// ── StatCard, metric tile ────────────────────────────────────────────────────
 export function StatCard({
   label,
   value,
@@ -98,7 +98,7 @@ export function RankBadge({
   if (apiStatus === "ERROR")
     return <span className="font-mono text-[8px] font-bold uppercase text-red-400/70">ERR</span>;
   if (apiStatus === "NOT_SYNCED" || !apiStatus)
-    return <span className="font-mono text-[8px] font-bold text-white/22">—</span>;
+    return <span className="font-mono text-[8px] font-bold text-white/22">-</span>;
   if (apiStatus === "UNRANKED")
     return <span className="font-mono text-[8px] font-bold uppercase tracking-[0.1em] text-white/35">Unranked</span>;
 

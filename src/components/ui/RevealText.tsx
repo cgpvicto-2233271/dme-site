@@ -23,7 +23,7 @@ function splitChars(str: string) {
   return str.split("");
 }
 
-/** Cinematic word-by-word mask reveal — each word slides up from behind a clip. */
+/** Cinematic word-by-word mask reveal, each word slides up from behind a clip. */
 export function RevealText({
   text,
   as: Tag = "span",
@@ -83,7 +83,7 @@ export function RevealText({
   );
 }
 
-/** Char-level reveal — each character slides up. Heavier, use sparingly. */
+/** Char-level reveal, each character slides up. Heavier, use sparingly. */
 export function RevealChars({
   text,
   as: Tag = "span",

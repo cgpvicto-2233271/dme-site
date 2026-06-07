@@ -6,6 +6,7 @@ import {
   Activity,
   ArrowUpRight,
   BookOpen,
+  Database,
   FileText,
   Map,
   Shuffle,
@@ -67,8 +68,8 @@ const TOOLS = [
     icon:    BookOpen,
     accent:  false,
     status:  "LIVE",
-    descFr:  "Bibliothèque stratégique DME. Macro, draft, vision, rotations — standards LCK/LPL. Référence pendant la prep match.",
-    descEn:  "DME strategy library. Macro, draft, vision, rotations — LCK/LPL standards. Reference during match prep.",
+    descFr:  "Bibliothèque stratégique DME. Macro, draft, vision, rotations, standards LCK/LPL. Référence pendant la prep match.",
+    descEn:  "DME strategy library. Macro, draft, vision, rotations, LCK/LPL standards. Reference during match prep.",
     tag:     "STRAT",
   },
   {
@@ -96,6 +97,19 @@ const TOOLS = [
     descFr:  "Dashboard analyst complet. Reviews en cours, preps à venir, failles joueur et méta watch. Vue globale analyst room.",
     descEn:  "Full analyst dashboard. Ongoing reviews, upcoming preps, player weaknesses and meta watch. Global view.",
     tag:     "DATA",
+  },
+  {
+    href:    "/coaching/match",
+    labelFr: "Match Data",
+    labelEn: "Match Data",
+    subFr:   "Match ID · Stats complètes · Export JSON · Timeline",
+    subEn:   "Match ID · Full stats · JSON export · Timeline",
+    icon:    Database,
+    accent:  true,
+    status:  "LIVE",
+    descFr:  "Colle un Match ID Riot et récupère toutes les données de la partie (Match-V5). Résumé KDA/CS/gold/vision par équipe et export JSON complet.",
+    descEn:  "Paste a Riot Match ID and pull the full game data (Match-V5). Per-team KDA/CS/gold/vision summary and full JSON export.",
+    tag:     "RIOT",
   },
 ] as const;
 
@@ -135,7 +149,7 @@ const PILLARS = [
 ] as const;
 
 const STATS = [
-  { value: "6",    labelFr: "Outils actifs",       labelEn: "Active tools"       },
+  { value: "7",    labelFr: "Outils actifs",       labelEn: "Active tools"       },
   { value: "100+", labelFr: "Champions draftables", labelEn: "Draftable champs"   },
   { value: "AAA",  labelFr: "Niveau cible",         labelEn: "Target level"       },
   { value: "LEC",  labelFr: "Standard référence",   labelEn: "Reference standard" },
@@ -186,8 +200,8 @@ export default function CoachingDashboard() {
             className="mt-6 max-w-2xl text-[15px] leading-7 text-white/45"
           >
             {fr
-              ? "Carte tactique, simulateur de draft, VOD review, playbook et dashboard analyst — ce qu'il faut pour coacher au niveau pro."
-              : "Tactical map, draft sim, VOD review, playbook and analyst dashboard — what it takes to coach at pro level."}
+              ? "Carte tactique, simulateur de draft, VOD review, playbook et dashboard analyst, ce qu'il faut pour coacher au niveau pro."
+              : "Tactical map, draft sim, VOD review, playbook and analyst dashboard, what it takes to coach at pro level."}
           </motion.p>
 
           <motion.div

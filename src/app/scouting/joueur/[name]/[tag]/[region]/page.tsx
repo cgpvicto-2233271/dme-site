@@ -62,7 +62,7 @@ const TIER_COLOR: Record<string, string> = {
 
 const POSITION_LABEL: Record<string, string> = {
   TOP: "Top", JUNGLE: "Jungle", MIDDLE: "Mid",
-  BOTTOM: "Bot", UTILITY: "Support", "": "—",
+  BOTTOM: "Bot", UTILITY: "Support", "": "-",
 };
 
 const DDRAGON = "https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion";
@@ -77,7 +77,7 @@ function fmtDur(s: number): string {
 }
 
 function fmtDate(ts: number): string {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const diff = Math.floor((Date.now() - ts) / 1000);
   if (diff < 3600) return `${Math.floor(diff / 60)}min`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
@@ -617,7 +617,7 @@ export default function JoueurPage() {
       {/* SoloQ */}
       {tab === "soloq" && (
         <div className="space-y-4">
-          <RankCard snap={soloQ} label="SoloQ — RANKED_SOLO_5x5" />
+          <RankCard snap={soloQ} label="SoloQ, RANKED_SOLO_5x5" />
           <StatsPanel stats={soloQStats} label="Stats SoloQ" />
           {soloQSnapshots.length > 0 && (
             <div className="bg-[#0d0b0b] border border-white/[0.06] rounded-xl overflow-hidden">
@@ -634,7 +634,7 @@ export default function JoueurPage() {
       {/* Flex */}
       {tab === "flex" && (
         <div className="space-y-4">
-          <RankCard snap={flex} label="Flex — RANKED_FLEX_SR" />
+          <RankCard snap={flex} label="Flex, RANKED_FLEX_SR" />
           <StatsPanel stats={flexStats} label="Stats Flex" />
           {flexSnapshots.length > 0 && (
             <div className="bg-[#0d0b0b] border border-white/[0.06] rounded-xl overflow-hidden">
@@ -669,14 +669,14 @@ export default function JoueurPage() {
         <div className="space-y-4">
           <div className="bg-[#0d0b0b] border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="px-4 py-3 border-b border-white/[0.04] text-xs font-semibold text-white/40 uppercase tracking-widest">
-              Champion Pool — SoloQ
+              Champion Pool, SoloQ
             </div>
             <ChampTable pool={soloQStats?.champPool ?? []} />
           </div>
           {(flexStats?.champPool.length ?? 0) > 0 && (
             <div className="bg-[#0d0b0b] border border-white/[0.06] rounded-xl overflow-hidden">
               <div className="px-4 py-3 border-b border-white/[0.04] text-xs font-semibold text-white/40 uppercase tracking-widest">
-                Champion Pool — Flex
+                Champion Pool, Flex
               </div>
               <ChampTable pool={flexStats?.champPool ?? []} />
             </div>

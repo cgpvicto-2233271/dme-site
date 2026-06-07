@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "LFT | DME — DeathMark Esports",
+  title: "LFT | DME, DeathMark Esports",
   description: "Joueurs en recherche d'équipe sur DME. Rejoins la communauté compétitive League of Legends.",
 };
 

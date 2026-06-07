@@ -20,7 +20,7 @@ export function IntroReveal() {
     if (hasRun.current) return;
     hasRun.current = true;
 
-    // Already played this session — remove black screen instantly
+    // Already played this session, remove black screen instantly
     if (sessionStorage.getItem("dme_intro")) {
       setPhase("done");
       return;
@@ -37,10 +37,10 @@ export function IntroReveal() {
     return () => [t1, t2, t3, t4].forEach(clearTimeout);
   }, []);
 
-  // Done — nothing
+  // Done, nothing
   if (phase === "done") return null;
 
-  // Pending — plain black cover so content never flashes before useEffect
+  // Pending, plain black cover so content never flashes before useEffect
   if (phase === "pending") {
     return (
       <div
@@ -50,7 +50,7 @@ export function IntroReveal() {
     );
   }
 
-  // Running — full intro
+  // Running, full intro
   return (
     <motion.div
       className="fixed inset-0 overflow-hidden"

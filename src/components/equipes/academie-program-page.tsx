@@ -158,13 +158,13 @@ export function AcademieProgramPage({
                       </div>
                       {roster.manager ? (
                         <p className="font-mono text-[9px] text-white/22">
-                          {t("Manager", "Manager")} — {roster.manager}
+                          {t("Manager", "Manager")}, {roster.manager}
                         </p>
                       ) : null}
                     </div>
                   </div>
 
-                  {/* Players — liste verticale */}
+                  {/* Players, liste verticale */}
                   <div className="divide-y divide-white/[0.05]">
                     {roster.players.map((player, idx) => (
                       <div

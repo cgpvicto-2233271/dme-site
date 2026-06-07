@@ -200,13 +200,13 @@ export default function LftRegisterPage() {
           <div className="grid grid-cols-2 gap-3">
             <Field label="Rôle principal">
               <Select value={role} onChange={(v) => setRole(v as Role | "")}>
-                <option value="">— Sélectionner —</option>
+                <option value="">- Sélectionner -</option>
                 {ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
               </Select>
             </Field>
             <Field label="Rôle secondaire">
               <Select value={secondaryRole} onChange={(v) => setSecondaryRole(v as Role | "")}>
-                <option value="">— Aucun —</option>
+                <option value="">- Aucun -</option>
                 {ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
               </Select>
             </Field>
@@ -219,13 +219,13 @@ export default function LftRegisterPage() {
           <div className="grid grid-cols-2 gap-3">
             <Field label="Disponibilité">
               <Select value={availability} onChange={setAvailability}>
-                <option value="">— Sélectionner —</option>
+                <option value="">- Sélectionner -</option>
                 {AVAIL_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </Select>
             </Field>
             <Field label="Niveau">
               <Select value={experience} onChange={setExperience}>
-                <option value="">— Sélectionner —</option>
+                <option value="">- Sélectionner -</option>
                 {EXP_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </Select>
             </Field>

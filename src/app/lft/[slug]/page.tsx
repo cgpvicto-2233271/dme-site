@@ -113,18 +113,18 @@ export default async function PublicProfilePage({
           <h2 className="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-4">Ranked Solo/Duo</h2>
           <div className="grid grid-cols-3 gap-3 text-center">
             <div>
-              <div className="text-lg font-black text-white">{player.wins ?? "—"}</div>
+              <div className="text-lg font-black text-white">{player.wins ?? "-"}</div>
               <div className="text-[10px] text-gray-600">Victoires</div>
             </div>
             <div>
-              <div className="text-lg font-black text-white">{player.losses ?? "—"}</div>
+              <div className="text-lg font-black text-white">{player.losses ?? "-"}</div>
               <div className="text-[10px] text-gray-600">Défaites</div>
             </div>
             <div>
               <div
                 className="text-lg font-black"
                 style={{ color: wr !== null ? (wr >= 55 ? "#22c55e" : wr <= 45 ? "#ef4444" : "#94a3b8") : "#6b7280" }}>
-                {wr !== null ? `${wr}%` : "—"}
+                {wr !== null ? `${wr}%` : "-"}
               </div>
               <div className="text-[10px] text-gray-600">Winrate</div>
             </div>

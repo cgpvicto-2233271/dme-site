@@ -110,8 +110,8 @@ export function DashboardClient({
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/52">
               {fr
-                ? "Base de données interne — joueurs NA, rangs live, notes et pipeline de recrutement."
-                : "Internal database — NA players, live ranks, notes and recruitment pipeline."}
+                ? "Base de données interne, joueurs NA, rangs live, notes et pipeline de recrutement."
+                : "Internal database, NA players, live ranks, notes and recruitment pipeline."}
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

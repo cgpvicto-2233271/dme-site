@@ -181,7 +181,7 @@ const CATEGORIES: Category[] = [
         tier:  "S",
       },
       {
-        name:  "AVL — Aegis Valorant League",
+        name:  "AVL, Aegis Valorant League",
         desc:  "Ressource régionale Québec/Canada pour l'analyse compétitive semi-pro. Contexte direct pour les équipes DME.",
         url:   "https://discord.gg/Zu4FP5pU9M",
         tag:   "Discord · Régional · NA",
@@ -202,7 +202,7 @@ const CATEGORIES: Category[] = [
     accent: "#f59e0b",
     resources: [
       {
-        name:  "Macro Framework — ProofByContradiction",
+        name:  "Macro Framework, ProofByContradiction",
         desc:  "Série YouTube complète sur le macro LoL : resource funneling, objective control, zone of death. Le curriculum macro le plus complet en anglais.",
         url:   "https://www.youtube.com/@ProofByContradiction/playlists",
         tag:   "YouTube · Série complète",
@@ -216,7 +216,7 @@ const CATEGORIES: Category[] = [
         tier:  "A",
       },
       {
-        name:  "Broken By Concept — Wave Management",
+        name:  "Broken By Concept, Wave Management",
         desc:  "Série dédiée entièrement au wave management : freeze, slow push, hard push, bounce. Maîtriser les waves = maîtriser le tempo.",
         url:   "https://www.youtube.com/@BrokenByConcept/playlists",
         tag:   "YouTube · Wave theory",
@@ -281,7 +281,7 @@ export default function RessourcesPage() {
           {/* Tier legend */}
           <motion.div variants={fadeUp(0.14, 10)} className="mt-6 flex flex-wrap items-center gap-4">
             {[
-              { tier: "S", label: "Référence mondiale — incontournable" },
+              { tier: "S", label: "Référence mondiale, incontournable" },
               { tier: "A", label: "Outil professionnel solide" },
               { tier: "B", label: "Complément utile" },
             ].map(t => (

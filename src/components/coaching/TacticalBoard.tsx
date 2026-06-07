@@ -308,7 +308,7 @@ export function TacticalBoard() {
     try{const raw=localStorage.getItem("dme_tactical_scenarios");if(raw)setScenarios(JSON.parse(raw) as Scenario[]);}catch{}
   },[]);
 
-  // Load map image — tries project file, then canvas fallback
+  // Load map image, tries project file, then canvas fallback
   useEffect(()=>{
     const tryLoad=(urls:string[],idx:number)=>{
       if(idx>=urls.length)return; // canvas drawMap handles fallback
@@ -546,7 +546,7 @@ export function TacticalBoard() {
                     ?(s==="blue"?"bg-blue-500/15 text-blue-300":s==="red"?"bg-red-500/15 text-red-300":"bg-white/[0.06] text-white/55")
                     :"text-white/22 hover:text-white/50"
                 }`}>
-                {s==="neutral"?"—":s}
+                {s==="neutral"?"-":s}
               </button>
             ))}
           </div>
@@ -573,7 +573,7 @@ export function TacticalBoard() {
         {/* Map canvas */}
         <div className="relative flex flex-1 items-center justify-center">
           <div ref={containerRef} className="relative select-none"
-            style={{width:"min(100%,600px)",height:"min(100%,600px)",aspectRatio:"1/1"}}>
+            style={{width:"min(100%,760px)",height:"min(100%,760px)",aspectRatio:"1/1"}}>
             <canvas ref={canvasRef}
               className="absolute inset-0 h-full w-full"
               style={{cursor:tool==="text"?"text":"crosshair",touchAction:"none"}}
@@ -600,7 +600,7 @@ export function TacticalBoard() {
                   boxShadow:`0 0 12px ${c.team==="blue"?"#3b82f680":"#e1192d80"}`}}
                 onPointerDown={e=>startChampDrag(e,c.id)}
                 onDoubleClick={()=>setChamps(prev=>prev.filter(x=>x.id!==c.id))}
-                title={`${c.name} — double-clic retirer`}>
+                title={`${c.name}, double-clic retirer`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={DD_CHAMPION_IMG(c.key)} alt={c.name}
                   style={{width:"100%",height:"100%",borderRadius:"50%",objectFit:"cover",display:"block",pointerEvents:"none",userSelect:"none"}}

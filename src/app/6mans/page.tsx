@@ -1,4 +1,4 @@
-// src/app/6mans/page.tsx — AAA+ DA rouge/noir · Server Component
+// src/app/6mans/page.tsx, AAA+ DA rouge/noir · Server Component
 import Link from "next/link";
 
 type Joueur = {

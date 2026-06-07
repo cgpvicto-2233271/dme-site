@@ -122,7 +122,7 @@ export default async function WatchlistPage() {
                     {score != null ? (
                       <span className="font-display text-xl font-black text-red-200">{score}</span>
                     ) : (
-                      <span className="font-mono text-[9px] text-white/22">—</span>
+                      <span className="font-mono text-[9px] text-white/22">-</span>
                     )}
                   </div>
 

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import {
   BookOpen,
   BarChart2,
+  Database,
   Download,
   FileText,
   LayoutDashboard,
@@ -18,14 +19,34 @@ import {
 import { spring } from "@/lib/motion";
 
 type NavIcon = React.ComponentType<{ className?: string }>;
-const NAV: { href: string; label: string; icon: NavIcon; exact?: boolean }[] = [
-  { href: "/coaching",          label: "Dashboard",  icon: LayoutDashboard, exact: true },
-  { href: "/coaching/map",      label: "Tactical",   icon: Map              },
-  { href: "/coaching/drafts",   label: "Draft",      icon: Shuffle          },
-  { href: "/coaching/vods",     label: "VOD Review", icon: Video            },
-  { href: "/coaching/playbook", label: "Playbook",   icon: BookOpen         },
-  { href: "/coaching/notes",    label: "Notes",      icon: FileText         },
-  { href: "/coaching/analysis", label: "Analyse",    icon: BarChart2        },
+type NavItem = { href: string; label: string; icon: NavIcon; exact?: boolean };
+type NavGroup = { label: string | null; items: NavItem[] };
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    label: null,
+    items: [{ href: "/coaching", label: "Dashboard", icon: LayoutDashboard, exact: true }],
+  },
+  {
+    label: "Outils",
+    items: [
+      { href: "/coaching/map", label: "Tactical", icon: Map },
+      { href: "/coaching/drafts", label: "Draft", icon: Shuffle },
+      { href: "/coaching/playbook", label: "Playbook", icon: BookOpen },
+    ],
+  },
+  {
+    label: "Review",
+    items: [
+      { href: "/coaching/vods", label: "VOD", icon: Video },
+      { href: "/coaching/notes", label: "Notes", icon: FileText },
+      { href: "/coaching/analysis", label: "Analyse", icon: BarChart2 },
+    ],
+  },
+  {
+    label: "Data",
+    items: [{ href: "/coaching/match", label: "Match Data", icon: Database }],
+  },
 ];
 
 interface Props {
@@ -45,14 +66,37 @@ export default function CoachingNav({ exportCanvas }: Props) {
     a.click();
   };
 
+  const renderItem = (item: NavItem) => {
+    const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+    const Icon = item.icon;
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        className={`relative flex items-center gap-1.5 whitespace-nowrap px-3.5 py-3.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] transition-colors duration-200 ${
+          active ? "bg-white/[0.04] text-white" : "text-white/32 hover:text-white/65"
+        }`}
+      >
+        <Icon className="h-3.5 w-3.5 shrink-0" />
+        {item.label}
+        {active ? (
+          <motion.div
+            layoutId="coaching-nav-indicator"
+            className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#e1192d]"
+            transition={spring.precise}
+          />
+        ) : null}
+      </Link>
+    );
+  };
+
   return (
     <div className="sticky top-[70px] z-30 border-b border-white/[0.06] bg-[#050505]/94 backdrop-blur-xl">
       <div className="dme-wrap">
         <div className="flex items-center gap-0">
 
           {/* Brand mark */}
-          <div className="mr-4 flex shrink-0 select-none items-center gap-3 py-3.5 sm:mr-6">
-            <div className="h-4 w-px bg-white/[0.08]" />
+          <div className="mr-3 flex shrink-0 select-none items-center gap-3 py-3.5 sm:mr-5">
             <div>
               <span className="font-display text-[13px] tracking-[0.12em] text-white/55">DME</span>
               <span className="font-display text-[13px] tracking-[0.12em] text-[#e1192d]"> COACH</span>
@@ -60,38 +104,23 @@ export default function CoachingNav({ exportCanvas }: Props) {
             <div className="h-4 w-px bg-white/[0.08]" />
           </div>
 
-          {/* Nav links */}
+          {/* Grouped nav links */}
           <div className="flex items-center overflow-x-auto no-scrollbar">
-            {NAV.map((item) => {
-              const active = item.exact
-                ? pathname === item.href
-                : pathname.startsWith(item.href);
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`relative flex items-center gap-1.5 whitespace-nowrap px-4 py-3.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] transition-colors duration-200 ${
-                    active ? "text-white" : "text-white/32 hover:text-white/65"
-                  }`}
-                >
-                  <Icon className="h-3.5 w-3.5 shrink-0" />
-                  {item.label}
-                  {active ? (
-                    <motion.div
-                      layoutId="coaching-nav-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#e1192d]"
-                      transition={spring.precise}
-                    />
-                  ) : null}
-                </Link>
-              );
-            })}
+            {NAV_GROUPS.map((group, gi) => (
+              <div key={group.label ?? "root"} className="flex items-center">
+                {gi > 0 && <div className="mx-1.5 h-5 w-px shrink-0 bg-white/[0.07]" />}
+                {group.label && (
+                  <span className="hidden shrink-0 pl-1 pr-0.5 font-mono text-[7px] font-bold uppercase tracking-[0.28em] text-white/18 lg:block">
+                    {group.label}
+                  </span>
+                )}
+                {group.items.map(renderItem)}
+              </div>
+            ))}
           </div>
 
           {/* Right actions */}
-          <div className="ml-auto flex shrink-0 items-center gap-3 py-3.5 pl-6">
+          <div className="ml-auto flex shrink-0 items-center gap-3 py-3.5 pl-4">
             {exportCanvas && (
               <button
                 onClick={handleExport}

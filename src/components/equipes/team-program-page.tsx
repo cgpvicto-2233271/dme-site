@@ -11,15 +11,28 @@ import { fadeUp, stagger, viewport } from "@/lib/motion";
 type Copy = { fr: string; en: string };
 
 export type ProgramStat   = { value: string; label: Copy };
-export type ProgramPlayer = { id: string; name: string; role?: string; image?: string | null; sub?: string };
+export type ProgramPlayer = {
+  id: string;
+  name: string;
+  role?: string;
+  image?: string | null;
+  sub?: string;
+  x?: string;
+  profile?: string;
+};
 export type ProgramRoster = {
   id: string;
   name: string;
   competition: string;
   season?: string;
   manager?: string;
+  managerUrl?: string;
   players: ProgramPlayer[];
 };
+
+function profileLabel(url: string) {
+  return url.includes("liquipedia") ? "Liquipedia" : "Wiki";
+}
 
 type Props = {
   eyebrow: Copy;
@@ -30,6 +43,8 @@ type Props = {
   rosters: ProgramRoster[];
   primaryCta: { href: string; label: Copy };
   secondaryCta?: { href: string; label: Copy };
+  rosterNote?: Copy;
+  rosterNoteHref?: string;
   academieHref?: string;
   academieLabel?: Copy;
   backHref?: string;
@@ -68,7 +83,7 @@ function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
           </div>
         )}
 
-        {/* Role badge — top-left */}
+        {/* Role badge, top-left */}
         {player.role ? (
           <div className="absolute left-3 top-3">
             <span className="font-mono text-[9px] font-bold uppercase tracking-[0.26em] text-[#e1192d]/70 bg-[#050505]/75 px-2 py-1">
@@ -90,6 +105,34 @@ function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
           <p className="mt-1 font-mono text-[9px] leading-tight text-white/32 line-clamp-2">
             {player.sub}
           </p>
+        ) : null}
+
+        {/* Liens joueur, X + profil (Liquipedia / Wiki) */}
+        {player.x || player.profile ? (
+          <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+            {player.x ? (
+              <a
+                href={player.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${player.name} sur X`}
+                className="border border-white/[0.1] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-white/45 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]"
+              >
+                X
+              </a>
+            ) : null}
+            {player.profile ? (
+              <a
+                href={player.profile}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${player.name}, ${profileLabel(player.profile)}`}
+                className="border border-white/[0.1] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-white/45 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]"
+              >
+                {profileLabel(player.profile)}
+              </a>
+            ) : null}
+          </div>
         ) : null}
       </div>
     </div>
@@ -122,9 +165,21 @@ function RosterBlock({ roster, lang, index }: { roster: ProgramRoster; lang: Lan
               </span>
             ) : null}
             {roster.manager ? (
-              <span className="border border-[#e1192d]/20 bg-[#e1192d]/[0.05] px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[#e1192d]/55">
-                {lang === "en" ? "Manager" : "Manager"} — {roster.manager}
-              </span>
+              roster.managerUrl ? (
+                <a
+                  href={roster.managerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 border border-[#e1192d]/20 bg-[#e1192d]/[0.05] px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[#e1192d]/55 transition hover:border-[#e1192d]/45 hover:text-[#e1192d]"
+                >
+                  {lang === "en" ? "Manager" : "Manager"}, {roster.manager}
+                  <ArrowUpRight className="h-3 w-3" />
+                </a>
+              ) : (
+                <span className="border border-[#e1192d]/20 bg-[#e1192d]/[0.05] px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[#e1192d]/55">
+                  {lang === "en" ? "Manager" : "Manager"}, {roster.manager}
+                </span>
+              )
             ) : null}
           </div>
         </div>
@@ -149,7 +204,7 @@ function RosterBlock({ roster, lang, index }: { roster: ProgramRoster; lang: Lan
         </div>
       </div>
 
-      {/* Joueurs — grille portrait, colonnes calées sur le nombre de joueurs */}
+      {/* Joueurs, grille portrait, colonnes calées sur le nombre de joueurs */}
       {(() => {
         const n = roster.players.length;
         const cls =
@@ -180,6 +235,8 @@ export function TeamProgramPage({
   rosters,
   primaryCta,
   secondaryCta,
+  rosterNote,
+  rosterNoteHref,
   academieHref,
   academieLabel,
   backHref,
@@ -191,7 +248,7 @@ export function TeamProgramPage({
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-white/[0.07]" style={{ paddingBlock: "clamp(4rem, 8vw, 7rem)" }}>
-        {/* Image droite — couvre toute la moitié droite */}
+        {/* Image droite, couvre toute la moitié droite */}
         <div className="absolute inset-y-0 right-0 hidden w-[48vw] lg:block">
           <Image src={heroImage} alt="" fill priority sizes="48vw" className="object-cover" style={{ opacity: 0.75 }} />
           <div className="absolute inset-0" style={{
@@ -284,10 +341,36 @@ export function TeamProgramPage({
               <RosterBlock key={roster.id} roster={roster} lang={lang} index={i} />
             ))}
           </motion.div>
+
+          {/* Bio / note sous le roster */}
+          {rosterNote ? (
+            <motion.div
+              variants={fadeUp(0.1, 20)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewport.once}
+              className="mt-6 border-l-2 border-[#e1192d]/50 bg-[#0a0a0a] px-6 py-5"
+            >
+              <p className="max-w-3xl text-sm leading-7 text-white/55">
+                {pick(rosterNote, lang)}
+              </p>
+              {rosterNoteHref ? (
+                <a
+                  href={rosterNoteHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-[#e1192d]/80 transition hover:text-[#e1192d]"
+                >
+                  {lang === "en" ? "View bracket" : "Voir le bracket"}
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              ) : null}
+            </motion.div>
+          ) : null}
         </div>
       </section>
 
-      {/* ── ACADÉMIE LINK — si disponible ──────────────────────────────── */}
+      {/* ── ACADÉMIE LINK, si disponible ──────────────────────────────── */}
       {academieHref ? (
         <section className="border-b border-white/[0.07] bg-[#080808]" style={{ paddingBlock: "clamp(3rem, 5vw, 5rem)" }}>
           <div className="dme-wrap">
@@ -307,8 +390,8 @@ export function TeamProgramPage({
                 </h2>
                 <p className="mt-3 max-w-xl text-sm leading-6 text-white/46">
                   {lang === "en"
-                    ? "The academy is a structured path — from raw potential to active roster. Clear roles, real coaching, competitive exposure."
-                    : "L'académie est un chemin structuré — du potentiel brut au roster actif. Rôles clairs, coaching réel, exposition compétitive."}
+                    ? "The academy is a structured path, from raw potential to active roster. Clear roles, real coaching, competitive exposure."
+                    : "L'académie est un chemin structuré, du potentiel brut au roster actif. Rôles clairs, coaching réel, exposition compétitive."}
                 </p>
               </div>
               <div className="shrink-0">

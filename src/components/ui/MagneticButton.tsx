@@ -12,7 +12,7 @@ type MagneticButtonProps = {
 /**
  * Applies a spring-based magnetic attraction effect.
  * The element follows the cursor within its bounding box.
- * Only active on pointer:fine (mouse) devices — no effect on touch.
+ * Only active on pointer:fine (mouse) devices, no effect on touch.
  */
 export function MagneticButton({
   children,

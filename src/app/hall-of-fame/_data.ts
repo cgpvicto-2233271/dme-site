@@ -33,7 +33,35 @@ export const GAME_LABELS: Record<GameKey, string> = {
 export const achievements: Achievement[] = [
 
   // ================================================================
-  // LANs — LoL
+  // LAN ETS 2026, LoL (derniers résultats)
+  // ================================================================
+  {
+    id:          "lan-ets-2026-1st",
+    titre:       "LAN ETS 2026 – 1re place (League of Legends)",
+    sousTitre:   "Victoire League of Legends, 4 800 $",
+    type:        "LAN",
+    category:    "LAN",
+    jeu:         "lol",
+    cashprize:   "4 800 $",
+    badge:       "1re place",
+    description:
+      "DME remporte la LAN ETS 2026 à Montréal en League of Legends, le plus gros cashprize LAN de l'organisation à ce jour et un nouveau sommet pour le programme compétitif.",
+  },
+  {
+    id:          "lan-ets-2026-3rd",
+    titre:       "LAN ETS 2026 – 3e place (League of Legends)",
+    sousTitre:   "Podium League of Legends, 1 000 $",
+    type:        "LAN",
+    category:    "LAN",
+    jeu:         "lol",
+    cashprize:   "1 000 $",
+    badge:       "3e place",
+    description:
+      "Une deuxième équipe DME sur le podium de la LAN ETS 2026, un top 3 qui confirme la profondeur du programme League of Legends de l'organisation.",
+  },
+
+  // ================================================================
+  // LANs, LoL
   // ================================================================
   {
     id:          "lan-uqtr",
@@ -87,35 +115,35 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
-  // LAN — LoL (nouveaux résultats)
+  // LAN, LoL (nouveaux résultats)
   // ================================================================
   {
     id:          "lan-cfpr-lol",
     titre:       "LAN CFPR – 1re place (League of Legends)",
-    sousTitre:   "Victoire League of Legends — 500 $",
+    sousTitre:   "Victoire League of Legends, 500 $",
     type:        "LAN",
     category:    "LAN",
     jeu:         "lol",
     cashprize:   "500 $",
     badge:       "1re place",
     description:
-      "DME remporte la LAN CFPR en League of Legends — un titre supplémentaire qui confirme la régularité du roster sur les événements LAN québécois.",
+      "DME remporte la LAN CFPR en League of Legends, un titre supplémentaire qui confirme la régularité du roster sur les événements LAN québécois.",
   },
 
   // ================================================================
-  // LAN — Rocket League
+  // LAN, Rocket League
   // ================================================================
   {
     id:          "lan-parro-rl",
     titre:       "LAN Parro – 1re place (Rocket League)",
-    sousTitre:   "Victoire Rocket League — 300 $",
+    sousTitre:   "Victoire Rocket League, 300 $",
     type:        "LAN",
     category:    "LAN",
     jeu:         "rocket-league",
     cashprize:   "300 $",
     badge:       "1re place",
     description:
-      "DME remporte la LAN Parro Rocket League — une victoire qui marque l'entrée du programme RL dans le palmarès compétitif de l'organisation.",
+      "DME remporte la LAN Parro Rocket League, une victoire qui marque l'entrée du programme RL dans le palmarès compétitif de l'organisation.",
   },
   {
     id:          "lan-cfpr",
@@ -131,7 +159,7 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
-  // Online — LoL
+  // Online, LoL
   // ================================================================
   {
     id:          "ggl",
@@ -182,7 +210,7 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
-  // Online — Rocket League
+  // Online, Rocket League
   // ================================================================
   {
     id:          "nrls",
@@ -198,7 +226,7 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
-  // Marvel Rivals — 3× Top 256 Americas
+  // Marvel Rivals, 3× Top 256 Americas
   // ================================================================
   {
     id:          "mr-top256-s2",
@@ -209,7 +237,7 @@ export const achievements: Achievement[] = [
     jeu:         "marvel-rivals",
     badge:       "Top 256",
     description:
-      "DME Street décroche un Top 256 Americas lors de la Saison 2 Hellfire Gala — une première performance qui confirme le potentiel du roster sur la scène compétitive Marvel Rivals.",
+      "DME Street décroche un Top 256 Americas lors de la Saison 2 Hellfire Gala, une première performance qui confirme le potentiel du roster sur la scène compétitive Marvel Rivals.",
   },
   {
     id:          "mr-top256-s5",
@@ -231,34 +259,34 @@ export const achievements: Achievement[] = [
     jeu:         "marvel-rivals",
     badge:       "Top 256",
     description:
-      "Troisième Top 256 Americas en trois saisons — une constance remarquable qui place DME Street parmi les équipes les plus régulières de la scène Marvel Rivals NA.",
+      "Troisième Top 256 Americas en trois saisons, une constance remarquable qui place DME Street parmi les équipes les plus régulières de la scène Marvel Rivals NA.",
   },
 
   // ================================================================
-  // AVL — LoL (résultat phare)
+  // AVL, LoL (résultat phare)
   // ================================================================
   {
     id:          "avl-champions",
     titre:       "Aegis Vanguard League – Champions",
-    sousTitre:   "1re place AVL — Spring 2026",
+    sousTitre:   "1re place AVL, Spring 2026",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
     cashprize:   "2 450 $",
     badge:       "Champions",
     description:
-      "DME remporte l'Aegis Vanguard League Spring 2026 — un titre qui couronne une saison dominante et positionne l'organisation parmi les meilleures structures de la scène LoL NA amateur.",
+      "DME remporte l'Aegis Vanguard League Spring 2026, un titre qui couronne une saison dominante et positionne l'organisation parmi les meilleures structures de la scène LoL NA amateur.",
     bannerSrc: "/medias/commun/avl.png",
-    bannerAlt: "DME — Champions AVL Spring 2026",
+    bannerAlt: "DME, Champions AVL Spring 2026",
   },
 
   // ================================================================
-  // Aegis — LoL académie Spring 2026
+  // Aegis, LoL académie Spring 2026
   // ================================================================
   {
     id:          "ael-spring-2026",
     titre:       "Aegis Executioner League – Top 8 Playoffs",
-    sousTitre:   "Spring 2026 — Coach : SAI",
+    sousTitre:   "Spring 2026, Coach : SAI",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
@@ -271,7 +299,7 @@ export const achievements: Achievement[] = [
   {
     id:          "adl-spring-2026",
     titre:       "Aegis Defenders League – Top 8 Playoffs",
-    sousTitre:   "Spring 2026 — Coach : Ratonvoyer",
+    sousTitre:   "Spring 2026, Coach : Ratonvoyer",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
@@ -284,7 +312,7 @@ export const achievements: Achievement[] = [
   {
     id:          "aml-spring-2026",
     titre:       "Aegis Marauders League – Top 8 Playoffs",
-    sousTitre:   "Spring 2026 — Coach : Monkey",
+    sousTitre:   "Spring 2026, Coach : Monkey",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
@@ -296,8 +324,19 @@ export const achievements: Achievement[] = [
   },
 
   // ================================================================
-  // Aegis / NACL — LoL
+  // Aegis / NACL, LoL
   // ================================================================
+  {
+    id:          "nacl-summer-promo-2026",
+    titre:       "NACL Summer Promotion 2026 – Qualifiés",
+    sousTitre:   "Qualification au tournoi de promotion NACL",
+    type:        "Ligue",
+    category:    "AEGIS",
+    jeu:         "lol",
+    badge:       "NACL · Qualifiés",
+    description:
+      "DeathMark E-Sports se qualifie pour le NACL Summer Promotion Tournament 2026, un cap majeur sur le circuit semi-professionnel nord-américain, à un palier des ligues officielles NACL.",
+  },
   {
     id:          "acl-autre",
     titre:       "Aegis Challenger League – Summer 2025",
@@ -366,23 +405,23 @@ export const achievements: Achievement[] = [
   {
     id:          "nacl-oq-top18",
     titre:       "NACL Open Qualifier – Top 18",
-    sousTitre:   "Février 2026 — Circuit semi-pro NA",
+    sousTitre:   "Février 2026, Circuit semi-pro NA",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
     badge:       "NACL · Top 18",
     description:
-      "Un Top 18 en NACL OQ de février 2026 — une performance significative sur le circuit semi-professionnel nord-américain qui confirme la progression de DeathMark E-Sports face aux meilleures structures du Tier 2.",
+      "Un Top 18 en NACL OQ de février 2026, une performance significative sur le circuit semi-professionnel nord-américain qui confirme la progression de DeathMark E-Sports face aux meilleures structures du Tier 2.",
   },
   {
     id:          "nacl-oq-top38",
     titre:       "NACL Open Qualifier – Top 38",
-    sousTitre:   "Février 2026 — Circuit semi-pro NA",
+    sousTitre:   "Février 2026, Circuit semi-pro NA",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
     badge:       "NACL · Top 38",
     description:
-      "Un Top 38 en NACL OQ de février 2026 — une deuxième équipe DME qui s'engage sur le circuit et représente l'organisation dans un des qualificatifs les plus compétitifs de la scène amateur NA.",
+      "Un Top 38 en NACL OQ de février 2026, une deuxième équipe DME qui s'engage sur le circuit et représente l'organisation dans un des qualificatifs les plus compétitifs de la scène amateur NA.",
   },
 ];

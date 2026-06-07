@@ -116,7 +116,7 @@ export default async function PlayersPage({ searchParams }: { searchParams: Sear
                     {score != null ? (
                       <span className="font-display text-xl font-black text-red-200">{score}</span>
                     ) : (
-                      <span className="font-mono text-[9px] text-white/22">—</span>
+                      <span className="font-mono text-[9px] text-white/22">-</span>
                     )}
                   </div>
 
@@ -125,7 +125,7 @@ export default async function PlayersPage({ searchParams }: { searchParams: Sear
                     {role ? (
                       <span className="font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-[#e1192d]/65">{role}</span>
                     ) : (
-                      <span className="font-mono text-[8px] text-white/20">—</span>
+                      <span className="font-mono text-[8px] text-white/20">-</span>
                     )}
                   </div>
 
@@ -133,7 +133,7 @@ export default async function PlayersPage({ searchParams }: { searchParams: Sear
                   <div className="font-mono text-[8px] text-white/25">
                     {syncedAt
                       ? new Intl.DateTimeFormat("fr-CA", { dateStyle: "short" }).format(new Date(syncedAt))
-                      : "—"}
+                      : "-"}
                   </div>
                 </Link>
               );

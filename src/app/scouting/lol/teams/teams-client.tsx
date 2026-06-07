@@ -495,7 +495,7 @@ function TeamCard({
             </div>
           ) : (
             <div className="px-5 py-8 text-center">
-              <p className="font-mono text-[10px] text-white/25">Aucun joueur — ajoutez des profils à suivre</p>
+              <p className="font-mono text-[10px] text-white/25">Aucun joueur, ajoutez des profils à suivre</p>
             </div>
           )}
 

@@ -54,7 +54,7 @@ function TierBadge({ tier, rank, lp }: { tier: string | null; rank: string | nul
   const isApex = ["CHALLENGER", "GRANDMASTER", "MASTER"].includes(tier);
   return (
     <span className="text-xs font-black" style={{ color }}>
-      {tier}{!isApex && rank ? ` ${rank}` : ""}{lp !== null ? ` — ${lp} LP` : ""}
+      {tier}{!isApex && rank ? ` ${rank}` : ""}{lp !== null ? `, ${lp} LP` : ""}
     </span>
   );
 }
@@ -96,7 +96,7 @@ function PlayerCard({ player }: { player: PublicPlayerListItem }) {
         )}
 
         <div className="flex items-center justify-between text-[10px] text-gray-600">
-          <span>{player.availability ? AVAIL_LABEL[player.availability] ?? player.availability : "—"}</span>
+          <span>{player.availability ? AVAIL_LABEL[player.availability] ?? player.availability : "-"}</span>
           {wr !== null && (
             <span className={wr >= 55 ? "text-[#22c55e]" : wr <= 45 ? "text-red-500" : "text-gray-500"}>
               {wr}% WR

@@ -1,5 +1,5 @@
 "use client";
-// src/components/LanguageContext.tsx — FR / EN bilingual system
+// src/components/LanguageContext.tsx, FR / EN bilingual system
 
 import {
   createContext,

@@ -17,7 +17,7 @@ type Props = { top6mans: Joueur6Mans[]; vods: HomeVod[]; events: HomeEvent[] };
 const TEAMS = [
   {
     game: { fr: "League of Legends", en: "League of Legends" },
-    circuit: "AVL · NACLOQ · ACL",
+    circuit: "NACL · ACL · AVL",
     image: "/medias/commun/banner-leagueoflegends.png",
     href: "/equipes/league-of-legends",
     academieHref: "/equipes/league-of-legends/academie",
@@ -122,7 +122,7 @@ function HeroSection() {
           </span>
         </motion.div>
 
-        {/* TITRE — Abolition, très grand */}
+        {/* TITRE, Abolition, très grand */}
         <div style={{ overflow: "hidden" }}>
           <motion.h1
             className="font-abolition text-white"
@@ -172,7 +172,7 @@ function HeroSection() {
           </ButtonLink>
         </motion.div>
 
-        {/* Stats rapides — row horizontale en bas */}
+        {/* Stats rapides, row horizontale en bas */}
         <motion.div
           className="mt-12 flex flex-wrap gap-8 border-t border-white/[0.07] pt-8"
           initial={{ opacity: 0 }}
@@ -182,7 +182,7 @@ function HeroSection() {
           {[
             { val: "04", label: { fr: "Jeux compétitifs", en: "Competitive games" } },
             { val: "15", label: { fr: "Rosters actifs", en: "Active rosters" } },
-            { val: "7 000$+", label: { fr: "Cashprize gagné", en: "Prize earned" } },
+            { val: "12 800$+", label: { fr: "Cashprize gagné", en: "Prize earned" } },
             { val: "2025", label: { fr: "Communauté de l'année", en: "Community of the year" } },
           ].map((s) => (
             <div key={s.val}>
@@ -204,8 +204,8 @@ function HeroSection() {
 function AwardStrip() {
   const { lang } = useLang();
   const items = lang === "en"
-    ? ["DeathMark E-Sports", "Community of the Year 2025", "Quebec · NA", "League of Legends", "Valorant", "Rocket League", "Marvel Rivals", "7 000$+ Prize", "AVL Champions 2026", "Built for Pressure"]
-    : ["DeathMark E-Sports", "Communauté de l'année 2025", "Québec · NA", "League of Legends", "Valorant", "Rocket League", "Marvel Rivals", "7 000$+ Cashprize", "Champions AVL 2026", "Fait pour la pression"];
+    ? ["DeathMark E-Sports", "Community of the Year 2025", "Quebec · NA", "League of Legends", "Valorant", "Rocket League", "Marvel Rivals", "12 800$+ Prize", "AVL Champions 2026", "Built for Pressure"]
+    : ["DeathMark E-Sports", "Communauté de l'année 2025", "Québec · NA", "League of Legends", "Valorant", "Rocket League", "Marvel Rivals", "12 800$+ Cashprize", "Champions AVL 2026", "Fait pour la pression"];
   const doubled = [...items, ...items];
 
   return (
@@ -385,6 +385,20 @@ function TeamsSection() {
 const TOP_RESULTS = [
   {
     game: "League of Legends",
+    event: "NACL Summer Promo",
+    badge: "Qualifiés",
+    cashprize: "",
+    color: "#e1192d",
+  },
+  {
+    game: "League of Legends",
+    event: "LAN ETS",
+    badge: "1re place",
+    cashprize: "4 800 $",
+    color: "#e1192d",
+  },
+  {
+    game: "League of Legends",
     event: "LAN CFPR",
     badge: "1re place",
     cashprize: "500 $",
@@ -426,7 +440,7 @@ function ResultsSection() {
               className="font-abolition text-white"
               style={{ fontSize: "clamp(2.8rem, 6vw, 6rem)", lineHeight: 0.92, letterSpacing: "0.01em" }}
             >
-              {lang === "en" ? "7 000$+ earned." : "7 000$+ gagnés."}
+              {lang === "en" ? "12 800$+ earned." : "12 800$+ gagnés."}
             </h2>
           </div>
           <Link
@@ -616,7 +630,7 @@ function VodsSection({ vods, events }: { vods: HomeVod[]; events: HomeEvent[] })
                   {nextEvent.titre}
                 </h3>
                 <p className="mt-3 text-sm text-white/38">
-                  {nextEvent.date} — {nextEvent.lieu}
+                  {nextEvent.date}, {nextEvent.lieu}
                 </p>
               </div>
             </a>
@@ -667,6 +681,39 @@ function VodsSection({ vods, events }: { vods: HomeVod[]; events: HomeEvent[] })
 /* ── 6. Actualités ───────────────────────────────────────────────────────── */
 const NEWS = [
   {
+    id:        "nacl",
+    date:      { fr: "Juin 2026", en: "June 2026" },
+    game:      "League of Legends",
+    badge:     { fr: "Qualifiés", en: "Qualified" },
+    title:     { fr: "NACL Summer Promo", en: "NACL Summer Promo" },
+    sub:       { fr: "NACL Summer Promotion", en: "NACL Summer Promotion" },
+    prize:     null,
+    href:      "https://liquipedia.net/leagueoflegends/North_American_Challengers_League/2026/Summer/Promotion_Tournament",
+    highlight: true,
+  },
+  {
+    id:        "lan-ets",
+    date:      { fr: "Mai 2026", en: "May 2026" },
+    game:      "League of Legends",
+    badge:     { fr: "1re place", en: "1st place" },
+    title:     { fr: "LAN ETS Winner", en: "LAN ETS Winner" },
+    sub:       { fr: "LAN ETS 2026 · Montréal", en: "LAN ETS 2026 · Montreal" },
+    prize:     "4 800 $",
+    href:      null,
+    highlight: false,
+  },
+  {
+    id:        "lan-ets-3rd",
+    date:      { fr: "Mai 2026", en: "May 2026" },
+    game:      "League of Legends",
+    badge:     { fr: "3e place", en: "3rd place" },
+    title:     { fr: "LAN ETS 3rd Place", en: "LAN ETS 3rd Place" },
+    sub:       { fr: "LAN ETS 2026 · Montréal", en: "LAN ETS 2026 · Montreal" },
+    prize:     "1 000 $",
+    href:      null,
+    highlight: false,
+  },
+  {
     id:        "avl",
     date:      { fr: "Janvier 2026", en: "January 2026" },
     game:      "League of Legends",
@@ -674,6 +721,7 @@ const NEWS = [
     title:     { fr: "AVL Champions", en: "AVL Champions" },
     sub:       { fr: "Aegis Vanguard League", en: "Aegis Vanguard League" },
     prize:     "2 450 $",
+    href:      null,
     highlight: true,
   },
   {
@@ -684,6 +732,7 @@ const NEWS = [
     title: { fr: "LAN Parro Winner", en: "LAN Parro Winner" },
     sub:   { fr: "LAN Parro Info", en: "LAN Parro Info" },
     prize: "300 $",
+    href:  null,
     highlight: false,
   },
   {
@@ -694,6 +743,7 @@ const NEWS = [
     title: { fr: "LAN CFPR Winner", en: "LAN CFPR Winner" },
     sub:   { fr: "Championnat CFPR", en: "CFPR Championship" },
     prize: "500 $",
+    href:  null,
     highlight: false,
   },
 ] as const;
@@ -744,6 +794,17 @@ function ActualitesSection() {
                 <div className="absolute inset-x-0 top-0 h-[2px] bg-[#e1192d]" />
               ) : null}
 
+              {/* Clickable overlay (external news link) */}
+              {item.href ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={lang === "en" ? item.title.en : item.title.fr}
+                  className="absolute inset-0 z-10"
+                />
+              ) : null}
+
               <div>
                 {/* Badge + date */}
                 <div className="mb-5 flex items-center justify-between gap-2">
@@ -771,13 +832,20 @@ function ActualitesSection() {
                 <p className="mt-1 font-mono text-[10px] text-white/25">{item.game}</p>
               </div>
 
-              {/* Prize */}
-              <p
-                className="font-abolition"
-                style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", lineHeight: 1, color: "#e1192d" }}
-              >
-                {item.prize}
-              </p>
+              {/* Prize / lien externe */}
+              {item.prize ? (
+                <p
+                  className="font-abolition"
+                  style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", lineHeight: 1, color: "#e1192d" }}
+                >
+                  {item.prize}
+                </p>
+              ) : item.href ? (
+                <span className="inline-flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#e1192d]/80">
+                  {lang === "en" ? "View bracket" : "Voir le bracket"}
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              ) : null}
             </motion.div>
           ))}
         </motion.div>
@@ -849,10 +917,10 @@ export function HomepageClient({ top6mans, vods, events }: Props) {
       <HeroSection />
       <AwardStrip />
       <TeamsSection />
+      <ActualitesSection />
       <ResultsSection />
       <SixMansSection top6mans={top6mans} />
       <VodsSection vods={vods} events={events} />
-      <ActualitesSection />
       <CommunitySection />
     </div>
   );

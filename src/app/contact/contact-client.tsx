@@ -46,8 +46,8 @@ export function ContactClient() {
                 className="dme-lead mt-6 max-w-2xl"
               >
                 {t(
-                  "DeathMark E-Sports est l'organisation esport de référence au Québec — Communauté de l'année 2025, active sur 5 scènes, avec une audience jeune, engagée et 100% nord-américaine.",
-                  "DeathMark E-Sports is Quebec's leading esports organization — Community of the Year 2025, active on 5 scenes, with a young, engaged, and 100% North American audience."
+                  "DeathMark E-Sports est l'organisation esport de référence au Québec, Communauté de l'année 2025, active sur 5 scènes, avec une audience jeune, engagée et 100% nord-américaine.",
+                  "DeathMark E-Sports is Quebec's leading esports organization, Community of the Year 2025, active on 5 scenes, with a young, engaged, and 100% North American audience."
                 )}
               </motion.p>
             </div>
@@ -78,7 +78,7 @@ export function ContactClient() {
         </div>
       </section>
 
-      {/* ── PARTENARIAT — section principale ─────────────────────────────── */}
+      {/* ── PARTENARIAT, section principale ─────────────────────────────── */}
       <section className="border-b border-white/[0.07]" style={{ paddingBlock: "clamp(4rem, 8vw, 7rem)" }}>
         <div className="dme-wrap">
           <div className="mb-10 flex items-center gap-4">
@@ -88,7 +88,7 @@ export function ContactClient() {
             </p>
           </div>
 
-          {/* Value props — 3 colonnes */}
+          {/* Value props, 3 colonnes */}
           <motion.div
             className="grid gap-px bg-white/[0.055] sm:grid-cols-3 mb-10"
             variants={stagger(0.07)}
@@ -101,8 +101,8 @@ export function ContactClient() {
                 num: "01",
                 title: { fr: "Audience qualifiée", en: "Qualified audience" },
                 text: {
-                  fr: "Joueurs 16–30 ans, actifs, passionnés. Une démographie difficile à atteindre via les médias traditionnels — DME l'a déjà capturée.",
-                  en: "Players aged 16–30, active and passionate. A demographic hard to reach through traditional media — DME has already captured it.",
+                  fr: "Joueurs 16–30 ans, actifs, passionnés. Une démographie difficile à atteindre via les médias traditionnels, DME l'a déjà capturée.",
+                  en: "Players aged 16–30, active and passionate. A demographic hard to reach through traditional media, DME has already captured it.",
                 },
               },
               {
@@ -165,7 +165,7 @@ export function ContactClient() {
             </div>
           </div>
 
-          {/* CTA partenariat — proéminent */}
+          {/* CTA partenariat, proéminent */}
           <motion.div
             variants={fadeUp(0.15, 18)}
             initial="hidden"
@@ -193,7 +193,7 @@ export function ContactClient() {
               </div>
               <div className="shrink-0">
                 <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent(t("Partenariat DME — [Votre entreprise]", "DME Partnership — [Your company]"))}`}
+                  href={`mailto:${EMAIL}?subject=${encodeURIComponent(t("Partenariat DME, [Votre entreprise]", "DME Partnership, [Your company]"))}`}
                   className="inline-flex items-center gap-2 bg-[#e1192d] px-8 py-4 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white transition hover:bg-[#c4152a]"
                 >
                   {t("Envoyer un email", "Send an email")}

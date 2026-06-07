@@ -38,7 +38,7 @@ export function ScoutNav() {
         </span>
       </div>
 
-      {/* Nav bar — toujours visible, scroll horizontal si petit écran */}
+      {/* Nav bar, toujours visible, scroll horizontal si petit écran */}
       <div className="w-full overflow-x-auto">
         <nav
           className="flex min-w-max items-stretch gap-0 border border-white/[0.08] bg-[#0a0a0a]"

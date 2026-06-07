@@ -120,14 +120,14 @@ export default function NotesPage() {
       ? (NOTE_TYPES.find(t => t.key === note.noteType)?.label ?? note.noteType)
       : (NOTE_TYPES.find(t => t.key === note.noteType)?.labelEn ?? note.noteType);
     const lines = [
-      `COACHING NOTE — DME`,
+      `COACHING NOTE, DME`,
       `═══════════════════════════════`,
       `${fr ? "Joueur" : "Player"}  : ${note.player}`,
       `${fr ? "Type" : "Type"}    : ${typeLabel}`,
       `${fr ? "Titre" : "Title"}   : ${note.title}`,
       `${fr ? "Date" : "Date"}    : ${note.sessionDate}`,
       `Patch   : ${note.patch}`,
-      `Tags    : ${note.tags.join(", ") || "—"}`,
+      `Tags    : ${note.tags.join(", ") || "-"}`,
       ``,
       fr ? "CONTENU" : "CONTENT",
       `─────────────────────────────`,
@@ -164,7 +164,7 @@ export default function NotesPage() {
   return (
     <div className="flex h-[calc(100vh-70px-49px)] overflow-hidden bg-[#060606]">
 
-      {/* ── Left panel — note list ──────────────────────────────────── */}
+      {/* ── Left panel, note list ──────────────────────────────────── */}
       <aside className="flex w-[240px] shrink-0 flex-col border-r border-white/[0.07] bg-[#080808]">
 
         {/* Header */}
@@ -303,7 +303,7 @@ export default function NotesPage() {
         </div>
       </aside>
 
-      {/* ── Right — editor ───────────────────────────────────────────── */}
+      {/* ── Right, editor ───────────────────────────────────────────── */}
       {!active ? (
         <div className="flex flex-1 items-center justify-center">
           <div className="text-center">
@@ -372,8 +372,8 @@ export default function NotesPage() {
             value={active.content}
             onChange={e => updateNote(active.id, { content: e.target.value })}
             placeholder={fr
-              ? `Notes de coaching pour ${active.player}…\n\nEx:\n— Problèmes identifiés:\n  · Wave freeze à 8min contre un push : décision incorrecte\n  · Rotation drake trop lente (-8s)\n\n— Exercices assignés:\n  · 10 games de freeze sur Renekton\n  · Rewatch le VOD à 12:34\n\n— Prochain focus:\n  · Level 1 setup bot side`
-              : `Coaching notes for ${active.player}…\n\nEx:\n— Issues identified:\n  · Wave freeze at 8min against a push: wrong call\n  · Drake rotation too slow (-8s)\n\n— Assigned drills:\n  · 10 freeze games on Renekton\n  · Rewatch VOD at 12:34\n\n— Next focus:\n  · Level 1 setup bot side`}
+              ? `Notes de coaching pour ${active.player}…\n\nEx:\n- Problèmes identifiés:\n  · Wave freeze à 8min contre un push : décision incorrecte\n  · Rotation drake trop lente (-8s)\n\n- Exercices assignés:\n  · 10 games de freeze sur Renekton\n  · Rewatch le VOD à 12:34\n\n- Prochain focus:\n  · Level 1 setup bot side`
+              : `Coaching notes for ${active.player}…\n\nEx:\n- Issues identified:\n  · Wave freeze at 8min against a push: wrong call\n  · Drake rotation too slow (-8s)\n\n- Assigned drills:\n  · 10 freeze games on Renekton\n  · Rewatch VOD at 12:34\n\n- Next focus:\n  · Level 1 setup bot side`}
             className="flex-1 resize-none bg-transparent p-5 font-mono text-[13px] leading-7 text-white/55 outline-none placeholder:text-white/15"
             data-lenis-prevent
             style={{ scrollbarWidth: "thin", scrollbarColor: "#e1192d18 transparent" }}

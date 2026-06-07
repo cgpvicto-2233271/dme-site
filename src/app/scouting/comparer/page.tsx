@@ -167,7 +167,7 @@ function PlayerCard({ data, color }: { data: PlayerData; color: string }) {
           <div className="text-xs text-gray-500">#{account.tagLine} · {data.region}</div>
           {soloQ && (
             <div className="text-sm font-semibold mt-0.5" style={{ color: tierColor }}>
-              {soloQ.tier} {soloQ.rank} — {soloQ.leaguePoints} LP
+              {soloQ.tier} {soloQ.rank}, {soloQ.leaguePoints} LP
             </div>
           )}
         </div>

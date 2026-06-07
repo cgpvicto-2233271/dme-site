@@ -16,9 +16,9 @@ const DD = "https://ddragon.leagueoflegends.com/cdn/14.10.1";
 interface NewsItem { id: string; title: string; region: string; type: string; date: string; summary?: string; }
 
 const MOCK_NEWS: NewsItem[] = [
-  { id: "1", title: "TidalWave (ADC) LFT — Challenger NA", region: "NA", type: "lft", date: "2025-05-03", summary: "Joueur Challenger recherche équipe semi-pro ou T1. Disponible immédiatement." },
+  { id: "1", title: "TidalWave (ADC) LFT, Challenger NA", region: "NA", type: "lft", date: "2025-05-03", summary: "Joueur Challenger recherche équipe semi-pro ou T1. Disponible immédiatement." },
   { id: "2", title: "VoidCrawler libre après fin de contrat", region: "NA", type: "lft", date: "2025-05-02", summary: "Jungler GM1, spécialisé early game. Contrat terminé le 30 avril." },
-  { id: "3", title: "AstroPath (SUP) — Import disponible", region: "EUW", type: "lft", date: "2025-05-01", summary: "Support EUW Gold1, visa travail Canada en cours. Cherche équipe NACL." },
+  { id: "3", title: "AstroPath (SUP), Import disponible", region: "EUW", type: "lft", date: "2025-05-01", summary: "Support EUW Gold1, visa travail Canada en cours. Cherche équipe NACL." },
   { id: "4", title: "Shuffles NACL Saison 2025 Split 2", region: "NA", type: "news", date: "2025-04-30", summary: "Plusieurs équipes NACL ont annoncé leurs rosters pour le prochain split." },
   { id: "5", title: "FrostForged signe avec Team DME (essai)", region: "NA", type: "news", date: "2025-04-28", summary: "Le toplaner Master1 rejoint DME pour une période d'essai de 2 semaines." },
   { id: "6", title: "Marché des transferts : offre en hausse pour les ADC", region: "ALL", type: "news", date: "2025-04-27", summary: "La demande pour les ADC augmente avec 3 équipes NACL cherchant activement." },

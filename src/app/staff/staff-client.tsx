@@ -34,8 +34,8 @@ const DEPARTMENTS: Department[] = [
         fullName: "Pierre Lavoie",
         role: { fr: "Propriétaire", en: "Owner" },
         desc: {
-          fr: "Vision stratégique et stabilité à long terme. Fondateur de l'identité DME — chaque décision organisationnelle passe par sa validation.",
-          en: "Strategic vision and long-term stability. Founder of the DME identity — every organizational decision goes through him.",
+          fr: "Vision stratégique et stabilité à long terme. Fondateur de l'identité DME, chaque décision organisationnelle passe par sa validation.",
+          en: "Strategic vision and long-term stability. Founder of the DME identity, every organizational decision goes through him.",
         },
         tags: ["Direction", "Vision", "Organisation"],
         department: { fr: "Direction", en: "Direction" },
@@ -73,8 +73,8 @@ const DEPARTMENTS: Department[] = [
         fullName: "Zachary Larocque",
         role: { fr: "Administrateur", en: "Admin" },
         desc: {
-          fr: "Opérations internes et coordination équipes. Tryouts, plannings, communications staff — la structure qui tient au quotidien derrière chaque split.",
-          en: "Internal operations and team coordination. Tryouts, scheduling, staff communications — the structure that holds day to day.",
+          fr: "Opérations internes et coordination équipes. Tryouts, plannings, communications staff, la structure qui tient au quotidien derrière chaque split.",
+          en: "Internal operations and team coordination. Tryouts, scheduling, staff communications, the structure that holds day to day.",
         },
         tags: ["Administration", "Tryouts", "Opérations"],
         department: { fr: "Management", en: "Management" },
@@ -84,8 +84,8 @@ const DEPARTMENTS: Department[] = [
         fullName: "Étienne Landry",
         role: { fr: "Administrateur & Caster", en: "Admin & Caster" },
         desc: {
-          fr: "Organisation événementielle et qualité broadcast. La voix de DME sur les matchdays — cast, coordination terrain et présence communautaire.",
-          en: "Event organization and broadcast quality. The voice of DME on matchdays — casting, on-site coordination and community presence.",
+          fr: "Organisation événementielle et qualité broadcast. La voix de DME sur les matchdays, cast, coordination terrain et présence communautaire.",
+          en: "Event organization and broadcast quality. The voice of DME on matchdays, casting, on-site coordination and community presence.",
         },
         tags: ["Événements", "Caster", "Broadcast"],
         department: { fr: "Management", en: "Management" },
@@ -148,8 +148,8 @@ export function StaffClient() {
               className="dme-lead mt-6"
             >
               {t(
-                "Direction, management et conseil d'administration — le noyau qui construit DeathMark au quotidien, split après split.",
-                "Direction, management, and board — the core building DeathMark daily, split after split."
+                "Direction, management et conseil d'administration, le noyau qui construit DeathMark au quotidien, split après split.",
+                "Direction, management, and board, the core building DeathMark daily, split after split."
               )}
             </motion.p>
           </div>
@@ -251,7 +251,7 @@ export function StaffClient() {
                         ))}
                       </div>
                       <a
-                        href={`mailto:${EMAIL}?subject=Contact ${member.tag} — DME`}
+                        href={`mailto:${EMAIL}?subject=Contact ${member.tag}, DME`}
                         className="inline-flex items-center gap-1.5 font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-white/35 transition hover:text-white"
                       >
                         {t("Écrire", "Write")}

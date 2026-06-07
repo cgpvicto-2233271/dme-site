@@ -144,9 +144,9 @@ export default function DatabasePage() {
                       {p.real_name && <div className="text-[10px] text-gray-600">{p.real_name}</div>}
                       {p.residency && <div className="text-[9px] text-gray-700">{p.residency}</div>}
                     </td>
-                    <td className="px-3 py-2.5 text-gray-400 text-sm">{p.team ?? p.team_last ?? "—"}</td>
-                    <td className="px-3 py-2.5 text-center text-xs font-bold text-gray-300">{p.role ?? "—"}</td>
-                    <td className="px-3 py-2.5 text-center text-xs font-black text-[#FFD700]/70">{p.league ?? "—"}</td>
+                    <td className="px-3 py-2.5 text-gray-400 text-sm">{p.team ?? p.team_last ?? "-"}</td>
+                    <td className="px-3 py-2.5 text-center text-xs font-bold text-gray-300">{p.role ?? "-"}</td>
+                    <td className="px-3 py-2.5 text-center text-xs font-black text-[#FFD700]/70">{p.league ?? "-"}</td>
                     <td className="px-3 py-2.5 text-center">
                       <span className={`text-[9px] font-black px-1.5 py-0.5 border ${p.tier===1?"border-yellow-500/30 text-yellow-400":"border-gray-700 text-gray-500"}`}>
                         T{p.tier}
@@ -160,7 +160,7 @@ export default function DatabasePage() {
                         <span title={p.soloq_ids.map(s=>`${s.name}#${s.tag}`).join(", ")}>
                           {p.soloq_ids.length} compte{p.soloq_ids.length>1?"s":""}
                         </span>
-                      ) : "—"}
+                      ) : "-"}
                     </td>
                     <td className="px-3 py-2.5 text-center">
                       {p.soloq_ids.length > 0 && (
