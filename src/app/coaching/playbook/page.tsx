@@ -1596,39 +1596,61 @@ export default function PlaybookPage() {
         {/* Layout */}
         <div className="grid gap-6" style={{ gridTemplateColumns: "210px 1fr 310px" }}>
 
-          {/* ── Left nav (grouped by category) ── */}
-          <nav className="space-y-5">
+          {/* ── Left nav (collapsible accordion) ── */}
+          <nav className="space-y-1.5 sticky top-[120px] self-start">
             {PB_CATEGORIES.map(cat => {
               const secs = SECTIONS.filter(s => (SECTION_CAT[s.id] ?? "jeu") === cat.id);
               if (!secs.length) return null;
+              const open = openCats.includes(cat.id);
+              const hasActive = secs.some(s => s.id === activeSection);
               return (
-                <div key={cat.id} className="space-y-1">
-                  <div className="mb-1 flex items-center gap-2 px-1.5">
-                    <span className="h-px w-3 bg-[#e1192d]/50" />
-                    <p className="font-mono text-[9px] font-bold uppercase tracking-[0.26em] text-white/30">
+                <div key={cat.id}>
+                  {/* Category header */}
+                  <button
+                    onClick={() => toggleCat(cat.id)}
+                    className="w-full flex items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/[0.03]"
+                    style={{ background: hasActive && !open ? "rgba(225,25,45,0.05)" : "transparent" }}
+                  >
+                    <span className="h-px w-3 shrink-0 bg-[#e1192d]/55" />
+                    <span
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em]"
+                      style={{ color: hasActive ? "#e1192d" : "rgba(255,255,255,0.55)" }}
+                    >
                       {fr ? cat.fr : cat.en}
-                    </p>
-                  </div>
-                  {secs.map(s => {
-                    const Icon = s.icon;
-                    const active = s.id === activeSection;
-                    return (
-                      <button
-                        key={s.id}
-                        onClick={() => { setActiveSection(s.id); setQuery(""); }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg text-sm transition-all text-left"
-                        style={{
-                          background: active ? `${s.color}18` : "transparent",
-                          color: active ? s.color : "rgba(255,255,255,0.45)",
-                          border: active ? `1px solid ${s.color}28` : "1px solid transparent",
-                        }}
-                      >
-                        <Icon style={{ color: active ? s.color : undefined }} className="w-4 h-4 shrink-0" />
-                        <span className="truncate font-medium">{fr ? s.labelFr : s.label}</span>
-                        <span className="ml-auto opacity-50 text-xs">{s.entries.length}</span>
-                      </button>
-                    );
-                  })}
+                    </span>
+                    <span className="ml-auto font-mono text-[9px] text-white/25">{secs.length}</span>
+                    <ChevronRight
+                      size={13}
+                      className="text-white/30 transition-transform duration-200"
+                      style={{ transform: open ? "rotate(90deg)" : "rotate(0deg)" }}
+                    />
+                  </button>
+
+                  {/* Sections (only when expanded) */}
+                  {open && (
+                    <div className="mt-0.5 space-y-0.5 pl-2.5">
+                      {secs.map(s => {
+                        const Icon = s.icon;
+                        const active = s.id === activeSection;
+                        return (
+                          <button
+                            key={s.id}
+                            onClick={() => { setActiveSection(s.id); setQuery(""); }}
+                            className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-all text-left"
+                            style={{
+                              background: active ? `${s.color}18` : "transparent",
+                              color: active ? s.color : "rgba(255,255,255,0.45)",
+                              border: active ? `1px solid ${s.color}28` : "1px solid transparent",
+                            }}
+                          >
+                            <Icon style={{ color: active ? s.color : undefined }} className="w-3.5 h-3.5 shrink-0" />
+                            <span className="truncate font-medium">{fr ? s.labelFr : s.label}</span>
+                            <span className="ml-auto opacity-50 text-xs">{s.entries.length}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               );
             })}

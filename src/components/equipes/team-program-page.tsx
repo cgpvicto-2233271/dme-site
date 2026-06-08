@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowUpRight, X } from "lucide-react";
 import { useLang, type Lang } from "@/components/LanguageContext";
 import { ButtonLink } from "@/components/ui/button";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
@@ -19,6 +20,13 @@ export type ProgramPlayer = {
   sub?: string;
   x?: string;
   profile?: string;
+  bio?: { fr: string; en: string };
+  // Rich "player dossier" (opens a spotlight modal when present)
+  fullName?: string;
+  nationality?: string;
+  story?: { fr: string; en: string };
+  timeline?: { year: string; text: string }[];
+  achievements?: { fr: string; en: string }[];
 };
 export type ProgramRoster = {
   id: string;
@@ -53,9 +61,16 @@ type Props = {
 function pick(copy: Copy, lang: Lang) { return lang === "en" ? copy.en : copy.fr; }
 
 /* ── Player portrait card ──────────────────────────────────────────────────── */
-function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
+function PlayerCard({ player, lang, onSelect }: { player: ProgramPlayer; lang: Lang; onSelect?: (p: ProgramPlayer) => void }) {
+  const rich = !!player.story;
   return (
-    <div className="group relative overflow-hidden border border-white/[0.07] bg-[#0a0a0a]">
+    <div
+      className={`group relative overflow-hidden border border-white/[0.07] bg-[#0a0a0a] transition ${rich ? "cursor-pointer hover:border-[#e1192d]/40" : ""}`}
+      onClick={rich ? () => onSelect?.(player) : undefined}
+      role={rich ? "button" : undefined}
+      tabIndex={rich ? 0 : undefined}
+      onKeyDown={rich ? (e) => { if (e.key === "Enter") onSelect?.(player); } : undefined}
+    >
       {/* Portrait image */}
       <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
         {player.image ? (
@@ -107,6 +122,12 @@ function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
           </p>
         ) : null}
 
+        {player.bio ? (
+          <p className="mt-2 text-[10px] leading-[1.45] text-white/45">
+            {lang === "en" ? player.bio.en : player.bio.fr}
+          </p>
+        ) : null}
+
         {/* Liens joueur, X + profil (Liquipedia / Wiki) */}
         {player.x || player.profile ? (
           <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
@@ -115,6 +136,7 @@ function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
                 href={player.x}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 aria-label={`${player.name} sur X`}
                 className="border border-white/[0.1] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-white/45 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]"
               >
@@ -126,6 +148,7 @@ function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
                 href={player.profile}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 aria-label={`${player.name}, ${profileLabel(player.profile)}`}
                 className="border border-white/[0.1] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-white/45 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]"
               >
@@ -134,13 +157,21 @@ function PlayerCard({ player, lang }: { player: ProgramPlayer; lang: Lang }) {
             ) : null}
           </div>
         ) : null}
+
+        {/* Affordance "ouvrir le dossier" */}
+        {rich ? (
+          <div className="mt-2.5 flex items-center gap-1.5 font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-[#e1192d]/55 transition group-hover:text-[#e1192d]/90">
+            {lang === "en" ? "View profile" : "Voir le profil"}
+            <ArrowUpRight className="h-3 w-3 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </div>
+        ) : null}
       </div>
     </div>
   );
 }
 
 /* ── Roster block ────────────────────────────────────────────────────────── */
-function RosterBlock({ roster, lang, index }: { roster: ProgramRoster; lang: Lang; index: number }) {
+function RosterBlock({ roster, lang, index, onSelect }: { roster: ProgramRoster; lang: Lang; index: number; onSelect?: (p: ProgramPlayer) => void }) {
   return (
     <motion.article
       variants={fadeUp(index * 0.06, 20)}
@@ -216,12 +247,140 @@ function RosterBlock({ roster, lang, index }: { roster: ProgramRoster; lang: Lan
         return (
           <div className={`grid gap-px bg-white/[0.055] ${cls}`}>
             {roster.players.map((player) => (
-              <PlayerCard key={player.id} player={player} lang={lang} />
+              <PlayerCard key={player.id} player={player} lang={lang} onSelect={onSelect} />
             ))}
           </div>
         );
       })()}
     </motion.article>
+  );
+}
+
+/* ── Player spotlight (mini-dossier modal) ─────────────────────────────────── */
+function PlayerSpotlight({ player, lang, onClose }: { player: ProgramPlayer; lang: Lang; onClose: () => void }) {
+  const fr = lang === "fr";
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+
+      <motion.div
+        className="relative z-10 grid w-full max-w-[880px] overflow-hidden border border-white/[0.1] bg-[#0a0a0a] md:grid-cols-[300px_1fr]"
+        style={{ maxHeight: "88vh" }}
+        initial={{ opacity: 0, y: 26, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 26, scale: 0.98 }}
+        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Portrait */}
+        <div className="relative hidden md:block">
+          {player.image ? (
+            <Image src={player.image} alt={player.name} fill sizes="300px" className="object-cover object-top" style={{ opacity: 0.9 }} />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-[#0d0d0d]">
+              <span className="font-abolition text-white/10" style={{ fontSize: "5rem" }}>{player.name.slice(0, 2).toUpperCase()}</span>
+            </div>
+          )}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, transparent 55%, #0a0a0a 100%)" }} />
+          {player.role ? (
+            <span className="absolute left-4 top-4 bg-[#050505]/80 px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.26em] text-[#e1192d]/80">
+              {player.role}
+            </span>
+          ) : null}
+        </div>
+
+        {/* Content */}
+        <div className="relative flex flex-col overflow-y-auto p-6 sm:p-8" data-lenis-prevent>
+          <button
+            onClick={onClose}
+            aria-label="Fermer"
+            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center border border-white/[0.1] text-white/40 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+
+          {/* Header */}
+          <p className="pr-10 font-mono text-[9px] font-bold uppercase tracking-[0.26em] text-[#e1192d]/65">
+            {player.role}{player.nationality ? ` · ${player.nationality}` : ""}
+          </p>
+          <h3 className="font-abolition mt-1 text-white" style={{ fontSize: "clamp(2rem, 5vw, 3rem)", lineHeight: 1 }}>
+            {player.name}
+          </h3>
+          {player.fullName ? (
+            <p className="mt-1.5 font-mono text-[11px] text-white/40">{player.fullName}</p>
+          ) : null}
+
+          {/* Story */}
+          {player.story ? (
+            <p className="mt-5 text-sm leading-7 text-white/65">{fr ? player.story.fr : player.story.en}</p>
+          ) : null}
+
+          {/* Timeline */}
+          {player.timeline && player.timeline.length > 0 ? (
+            <div className="mt-6">
+              <p className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">
+                {fr ? "Parcours" : "Career"}
+              </p>
+              <div className="space-y-2">
+                {player.timeline.map((t, i) => (
+                  <div key={i} className="flex gap-3">
+                    <span className="w-12 shrink-0 font-mono text-[10px] font-bold text-[#e1192d]/70">{t.year}</span>
+                    <span className="font-mono text-[10px] leading-[1.5] text-white/60">{t.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {/* Achievements */}
+          {player.achievements && player.achievements.length > 0 ? (
+            <div className="mt-6">
+              <p className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-white/30">
+                {fr ? "Faits d'armes" : "Achievements"}
+              </p>
+              <ul className="space-y-2">
+                {player.achievements.map((a, i) => (
+                  <li key={i} className="flex gap-2.5 text-sm text-white/70">
+                    <span className="mt-0.5 shrink-0 text-[#e1192d]">▸</span>
+                    <span>{fr ? a.fr : a.en}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {/* Links */}
+          {player.x || player.profile ? (
+            <div className="mt-7 flex flex-wrap gap-2">
+              {player.x ? (
+                <a href={player.x} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 border border-white/[0.1] px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-white/50 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]">
+                  X <ArrowUpRight className="h-3 w-3" />
+                </a>
+              ) : null}
+              {player.profile ? (
+                <a href={player.profile} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 border border-white/[0.1] px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-white/50 transition hover:border-[#e1192d]/40 hover:text-[#e1192d]">
+                  {profileLabel(player.profile)} <ArrowUpRight className="h-3 w-3" />
+                </a>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -242,6 +401,7 @@ export function TeamProgramPage({
   backHref,
 }: Props) {
   const { lang } = useLang();
+  const [spotlight, setSpotlight] = useState<ProgramPlayer | null>(null);
 
   return (
     <div className="dme-page">
@@ -338,7 +498,7 @@ export function TeamProgramPage({
             viewport={viewport.once}
           >
             {rosters.map((roster, i) => (
-              <RosterBlock key={roster.id} roster={roster} lang={lang} index={i} />
+              <RosterBlock key={roster.id} roster={roster} lang={lang} index={i} onSelect={setSpotlight} />
             ))}
           </motion.div>
 
@@ -423,6 +583,13 @@ export function TeamProgramPage({
           </div>
         </div>
       </section>
+
+      {/* ── PLAYER SPOTLIGHT MODAL ──────────────────────────────────────── */}
+      <AnimatePresence>
+        {spotlight ? (
+          <PlayerSpotlight player={spotlight} lang={lang} onClose={() => setSpotlight(null)} />
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
