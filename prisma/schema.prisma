@@ -657,3 +657,57 @@ model ScoutNote {
 
   @@index([puuid, createdAt])
 }
+
+
+// ─── Coach Booking Platform ───────────────────────────────────────────────────
+
+model CoachBooking {
+  id           String   @id @default(cuid())
+  coachSlug    String
+  eleveEmail   String
+  eleveDiscord String?
+  elevePseudo  String
+  eleveRole    String?
+  eleveRank    String?
+  objective    String?  @db.Text
+  slotDate     DateTime
+  durationHrs  Int      @default(1)
+  status       String   @default("pending")
+  totalCAD     Int
+  note         String?  @db.Text
+  calEventId   String?
+  sessionLink  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([coachSlug, slotDate])
+  @@index([status, slotDate])
+  @@index([slotDate])
+}
+
+model CoachAvailability {
+  id           String    @id @default(cuid())
+  coachSlug    String
+  dayOfWeek    Int?
+  specificDate DateTime?
+  startHour    Int
+  endHour      Int
+  isBlocked    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+
+  @@index([coachSlug, dayOfWeek])
+  @@index([coachSlug, specificDate])
+}
+
+model CoachReview {
+  id          String   @id @default(cuid())
+  coachSlug   String
+  elevePseudo String
+  eleveRank   String?
+  rating      Int
+  comment     String   @db.Text
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@index([coachSlug, isVisible])
+}

@@ -35,6 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/", label: { fr: "Accueil", en: "Home" } },
   { href: "/equipes", label: { fr: "Équipes", en: "Teams" } },
   { href: "/hall-of-fame", label: { fr: "Résultats", en: "Results" } },
+  { href: "/coach", label: { fr: "Coaching", en: "Coaching" } },
   { href: "/recrutement", label: { fr: "Recrutement", en: "Tryouts" } },
   { href: "/social", label: { fr: "Communauté", en: "Community" } },
   { href: "/staff", label: { fr: "Staff", en: "Staff" } },
@@ -201,14 +202,14 @@ export default function Header({ role }: Props) {
                   key={candidate}
                   type="button"
                   onClick={() => setLang(candidate)}
-                  className={`h-8 px-3 font-mono text-[9px] font-black uppercase tracking-[0.18em] transition ${
+                  className={`h-8 px-3 text-base transition ${
                     lang === candidate
-                      ? "bg-white text-black"
-                      : "text-white/38 hover:text-white/72"
+                      ? "bg-white/10 opacity-100"
+                      : "opacity-35 hover:opacity-70"
                   }`}
                   aria-label={candidate === "fr" ? "Francais" : "English"}
                 >
-                  {candidate}
+                  <Image src={candidate === "fr" ? "/medias/players/FR1.png" : "/medias/players/US.png"} alt={candidate} width={26} height={18} className="rounded-[2px] object-cover" />
                 </button>
               ))}
             </div>
@@ -383,11 +384,11 @@ export default function Header({ role }: Props) {
                         key={candidate}
                         type="button"
                         onClick={() => setLang(candidate)}
-                        className={`h-8 w-12 font-mono text-[9px] font-black uppercase tracking-[0.18em] ${
-                          lang === candidate ? "bg-white text-black" : "text-white/42"
+                        className={`h-8 w-12 text-base transition ${
+                          lang === candidate ? "bg-white/10 opacity-100" : "opacity-38"
                         }`}
                       >
-                        {candidate}
+                        <Image src={candidate === "fr" ? "/medias/players/FR1.png" : "/medias/players/US.png"} alt={candidate} width={26} height={18} className="rounded-[2px] object-cover" />
                       </button>
                     ))}
                   </div>

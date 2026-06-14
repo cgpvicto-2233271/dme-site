@@ -45,7 +45,7 @@ const rosters: LoLRoster[] = [
     managerUrl: "https://x.com/coussinhoo",
     players: [
       {
-        id: "nacl-top", name: "Karsiak", role: "TOP", image: "/medias/commun/akali.png",
+        id: "nacl-top", name: "Karsiak", role: "TOP", image: "/medias/players/karsiak (2).png",
         x: "https://x.com/Karsiakk", profile: "https://lol.fandom.com/wiki/Karsiak",
         bio: {
           fr: "Vincent « Karsiak » Grenier a grandi sur l'Aegis Challenger League, enchaînant les splits pour apprendre le jeu au contact d'équipes installées. Son meilleur résultat à ce jour : un Top 4 au Spring Open Qualifier 2026. Il tient la top lane de DME pour la campagne NACL.",
@@ -68,7 +68,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-jgl", name: "Verdict", role: "JUNGLE", image: "/medias/commun/zed.png",
+        id: "nacl-jgl", name: "Verdict", role: "JUNGLE", image: null,
         x: "https://x.com/VerdictNA", profile: "https://liquipedia.net/leagueoflegends/Verdict",
         bio: {
           fr: "Vincent « Verdict » Filosa, aussi connu sous « Anti », est un vétéran de la scène NA actif depuis 2020. Il a disputé les LCS Proving Grounds 2022 avec Team Ambition, est passé par Calamity Esports, et a brillé en collégial avec l'UQAM (champion de la CLOL East 2026). En mai 2026, il rejoint DME et remporte la LAN ETS.",
@@ -95,7 +95,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-mid", name: "SirZepre", role: "MID", image: "/medias/commun/ryze.png",
+        id: "nacl-mid", name: "SirZepre", role: "MID", image: "/medias/players/sirzepre.png",
         x: "https://x.com/NTL_SirZepre", profile: "https://liquipedia.net/leagueoflegends/SirZepre",
         bio: {
           fr: "Alexandre « SirZepre » Noel écume le circuit NACL depuis 2023 (Team Ambition, Maelstrom, ROYALS), en parallèle d'un solide parcours collégial CLOL avec UHSP Eutectics, vice-champion du CLOL Fall Warmup 2025. Passé par Gravity et Vancouver Impact, il rejoint DME en mai 2026 et remporte aussitôt la LAN ETS.",
@@ -120,7 +120,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-adc", name: "Goodboi", role: "ADC", image: "/medias/commun/ezreal.png",
+        id: "nacl-adc", name: "Goodboi", role: "ADC", image: "/medias/players/goodboi.png",
         x: "https://x.com/lolgoodboi", profile: "https://liquipedia.net/leagueoflegends/Good_Boi",
         bio: {
           fr: "Emmanuel « Goodboi » Rouleau-Grosset est le vétéran du roster, actif depuis 2020. Repéré aux LCS Scouting Grounds 2021 (4e avec Team Ocean) et 3e de la LAN ETS 2022, il a disputé la NACL 2026 Spring (Tier 1) avec Apex Mission Impossible avant de rejoindre DME et de remporter la LAN ETS 2026.",
@@ -147,7 +147,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-sup", name: "Admirable Potato", role: "SUPPORT", image: "/medias/commun/rakan.png",
+        id: "nacl-sup", name: "Admirable Potato", role: "SUPPORT", image: "/medias/players/AdmirablePotato (1).png",
         x: "https://x.com/Adm_Potato", profile: "https://liquipedia.net/leagueoflegends/Admirable_potato",
         bio: {
           fr: "Henri « Admirable Potato » Lefebvre, support issu de la filière universitaire, est double champion collégial CLOL : 1re place à la CLOL National 2022 avec Bay State College, puis à la CLOL East 2026 avec l'UQAM. Déjà présent sur l'Aegis Challengers League 2025 avec DME, il apporte au botside vision et expérience de la compétition encadrée.",
