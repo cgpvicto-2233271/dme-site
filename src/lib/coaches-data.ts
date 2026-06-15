@@ -62,7 +62,7 @@ export const COACHES: CoachData[] = [
     slug: "verdict",
     pseudo: "Verdict",
     fullName: "Vincent Filosa",
-    email: "verdict@placeholder.com", // ← remplacer par le vrai email
+    email: "vincent2692@live.ca",
     role: ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"],
     specialRole: "JUNGLE",
     rank: { fr: "Challenger NA", en: "Challenger NA" },
@@ -79,12 +79,12 @@ export const COACHES: CoachData[] = [
       en: "Elite shotcaller · Challenger since season 10.",
     },
     bio: {
-      fr: "Verdict est Challenger depuis la saison 10, sans interruption, top 50 NA chaque saison. Ce qui le distingue n'est pas uniquement son mécanisme : c'est sa capacité à lire une game entière en temps réel et à dicter chaque décision collective. Surnommé « Anti » en compétitif, il a enchaîné LCS Proving Grounds 2022, Champion CLOL East 2026 avec l'UQAM et Champion LAN ETS 2026 avec DME. Un shotcaller qui voit la carte différemment, et qui va t'apprendre à faire pareil.",
-      en: "Verdict has been Challenger since season 10, uninterrupted, top 50 NA every season. What sets him apart isn't just his mechanics: it's his ability to read an entire game in real time and dictate every collective decision. Known as « Anti » in competitive play, he stacked LCS Proving Grounds 2022, 2026 CLOL East Champion with UQAM, and 2026 LAN ETS Champion with DME. A shotcaller who sees the map differently, and who will teach you to do the same.",
+      fr: "What up chief, ici Verdict, francophone et Challenger jungle depuis proche d'une décennie maintenant. L'une de tes résolutions de l'année était d'atteindre Plat ? Diamond ? Master ? Ça va être aussi simple que de collecter du sirop d'érable, c'est ici qu'on ouvre le livre de la jungle ensemble pour déterminer quelles sont TES forces et faiblesses puis en exploiter le plein potentiel à l'aide d'astuces soigneusement développées pour des joueurs de ton elo. Book une session pour qu'on puisse travailler vers ton ascension et un match history bien plus bleuté, au plaisir boss.",
+      en: "What up chief, Verdict here, French-speaking Challenger jungler for close to a decade now. One of your resolutions was to hit Plat? Diamond? Master? It's gonna be as simple as collecting maple syrup — this is where we open the jungle book together to figure out what YOUR strengths and weaknesses are, then exploit their full potential with tricks carefully developed for players at your elo. Book a session so we can work toward your climb and a much bluer match history. See you soon boss.",
     },
     philosophy: {
-      fr: "La plupart des joueurs perdent des games qu'ils auraient dû gagner, pas parce qu'ils jouent mal, mais parce qu'ils ne savent pas quoi décider. Mon coaching ne porte pas sur les mécaniques. Il porte sur la prise de décision : pourquoi tu bouges ici, pourquoi tu cèdes cet objectif, pourquoi tu dois call avant que ça arrive. Comprendre ça, c'est ce qui fait la différence entre Diamond et Challenger.",
-      en: "Most players lose games they should have won, not because they play badly, but because they don't know what to decide. My coaching isn't about mechanics. It's about decision-making: why you move here, why you concede this objective, why you need to call before it happens. Understanding that is what separates Diamond from Challenger.",
+      fr: "Plèbe, ramasseur de canettes, emballeur à Dollarama, low elo chud, peu importe le titre, tu peux devenir qui tu veux tant que tu stick to the plan. La discipline te rend maître de ton destin et tu es celui qui rédiges le script. Je te prêterai main forte pour que tu atteignes ton goal coûte que coûte.",
+      en: "Pleb, can collector, Dollarama packer, low elo chud — whatever the title, you can become whoever you want as long as you stick to the plan. Discipline makes you master of your destiny, and you're the one writing the script. I'll lend you a hand so you can reach your goal no matter what.",
     },
     accomplishments: [
       { year: "S10+", label: { fr: "Challenger NA continu depuis la saison 10", en: "Continuous Challenger NA since season 10" } },
@@ -181,11 +181,10 @@ export const COACHES: CoachData[] = [
       },
     ],
     availability: [
-      { day: 1, startHour: 18, endHour: 22 }, // Lundi
-      { day: 3, startHour: 18, endHour: 22 }, // Mercredi
-      { day: 5, startHour: 17, endHour: 23 }, // Vendredi
-      { day: 6, startHour: 13, endHour: 22 }, // Samedi
-      { day: 0, startHour: 14, endHour: 20 }, // Dimanche
+      { day: 1, startHour: 17, endHour: 23 }, // Lundi
+      { day: 3, startHour: 17, endHour: 23 }, // Mercredi
+      { day: 4, startHour: 17, endHour: 23 }, // Jeudi
+      { day: 6, startHour: 12, endHour: 22 }, // Samedi
     ],
   },
 
@@ -306,11 +305,11 @@ export const COACHES: CoachData[] = [
       },
     ],
     availability: [
-      { day: 2, startHour: 18, endHour: 23 }, // Mardi
-      { day: 4, startHour: 18, endHour: 23 }, // Jeudi
-      { day: 5, startHour: 17, endHour: 23 }, // Vendredi
-      { day: 6, startHour: 12, endHour: 22 }, // Samedi
-      { day: 0, startHour: 12, endHour: 21 }, // Dimanche
+      { day: 1, startHour: 13, endHour: 19 }, // Lundi
+      { day: 2, startHour: 13, endHour: 19 }, // Mardi
+      { day: 3, startHour: 13, endHour: 19 }, // Mercredi
+      { day: 4, startHour: 13, endHour: 19 }, // Jeudi
+      { day: 5, startHour: 13, endHour: 19 }, // Vendredi
     ],
   },
 ];
