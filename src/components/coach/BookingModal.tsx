@@ -153,6 +153,16 @@ export function BookingModal({
         lang: lang as "fr" | "en",
       });
       if (result.ok) {
+        // Bloque immédiatement les créneaux dans l'état local
+        if (selection) {
+          const newSlots: string[] = [];
+          for (let h = 0; h < selection.durationHrs; h++) {
+            const d = new Date(selection.date.getTime() + h * 3_600_000);
+            d.setUTCMinutes(0, 0, 0);
+            newSlots.push(d.toISOString());
+          }
+          setLiveBookedSlots((prev) => [...prev, ...newSlots]);
+        }
         setBookingId(result.id);
         setStep("done");
       } else {

@@ -95,8 +95,11 @@ export async function getBookedSlots(coachSlug: string, fromDate: Date): Promise
   const slots: string[] = [];
   for (const b of bookings) {
     for (let h = 0; h < b.durationHrs; h++) {
-      const d = new Date(b.slotDate);
-      d.setHours(d.getHours() + h);
+      // Arithmetic purement UTC — pas de dépendance au timezone serveur
+      const slotMs = b.slotDate.getTime() + h * 3_600_000;
+      const d = new Date(slotMs);
+      // Normalise minutes/secondes au cas où (précaution)
+      d.setUTCMinutes(0, 0, 0);
       slots.push(d.toISOString());
     }
   }

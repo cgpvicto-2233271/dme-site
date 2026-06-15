@@ -26,14 +26,14 @@ const HTML = `<!DOCTYPE html>
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background-color:#070709;">
+<body style="margin:0;padding:0;background-color:#070709;" bgcolor="#070709">
   <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#070709;opacity:0;">
     Slot locked in. Every detail of your DME coaching session is inside.
   </div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#070709;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#070709;" bgcolor="#070709">
     <tr>
-      <td align="center" style="padding:34px 12px;">
-        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background-color:#0c0c0f;border:1px solid #20202a;">
+      <td align="center" style="padding:34px 12px;" bgcolor="#070709">
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background-color:#0c0c0f;border:1px solid #20202a;" bgcolor="#0c0c0f">
           <!-- HEADER -->
           <tr>
             <td class="px" style="padding:24px 34px;border-bottom:1px solid #20202a;">
