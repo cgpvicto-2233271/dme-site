@@ -148,6 +148,7 @@ export function BookingModal({
         objective: form.objective,
         slotDate: selection.date.toISOString(),
         durationHrs: selection.durationHrs,
+        packTotalCAD: selectedPack.totalCAD,
         note: form.note || undefined,
         lang: lang as "fr" | "en",
       });

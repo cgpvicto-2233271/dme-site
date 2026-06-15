@@ -13,6 +13,7 @@ export type BookingInput = {
   objective?: string;
   slotDate: string; // ISO string
   durationHrs: number;
+  packTotalCAD?: number;
   note?: string;
   lang?: "fr" | "en";
 };
@@ -41,7 +42,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     });
     if (conflict) return { ok: false, error: "Ce créneau est déjà réservé. Choisis un autre horaire." };
 
-    const totalCAD = coach.rateCAD * input.durationHrs;
+    const totalCAD = input.packTotalCAD ?? coach.rateCAD * input.durationHrs;
 
     const booking = await prisma.coachBooking.create({
       data: {
