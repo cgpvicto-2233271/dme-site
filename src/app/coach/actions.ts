@@ -62,8 +62,9 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     // Email de notification (mailto fallback — remplacer par Resend/nodemailer en prod)
     try {
       await sendBookingEmail({ booking: { ...booking, totalCAD }, coachName: coach.pseudo, coachEmail: coach.email });
-    } catch {
-      // Non-fatal — la réservation est enregistrée même si l'email échoue
+    } catch (emailErr) {
+      const e = emailErr as { message?: string; name?: string; statusCode?: number };
+      console.error("[EMAIL] Échec envoi:", e?.name, e?.statusCode, e?.message);
     }
 
     return { ok: true, id: booking.id, totalCAD };
@@ -132,7 +133,7 @@ async function sendBookingEmail(params: {
     timeZone: "America/Toronto",
   });
 
-  const FROM = "DME Coaching <noreply@deathmarkesports.com>";
+  const FROM = "DME Coaching <noreply@deathmarkesport.com>";
   const coachEmail = params.coachEmail;
 
   // 1. Confirmation à l'élève
