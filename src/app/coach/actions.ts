@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCoach } from "@/lib/coaches-data";
+import { buildEmailFR } from "@/emails/coaching-fr";
+import { buildEmailEN } from "@/emails/coaching-en";
 
 export type BookingInput = {
   coachSlug: string;
@@ -195,11 +197,8 @@ async function sendBookingEmail(params: {
   const FROM = "DME Coaching <noreply@deathmarkesport.com>";
   const coachEmail = params.coachEmail;
 
-  // 1. Confirmation à l'élève — template Resend selon la langue
-  // Variables à déclarer dans chaque template Resend :
-  //   {{elevePseudo}}, {{coachName}}, {{date}}, {{duration}}, {{total}}, {{discord}}, {{objective}}
-  const templateId = isEN ? "session-confirmation" : "coaching-session-confirmation";
-  const templateData = {
+  // 1. Confirmation à l'élève (langue détectée via toggle FR/EN du site)
+  const d = {
     elevePseudo: booking.elevePseudo,
     coachName,
     date: dateStr,
@@ -210,21 +209,13 @@ async function sendBookingEmail(params: {
     bookingId: booking.id,
   };
 
-  await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: FROM,
-      to: booking.eleveEmail,
-      subject: isEN
-        ? `Booking received · Coaching with ${coachName}`
-        : `Réservation reçue · Coaching avec ${coachName}`,
-      template_id: templateId,
-      data: templateData,
-    }),
+  await resend.emails.send({
+    from: FROM,
+    to: booking.eleveEmail,
+    subject: isEN
+      ? `Booking received · Coaching with ${coachName}`
+      : `Réservation reçue · Coaching avec ${coachName}`,
+    html: isEN ? buildEmailEN(d) : buildEmailFR(d),
   });
 
   // 2. Notification au coach directement
