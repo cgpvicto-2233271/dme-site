@@ -101,6 +101,11 @@ function CoachCard({ coach, lang, index, onBook }: {
   const avgRating = coach.reviews.length
     ? (coach.reviews.reduce((s, r) => s + r.rating, 0) / coach.reviews.length).toFixed(1)
     : null;
+  const bestDiscount = coach.packs.reduce((max, p) => {
+    if (!p.originalPrice) return max;
+    const pct = Math.round((1 - p.totalCAD / p.originalPrice) * 100);
+    return pct > max ? pct : max;
+  }, 0);
 
   return (
     <motion.article
@@ -183,9 +188,20 @@ function CoachCard({ coach, lang, index, onBook }: {
               <span className="font-abolition text-white" style={{ fontSize: "2rem", lineHeight: 1 }}>25$</span>
               <span className="font-mono text-[9px] font-bold text-white/40">/h CAD</span>
             </div>
-            <p className="font-mono text-[8px] text-[#dc2626]/60 mt-0.5">
-              {coach.packs.length} {t("packs disponibles", "packs available")}
-            </p>
+            {bestDiscount > 0 ? (
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="font-mono text-[8px] font-bold px-1.5 py-0.5 bg-[#dc2626]/18 text-[#dc2626]">
+                  -{bestDiscount}%
+                </span>
+                <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-[#dc2626]/55">
+                  {t("Offre de lancement", "Launch offer")}
+                </span>
+              </div>
+            ) : (
+              <p className="font-mono text-[8px] text-[#dc2626]/60 mt-0.5">
+                {coach.packs.length} {t("packs disponibles", "packs available")}
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-1 mb-0.5">
             <Image src="/medias/players/FR1.png" alt="FR" width={20} height={14} className="rounded-[2px] object-cover" />

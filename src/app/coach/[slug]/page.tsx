@@ -148,7 +148,7 @@ export default function CoachProfilePage({ params }: { params: Promise<{ slug: s
               <motion.div variants={fadeUp(0.16, 14)} className="mt-7 flex flex-wrap gap-6">
                 {[
                   { val: `${coach.rateCAD}$`, label: t("/ session", "/ session"), emoji: false },
-                  { val: `${coach.yearsXp}+`, label: t("ans", "years"), emoji: false },
+                  { val: `${coach.yearsXp}+`, label: t("expérience", "experience"), emoji: false },
                   { val: "flags", label: t("Langues", "Languages"), emoji: true },
                   { val: `${coach.reviews.length}`, label: t("avis", "reviews"), emoji: false },
                 ].map((s) => (
@@ -350,6 +350,17 @@ export default function CoachProfilePage({ params }: { params: Promise<{ slug: s
                   )}
                   <div className="p-4">
                     <p className="font-mono text-[11px] font-bold text-white/50 mb-2">{lang === "fr" ? pack.label.fr : pack.label.en}</p>
+                    {pack.originalPrice && (
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="font-mono text-[10px] text-white/28 line-through">{pack.originalPrice}$</span>
+                        <span className="font-mono text-[8px] font-bold px-1.5 py-0.5 bg-[#dc2626]/15 text-[#dc2626]">
+                          -{Math.round((1 - pack.totalCAD / pack.originalPrice) * 100)}%
+                        </span>
+                        <span className="font-mono text-[8px] uppercase tracking-[0.15em] text-[#dc2626]/55">
+                          {t("Lancement", "Launch")}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-baseline gap-1.5 mb-1">
                       <span className="font-abolition text-white" style={{ fontSize: "2rem", lineHeight: 1 }}>{pack.totalCAD}$</span>
                       <span className="font-mono text-[10px] text-white/30">
