@@ -68,7 +68,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-jgl", name: "Verdict", role: "JUNGLE", image: "/medias/players/anti.png",
+        id: "nacl-jgl", name: "Verdict", role: "JUNGLE", image: "/medias/players/anti (1).png",
         x: "https://x.com/VerdictNA", profile: "https://liquipedia.net/leagueoflegends/Verdict",
         bio: {
           fr: "Vincent « Verdict » Filosa, aussi connu sous « Anti », est un vétéran de la scène NA actif depuis 2020. Il a disputé les LCS Proving Grounds 2022 avec Team Ambition, est passé par Calamity Esports, et a brillé en collégial avec l'UQAM (champion de la CLOL East 2026). En mai 2026, il rejoint DME et remporte la LAN ETS.",
@@ -120,7 +120,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-adc", name: "Goodboi", role: "ADC", image: "/medias/players/goodboi.png",
+        id: "nacl-adc", name: "Goodboi", role: "ADC", image: "/medias/players/goodboi (1).png",
         x: "https://x.com/lolgoodboi", profile: "https://liquipedia.net/leagueoflegends/Good_Boi",
         bio: {
           fr: "Emmanuel « Goodboi » Rouleau-Grosset est le vétéran du roster, actif depuis 2020. Repéré aux LCS Scouting Grounds 2021 (4e avec Team Ocean) et 3e de la LAN ETS 2022, il a disputé la NACL 2026 Spring (Tier 1) avec Apex Mission Impossible avant de rejoindre DME et de remporter la LAN ETS 2026.",
