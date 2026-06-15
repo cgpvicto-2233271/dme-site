@@ -168,30 +168,30 @@ export const COACHES: CoachData[] = [
     ],
     reviews: [
       {
-        elevePseudo: "QuickStrike99",
-        eleveRank: "Platine II",
+        elevePseudo: "Nyzox",
+        eleveRank: "",
         rating: 5,
         comment: {
-          fr: "Verdict m'a changé la vie sur le jungle. En une session il a identifié pourquoi je perdais du tempo à chaque game. Incroyable.",
-          en: "Verdict changed my jungle life. In one session he identified why I was losing tempo every game. Incredible.",
+          fr: "franchement j'attendais pas grand chose mais la session était vraiment solide. m'a expliqué des affaires sur le pathing que j'aurais jamais capté tout seul. vaut la peine",
+          en: "honestly didn't expect much but the session was really solid. explained pathing stuff I never would've figured out on my own. worth it",
         },
       },
       {
-        elevePseudo: "NightCrawlLoL",
-        eleveRank: "Diamant IV",
+        elevePseudo: "CptKraken",
+        eleveRank: "Diamant II",
         rating: 5,
         comment: {
-          fr: "La session VOD review était ultra précise. J'ai monté 3 divisions en 2 semaines après avoir appliqué ses conseils.",
-          en: "The VOD review session was ultra precise. I climbed 3 divisions in 2 weeks after applying his advice.",
+          fr: "verdict est chill à coacher, va droit au but. on a review une game ensemble pis il a trouvé genre 3-4 patterns récurrents dans mes erreurs en genre 20min. bon investissement",
+          en: "verdict is chill to get coached by, straight to the point. we reviewed a game and he spotted like 3-4 recurring patterns in my mistakes in like 20min. good investment",
         },
       },
       {
-        elevePseudo: "EsportDreams",
-        eleveRank: "Or I",
+        elevePseudo: "Maliox",
+        eleveRank: "Or II",
         rating: 4,
         comment: {
-          fr: "Super coach. Explique bien les raisons derrière chaque décision. Session live très utile pour corriger les mauvaises habitudes.",
-          en: "Great coach. Explains the reasoning behind every decision well. Live session very useful for correcting bad habits.",
+          fr: "bonne session, super communicatif. seul bémol ça va vite par moments mais t'as l'enregistrement pour rerewatcher. recommande pour quelqu'un qui veut vraiment comprendre le jungle",
+          en: "good session, really communicative. only thing is it goes fast sometimes but you have the recording to rewatch. recommend for anyone who actually wants to understand jungle",
         },
       },
     ],
