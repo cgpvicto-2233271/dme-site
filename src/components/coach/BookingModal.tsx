@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import {
   X, ChevronRight, ChevronLeft, Check, Shield,
   Clock, User, Mail, MessageSquare, AlertCircle, AlertTriangle,
@@ -10,7 +10,7 @@ import {
 import { useLang } from "@/components/LanguageContext";
 import type { CoachData } from "@/lib/coaches-data";
 import { RANKS_FR, RANKS_EN, ROLES_LABEL } from "@/lib/coaches-data";
-import { createBooking } from "@/app/coach/actions";
+import { createBooking, getBookedSlots } from "@/app/coach/actions";
 
 type Step = "pack" | "slot" | "form" | "confirm" | "done";
 
@@ -107,12 +107,17 @@ export function BookingModal({
   });
   const [error, setError] = useState<string | null>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const [liveBookedSlots, setLiveBookedSlots] = useState<string[]>(bookedSlots);
+
+  useEffect(() => {
+    getBookedSlots(coach.slug, new Date()).then(setLiveBookedSlots).catch(() => {});
+  }, [coach.slug]);
 
   const selectedPack = coach.packs[selectedPackIdx];
   const durationHrs = selectedPack.durationHrs ?? 1;
   const days = generateDays(14).slice(weekOffset * 7, weekOffset * 7 + 7);
   const activeDay = days[activeDayIdx] ?? days[0];
-  const slots = activeDay ? getSlotsForDay(coach, activeDay, bookedSlots, durationHrs) : [];
+  const slots = activeDay ? getSlotsForDay(coach, activeDay, liveBookedSlots, durationHrs) : [];
   const ranks = lang === "fr" ? RANKS_FR : RANKS_EN;
   const accent = coach.accentColor;
 
@@ -247,6 +252,14 @@ export function BookingModal({
                             )}
                           </div>
                           <div className="text-right shrink-0">
+                            {pack.originalPrice && (
+                              <div className="flex items-center justify-end gap-2 mb-0.5">
+                                <span className="font-mono text-[9px] text-white/28 line-through">{pack.originalPrice}$</span>
+                                <span className="font-mono text-[8px] font-bold px-1.5 py-0.5" style={{ background: `${accent}22`, color: accent }}>
+                                  -{Math.round((1 - pack.totalCAD / pack.originalPrice) * 100)}%
+                                </span>
+                              </div>
+                            )}
                             <span className="font-abolition text-white" style={{ fontSize: "2.2rem", lineHeight: 1 }}>
                               {pack.totalCAD}$
                             </span>
@@ -334,7 +347,7 @@ export function BookingModal({
                   </div>
                   <div className="grid grid-cols-7 gap-1">
                     {days.map((day, i) => {
-                      const daySlots = getSlotsForDay(coach, day, bookedSlots, durationHrs);
+                      const daySlots = getSlotsForDay(coach, day, liveBookedSlots, durationHrs);
                       const hasSlots = daySlots.some((s) => s.available);
                       const isActive = i === activeDayIdx;
                       return (

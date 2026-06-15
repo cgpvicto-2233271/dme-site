@@ -18,6 +18,7 @@ export type CoachPack = {
   badge?: string;
   includes?: { fr: string; en: string }[];
   savings?: { fr: string; en: string };
+  originalPrice?: number;
 };
 
 export type CoachReviewSeed = {
@@ -136,9 +137,9 @@ export const COACHES: CoachData[] = [
         ],
       },
       {
-        label: { fr: "Pack Progression", en: "Progression Pack" },
+        label: { fr: "Pack Progression · 3 sessions", en: "Progression Pack · 3 sessions" },
         sessions: 3,
-        totalCAD: 65,
+        totalCAD: 60,
         durationHrs: 1,
         badge: "Recommandé",
         includes: [
@@ -148,7 +149,21 @@ export const COACHES: CoachData[] = [
           { fr: "Plan évolutif personnalisé", en: "Personalized evolving plan" },
           { fr: "Enregistrements YouTube (non répertoriés)", en: "YouTube recordings (unlisted)" },
         ],
-        savings: { fr: "Valeur 75 $ — Économisez 10 $", en: "Value $75 — Save $10" },
+        savings: { fr: "Valeur 75 $ — Économisez 15 $", en: "Value $75 — Save $15" },
+      },
+      {
+        label: { fr: "Pack Élite · 5 sessions", en: "Elite Pack · 5 sessions" },
+        sessions: 5,
+        totalCAD: 90,
+        durationHrs: 1,
+        includes: [
+          { fr: "5 séances d'1 heure", en: "5 one-hour sessions" },
+          { fr: "Analyse VOD ou coaching live", en: "VOD analysis or live coaching" },
+          { fr: "Suivi Discord continu", en: "Continuous Discord follow-up" },
+          { fr: "Plan évolutif sur 5 semaines", en: "5-week evolving plan" },
+          { fr: "Enregistrements YouTube (non répertoriés)", en: "YouTube recordings (unlisted)" },
+        ],
+        savings: { fr: "Valeur 125 $ — Économisez 35 $", en: "Value $125 — Save $35" },
       },
     ],
     reviews: [
@@ -256,6 +271,7 @@ export const COACHES: CoachData[] = [
         label: { fr: "Session découverte 1h", en: "Intro session 1h" },
         sessions: 1,
         totalCAD: 25,
+        originalPrice: 50,
         durationHrs: 1,
         includes: [
           { fr: "1 heure de coaching", en: "1 hour of coaching" },
@@ -268,6 +284,7 @@ export const COACHES: CoachData[] = [
         label: { fr: "Coaching ADC Challenger 2h", en: "ADC Challenger Coaching 2h" },
         sessions: 1,
         totalCAD: 50,
+        originalPrice: 75,
         durationHrs: 2,
         includes: [
           { fr: "Séance de 2 heures", en: "2-hour session" },
@@ -278,9 +295,10 @@ export const COACHES: CoachData[] = [
         ],
       },
       {
-        label: { fr: "Pack Progression", en: "Progression Pack" },
+        label: { fr: "Pack Progression · 3x2h", en: "Progression Pack · 3x2h" },
         sessions: 3,
         totalCAD: 120,
+        originalPrice: 150,
         durationHrs: 2,
         badge: "Recommandé",
         includes: [
