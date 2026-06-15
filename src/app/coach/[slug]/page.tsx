@@ -176,7 +176,7 @@ export default function CoachProfilePage({ params }: { params: Promise<{ slug: s
               <motion.div variants={fadeUp(0.16, 14)} className="mt-7 flex flex-wrap gap-6">
                 {[
                   { val: `${coach.rateCAD}$`, label: t("/ session", "/ session"), emoji: false },
-                  { val: `${coach.yearsXp}+`, label: t("expérience", "experience"), emoji: false },
+                  { val: `${coach.yearsXp} ANS+`, label: t("expérience", "experience"), emoji: false },
                   { val: "flags", label: t("Langues", "Languages"), emoji: true },
                   { val: `${coach.reviews.length}`, label: t("avis", "reviews"), emoji: false },
                 ].map((s) => (
