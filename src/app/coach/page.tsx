@@ -258,8 +258,8 @@ export default function CoachPage() {
             </motion.h1>
             <motion.p variants={fadeUp(0.1, 20)} className="mt-5 max-w-lg text-[13px] leading-7 text-white/38">
               {t(
-                "Des joueurs et coachs qui ont atteint le plus haut niveau et qui sont prêts à mettre leur temps et leur expérience à ta disposition. Pas des influenceurs — des compétiteurs qui ont fait leurs preuves.",
-                "Players and coaches who reached the highest level and are ready to put their time and experience at your disposal. Not influencers — competitors who proved themselves.",
+                "Des joueurs et coachs qui ont atteint le plus haut niveau et qui sont prêts à mettre leur temps et leur expérience à ta disposition. Pas des influenceurs des compétiteurs qui ont fait leurs preuves.",
+                "Players and coaches who reached the highest level and are ready to put their time and experience at your disposal. Not influencers competitors who proved themselves.",
               )}
             </motion.p>
             <motion.div variants={fadeUp(0.15, 16)} className="mt-8 flex flex-wrap gap-3">
@@ -300,7 +300,7 @@ export default function CoachPage() {
               {t("La plaque tournante\ndu jeu québécois.", "Quebec's hub\nfor gaming.")}
             </h2>
             <div className="space-y-4 text-[12px] leading-7 text-white/40 max-w-lg">
-              <p>{t("DME a un objectif clair : devenir la référence du développement de joueurs au Québec. Pas en faisant des promesses vides — en mettant de vrais tops joueurs et coachs Challenger à disposition, à des prix accessibles à tous.", "DME has a clear goal: become the reference for player development in Quebec. Not by making empty promises — by giving access to real top players and Challenger coaches, at prices accessible to everyone.")}</p>
+              <p>{t("DME a un objectif clair : devenir la référence du développement de joueurs au Québec. Pas en faisant des promesses vides en mettant de vrais tops joueurs et coachs Challenger à disposition, à des prix accessibles à tous.", "DME has a clear goal: become the reference for player development in Quebec. Not by making empty promises by giving access to real top players and Challenger coaches, at prices accessible to everyone.")}</p>
               <p>{t("Ici, tu ne paies pas une marque. Tu paies pour du temps avec quelqu'un qui a atteint le plus haut niveau et qui sait comment t'y amener. Des tarifs raisonnables, une méthode concrète, une communauté qui grandit.", "Here, you're not paying for a brand. You're paying for time with someone who reached the highest level and knows how to get you there. Reasonable rates, a concrete method, a growing community.")}</p>
             </div>
           </motion.div>
