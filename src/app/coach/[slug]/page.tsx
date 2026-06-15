@@ -4,15 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import {
   ArrowLeft, ArrowRight, Shield, Star, Trophy, ExternalLink,
-  Clock, Users, CheckCircle, Check, BadgeCheck,
+  Clock, Users, CheckCircle, Check, BadgeCheck, Send,
 } from "lucide-react";
 import { useLang } from "@/components/LanguageContext";
 import { COACHES, type CoachData } from "@/lib/coaches-data";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
 import { BookingModal } from "@/components/coach/BookingModal";
+import { createReview, getCoachReviews, type LiveReview } from "@/app/coach/actions";
 
 const RED = "#dc2626";
 
@@ -81,10 +82,37 @@ export default function CoachProfilePage({ params }: { params: Promise<{ slug: s
   const { lang } = useLang();
   const t = (fr: string, en: string) => lang === "en" ? en : fr;
   const [modalOpen, setModalOpen] = useState(false);
+  const [liveReviews, setLiveReviews] = useState<LiveReview[]>([]);
+  const [revPseudo, setRevPseudo] = useState("");
+  const [revRank, setRevRank] = useState("");
+  const [revRating, setRevRating] = useState(0);
+  const [revHover, setRevHover] = useState(0);
+  const [revComment, setRevComment] = useState("");
+  const [revStatus, setRevStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+  const [revError, setRevError] = useState("");
+
+  useEffect(() => {
+    getCoachReviews(coach!.slug).then(setLiveReviews).catch(() => {});
+  }, [coach!.slug]);
 
   const avgRating = coach.reviews.length
     ? (coach.reviews.reduce((s, r) => s + r.rating, 0) / coach.reviews.length).toFixed(1)
     : null;
+
+  async function submitReview() {
+    if (!revRating) { setRevError(t("Choisis une note.", "Please select a rating.")); return; }
+    if (!revPseudo.trim()) { setRevError(t("Entre ton pseudo.", "Enter your pseudo.")); return; }
+    if (!revComment.trim()) { setRevError(t("Entre un commentaire.", "Enter a comment.")); return; }
+    setRevStatus("loading");
+    const res = await createReview({ coachSlug: coach!.slug, elevePseudo: revPseudo, eleveRank: revRank || undefined, rating: revRating, comment: revComment });
+    if (res.ok) {
+      setRevStatus("ok");
+      getCoachReviews(coach!.slug).then(setLiveReviews).catch(() => {});
+    } else {
+      setRevStatus("error");
+      setRevError(res.error ?? "Erreur.");
+    }
+  }
 
   return (
     <div className="dme-page">
@@ -300,21 +328,111 @@ export default function CoachProfilePage({ params }: { params: Promise<{ slug: s
             <div className="mb-5">
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-white/35">{t("Avis joueurs", "Player reviews")}</p>
             </div>
-            <div className="space-y-3">
-              {coach.reviews.map((rev, i) => (
-                <motion.div key={i} variants={fadeUp(i * 0.05, 14)} initial="hidden" whileInView="visible" viewport={viewport.once}
-                  className="border border-white/[0.07] bg-[#080808] p-5"
-                >
-                  <div className="mb-3 flex items-center gap-3">
-                    <Stars rating={rev.rating} />
-                    <span className="font-mono text-[11px] font-bold text-white/50">{rev.elevePseudo}</span>
-                    {rev.eleveRank && <span className="font-mono text-[10px] text-white/22">· {rev.eleveRank}</span>}
+            <div className="grid gap-5 lg:grid-cols-[1fr_260px] lg:items-start">
+
+              {/* Liste des avis */}
+              <div className="space-y-3">
+                {liveReviews.map((rev) => (
+                  <div key={rev.id} className="border border-white/[0.07] bg-[#080808] p-5">
+                    <div className="mb-3 flex items-center gap-3">
+                      <Stars rating={rev.rating} />
+                      <span className="font-mono text-[11px] font-bold text-white/50">{rev.elevePseudo}</span>
+                      {rev.eleveRank && <span className="font-mono text-[10px] text-white/22">· {rev.eleveRank}</span>}
+                    </div>
+                    <p className="text-[13px] leading-6 text-white/42 italic">{rev.comment}</p>
                   </div>
-                  <p className="text-[13px] leading-6 text-white/42 italic">
-                    {lang === "fr" ? rev.comment.fr : rev.comment.en}
-                  </p>
-                </motion.div>
-              ))}
+                ))}
+                {coach.reviews.map((rev, i) => (
+                  <motion.div key={i} variants={fadeUp(i * 0.05, 14)} initial="hidden" whileInView="visible" viewport={viewport.once}
+                    className="border border-white/[0.07] bg-[#080808] p-5"
+                  >
+                    <div className="mb-3 flex items-center gap-3">
+                      <Stars rating={rev.rating} />
+                      <span className="font-mono text-[11px] font-bold text-white/50">{rev.elevePseudo}</span>
+                      {rev.eleveRank && <span className="font-mono text-[10px] text-white/22">· {rev.eleveRank}</span>}
+                    </div>
+                    <p className="text-[13px] leading-6 text-white/42 italic">
+                      {lang === "fr" ? rev.comment.fr : rev.comment.en}
+                    </p>
+                  </motion.div>
+                ))}
+                {liveReviews.length === 0 && coach.reviews.length === 0 && (
+                  <p className="font-mono text-[11px] text-white/20">{t("Aucun avis pour l'instant.", "No reviews yet.")}</p>
+                )}
+              </div>
+
+              {/* Formulaire */}
+              <div className="border border-white/[0.07] bg-[#080808] p-5 lg:sticky lg:top-6">
+                {revStatus === "ok" ? (
+                  <div className="flex flex-col items-center gap-3 py-4 text-center">
+                    <span className="font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-emerald-400">{t("Avis envoyé !", "Review submitted!")}</span>
+                    <p className="font-mono text-[10px] text-white/30">{t("Merci pour ton retour.", "Thanks for your feedback.")}</p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="mb-4 font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-white/30">
+                      {t("Laisser un avis", "Leave a review")}
+                    </p>
+
+                    {/* Étoiles */}
+                    <div className="mb-4 flex gap-1">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setRevRating(s)}
+                          onMouseEnter={() => setRevHover(s)}
+                          onMouseLeave={() => setRevHover(0)}
+                          className="transition"
+                        >
+                          <Star
+                            className="h-5 w-5"
+                            fill={(revHover || revRating) >= s ? "#f59e0b" : "transparent"}
+                            style={{ color: (revHover || revRating) >= s ? "#f59e0b" : "rgba(255,255,255,0.12)" }}
+                          />
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="space-y-2.5">
+                      <input
+                        value={revPseudo}
+                        onChange={(e) => setRevPseudo(e.target.value)}
+                        placeholder={t("Pseudo*", "Pseudo*")}
+                        className="w-full border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 font-mono text-[11px] text-white/70 placeholder:text-white/20 outline-none focus:border-white/20"
+                      />
+                      <input
+                        value={revRank}
+                        onChange={(e) => setRevRank(e.target.value)}
+                        placeholder={t("Rang (optionnel)", "Rank (optional)")}
+                        className="w-full border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 font-mono text-[11px] text-white/70 placeholder:text-white/20 outline-none focus:border-white/20"
+                      />
+                      <textarea
+                        value={revComment}
+                        onChange={(e) => setRevComment(e.target.value)}
+                        placeholder={t("Ton commentaire...", "Your comment...")}
+                        rows={4}
+                        maxLength={500}
+                        className="w-full resize-none border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 font-mono text-[11px] text-white/70 placeholder:text-white/20 outline-none focus:border-white/20"
+                      />
+                    </div>
+
+                    {revError && (
+                      <p className="mt-2 font-mono text-[9px] text-[#dc2626]/80">{revError}</p>
+                    )}
+
+                    <button
+                      onClick={submitReview}
+                      disabled={revStatus === "loading"}
+                      className="mt-3 flex w-full items-center justify-center gap-2 py-3 font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-white transition"
+                      style={{ background: revStatus === "loading" ? "rgba(220,38,38,0.5)" : RED }}
+                    >
+                      <Send className="h-3 w-3" />
+                      {revStatus === "loading" ? t("Envoi...", "Sending...") : t("Envoyer", "Send")}
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </motion.section>
 

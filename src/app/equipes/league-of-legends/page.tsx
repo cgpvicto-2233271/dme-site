@@ -129,8 +129,8 @@ const rosters: LoLRoster[] = [
         fullName: "Emmanuel Rouleau-Grosset",
         nationality: "Canada",
         story: {
-          fr: "Le vétéran. Sur la scène depuis 2020, Goodboi a tout vu : repéré aux LCS Scouting Grounds 2021 avec Team Ocean, ancien support reconverti en carry, podium à la LAN ETS 2022. En 2026, il dispute même la NACL Spring en Tier 1 avec Apex Mission Impossible, avant de poser ses valises à DME et de soulever le trophée de la LAN ETS. L'expérience et la carry attitude au service du botside.",
-          en: "The veteran. On the scene since 2020, Goodboi has seen it all: scouted at the 2021 LCS Scouting Grounds with Team Ocean, a former support turned carry, podium at LAN ETS 2022. In 2026 he even played Tier 1 NACL Spring with Apex Mission Impossible, before settling at DME and lifting the LAN ETS trophy. Experience and carry mentality at the service of the bot side.",
+          fr: "Le vétéran. Sur la scène depuis 2020, Goodboi a tout vu : repéré aux LCS Scouting Grounds 2021 avec Team Ocean, ADC all-time, podium à la LAN ETS 2022. En 2026, il dispute la NACL Spring en Tier 1 avec Apex Mission Impossible, avant de poser ses valises à DME et de soulever le trophée de la LAN ETS. L'expérience et la carry attitude au service du botside.",
+          en: "The veteran. On the scene since 2020, Goodboi has seen it all: scouted at the 2021 LCS Scouting Grounds with Team Ocean, ADC all the way, podium at LAN ETS 2022. In 2026 he played Tier 1 NACL Spring with Apex Mission Impossible, before settling at DME and lifting the LAN ETS trophy. Experience and carry mentality at the service of the bot side.",
         },
         timeline: [
           { year: "2020", text: "Débuts, Dark Allegiance" },

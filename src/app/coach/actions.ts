@@ -99,6 +99,59 @@ export async function getBookedSlots(coachSlug: string, fromDate: Date): Promise
   return slots;
 }
 
+// ─── Reviews ─────────────────────────────────────────────────────────────────
+
+export type ReviewInput = {
+  coachSlug: string;
+  elevePseudo: string;
+  eleveRank?: string;
+  rating: number;
+  comment: string;
+};
+
+export type LiveReview = {
+  id: string;
+  elevePseudo: string;
+  eleveRank: string | null;
+  rating: number;
+  comment: string;
+  createdAt: Date;
+};
+
+export async function createReview(input: ReviewInput): Promise<{ ok: boolean; error?: string }> {
+  if (!input.elevePseudo.trim() || !input.comment.trim()) {
+    return { ok: false, error: "Pseudo et commentaire requis." };
+  }
+  if (input.rating < 1 || input.rating > 5) {
+    return { ok: false, error: "Note invalide." };
+  }
+  if (input.comment.trim().length > 500) {
+    return { ok: false, error: "Commentaire trop long (max 500 caractères)." };
+  }
+  try {
+    await prisma.coachReview.create({
+      data: {
+        coachSlug: input.coachSlug,
+        elevePseudo: input.elevePseudo.trim(),
+        eleveRank: input.eleveRank?.trim() || null,
+        rating: input.rating,
+        comment: input.comment.trim(),
+      },
+    });
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Erreur serveur. Réessaie." };
+  }
+}
+
+export async function getCoachReviews(coachSlug: string): Promise<LiveReview[]> {
+  return prisma.coachReview.findMany({
+    where: { coachSlug, isVisible: true },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, elevePseudo: true, eleveRank: true, rating: true, comment: true, createdAt: true },
+  });
+}
+
 // ─── Email via Resend ─────────────────────────────────────────────────────────
 async function sendBookingEmail(params: {
   booking: {

@@ -185,15 +185,6 @@ export const COACHES: CoachData[] = [
           en: "verdict is chill to get coached by, straight to the point. we reviewed a game and he spotted like 3-4 recurring patterns in my mistakes in like 20min. good investment",
         },
       },
-      {
-        elevePseudo: "Maliox",
-        eleveRank: "Or II",
-        rating: 4,
-        comment: {
-          fr: "bonne session, super communicatif. seul bémol ça va vite par moments mais t'as l'enregistrement pour rerewatcher. recommande pour quelqu'un qui veut vraiment comprendre le jungle",
-          en: "good session, really communicative. only thing is it goes fast sometimes but you have the recording to rewatch. recommend for anyone who actually wants to understand jungle",
-        },
-      },
     ],
     availability: [
       { day: 1, startHour: 17, endHour: 23 }, // Lundi
