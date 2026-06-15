@@ -68,7 +68,8 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 
     return { ok: true, id: booking.id, totalCAD };
   } catch (err) {
-    console.error("[createBooking]", err);
+    const e = err as { message?: string; code?: string; meta?: unknown };
+    console.error("[createBooking] code:", e?.code, "| msg:", e?.message, "| meta:", JSON.stringify(e?.meta));
     return { ok: false, error: "Une erreur est survenue. Réessaie ou contacte-nous directement." };
   }
 }
