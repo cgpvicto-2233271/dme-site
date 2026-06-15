@@ -14,6 +14,7 @@ export type BookingInput = {
   slotDate: string; // ISO string
   durationHrs: number;
   note?: string;
+  lang?: "fr" | "en";
 };
 
 export type BookingResult =
@@ -61,7 +62,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 
     // Email de notification (mailto fallback — remplacer par Resend/nodemailer en prod)
     try {
-      await sendBookingEmail({ booking: { ...booking, totalCAD }, coachName: coach.pseudo, coachEmail: coach.email });
+      await sendBookingEmail({ booking: { ...booking, totalCAD }, coachName: coach.pseudo, coachEmail: coach.email, lang: input.lang ?? "fr" });
     } catch (emailErr) {
       const e = emailErr as { message?: string; name?: string; statusCode?: number };
       console.error("[EMAIL] Échec envoi:", e?.name, e?.statusCode, e?.message);
@@ -169,6 +170,7 @@ async function sendBookingEmail(params: {
   };
   coachName: string;
   coachEmail: string;
+  lang?: "fr" | "en";
 }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -180,7 +182,10 @@ async function sendBookingEmail(params: {
   const resend = new Resend(apiKey);
 
   const { booking, coachName } = params;
-  const dateStr = booking.slotDate.toLocaleString("fr-CA", {
+  const isEN = params.lang === "en";
+  const locale = isEN ? "en-CA" : "fr-CA";
+
+  const dateStr = booking.slotDate.toLocaleString(locale, {
     weekday: "long", year: "numeric", month: "long",
     day: "numeric", hour: "2-digit", minute: "2-digit",
     timeZone: "America/Toronto",
@@ -189,26 +194,30 @@ async function sendBookingEmail(params: {
   const FROM = "DME Coaching <noreply@deathmarkesport.com>";
   const coachEmail = params.coachEmail;
 
-  // 1. Confirmation à l'élève
+  // 1. Confirmation à l'élève (langue détectée)
   await resend.emails.send({
     from: FROM,
     to: booking.eleveEmail,
-    subject: `Réservation reçue · Coaching avec ${coachName}`,
+    subject: isEN
+      ? `Booking received · Coaching with ${coachName}`
+      : `Réservation reçue · Coaching avec ${coachName}`,
     html: `
       <div style="font-family:monospace;background:#070707;color:#fff;padding:32px;max-width:560px">
         <p style="color:#dc2626;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 16px">DeathMark Esports · Coaching</p>
-        <h1 style="font-size:32px;margin:0 0 8px;font-weight:900">Demande reçue.</h1>
+        <h1 style="font-size:32px;margin:0 0 8px;font-weight:900">${isEN ? "Request received." : "Demande reçue."}</h1>
         <p style="color:rgba(255,255,255,0.5);font-size:13px;margin:0 0 32px">
-          ${coachName} va te contacter sur Discord sous 24h pour confirmer les détails et organiser le paiement.
+          ${isEN
+            ? `${coachName} will contact you on Discord within 24h to confirm the details and arrange payment.`
+            : `${coachName} va te contacter sur Discord sous 24h pour confirmer les détails et organiser le paiement.`}
         </p>
         <table style="width:100%;border-collapse:collapse;font-size:12px">
           ${[
             ["Coach", coachName],
-            ["Créneau", dateStr],
-            ["Durée", `${booking.durationHrs}h`],
+            [isEN ? "Slot" : "Créneau", dateStr],
+            [isEN ? "Duration" : "Durée", `${booking.durationHrs}h`],
             ["Total", `${booking.totalCAD}$ CAD`],
             ["Discord", booking.eleveDiscord ?? "–"],
-            ["Objectif", booking.objective ?? "–"],
+            [isEN ? "Objective" : "Objectif", booking.objective ?? "–"],
           ].map(([label, val]) => `
             <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
               <td style="padding:10px 0;color:rgba(255,255,255,0.35);width:120px">${label}</td>
@@ -217,7 +226,9 @@ async function sendBookingEmail(params: {
           `).join("")}
         </table>
         <div style="margin-top:24px;border:1px solid rgba(220,38,38,0.2);background:rgba(220,38,38,0.05);padding:16px;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.8">
-          Le règlement s'effectue directement entre toi et ${coachName}. DeathMark Esports n'est pas responsable des transactions financières entre les parties.
+          ${isEN
+            ? `Payment is handled directly between you and ${coachName}. DeathMark Esports bears no responsibility for financial transactions between the parties.`
+            : `Le règlement s'effectue directement entre toi et ${coachName}. DeathMark Esports n'est pas responsable des transactions financières entre les parties.`}
         </div>
         <p style="margin-top:24px;font-size:10px;color:rgba(255,255,255,0.2)">ID : ${booking.id}</p>
       </div>

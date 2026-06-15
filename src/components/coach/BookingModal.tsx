@@ -149,6 +149,7 @@ export function BookingModal({
         slotDate: selection.date.toISOString(),
         durationHrs: selection.durationHrs,
         note: form.note || undefined,
+        lang: lang as "fr" | "en",
       });
       if (result.ok) {
         setBookingId(result.id);
