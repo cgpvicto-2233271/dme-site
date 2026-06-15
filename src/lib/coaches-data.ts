@@ -41,6 +41,7 @@ export type CoachData = {
   rateCAD: number;
   accentColor: string;
   image: string | null;
+  imagePosition?: string;
   available: boolean;
   bio: { fr: string; en: string };
   philosophy: { fr: string; en: string };
@@ -71,6 +72,7 @@ export const COACHES: CoachData[] = [
     rateCAD: 25,
     accentColor: "#dc2626",
     image: "/medias/players/anti.png",
+    imagePosition: "50% 15%",
     available: true,
     tagline: {
       fr: "Shotcaller élite · Challenger depuis la saison 10.",
