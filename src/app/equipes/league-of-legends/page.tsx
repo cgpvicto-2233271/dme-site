@@ -68,7 +68,7 @@ const rosters: LoLRoster[] = [
         ],
       },
       {
-        id: "nacl-jgl", name: "Verdict", role: "JUNGLE", image: null,
+        id: "nacl-jgl", name: "Verdict", role: "JUNGLE", image: "/medias/players/anti.png",
         x: "https://x.com/VerdictNA", profile: "https://liquipedia.net/leagueoflegends/Verdict",
         bio: {
           fr: "Vincent « Verdict » Filosa, aussi connu sous « Anti », est un vétéran de la scène NA actif depuis 2020. Il a disputé les LCS Proving Grounds 2022 avec Team Ambition, est passé par Calamity Esports, et a brillé en collégial avec l'UQAM (champion de la CLOL East 2026). En mai 2026, il rejoint DME et remporte la LAN ETS.",

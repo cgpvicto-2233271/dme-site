@@ -37,7 +37,7 @@ const PLAYERS = [
     fullName: "Vincent Filosa",
     role: "JUNGLE",
     nationality: "CA",
-    image: null,
+    image: "/medias/players/anti.png",
     x: "https://x.com/VerdictNA",
     liquipedia: "https://liquipedia.net/leagueoflegends/Verdict",
     tagline: { fr: "Le tempo qui dicte la carte.", en: "The tempo that dictates the map." },

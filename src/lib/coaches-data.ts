@@ -70,7 +70,7 @@ export const COACHES: CoachData[] = [
     totalSessions: 0,
     rateCAD: 25,
     accentColor: "#dc2626",
-    image: null,
+    image: "/medias/players/anti.png",
     available: true,
     tagline: {
       fr: "Shotcaller élite · Challenger depuis la saison 10.",
