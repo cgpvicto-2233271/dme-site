@@ -4,42 +4,58 @@ import { VisuelAffiche } from "@/components/VisuelAffiche";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ContactDiscord } from "@/components/ContactDiscord";
 import type { ReactNode } from "react";
 import { useLang, type Lang } from "@/components/LanguageContext";
-import { EMAIL_CONTACT } from "@/lib/marque";
+import { DISCORD_SERVEUR, RECRUTEURS, type Recruteur } from "@/lib/marque";
 import { PROGRAMMES } from "@/lib/programmes";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
 
 type Copy = { fr: string; en: string };
 
-const DISCORD = "https://discord.gg/Zu4FP5pU9M";
-
 const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
 
-/* Formulaire et exigences par jeu. Sans formulaire (CS2 pour l'instant), la
-   candidature passe par courriel. */
-const CANDIDATURES: Record<string, { formulaire?: string; exigences: Copy }> = {
+/* Exigences et responsable par jeu. Toutes les candidatures passent par
+   Discord, en message prive au responsable du programme. */
+const CANDIDATURES: Record<string, { recruteur: Recruteur; profil: string; exigences: Copy }> = {
   "/equipes/league-of-legends": {
-    formulaire: "https://docs.google.com/forms/d/e/1FAIpQLScfbd24P68d4kXh_YYOHju1XZtZVjhPgS3_qTNM2auefj367A/viewform",
+    recruteur: RECRUTEURS.coussinho,
+    profil: "op.gg",
     exigences: {
       fr: "Diamant+ en SoloQ, Challenger visé. Rôle fixe, pool de champions profond, disponible pour des scrims réguliers.",
       en: "Diamond+ in SoloQ, Challenger target. Fixed role, deep champion pool, available for regular scrims.",
     },
   },
   "/equipes/valorant": {
-    formulaire: "https://docs.google.com/forms/d/e/1FAIpQLSfJSsPpkQK4KiJBeSKHCL861BG41d9K8HMGD74f7X6AoVK-fw/viewform",
+    recruteur: RECRUTEURS.jarsiss,
+    profil: "tracker.gg",
     exigences: {
       fr: "Immortal+ minimum, Radiant visé. Rôle fixe, communication structurée, engagement à long terme.",
       en: "Immortal+ minimum, Radiant target. Fixed role, structured comms, long-term commitment.",
     },
   },
   "/equipes/counter-strike": {
+    recruteur: RECRUTEURS.jarsiss,
+    profil: "FACEIT",
     exigences: {
-      fr: "Rôle défini et disponible pour la saison ESEA. Candidature par courriel, avec ton profil FACEIT ou ton historique de jeu.",
-      en: "Defined role and available for the ESEA season. Apply by email with your FACEIT profile or your match history.",
+      fr: "Rôle défini et disponible pour la saison ESEA. Un profil FACEIT actif est exigé.",
+      en: "Defined role and available for the ESEA season. An active FACEIT profile is required.",
     },
   },
 };
+
+/* Le message type : l'objet, puis un champ par ligne. */
+function messageJoueur(jeu: string, profil: string): Copy[] {
+  return [
+    { fr: `Candidature DME — ${jeu}`, en: `DME application — ${jeu}` },
+    { fr: "Pseudo en jeu :", en: "In-game name:" },
+    { fr: "Rang actuel et meilleur rang :", en: "Current and peak rank:" },
+    { fr: "Rôle principal :", en: "Main role:" },
+    { fr: "Disponibilités (soirs, fins de semaine) :", en: "Availability (evenings, weekends):" },
+    { fr: `Lien ${profil} :`, en: `${profil} link:` },
+    { fr: "Pourquoi DME, en deux phrases :", en: "Why DME, in two sentences:" },
+  ];
+}
 
 const CRITERES = [
   {
@@ -92,8 +108,8 @@ export function RecrutementClient() {
           </motion.h1>
           <motion.p variants={fadeUp(0, 20)} className="lede mt-6">
             {lang === "en"
-              ? "Pick your game. Every application goes straight to the staff of that roster."
-              : "Choisis ton jeu. Chaque candidature va directement au staff du roster concerné."}
+              ? "Pick your game and send one complete direct message on Discord to the person in charge of that roster. No form: a real person reads every application."
+              : "Choisis ton jeu et envoie un message privé complet sur Discord au responsable du roster. Pas de formulaire : chaque candidature est lue par une vraie personne."}
           </motion.p>
           <motion.ol variants={fadeUp(0, 20)} className="mt-8 flex flex-wrap gap-2">
             {ETAPES.map((e, i) => (
@@ -111,9 +127,6 @@ export function RecrutementClient() {
         <div className="grid gap-3 lg:grid-cols-3 lg:gap-4">
           {PROGRAMMES.map((prog, i) => {
             const candidature = CANDIDATURES[prog.href];
-            const lienCandidature =
-              candidature?.formulaire ??
-              `mailto:${EMAIL_CONTACT}?subject=${encodeURIComponent(`${lang === "en" ? "Application" : "Candidature"} ${prog.court}`)}`;
             return (
               <Reveal key={prog.href} delay={i * 0.06}>
                 <article className="surface flex h-full flex-col overflow-hidden">
@@ -128,20 +141,15 @@ export function RecrutementClient() {
                     {candidature ? (
                       <p className="mt-4 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(candidature.exigences, lang)}</p>
                     ) : null}
-                    <div className="mt-auto flex flex-wrap gap-2 pt-8">
-                      <a
-                        href={lienCandidature}
-                        target={candidature?.formulaire ? "_blank" : undefined}
-                        rel="noopener noreferrer"
-                        className="pill min-h-11 text-[14px]"
-                      >
-                        {lang === "en" ? "Apply" : "Postuler"}
-                        <ArrowUpRight className="h-4 w-4" aria-hidden />
-                      </a>
-                      <Link href={prog.href} className="pill-ghost min-h-11 text-[14px]">
-                        {lang === "en" ? "The roster" : "Le roster"}
-                      </Link>
-                    </div>
+                    {candidature ? (
+                      <div className="mt-auto pt-8">
+                        <ContactDiscord recruteur={candidature.recruteur} message={messageJoueur(prog.jeu, candidature.profil)} />
+                      </div>
+                    ) : null}
+                    <Link href={prog.href} className="group mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[color:var(--t-2)] hover:text-[color:var(--t-1)]">
+                      {lang === "en" ? "See the roster" : "Voir le roster"}
+                      <ArrowRight className="h-4 w-4 text-[color:var(--red)] transition-transform group-hover:translate-x-1" aria-hidden />
+                    </Link>
                   </div>
                 </article>
               </Reveal>
@@ -172,8 +180,8 @@ export function RecrutementClient() {
             <h2 className="h-card">{lang === "en" ? "Not a player? Join the staff." : "Pas joueur ? Rejoins le staff."}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--t-2)]">
               {lang === "en"
-                ? "Content, moderation, tournaments, coaching, partnerships: we're opening volunteer roles."
-                : "Contenu, modération, tournois, coaching, partenariats : on ouvre des postes bénévoles."}
+                ? "Content, moderation, tournaments, coaching, partnerships: we're opening volunteer roles. Staff applications go to Coussinho on Discord."
+                : "Contenu, modération, tournois, coaching, partenariats : on ouvre des postes bénévoles. Les candidatures staff vont à Coussinho sur Discord."}
             </p>
             <Link href="/staff#postes" className="group mt-auto inline-flex items-center gap-2 pt-8 text-[15px] font-semibold">
               {lang === "en" ? "See open positions" : "Voir les postes ouverts"}
@@ -187,7 +195,7 @@ export function RecrutementClient() {
                 ? "Our Discord is open. Staff answer there, and tryouts are announced there first."
                 : "Notre Discord est ouvert. Le staff y répond, et les tryouts y sont annoncés en premier."}
             </p>
-            <a href={DISCORD} target="_blank" rel="noopener noreferrer" className="group mt-auto inline-flex items-center gap-2 pt-8 text-[15px] font-semibold">
+            <a href={DISCORD_SERVEUR} target="_blank" rel="noopener noreferrer" className="group mt-auto inline-flex items-center gap-2 pt-8 text-[15px] font-semibold">
               {lang === "en" ? "Join the Discord" : "Rejoindre le Discord"}
               <ArrowUpRight className="h-4 w-4 text-[color:var(--red)]" aria-hidden />
             </a>

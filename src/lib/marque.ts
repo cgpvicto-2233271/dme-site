@@ -52,3 +52,23 @@ export const DISTINCTION = {
   titre: { fr: "Communauté de l'année 2025", en: "2025 Community of the Year" },
   par: "Gala Esport Québec",
 } as const;
+
+/** Le serveur Discord public de DME. */
+export const DISCORD_SERVEUR = "https://discord.gg/Zu4FP5pU9M";
+
+/* Les candidatures passent par Discord, en message prive au responsable du
+   programme. Aucun formulaire externe. */
+export type Recruteur = { pseudo: string; discord: string; role: Copy };
+
+export const RECRUTEURS = {
+  coussinho: {
+    pseudo: "Coussinho",
+    discord: "coussinhoo",
+    role: { fr: "League of Legends et staff", en: "League of Legends and staff" },
+  },
+  jarsiss: {
+    pseudo: "Jarsiss",
+    discord: "jarsiss",
+    role: { fr: "Valorant et Counter-Strike 2", en: "Valorant and Counter-Strike 2" },
+  },
+} as const satisfies Record<string, Recruteur>;

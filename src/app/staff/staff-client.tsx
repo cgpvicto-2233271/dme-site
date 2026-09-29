@@ -1,14 +1,24 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLang, type Lang } from "@/components/LanguageContext";
-import { EMAIL_CONTACT, FONDATION } from "@/lib/marque";
+import { ContactDiscord } from "@/components/ContactDiscord";
+import { FONDATION, RECRUTEURS } from "@/lib/marque";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
 
 type Copy = { fr: string; en: string };
+
+/* Le message type d'une candidature staff, envoye a Coussinho sur Discord. */
+const MESSAGE_STAFF: Copy[] = [
+  { fr: "Candidature staff DME", en: "DME staff application" },
+  { fr: "Pseudo :", en: "Username:" },
+  { fr: "Poste visé :", en: "Role you're applying for:" },
+  { fr: "Expérience (lien vers ton travail si possible) :", en: "Experience (link to your work if possible):" },
+  { fr: "Heures disponibles par semaine :", en: "Hours available per week:" },
+  { fr: "Pourquoi DME, en deux phrases :", en: "Why DME, in two sentences:" },
+];
 
 type Membre = {
   pseudo: string;
@@ -229,15 +239,8 @@ export function StaffClient() {
                 ? "The roles we're opening to support our growth. Volunteer, remote-friendly, with real responsibility from day one."
                 : "Les rôles qu'on ouvre pour soutenir notre croissance. Bénévoles, à distance, avec de vraies responsabilités dès le premier jour."}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/contact" className="pill">
-                {lang === "en" ? "Apply" : "Postuler"}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </Link>
-              <a href={`mailto:${EMAIL_CONTACT}`} className="pill-ghost">
-                <Mail className="h-4 w-4" aria-hidden />
-                {EMAIL_CONTACT}
-              </a>
+            <div className="mt-8">
+              <ContactDiscord recruteur={RECRUTEURS.coussinho} message={MESSAGE_STAFF} />
             </div>
           </Reveal>
           <Reveal delay={0.06} className="surface divide-y divide-[color:var(--line)] overflow-hidden">

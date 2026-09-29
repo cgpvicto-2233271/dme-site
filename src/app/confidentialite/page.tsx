@@ -37,14 +37,14 @@ const SECTIONS: SectionLegale[] = [
             ? [
                 ["Member or staff sign-in", "Email address, access role", "Give access to internal areas"],
                 ["LFT registration", "Riot ID, region, roles, availability, languages, social handles (optional), bio", "Show your profile in the LFT list; public game stats are fetched from the Riot API"],
-                ["Tryout application", "Answers to the Google Form", "Evaluate applications (handled by Google Forms)"],
+                ["Player or staff application", "The message you send us on Discord (username, rank, role, availability, profile links)", "Evaluate applications; the message stays in Discord"],
                 ["Internal scouting (staff only)", "Public game data of players (Riot ID, rank, match history), staff notes", "Scout players for our rosters"],
                 ["Any visit", "Technical logs from our host (IP address, browser)", "Security and proper operation of the site"],
               ]
             : [
                 ["Connexion membre ou staff", "Adresse courriel, rôle d'accès", "Donner accès aux espaces internes"],
                 ["Inscription LFT", "Riot ID, région, rôles, disponibilités, langues, réseaux (facultatifs), bio", "Afficher votre profil dans la liste LFT ; les statistiques publiques de jeu sont récupérées via l'API Riot"],
-                ["Candidature de recrutement", "Réponses au formulaire Google", "Évaluer les candidatures (traitées par Google Forms)"],
+                ["Candidature joueur ou staff", "Le message que vous nous envoyez sur Discord (pseudo, rang, rôle, disponibilités, liens de profil)", "Évaluer les candidatures ; le message reste dans Discord"],
                 ["Scouting interne (staff seulement)", "Données de jeu publiques de joueurs (Riot ID, rang, historique), notes du staff", "Repérer des joueurs pour nos rosters"],
                 ["Toute visite", "Journaux techniques de l'hébergeur (adresse IP, navigateur)", "Sécurité et bon fonctionnement du site"],
               ]
@@ -105,15 +105,13 @@ const SECTIONS: SectionLegale[] = [
                   "Vercel: hosting and technical logs",
                   "Our database provider: storage of LFT profiles and scouting data",
                   "Riot Games: public game data through the official API",
-                  "Google (Forms): tryout applications",
-                  "Discord: sign-in, if you choose it",
+                  "Discord: sign-in if you choose it, and applications sent by direct message",
                 ]
               : [
                   "Vercel : hébergement et journaux techniques",
                   "Notre fournisseur de base de données : conservation des profils LFT et des données de scouting",
                   "Riot Games : données de jeu publiques via l'API officielle",
-                  "Google (Forms) : candidatures de recrutement",
-                  "Discord : connexion, si vous la choisissez",
+                  "Discord : connexion si vous la choisissez, et candidatures envoyées en message privé",
                 ]
           }
         />
