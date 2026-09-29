@@ -15,47 +15,71 @@ type Copy = { fr: string; en: string };
 
 const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
 
-/* Exigences et responsable par jeu. Toutes les candidatures passent par
-   Discord, en message prive au responsable du programme. */
-const CANDIDATURES: Record<string, { recruteur: Recruteur; profil: string; exigences: Copy }> = {
+/* Exigences, responsable et message type par jeu. Toutes les candidatures
+   passent par Discord, en message prive au responsable du programme. */
+type Candidature = { recruteur: Recruteur; exigences: Copy; intro: Copy; message: Copy[] };
+
+const CANDIDATURES: Record<string, Candidature> = {
   "/equipes/league-of-legends": {
     recruteur: RECRUTEURS.coussinho,
-    profil: "op.gg",
     exigences: {
-      fr: "Diamant+ en SoloQ, Challenger visé. Rôle fixe, pool de champions profond, disponible pour des scrims réguliers.",
-      en: "Diamond+ in SoloQ, Challenger target. Fixed role, deep champion pool, available for regular scrims.",
+      fr: "Master+ en SoloQ, Challenger visé. Rôle fixe, pool de champions profond, disponible pour des scrims réguliers.",
+      en: "Master+ in SoloQ, Challenger target. Fixed role, deep champion pool, available for regular scrims.",
     },
+    intro: {
+      fr: "Coussinho, manager du roster ACL, lit chaque candidature LoL. Ton op.gg compte plus qu'un long texte.",
+      en: "Coussinho, manager of the ACL roster, reads every LoL application. Your op.gg counts more than a long text.",
+    },
+    message: [
+      { fr: "Candidature LoL, roster ACL", en: "LoL application, ACL roster" },
+      { fr: "Riot ID :", en: "Riot ID:" },
+      { fr: "Rang SoloQ actuel et peak :", en: "Current and peak SoloQ rank:" },
+      { fr: "Rôle et trois champions principaux :", en: "Role and three main champions:" },
+      { fr: "Lien op.gg :", en: "op.gg link:" },
+      { fr: "Soirs dispos pour les scrims :", en: "Evenings available for scrims:" },
+      { fr: "Ce que tu viens chercher chez DME :", en: "What you're looking for at DME:" },
+    ],
   },
   "/equipes/valorant": {
     recruteur: RECRUTEURS.jarsiss,
-    profil: "tracker.gg",
     exigences: {
       fr: "Immortal+ minimum, Radiant visé. Rôle fixe, communication structurée, engagement à long terme.",
       en: "Immortal+ minimum, Radiant target. Fixed role, structured comms, long-term commitment.",
     },
+    intro: {
+      fr: "Jarsiss gère le recrutement Valorant. Dis-lui surtout où tu as déjà joué en équipe : c'est ce qui fait la différence.",
+      en: "Jarsiss runs Valorant recruitment. Above all, say where you've already played as a team: that's what makes the difference.",
+    },
+    message: [
+      { fr: "Candidature Valorant, DME Contenders", en: "Valorant application, DME Contenders" },
+      { fr: "Riot ID :", en: "Riot ID:" },
+      { fr: "Rang actuel et peak :", en: "Current and peak rank:" },
+      { fr: "Rôle et agents joués :", en: "Role and agents played:" },
+      { fr: "Lien tracker.gg :", en: "tracker.gg link:" },
+      { fr: "Expérience en équipe (Premier, ligues, tournois) :", en: "Team experience (Premier, leagues, tournaments):" },
+      { fr: "Disponibilités :", en: "Availability:" },
+    ],
   },
   "/equipes/counter-strike": {
     recruteur: RECRUTEURS.jarsiss,
-    profil: "FACEIT",
     exigences: {
       fr: "Rôle défini et disponible pour la saison ESEA. Un profil FACEIT actif est exigé.",
       en: "Defined role and available for the ESEA season. An active FACEIT profile is required.",
     },
+    intro: {
+      fr: "Jarsiss s'occupe aussi du roster CS2. Sans profil FACEIT à jour, la candidature n'est pas étudiée.",
+      en: "Jarsiss also handles the CS2 roster. Without an up-to-date FACEIT profile, the application isn't reviewed.",
+    },
+    message: [
+      { fr: "Candidature CS2, saison ESEA", en: "CS2 application, ESEA season" },
+      { fr: "Pseudo FACEIT et lien du profil :", en: "FACEIT name and profile link:" },
+      { fr: "Niveau et ELO FACEIT :", en: "FACEIT level and ELO:" },
+      { fr: "Rôle (entry, AWP, IGL, support, lurk) :", en: "Role (entry, AWP, IGL, support, lurk):" },
+      { fr: "Ligues déjà jouées (ESEA, autres) :", en: "Leagues already played (ESEA, other):" },
+      { fr: "Disponible pour toute la saison ? :", en: "Available for the whole season?:" },
+    ],
   },
 };
-
-/* Le message type : l'objet, puis un champ par ligne. */
-function messageJoueur(jeu: string, profil: string): Copy[] {
-  return [
-    { fr: `Candidature DME — ${jeu}`, en: `DME application — ${jeu}` },
-    { fr: "Pseudo en jeu :", en: "In-game name:" },
-    { fr: "Rang actuel et meilleur rang :", en: "Current and peak rank:" },
-    { fr: "Rôle principal :", en: "Main role:" },
-    { fr: "Disponibilités (soirs, fins de semaine) :", en: "Availability (evenings, weekends):" },
-    { fr: `Lien ${profil} :`, en: `${profil} link:` },
-    { fr: "Pourquoi DME, en deux phrases :", en: "Why DME, in two sentences:" },
-  ];
-}
 
 const CRITERES = [
   {
@@ -143,7 +167,7 @@ export function RecrutementClient() {
                     ) : null}
                     {candidature ? (
                       <div className="mt-auto pt-8">
-                        <ContactDiscord recruteur={candidature.recruteur} message={messageJoueur(prog.jeu, candidature.profil)} />
+                        <ContactDiscord recruteur={candidature.recruteur} intro={candidature.intro} message={candidature.message} />
                       </div>
                     ) : null}
                     <Link href={prog.href} className="group mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[color:var(--t-2)] hover:text-[color:var(--t-1)]">
@@ -180,8 +204,8 @@ export function RecrutementClient() {
             <h2 className="h-card">{lang === "en" ? "Not a player? Join the staff." : "Pas joueur ? Rejoins le staff."}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--t-2)]">
               {lang === "en"
-                ? "Content, moderation, tournaments, coaching, partnerships: we're opening volunteer roles. Staff applications go to Coussinho on Discord."
-                : "Contenu, modération, tournois, coaching, partenariats : on ouvre des postes bénévoles. Les candidatures staff vont à Coussinho sur Discord."}
+                ? "Content, moderation, tournaments, coaching, partnerships: we're opening volunteer roles. Staff applications go to Coussinho, on Discord or by email."
+                : "Contenu, modération, tournois, coaching, partenariats : on ouvre des postes bénévoles. Les candidatures staff vont à Coussinho, sur Discord ou par courriel."}
             </p>
             <Link href="/staff#postes" className="group mt-auto inline-flex items-center gap-2 pt-8 text-[15px] font-semibold">
               {lang === "en" ? "See open positions" : "Voir les postes ouverts"}

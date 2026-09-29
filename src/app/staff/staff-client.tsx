@@ -10,14 +10,21 @@ import { fadeUp, stagger, viewport } from "@/lib/motion";
 
 type Copy = { fr: string; en: string };
 
-/* Le message type d'une candidature staff, envoye a Coussinho sur Discord. */
+/* Candidature staff : a Coussinho, sur Discord ou par courriel. */
+const COURRIEL_STAFF = "mathcousanca@gmail.com";
+
+const INTRO_STAFF: Copy = {
+  fr: "Écris à Coussinho, sur Discord ou par courriel. Présente-toi comme pour un vrai poste : ce que tu sais faire, et le temps que tu peux y mettre.",
+  en: "Write to Coussinho, on Discord or by email. Introduce yourself as you would for a real job: what you can do, and how much time you can give.",
+};
+
 const MESSAGE_STAFF: Copy[] = [
   { fr: "Candidature staff DME", en: "DME staff application" },
-  { fr: "Pseudo :", en: "Username:" },
+  { fr: "Nom et pseudo :", en: "Name and username:" },
   { fr: "Poste visé :", en: "Role you're applying for:" },
-  { fr: "Expérience (lien vers ton travail si possible) :", en: "Experience (link to your work if possible):" },
+  { fr: "Expérience, avec un lien vers ton travail si possible :", en: "Experience, with a link to your work if possible:" },
   { fr: "Heures disponibles par semaine :", en: "Hours available per week:" },
-  { fr: "Pourquoi DME, en deux phrases :", en: "Why DME, in two sentences:" },
+  { fr: "Ce que tu apporterais à DME :", en: "What you would bring to DME:" },
 ];
 
 type Membre = {
@@ -240,7 +247,7 @@ export function StaffClient() {
                 : "Les rôles qu'on ouvre pour soutenir notre croissance. Bénévoles, à distance, avec de vraies responsabilités dès le premier jour."}
             </p>
             <div className="mt-8">
-              <ContactDiscord recruteur={RECRUTEURS.coussinho} message={MESSAGE_STAFF} />
+              <ContactDiscord recruteur={RECRUTEURS.coussinho} intro={INTRO_STAFF} message={MESSAGE_STAFF} courriel={COURRIEL_STAFF} />
             </div>
           </Reveal>
           <Reveal delay={0.06} className="surface divide-y divide-[color:var(--line)] overflow-hidden">
