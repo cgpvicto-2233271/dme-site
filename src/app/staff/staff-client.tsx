@@ -30,49 +30,70 @@ const MESSAGE_STAFF: Copy[] = [
 type Membre = {
   pseudo: string;
   nom?: string;
-  role: Copy;
+  /** Le titre, court. */
+  titre: Copy;
+  /** Le perimetre, en quelques mots. */
+  perimetre: Copy;
   mission: Copy;
   dossiers: Copy[];
 };
 
 /* La direction de la deuxieme phase : cinq personnes, un responsable unique
-   par dossier. Source : plan de match de la direction, Q4 2026. */
+   par dossier. */
 const DIRECTION: Membre[] = [
   {
     pseudo: "Coussinho",
     nom: "Mathieu Cousança",
-    role: { fr: "Copropriétaire · Manager", en: "Co-owner · Manager" },
+    titre: { fr: "Copropriétaire", en: "Co-owner" },
+    perimetre: { fr: "Manager League of Legends", en: "League of Legends manager" },
     mission: {
-      fr: "Fixe la vision avec Jarsiss, valide les ententes majeures et les embauches, et tranche les décisions finales. Garde son poste de manager auprès de ses équipes.",
-      en: "Sets the vision with Jarsiss, signs off on major deals and hires, and makes the final calls. Keeps his manager role with his teams.",
+      fr: "Porte la vision de DME avec Jarsiss et signe les ententes majeures comme les embauches. Sur le terrain, il dirige les rosters League of Legends, du recrutement jusqu'aux soirs de match.",
+      en: "Carries DME's vision with Jarsiss and signs off on major deals and hires. On the ground, he leads the League of Legends rosters, from recruitment to match nights.",
     },
     dossiers: [
       { fr: "Vision", en: "Vision" },
-      { fr: "Décisions finales", en: "Final calls" },
-      { fr: "Rosters", en: "Rosters" },
+      { fr: "Rosters LoL", en: "LoL rosters" },
+      { fr: "Recrutement", en: "Recruitment" },
     ],
   },
   {
     pseudo: "Jarsiss",
     nom: "Zachary Larocque",
-    role: { fr: "Copropriétaire · Manager", en: "Co-owner · Manager" },
+    titre: { fr: "Copropriétaire", en: "Co-owner" },
+    perimetre: { fr: "Manager Valorant et Counter-Strike 2", en: "Valorant and Counter-Strike 2 manager" },
     mission: {
-      fr: "Partage la vision et le budget avec Coussinho et anime la réunion hebdomadaire de direction. Manager du nouveau roster Counter-Strike.",
-      en: "Shares vision and budget with Coussinho and runs the weekly leadership meeting. Manager of the new Counter-Strike roster.",
+      fr: "Codirige l'organisation et mène la réunion hebdomadaire de direction. Il bâtit les programmes FPS de DME, de Valorant jusqu'au nouveau roster Counter-Strike 2.",
+      en: "Co-leads the organisation and runs the weekly leadership meeting. He builds DME's FPS programs, from Valorant to the new Counter-Strike 2 roster.",
     },
     dossiers: [
+      { fr: "Direction", en: "Leadership" },
+      { fr: "Valorant", en: "Valorant" },
+      { fr: "Counter-Strike 2", en: "Counter-Strike 2" },
+    ],
+  },
+  {
+    pseudo: "Canard",
+    nom: "Mathieu Peterson",
+    titre: { fr: "Directeur financier (CFO)", en: "Chief Financial Officer" },
+    perimetre: { fr: "Finances et tournois", en: "Finance and tournaments" },
+    mission: {
+      fr: "Tient les finances de DME : budget, dépenses et trésorerie. Il organise aussi nos tournois internes et communautaires, et gère nos inscriptions aux compétitions externes.",
+      en: "Runs DME's finances: budget, spending and cash flow. He also organises our internal and community tournaments and handles our entries into external competitions.",
+    },
+    dossiers: [
+      { fr: "Finances", en: "Finance" },
       { fr: "Budget", en: "Budget" },
-      { fr: "Réunion hebdo", en: "Weekly meeting" },
-      { fr: "Counter-Strike", en: "Counter-Strike" },
+      { fr: "Tournois", en: "Tournaments" },
     ],
   },
   {
     pseudo: "Etirock",
     nom: "Étienne Landry",
-    role: { fr: "Communications · Point de contact", en: "Communications · Point of contact" },
+    titre: { fr: "Directeur des communications", en: "Head of Communications" },
+    perimetre: { fr: "Communauté et partenaires", en: "Community and partners" },
     mission: {
-      fr: "La voix de DME : annonces, ton et messages publics. Point de contact central pour la communauté et les partenaires, il met aussi chaque décision importante à l'épreuve avant qu'on s'engage.",
-      en: "The voice of DME: announcements, tone and public messaging. Central point of contact for the community and partners, he also stress-tests every major decision before we commit.",
+      fr: "La voix de DME : annonces, ton et messages publics. Point de contact de la communauté et des partenaires, il met chaque décision importante à l'épreuve avant qu'on s'engage.",
+      en: "The voice of DME: announcements, tone and public messaging. Point of contact for the community and partners, he stress-tests every major decision before we commit.",
     },
     dossiers: [
       { fr: "Communications", en: "Communications" },
@@ -81,30 +102,18 @@ const DIRECTION: Membre[] = [
     ],
   },
   {
-    pseudo: "Canard",
-    role: { fr: "Tournois · Commandites", en: "Tournaments · Sponsorships" },
-    mission: {
-      fr: "Organise nos tournois internes et communautaires, gère les inscriptions aux tournois externes et bâtit le pipeline de commandites.",
-      en: "Runs our internal and community tournaments, handles external tournament entries and builds the sponsorship pipeline.",
-    },
-    dossiers: [
-      { fr: "Tournois", en: "Tournaments" },
-      { fr: "Commandites", en: "Sponsorships" },
-      { fr: "Giveaways", en: "Giveaways" },
-    ],
-  },
-  {
     pseudo: "Benoit",
     nom: "Benoit Bouthillier",
-    role: { fr: "Finances · Prévisions", en: "Finance · Forecasting" },
+    titre: { fr: "Analyste financier", en: "Financial Analyst" },
+    perimetre: { fr: "Prévisions et indicateurs", en: "Forecasting and metrics" },
     mission: {
-      fr: "Tient la prévision 2027, valide chaque dépense majeure et suit les indicateurs financiers et d'audience qui comptent pour nos partenaires.",
-      en: "Keeps the 2027 forecast, signs off on every major expense and tracks the financial and audience metrics that matter to our partners.",
+      fr: "Bâtit la prévision 2027 avec le CFO et suit les indicateurs de performance et d'audience qui comptent pour nos partenaires.",
+      en: "Builds the 2027 forecast with the CFO and tracks the performance and audience metrics that matter to our partners.",
     },
     dossiers: [
-      { fr: "Finances", en: "Finance" },
       { fr: "Prévisions", en: "Forecasting" },
       { fr: "Indicateurs", en: "Metrics" },
+      { fr: "Rapports", en: "Reporting" },
     ],
   },
 ];
@@ -191,8 +200,11 @@ export function StaffClient() {
                     {m.pseudo.charAt(0)}
                   </span>
                 </div>
-                <p className="mt-5 text-[14px] font-semibold text-[color:var(--red-lift)]">{pick(m.role, lang)}</p>
-                <p className="mt-2 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(m.mission, lang)}</p>
+                <div className="mt-6 border-l-2 border-[color:var(--red)] pl-4">
+                  <p className="text-[16px] font-semibold text-[color:var(--t-1)]">{pick(m.titre, lang)}</p>
+                  <p className="mt-0.5 text-[14px] text-[color:var(--red-lift)]">{pick(m.perimetre, lang)}</p>
+                </div>
+                <p className="mt-5 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(m.mission, lang)}</p>
                 <ul className="mt-auto flex flex-wrap gap-2 pt-6">
                   {m.dossiers.map((d) => (
                     <li key={d.fr} className="rounded-full border border-[color:var(--line-2)] px-3 py-1 text-[13px] text-[color:var(--t-2)]">

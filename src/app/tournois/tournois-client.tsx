@@ -87,11 +87,11 @@ export function TournoisClient() {
             <p className="text-[15px] font-semibold text-[color:var(--t-3)]">
               {lang === "en" ? "Tournament lead" : "Responsable des tournois"}
             </p>
-            <h2 className="h-card mt-1">Canard · Mathieu Petterson</h2>
+            <h2 className="h-card mt-1">Canard · Mathieu Peterson</h2>
             <p className="mt-3 max-w-[70ch] text-[15px] leading-relaxed text-[color:var(--t-2)]">
               {lang === "en"
-                ? "In charge of tournaments and sponsorships at DME. Before joining DME, Mathieu led Eternal E-Sport, a Québec League of Legends league founded in 2025, with Prestige and Academy divisions, playoffs and weekly broadcasts. He brings that experience in running structured competitions to DME's community tournaments."
-                : "Responsable des tournois et des commandites chez DME. Avant DME, Mathieu dirigeait l'Eternal E-Sport, une ligue québécoise de League of Legends fondée en 2025, avec des divisions Prestige et Académie, des playoffs et des diffusions chaque semaine. Il apporte cette expérience de compétitions structurées aux tournois communautaires de DME."}
+                ? "CFO of DME, in charge of finance and tournaments. Before joining DME, Mathieu led Eternal E-Sport, a Québec League of Legends league founded in 2025, with Prestige and Academy divisions, playoffs and weekly broadcasts. He brings that experience in running structured competitions to DME's community tournaments."
+                : "CFO de DME, responsable des finances et des tournois. Avant DME, Mathieu dirigeait l'Eternal E-Sport, une ligue québécoise de League of Legends fondée en 2025, avec des divisions Prestige et Académie, des playoffs et des diffusions chaque semaine. Il apporte cette expérience de compétitions structurées aux tournois communautaires de DME."}
             </p>
             <a
               href={ETERNAL}
