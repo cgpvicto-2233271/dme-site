@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { VisuelAffiche } from "@/components/VisuelAffiche";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -52,13 +52,10 @@ export function EquipesClient({ pillars }: Props) {
               <Link href={prog.href} className="surface lift group flex h-full flex-col overflow-hidden">
                 <div className="relative aspect-[16/9] overflow-hidden">
                   {prog.image ? (
-                    <Image
+                    <VisuelAffiche
                       src={prog.image}
-                      unoptimized={prog.image.endsWith(".webp")}
-                      alt=""
-                      fill
                       sizes="(min-width: 1024px) 33vw, 100vw"
-                      className="object-cover opacity-80 transition-transform duration-500 group-hover:scale-[1.04]"
+                      className="transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                   ) : (
                     <span

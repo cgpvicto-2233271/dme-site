@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { VisuelAffiche } from "@/components/VisuelAffiche";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -119,7 +119,7 @@ export function RecrutementClient() {
                 <article className="surface flex h-full flex-col overflow-hidden">
                   <div className="relative aspect-[16/9]">
                     {prog.image ? (
-                      <Image src={prog.image} unoptimized={prog.image.endsWith(".webp")} alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover opacity-80" />
+                      <VisuelAffiche src={prog.image} sizes="(min-width: 1024px) 33vw, 100vw" />
                     ) : null}
                   </div>
                   <div className="flex flex-1 flex-col p-6 md:p-8">

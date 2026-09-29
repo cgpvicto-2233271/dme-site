@@ -120,7 +120,7 @@ function CarteJoueur({ player, lang, onSelect }: { player: ProgramPlayer; lang: 
               unoptimized={player.image.endsWith(".webp")}
               sizes="(min-width: 1280px) 280px, (min-width: 768px) 30vw, 50vw"
               className={`transition-transform duration-500 group-hover:scale-[1.03] ${
-                player.cadrage === "entier" ? "object-contain object-bottom p-3 pb-0" : "object-cover object-top"
+                player.cadrage === "entier" ? "object-contain object-bottom px-2 pt-5" : "object-cover object-top"
               }`}
             />
           </>
