@@ -17,7 +17,7 @@ const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
 
 /* Exigences, responsable et message type par jeu. Toutes les candidatures
    passent par Discord, en message prive au responsable du programme. */
-type Candidature = { recruteur: Recruteur; exigences: Copy; rejoindre: Copy[]; intro: Copy; message: Copy[] };
+type Candidature = { recruteur: Recruteur; exigences: Copy; attentes: Copy[]; intro: Copy; message: Copy[] };
 
 const CANDIDATURES: Record<string, Candidature> = {
   "/equipes/league-of-legends": {
@@ -26,10 +26,10 @@ const CANDIDATURES: Record<string, Candidature> = {
       fr: "Master+ en SoloQ, Challenger visé. Rôle fixe, pool de champions profond, disponible pour des scrims réguliers.",
       en: "Master+ in SoloQ, Challenger target. Fixed role, deep champion pool, available for regular scrims.",
     },
-    rejoindre: [
-      { fr: "Compétition en Aegis Challengers League", en: "Competing in the Aegis Challengers League" },
-      { fr: "Des scrims planifiés chaque semaine", en: "Scrims scheduled every week" },
-      { fr: "Un suivi individuel à chaque split", en: "One-on-one follow-up every split" },
+    attentes: [
+      { fr: "Présent à chaque scrim et chaque match officiel", en: "Present at every scrim and official match" },
+      { fr: "Ouvert à la critique, en review comme en jeu", en: "Open to feedback, in review and in game" },
+      { fr: "Un vrai travail en SoloQ entre les séances", en: "Real SoloQ work between sessions" },
     ],
     intro: {
       fr: "Coussinho, manager de nos équipes T2 et T3 League of Legends, lit chaque candidature. Ton parcours en compétition compte plus que ton op.gg.",
@@ -53,10 +53,10 @@ const CANDIDATURES: Record<string, Candidature> = {
       fr: "Immortal+ minimum, Radiant visé. Rôle fixe, communication structurée, engagement à long terme.",
       en: "Immortal+ minimum, Radiant target. Fixed role, structured comms, long-term commitment.",
     },
-    rejoindre: [
-      { fr: "Compétition en Valorant Contenders", en: "Competing in Valorant Contenders" },
-      { fr: "Des rôles et des stratégies bâtis avec le staff", en: "Roles and strategies built with the staff" },
-      { fr: "Une revue de VOD après les matchs officiels", en: "VOD review after official matches" },
+    attentes: [
+      { fr: "Des calls clairs, même quand la game va mal", en: "Clear calls, even when the game goes wrong" },
+      { fr: "Présent aux pratiques et aux officiels", en: "Present at practices and officials" },
+      { fr: "Du travail individuel sur ton aim et tes agents", en: "Individual work on your aim and agents" },
     ],
     intro: {
       fr: "Jarsiss gère le recrutement Valorant. Dis-lui surtout où tu as déjà joué en équipe : c'est ce qui fait la différence.",
@@ -79,10 +79,10 @@ const CANDIDATURES: Record<string, Candidature> = {
       fr: "Rôle défini et disponible pour la saison ESEA. Un profil FACEIT actif est exigé.",
       en: "Defined role and available for the ESEA season. An active FACEIT profile is required.",
     },
-    rejoindre: [
-      { fr: "La saison 59 de l'ESEA Main", en: "Season 59 of ESEA Main" },
-      { fr: "Un roster neuf, construit autour de rôles clairs", en: "A new roster, built around clear roles" },
-      { fr: "Pratiques et officiels planifiés à l'avance", en: "Practices and officials planned ahead" },
+    attentes: [
+      { fr: "Engagé pour toute la saison ESEA", en: "Committed for the whole ESEA season" },
+      { fr: "La maîtrise de ton rôle et de tes utilitaires", en: "Command of your role and your utility" },
+      { fr: "Ponctuel aux pratiques comme aux officiels", en: "On time for practices and officials alike" },
     ],
     intro: {
       fr: "Jarsiss s'occupe aussi du roster CS2. Sans profil FACEIT à jour, la candidature n'est pas étudiée.",
@@ -186,9 +186,9 @@ export function RecrutementClient() {
                       <>
                         <p className="mt-4 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(candidature.exigences, lang)}</p>
                         <div className="mt-6">
-                          <p className="text-[13px] font-semibold text-[color:var(--t-3)]">{lang === "en" ? "What you're joining" : "Ce que tu rejoins"}</p>
+                          <p className="text-[13px] font-semibold text-[color:var(--t-3)]">{lang === "en" ? "What we expect from you" : "Ce qu'on attend de toi"}</p>
                           <ul className="mt-2.5 space-y-2">
-                            {candidature.rejoindre.map((point) => (
+                            {candidature.attentes.map((point) => (
                               <li key={point.fr} className="flex items-center gap-3 text-[15px] text-[color:var(--t-1)]">
                                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--red)]" aria-hidden />
                                 {pick(point, lang)}

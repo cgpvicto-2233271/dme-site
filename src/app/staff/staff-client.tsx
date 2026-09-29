@@ -44,31 +44,46 @@ const DIRECTION: Membre[] = [
   {
     pseudo: "Coussinho",
     nom: "Mathieu Cousança",
-    titre: { fr: "Copropriétaire", en: "Co-owner" },
-    perimetre: { fr: "Manager League of Legends", en: "League of Legends manager" },
+    titre: { fr: "Copropriétaire · Directeur esports", en: "Co-owner · Head of Esports" },
+    perimetre: { fr: "Stratégie compétitive et League of Legends", en: "Competitive strategy and League of Legends" },
     mission: {
-      fr: "Porte la vision de DME avec Jarsiss et signe les ententes majeures comme les embauches. Sur le terrain, il dirige les rosters League of Legends, du recrutement jusqu'aux soirs de match.",
-      en: "Carries DME's vision with Jarsiss and signs off on major deals and hires. On the ground, he leads the League of Legends rosters, from recruitment to match nights.",
+      fr: "Définit la stratégie compétitive de DME et porte la vision de l'organisation avec Jarsiss. Il signe les ententes majeures, valide chaque embauche et dirige les rosters League of Legends, du recrutement jusqu'aux soirs de match.",
+      en: "Sets DME's competitive strategy and carries the organisation's vision with Jarsiss. He signs off on major deals, approves every hire and leads the League of Legends rosters, from recruitment to match nights.",
     },
     dossiers: [
       { fr: "Vision", en: "Vision" },
-      { fr: "Rosters LoL", en: "LoL rosters" },
-      { fr: "Recrutement", en: "Recruitment" },
+      { fr: "Stratégie compétitive", en: "Competitive strategy" },
+      { fr: "League of Legends", en: "League of Legends" },
     ],
   },
   {
     pseudo: "Jarsiss",
     nom: "Zachary Larocque",
-    titre: { fr: "Copropriétaire", en: "Co-owner" },
-    perimetre: { fr: "Manager Valorant et Counter-Strike 2", en: "Valorant and Counter-Strike 2 manager" },
+    titre: { fr: "Copropriétaire · Directeur du développement", en: "Co-owner · Head of Development" },
+    perimetre: { fr: "Croissance, Valorant et Counter-Strike 2", en: "Growth, Valorant and Counter-Strike 2" },
     mission: {
-      fr: "Codirige l'organisation et mène la réunion hebdomadaire de direction. Il bâtit les programmes FPS de DME, de Valorant jusqu'au nouveau roster Counter-Strike 2.",
-      en: "Co-leads the organisation and runs the weekly leadership meeting. He builds DME's FPS programs, from Valorant to the new Counter-Strike 2 roster.",
+      fr: "Codirige l'organisation et pilote sa croissance : nouveaux programmes, nouvelles scènes, réunion de direction chaque semaine. Il a lancé le programme Counter-Strike 2 et dirige les rosters FPS de DME.",
+      en: "Co-leads the organisation and drives its growth: new programs, new scenes, a leadership meeting every week. He launched the Counter-Strike 2 program and leads DME's FPS rosters.",
     },
     dossiers: [
-      { fr: "Direction", en: "Leadership" },
+      { fr: "Développement", en: "Development" },
       { fr: "Valorant", en: "Valorant" },
       { fr: "Counter-Strike 2", en: "Counter-Strike 2" },
+    ],
+  },
+  {
+    pseudo: "Etirock",
+    nom: "Étienne Landry",
+    titre: { fr: "Directeur des opérations (COO)", en: "Chief Operating Officer" },
+    perimetre: { fr: "Opérations, communications et partenaires", en: "Operations, communications and partners" },
+    mission: {
+      fr: "Fait tourner l'organisation au quotidien : coordination des équipes, suivi des dossiers et calendrier. Il est aussi la voix de DME, point de contact de la communauté et des partenaires, et met chaque décision importante à l'épreuve avant qu'on s'engage.",
+      en: "Runs the organisation day to day: team coordination, file follow-up and scheduling. He is also the voice of DME, point of contact for the community and partners, and stress-tests every major decision before we commit.",
+    },
+    dossiers: [
+      { fr: "Opérations", en: "Operations" },
+      { fr: "Communications", en: "Communications" },
+      { fr: "Partenaires", en: "Partners" },
     ],
   },
   {
@@ -84,21 +99,6 @@ const DIRECTION: Membre[] = [
       { fr: "Finances", en: "Finance" },
       { fr: "Budget", en: "Budget" },
       { fr: "Tournois", en: "Tournaments" },
-    ],
-  },
-  {
-    pseudo: "Etirock",
-    nom: "Étienne Landry",
-    titre: { fr: "Directeur des communications", en: "Head of Communications" },
-    perimetre: { fr: "Communauté et partenaires", en: "Community and partners" },
-    mission: {
-      fr: "La voix de DME : annonces, ton et messages publics. Point de contact de la communauté et des partenaires, il met chaque décision importante à l'épreuve avant qu'on s'engage.",
-      en: "The voice of DME: announcements, tone and public messaging. Point of contact for the community and partners, he stress-tests every major decision before we commit.",
-    },
-    dossiers: [
-      { fr: "Communications", en: "Communications" },
-      { fr: "Communauté", en: "Community" },
-      { fr: "Partenaires", en: "Partners" },
     ],
   },
   {
