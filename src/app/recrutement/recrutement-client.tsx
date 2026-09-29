@@ -17,7 +17,7 @@ const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
 
 /* Exigences, responsable et message type par jeu. Toutes les candidatures
    passent par Discord, en message prive au responsable du programme. */
-type Candidature = { recruteur: Recruteur; exigences: Copy; intro: Copy; message: Copy[] };
+type Candidature = { recruteur: Recruteur; exigences: Copy; rejoindre: Copy[]; intro: Copy; message: Copy[] };
 
 const CANDIDATURES: Record<string, Candidature> = {
   "/equipes/league-of-legends": {
@@ -26,6 +26,11 @@ const CANDIDATURES: Record<string, Candidature> = {
       fr: "Master+ en SoloQ, Challenger visé. Rôle fixe, pool de champions profond, disponible pour des scrims réguliers.",
       en: "Master+ in SoloQ, Challenger target. Fixed role, deep champion pool, available for regular scrims.",
     },
+    rejoindre: [
+      { fr: "Compétition en Aegis Challengers League", en: "Competing in the Aegis Challengers League" },
+      { fr: "Des scrims planifiés chaque semaine", en: "Scrims scheduled every week" },
+      { fr: "Un suivi individuel à chaque split", en: "One-on-one follow-up every split" },
+    ],
     intro: {
       fr: "Coussinho, manager de nos équipes T2 et T3 League of Legends, lit chaque candidature. Ton parcours en compétition compte plus que ton op.gg.",
       en: "Coussinho, manager of our T2 and T3 League of Legends teams, reads every application. Your competitive track record counts more than your op.gg.",
@@ -48,6 +53,11 @@ const CANDIDATURES: Record<string, Candidature> = {
       fr: "Immortal+ minimum, Radiant visé. Rôle fixe, communication structurée, engagement à long terme.",
       en: "Immortal+ minimum, Radiant target. Fixed role, structured comms, long-term commitment.",
     },
+    rejoindre: [
+      { fr: "Compétition en Valorant Contenders", en: "Competing in Valorant Contenders" },
+      { fr: "Des rôles et des stratégies bâtis avec le staff", en: "Roles and strategies built with the staff" },
+      { fr: "Une revue de VOD après les matchs officiels", en: "VOD review after official matches" },
+    ],
     intro: {
       fr: "Jarsiss gère le recrutement Valorant. Dis-lui surtout où tu as déjà joué en équipe : c'est ce qui fait la différence.",
       en: "Jarsiss runs Valorant recruitment. Above all, say where you've already played as a team: that's what makes the difference.",
@@ -59,6 +69,7 @@ const CANDIDATURES: Record<string, Candidature> = {
       { fr: "Rôle et agents joués :", en: "Role and agents played:" },
       { fr: "Lien tracker.gg :", en: "tracker.gg link:" },
       { fr: "Expérience en équipe (Premier, ligues, tournois) :", en: "Team experience (Premier, leagues, tournaments):" },
+      { fr: "Lien Liquipedia ou VLR.gg, si tu en as un :", en: "Liquipedia or VLR.gg link, if you have one:" },
       { fr: "Disponibilités :", en: "Availability:" },
     ],
   },
@@ -68,6 +79,11 @@ const CANDIDATURES: Record<string, Candidature> = {
       fr: "Rôle défini et disponible pour la saison ESEA. Un profil FACEIT actif est exigé.",
       en: "Defined role and available for the ESEA season. An active FACEIT profile is required.",
     },
+    rejoindre: [
+      { fr: "La saison 59 de l'ESEA Main", en: "Season 59 of ESEA Main" },
+      { fr: "Un roster neuf, construit autour de rôles clairs", en: "A new roster, built around clear roles" },
+      { fr: "Pratiques et officiels planifiés à l'avance", en: "Practices and officials planned ahead" },
+    ],
     intro: {
       fr: "Jarsiss s'occupe aussi du roster CS2. Sans profil FACEIT à jour, la candidature n'est pas étudiée.",
       en: "Jarsiss also handles the CS2 roster. Without an up-to-date FACEIT profile, the application isn't reviewed.",
@@ -78,7 +94,9 @@ const CANDIDATURES: Record<string, Candidature> = {
       { fr: "Niveau et ELO FACEIT :", en: "FACEIT level and ELO:" },
       { fr: "Rôle (entry, AWP, IGL, support, lurk) :", en: "Role (entry, AWP, IGL, support, lurk):" },
       { fr: "Ligues déjà jouées (ESEA, autres) :", en: "Leagues already played (ESEA, other):" },
+      { fr: "Lien Liquipedia, si tu en as un :", en: "Liquipedia link, if you have one:" },
       { fr: "Disponible pour toute la saison ? :", en: "Available for the whole season?:" },
+      { fr: "Ce que tu viens chercher chez DME :", en: "What you're looking for at DME:" },
     ],
   },
 };
@@ -165,14 +183,27 @@ export function RecrutementClient() {
                     <h2 className="h-card">{prog.jeu}</h2>
                     <p className="mt-1 text-[14px] text-[color:var(--t-3)]">{prog.roster} · {pick(prog.circuit, lang)}</p>
                     {candidature ? (
-                      <p className="mt-4 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(candidature.exigences, lang)}</p>
+                      <>
+                        <p className="mt-4 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(candidature.exigences, lang)}</p>
+                        <div className="mt-6">
+                          <p className="text-[13px] font-semibold text-[color:var(--t-3)]">{lang === "en" ? "What you're joining" : "Ce que tu rejoins"}</p>
+                          <ul className="mt-2.5 space-y-2">
+                            {candidature.rejoindre.map((point) => (
+                              <li key={point.fr} className="flex items-center gap-3 text-[15px] text-[color:var(--t-1)]">
+                                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--red)]" aria-hidden />
+                                {pick(point, lang)}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
                     ) : null}
                     {candidature ? (
-                      <div className="mt-auto pt-8">
+                      <div className="pt-8">
                         <ContactDiscord recruteur={candidature.recruteur} intro={candidature.intro} message={candidature.message} />
                       </div>
                     ) : null}
-                    <Link href={prog.href} className="group mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[color:var(--t-2)] hover:text-[color:var(--t-1)]">
+                    <Link href={prog.href} className="group mt-auto inline-flex items-center gap-2 self-start pt-6 text-[14px] font-semibold text-[color:var(--t-2)] hover:text-[color:var(--t-1)]">
                       {lang === "en" ? "See the roster" : "Voir le roster"}
                       <ArrowRight className="h-4 w-4 text-[color:var(--red)] transition-transform group-hover:translate-x-1" aria-hidden />
                     </Link>
