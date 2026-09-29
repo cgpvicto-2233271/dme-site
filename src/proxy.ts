@@ -4,7 +4,8 @@ import { lireSession, NOM_COOKIE, ROLES_INTERNES } from "@/lib/session";
 
 /* Le pare-feu applicatif du site.
 
-   1. riot.txt : normalise les variantes d'URL (verification Riot).
+   1. riot.txt : normalise les variantes d'URL (verification Riot), sauf
+      /tournois/riot.txt qui verifie la demande de cle de production.
    2. Routes de diagnostic : introuvables en production.
    3. API internes (staff, scouting, coaching) : session staff signee exigee,
       en plus des verifications propres a chaque route. Une route oubliee
@@ -19,7 +20,8 @@ export async function proxy(req: NextRequest) {
   const url = req.nextUrl;
   const chemin = url.pathname;
 
-  if (chemin.includes("riot.txt")) {
+  // /tournois/riot.txt a son propre code (fichier statique dans public/tournois).
+  if (chemin.includes("riot.txt") && chemin !== "/tournois/riot.txt") {
     url.pathname = "/riot.txt";
     return NextResponse.rewrite(url);
   }
