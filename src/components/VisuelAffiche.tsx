@@ -4,26 +4,24 @@ type Props = {
   src: string;
   alt?: string;
   sizes: string;
+  /** Point de l'image garde au centre du cadre (object-position). */
+  position?: string;
   className?: string;
 };
 
-/* Une affiche (souvent en portrait) dans un cadre paysage : on la montre en
-   entier plutot que de la rogner, posee sur un fond flou tire de la meme
-   image. Le cadre parent doit etre `relative` et avoir sa taille. */
-export function VisuelAffiche({ src, alt = "", sizes, className = "" }: Props) {
-  const webp = src.endsWith(".webp");
+/* Une affiche de roster qui remplit son cadre. Le recadrage est choisi par
+   affiche (`position`) pour garder l'essentiel visible. Le cadre parent doit
+   etre `relative` et avoir sa taille. */
+export function VisuelAffiche({ src, alt = "", sizes, position = "50% 50%", className = "" }: Props) {
   return (
-    <span className={`absolute inset-0 overflow-hidden ${className}`}>
-      <Image
-        src={src}
-        alt=""
-        aria-hidden
-        fill
-        unoptimized={webp}
-        sizes={sizes}
-        className="scale-110 object-cover opacity-45 blur-2xl"
-      />
-      <Image src={src} alt={alt} fill unoptimized={webp} sizes={sizes} className="object-contain" />
-    </span>
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      unoptimized={src.endsWith(".webp")}
+      sizes={sizes}
+      className={`object-cover ${className}`}
+      style={{ objectPosition: position }}
+    />
   );
 }

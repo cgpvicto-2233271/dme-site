@@ -241,9 +241,9 @@ export default function Header({ role }: Props) {
                         onClick={fermer}
                         className="surface lift group flex h-full items-center gap-4 overflow-hidden p-3 sm:flex-col sm:items-stretch sm:p-0"
                       >
-                        <span className="relative block h-16 w-20 shrink-0 overflow-hidden rounded-[12px] sm:h-auto sm:w-auto sm:rounded-none sm:aspect-[16/9]">
+                        <span className="relative block h-16 w-20 shrink-0 overflow-hidden rounded-[12px] sm:h-auto sm:w-auto sm:rounded-none sm:aspect-[4/3]">
                           {prog.image ? (
-                            <VisuelAffiche src={prog.image} sizes="(min-width: 640px) 280px, 80px" />
+                            <VisuelAffiche src={prog.image} position={prog.cadrage} sizes="(min-width: 640px) 280px, 80px" />
                           ) : (
                             <span
                               className="absolute inset-0 grid place-items-center text-[20px] font-bold tracking-[-0.04em] text-white/25 sm:text-[34px]"

@@ -117,9 +117,9 @@ export function RecrutementClient() {
             return (
               <Reveal key={prog.href} delay={i * 0.06}>
                 <article className="surface flex h-full flex-col overflow-hidden">
-                  <div className="relative aspect-[16/9]">
+                  <div className="relative aspect-[4/3] overflow-hidden">
                     {prog.image ? (
-                      <VisuelAffiche src={prog.image} sizes="(min-width: 1024px) 33vw, 100vw" />
+                      <VisuelAffiche src={prog.image} position={prog.cadrage} sizes="(min-width: 1024px) 33vw, 100vw" />
                     ) : null}
                   </div>
                   <div className="flex flex-1 flex-col p-6 md:p-8">

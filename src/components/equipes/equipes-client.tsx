@@ -50,10 +50,11 @@ export function EquipesClient({ pillars }: Props) {
           {PROGRAMMES.map((prog, i) => (
             <Reveal key={prog.href} delay={i * 0.06}>
               <Link href={prog.href} className="surface lift group flex h-full flex-col overflow-hidden">
-                <div className="relative aspect-[16/9] overflow-hidden">
+                <div className="relative aspect-[4/3] overflow-hidden">
                   {prog.image ? (
                     <VisuelAffiche
                       src={prog.image}
+                      position={prog.cadrage}
                       sizes="(min-width: 1024px) 33vw, 100vw"
                       className="transition-transform duration-500 group-hover:scale-[1.03]"
                     />
