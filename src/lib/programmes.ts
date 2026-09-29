@@ -15,6 +15,8 @@ export type Programme = {
   image?: string;
   /** Recadrage de l'affiche dans les cartes (object-position). */
   cadrage?: string;
+  /** Agrandissement de l'affiche dans son cadre, pour sortir le texte du champ. */
+  zoom?: number;
   nouveau?: boolean;
 };
 
@@ -27,7 +29,8 @@ export const PROGRAMMES: Programme[] = [
     circuit: { fr: "Aegis Challengers League", en: "Aegis Challengers League" },
     joueurs: ["Karsiak", "yuu13", "Moss", "Melke", "winter"],
     image: "/medias/lol/roster-acl.webp",
-    cadrage: "50% 32%",
+    cadrage: "50% 3%",
+    zoom: 1.08,
   },
   {
     href: "/equipes/valorant",
@@ -47,7 +50,8 @@ export const PROGRAMMES: Programme[] = [
     circuit: { fr: "ESEA Main · Saison 59", en: "ESEA Main · Season 59" },
     joueurs: ["VilePickle", "1Grmz", "Coldzy", "Tao", "donPepito"],
     image: "/medias/cs2/roster-cs2.webp",
-    cadrage: "50% 42%",
+    cadrage: "50% 69%",
+    zoom: 1.1,
     nouveau: true,
   },
 ];

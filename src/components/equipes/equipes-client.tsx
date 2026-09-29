@@ -55,6 +55,7 @@ export function EquipesClient({ pillars }: Props) {
                     <VisuelAffiche
                       src={prog.image}
                       position={prog.cadrage}
+                      zoom={prog.zoom}
                       sizes="(min-width: 1024px) 33vw, 100vw"
                       className="transition-transform duration-500 group-hover:scale-[1.03]"
                     />

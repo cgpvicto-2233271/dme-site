@@ -119,7 +119,7 @@ export function RecrutementClient() {
                 <article className="surface flex h-full flex-col overflow-hidden">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     {prog.image ? (
-                      <VisuelAffiche src={prog.image} position={prog.cadrage} sizes="(min-width: 1024px) 33vw, 100vw" />
+                      <VisuelAffiche src={prog.image} position={prog.cadrage} zoom={prog.zoom} sizes="(min-width: 1024px) 33vw, 100vw" />
                     ) : null}
                   </div>
                   <div className="flex flex-1 flex-col p-6 md:p-8">
