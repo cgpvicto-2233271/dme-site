@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useTransition, useEffect } from "react";
 import {
   X, ChevronRight, ChevronLeft, Check, Shield,
@@ -11,6 +11,7 @@ import { useLang } from "@/components/LanguageContext";
 import type { CoachData } from "@/lib/coaches-data";
 import { RANKS_FR, RANKS_EN, ROLES_LABEL } from "@/lib/coaches-data";
 import { createBooking, getBookedSlots } from "@/app/coach/actions";
+import { ease } from "@/lib/motion";
 
 type Step = "pack" | "slot" | "form" | "confirm" | "done";
 
@@ -186,7 +187,7 @@ export function BookingModal({
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 50, opacity: 0 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.4, ease: ease.spring }}
       >
         <div className="h-0.5 w-full" style={{ background: accent }} />
 
@@ -557,8 +558,8 @@ export function BookingModal({
                   <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#dc2626]/50" />
                   <p className="font-mono text-[9px] leading-relaxed text-white/30">
                     {t(
-                      "DME agit comme intermédiaire de mise en relation. Le règlement s'effectue directement entre l'élève et le coach prestataire. DeathMark Esports n'est aucunement responsable des transactions financières entre les parties.",
-                      "DME acts as a matchmaking intermediary. Payment is handled directly between the student and the coach. DeathMark Esports bears no responsibility for financial transactions between the parties."
+                      "DME agit comme intermédiaire de mise en relation. Le règlement s'effectue directement entre l'élève et le coach prestataire. DME n'est aucunement responsable des transactions financières entre les parties.",
+                      "DME acts as a matchmaking intermediary. Payment is handled directly between the student and the coach. DME bears no responsibility for financial transactions between the parties."
                     )}
                   </p>
                 </div>
@@ -666,7 +667,7 @@ export function BookingModal({
                   style={{ borderColor: `${accent}40`, background: `${accent}14` }}
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+                  transition={{ delay: 0.15, duration: 0.4, ease: ease.spring }}>
                   <Check className="h-6 w-6" style={{ color: accent }} />
                 </motion.div>
                 <div>

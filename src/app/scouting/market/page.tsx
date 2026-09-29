@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { Zap, Globe, RefreshCw, ExternalLink, TrendingUp, Users } from "lucide-react";
 import GradeChip from "../components/GradeChip";

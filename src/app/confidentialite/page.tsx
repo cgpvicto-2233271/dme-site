@@ -1,186 +1,223 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { useLang } from "@/components/LanguageContext";
+import { Liste, PageLegale, Tableau, type SectionLegale } from "@/components/PageLegale";
+import { EMAIL_CONTACT } from "@/lib/marque";
 
-const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
+const Courriel = () => (
+  <a href={`mailto:${EMAIL_CONTACT}`} className="font-semibold text-white underline underline-offset-4">
+    {EMAIL_CONTACT}
+  </a>
+);
+
+/* Politique redigee d'apres ce que le site fait reellement (audit du code,
+   septembre 2026) et les exigences de la Loi 25 (Quebec) et de la LPRPDE. */
+const SECTIONS: SectionLegale[] = [
+  {
+    titre: { fr: "Qui est responsable", en: "Who is responsible" },
+    contenu: (lang) =>
+      lang === "en" ? (
+        <>
+          <p>DME is an esports organisation based in Québec, Canada. This policy explains which personal information we collect through this site, why, and what you can do about it.</p>
+          <p>The person in charge of the protection of personal information is DME&apos;s leadership (co-owners). You can reach them at <Courriel />.</p>
+        </>
+      ) : (
+        <>
+          <p>DME est une organisation esport basée au Québec, Canada. Cette politique explique quels renseignements personnels nous recueillons par ce site, pourquoi, et ce que vous pouvez faire à ce sujet.</p>
+          <p>La personne responsable de la protection des renseignements personnels est la direction de DME (copropriétaires). Vous pouvez la joindre à <Courriel />.</p>
+        </>
+      ),
+  },
+  {
+    titre: { fr: "Ce que nous recueillons, et pourquoi", en: "What we collect, and why" },
+    contenu: (lang) => (
+      <Tableau
+        entetes={lang === "en" ? ["When", "Information", "Purpose"] : ["Quand", "Renseignements", "Finalité"]}
+        lignes={
+          lang === "en"
+            ? [
+                ["Member or staff sign-in", "Email address, access role", "Give access to internal areas"],
+                ["LFT registration", "Riot ID, region, roles, availability, languages, social handles (optional), bio", "Show your profile in the LFT list; public game stats are fetched from the Riot API"],
+                ["Tryout application", "Answers to the Google Form", "Evaluate applications (handled by Google Forms)"],
+                ["Internal scouting (staff only)", "Public game data of players (Riot ID, rank, match history), staff notes", "Scout players for our rosters"],
+                ["Any visit", "Technical logs from our host (IP address, browser)", "Security and proper operation of the site"],
+              ]
+            : [
+                ["Connexion membre ou staff", "Adresse courriel, rôle d'accès", "Donner accès aux espaces internes"],
+                ["Inscription LFT", "Riot ID, région, rôles, disponibilités, langues, réseaux (facultatifs), bio", "Afficher votre profil dans la liste LFT ; les statistiques publiques de jeu sont récupérées via l'API Riot"],
+                ["Candidature de recrutement", "Réponses au formulaire Google", "Évaluer les candidatures (traitées par Google Forms)"],
+                ["Scouting interne (staff seulement)", "Données de jeu publiques de joueurs (Riot ID, rang, historique), notes du staff", "Repérer des joueurs pour nos rosters"],
+                ["Toute visite", "Journaux techniques de l'hébergeur (adresse IP, navigateur)", "Sécurité et bon fonctionnement du site"],
+              ]
+        }
+      />
+    ),
+  },
+  {
+    titre: { fr: "Témoins (cookies) et stockage local", en: "Cookies and local storage" },
+    contenu: (lang) => (
+      <>
+        <p>
+          {lang === "en"
+            ? "We use no advertising or analytics cookies, and no tracking pixels. Only what the site needs to work:"
+            : "Nous n'utilisons aucun témoin publicitaire ou analytique, ni aucun pixel de suivi. Seulement ce dont le site a besoin pour fonctionner :"}
+        </p>
+        <Tableau
+          entetes={lang === "en" ? ["Name", "Type", "Purpose", "Duration"] : ["Nom", "Type", "Finalité", "Durée"]}
+          lignes={
+            lang === "en"
+              ? [
+                  ["dme_access", "Essential cookie (signed, httpOnly)", "Keeps you signed in", "30 days"],
+                  ["next-auth.*", "Essential cookies", "Discord sign-in, if used", "Session"],
+                  ["dme-lang", "Local storage", "Remembers your language", "Until deleted"],
+                  ["dme_avis_temoins", "Local storage", "Remembers that you closed this notice", "Until deleted"],
+                  ["dme_intro", "Session storage", "Plays the intro once per visit", "Tab closed"],
+                ]
+              : [
+                  ["dme_access", "Témoin essentiel (signé, httpOnly)", "Garder votre session ouverte", "30 jours"],
+                  ["next-auth.*", "Témoins essentiels", "Connexion Discord, si utilisée", "Session"],
+                  ["dme-lang", "Stockage local", "Retenir votre langue", "Jusqu'à suppression"],
+                  ["dme_avis_temoins", "Stockage local", "Retenir que vous avez fermé l'avis", "Jusqu'à suppression"],
+                  ["dme_intro", "Stockage de session", "Jouer l'intro une fois par visite", "Fermeture de l'onglet"],
+                ]
+          }
+        />
+        <p>
+          {lang === "en"
+            ? "Staff tools also keep working notes in the browser's local storage; they never leave the device. Video thumbnails are loaded from YouTube (i.ytimg.com), and videos open on YouTube, which applies its own policy."
+            : "Les outils du staff conservent aussi des notes de travail dans le stockage local du navigateur ; elles ne quittent jamais l'appareil. Les vignettes vidéo sont chargées depuis YouTube (i.ytimg.com), et les vidéos s'ouvrent sur YouTube, qui applique sa propre politique."}
+        </p>
+      </>
+    ),
+  },
+  {
+    titre: { fr: "Partage et fournisseurs", en: "Sharing and service providers" },
+    contenu: (lang) => (
+      <>
+        <p>
+          {lang === "en"
+            ? "We never sell or rent your personal information. We only share it with the providers the site needs, which may process it outside Québec (mainly in the United States):"
+            : "Nous ne vendons ni ne louons jamais vos renseignements personnels. Nous les partageons seulement avec les fournisseurs dont le site a besoin, qui peuvent les traiter hors du Québec (principalement aux États-Unis) :"}
+        </p>
+        <Liste
+          items={
+            lang === "en"
+              ? [
+                  "Vercel: hosting and technical logs",
+                  "Our database provider: storage of LFT profiles and scouting data",
+                  "Riot Games: public game data through the official API",
+                  "Google (Forms): tryout applications",
+                  "Discord: sign-in, if you choose it",
+                ]
+              : [
+                  "Vercel : hébergement et journaux techniques",
+                  "Notre fournisseur de base de données : conservation des profils LFT et des données de scouting",
+                  "Riot Games : données de jeu publiques via l'API officielle",
+                  "Google (Forms) : candidatures de recrutement",
+                  "Discord : connexion, si vous la choisissez",
+                ]
+          }
+        />
+        <p>
+          {lang === "en"
+            ? "Before any transfer outside Québec, we make sure the information receives adequate protection, as required by Law 25. We may also disclose information when the law requires it."
+            : "Avant tout transfert hors du Québec, nous nous assurons que les renseignements bénéficient d'une protection adéquate, comme l'exige la Loi 25. Nous pouvons aussi communiquer des renseignements lorsque la loi l'exige."}
+        </p>
+      </>
+    ),
+  },
+  {
+    titre: { fr: "Conservation", en: "Retention" },
+    contenu: (lang) => (
+      <p>
+        {lang === "en"
+          ? "We keep personal information only as long as needed for the purpose it was collected for, then delete or anonymise it. You can ask us at any time to delete your LFT profile."
+          : "Nous conservons les renseignements personnels seulement le temps nécessaire à la finalité pour laquelle ils ont été recueillis, puis nous les supprimons ou les anonymisons. Vous pouvez nous demander en tout temps de supprimer votre profil LFT."}
+      </p>
+    ),
+  },
+  {
+    titre: { fr: "Sécurité", en: "Security" },
+    contenu: (lang) => (
+      <Liste
+        items={
+          lang === "en"
+            ? [
+                "Encrypted connection (HTTPS) enforced on every page",
+                "Signed, httpOnly session cookie that cannot be forged or read by scripts",
+                "Staff access protected by a password verified on the server, and internal tools closed to the public",
+                "Security headers (content policy, anti-clickjacking) and no third-party trackers",
+                "Access to personal information limited to the staff who need it",
+              ]
+            : [
+                "Connexion chiffrée (HTTPS) imposée sur toutes les pages",
+                "Témoin de session signé et httpOnly, impossible à falsifier ou à lire par un script",
+                "Accès staff protégé par un mot de passe vérifié côté serveur, et outils internes fermés au public",
+                "En-têtes de sécurité (politique de contenu, anti-clickjacking) et aucun traceur tiers",
+                "Accès aux renseignements personnels limité au staff qui en a besoin",
+              ]
+        }
+      />
+    ),
+  },
+  {
+    titre: { fr: "Vos droits", en: "Your rights" },
+    contenu: (lang) =>
+      lang === "en" ? (
+        <>
+          <p>Under Québec&apos;s Law 25 and Canadian law, you may at any time:</p>
+          <Liste items={["access the information we hold about you", "have it corrected", "withdraw your consent", "ask for it to be deleted or de-indexed", "receive it in a structured, commonly used format"]} />
+          <p>Write to <Courriel />. We answer within 30 days. If you are not satisfied, you can file a complaint with the Commission d&apos;accès à l&apos;information du Québec.</p>
+        </>
+      ) : (
+        <>
+          <p>En vertu de la Loi 25 et des lois canadiennes, vous pouvez en tout temps :</p>
+          <Liste items={["accéder aux renseignements que nous détenons à votre sujet", "les faire rectifier", "retirer votre consentement", "demander leur suppression ou leur désindexation", "les recevoir dans un format structuré et couramment utilisé"]} />
+          <p>Écrivez à <Courriel />. Nous répondons dans un délai de 30 jours. Si la réponse ne vous satisfait pas, vous pouvez porter plainte auprès de la Commission d&apos;accès à l&apos;information du Québec.</p>
+        </>
+      ),
+  },
+  {
+    titre: { fr: "Mineurs", en: "Minors" },
+    contenu: (lang) => (
+      <p>
+        {lang === "en"
+          ? "Many players in our community are young. Information about a person under 14 is only collected with the consent of a parent or guardian. If you believe we hold such information without consent, contact us and we will delete it."
+          : "Plusieurs joueurs de notre communauté sont jeunes. Les renseignements d'une personne de moins de 14 ans ne sont recueillis qu'avec le consentement d'un parent ou tuteur. Si vous croyez que nous détenons de tels renseignements sans consentement, écrivez-nous et nous les supprimerons."}
+      </p>
+    ),
+  },
+  {
+    titre: { fr: "Incidents de confidentialité", en: "Privacy incidents" },
+    contenu: (lang) => (
+      <p>
+        {lang === "en"
+          ? "If an incident presents a risk of serious harm, we notify the people concerned and the Commission d'accès à l'information, and we keep a register of incidents, as required by law."
+          : "Si un incident présente un risque de préjudice sérieux, nous avisons les personnes concernées et la Commission d'accès à l'information, et nous tenons un registre des incidents, comme l'exige la loi."}
+      </p>
+    ),
+  },
+  {
+    titre: { fr: "Modifications", en: "Changes" },
+    contenu: (lang) => (
+      <p>
+        {lang === "en"
+          ? "We may update this policy. The date at the top of the page shows the latest version; significant changes are announced on our Discord."
+          : "Nous pouvons mettre cette politique à jour. La date en haut de page indique la version en vigueur ; les changements importants sont annoncés sur notre Discord."}
+      </p>
+    ),
+  },
+];
 
 export default function Confidentialite() {
-  const { t } = useLang();
-
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
-
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden border-b border-white/[0.05] pb-16 pt-28">
-        <div className="pointer-events-none absolute -top-32 left-0 h-[400px] w-[500px] bg-[radial-gradient(ellipse,rgba(220,38,38,0.05),transparent_65%)]" />
-        <div className="relative mx-auto max-w-[100rem] px-6 sm:px-10">
-          <motion.div className="mb-8 flex items-center gap-4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease }}>
-            <div className="h-px w-8 bg-red-600" />
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.45em] text-white/20">{t("Données & vie privée", "Data & Privacy")}</span>
-          </motion.div>
-          <motion.h1 className="text-[clamp(2.5rem,7vw,6rem)] font-black uppercase leading-[0.9] tracking-tight" initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }}>
-            <span className="block text-white">{t("Politique de", "Privacy")}</span>
-            <span className="block text-red-600">{t("Confidentialité.", "Policy.")}</span>
-          </motion.h1>
-          <motion.p className="mt-5 font-mono text-[9px] font-black uppercase tracking-[0.3em] text-white/20" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.4, ease }}>
-            {t("Dernière mise à jour : 2026", "Last updated: 2026")}
-          </motion.p>
-        </div>
-      </section>
-
-      {/* ── CONTENT ── */}
-      <div className="mx-auto max-w-[100rem] px-6 sm:px-10 py-16">
-        <div className="grid gap-[1px] bg-white/[0.04] sm:grid-cols-1 lg:grid-cols-2">
-
-          {[
-            {
-              num: "01",
-              titre: t("Introduction", "Introduction"),
-              content: (
-                <p className="text-[0.85rem] leading-relaxed text-white/35">
-                  {t(
-                    "Cette politique explique comment DeathMark E-Sports (DME) collecte, utilise, protège et gère les informations transmises via ce site.",
-                    "This policy explains how DeathMark E-Sports (DME) collects, uses, protects and manages information submitted through this site."
-                  )}
-                </p>
-              ),
-            },
-            {
-              num: "02",
-              titre: t("Données collectées", "Data Collected"),
-              content: (
-                <div className="space-y-2 text-[0.85rem] leading-relaxed text-white/35">
-                  <p className="text-white/50 font-black uppercase tracking-[0.08em] text-[0.78rem] mb-3">{t("Selon l'usage du site :", "Depending on site usage:")}</p>
-                  {([
-                    t("Nom et prénom", "First and last name"),
-                    t("Adresse courriel", "Email address"),
-                    t("Pseudo Discord ou réseaux sociaux", "Discord or social media username"),
-                    t("Réponses des formulaires (recrutement)", "Form responses (recruitment)"),
-                    t("Adresse IP et données techniques", "IP address and technical data"),
-                  ] as React.ReactNode[]).map((item, i) => (
-                    <p key={i} className="flex items-start gap-2">
-                      <span className="mt-[7px] h-1 w-1 shrink-0 bg-red-600/40" />
-                      {item}
-                    </p>
-                  ))}
-                </div>
-              ),
-            },
-            {
-              num: "03",
-              titre: t("Utilisation des données", "Use of Data"),
-              content: (
-                <div className="space-y-2 text-[0.85rem] leading-relaxed text-white/35">
-                  {([
-                    t("Répondre aux demandes des formulaires", "Respond to form requests"),
-                    t("Évaluer les candidatures de joueurs ou staffs", "Evaluate player or staff applications"),
-                    t("Communiquer avec les personnes ayant fait une demande", "Communicate with those who submitted requests"),
-                    t("Améliorer le site et son contenu", "Improve the site and its content"),
-                  ] as React.ReactNode[]).map((item, i) => (
-                    <p key={i} className="flex items-start gap-2">
-                      <span className="mt-[7px] h-1 w-1 shrink-0 bg-red-600/40" />
-                      {item}
-                    </p>
-                  ))}
-                </div>
-              ),
-            },
-            {
-              num: "04",
-              titre: t("Partage des données", "Data Sharing"),
-              content: (
-                <p className="text-[0.85rem] leading-relaxed text-white/35">
-                  {t(
-                    "DME ne vend, ne loue et ne partage aucune donnée personnelle, sauf si requis par la loi ou pour répondre à une demande de l'utilisateur.",
-                    "DME does not sell, rent or share any personal data, except as required by law or to respond to a user request."
-                  )}
-                </p>
-              ),
-            },
-            {
-              num: "05",
-              titre: t("Sécurité", "Security"),
-              content: (
-                <p className="text-[0.85rem] leading-relaxed text-white/35">
-                  {t(
-                    "Les données transmises via ce site sont protégées par des mesures standard (HTTPS et bonnes pratiques). Aucune information sensible (mot de passe, paiement) n'est demandée.",
-                    "Data submitted through this site is protected by standard measures (HTTPS and best practices). No sensitive information (passwords, payments) is requested."
-                  )}
-                </p>
-              ),
-            },
-            {
-              num: "06",
-              titre: t("Durée de conservation", "Retention Period"),
-              content: (
-                <p className="text-[0.85rem] leading-relaxed text-white/35">
-                  {t(
-                    "Les données reçues via les formulaires sont conservées uniquement pour la durée nécessaire au traitement des demandes.",
-                    "Data received through forms is retained only for the time necessary to process requests."
-                  )}
-                </p>
-              ),
-            },
-            {
-              num: "07",
-              titre: t("Vos droits", "Your Rights"),
-              content: (
-                <div className="space-y-3">
-                  <div className="space-y-2 text-[0.85rem] leading-relaxed text-white/35">
-                    {([
-                      t("L'accès à vos données", "Access to your data"),
-                      t("La modification ou suppression de celles-ci", "Modification or deletion of your data"),
-                    ] as React.ReactNode[]).map((item, i) => (
-                      <p key={i} className="flex items-start gap-2">
-                        <span className="mt-[7px] h-1 w-1 shrink-0 bg-red-600/40" />
-                        {item}
-                      </p>
-                    ))}
-                  </div>
-                  <a href="mailto:deathmarkesport@gmail.com" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-red-600/70 hover:text-red-500 transition-colors">
-                    deathmarkesport@gmail.com →
-                  </a>
-                </div>
-              ),
-            },
-            {
-              num: "08",
-              titre: t("Modifications", "Updates"),
-              content: (
-                <p className="text-[0.85rem] leading-relaxed text-white/35">
-                  {t(
-                    "DME peut mettre à jour cette politique sans préavis. La version en ligne fait foi.",
-                    "DME may update this policy without notice. The online version is authoritative."
-                  )}
-                </p>
-              ),
-            },
-          ].map((section, i) => (
-            <motion.div
-              key={section.num}
-              className="group relative overflow-hidden bg-[#080808] p-8"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.55, delay: i * 0.06, ease }}
-            >
-              <div className="absolute left-0 right-0 top-0 h-[1px] origin-left scale-x-0 bg-red-600/40 transition-transform duration-500 group-hover:scale-x-100" />
-              <p className="mb-4 font-mono text-[9px] font-black tracking-[0.3em] text-red-600/30">{section.num}</p>
-              <h2 className="font-display mb-5 text-[1.4rem] uppercase leading-tight text-white">{section.titre}</h2>
-              {section.content}
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-12 flex flex-wrap items-center gap-6 border-t border-white/[0.04] pt-8">
-          <Link href="/mentions-legales" className="text-[9px] font-black uppercase tracking-[0.35em] text-white/20 transition-colors hover:text-white/55">{t("Mentions légales →", "Legal Notice →")}</Link>
-          <Link href="/conditions-utilisation" className="text-[9px] font-black uppercase tracking-[0.35em] text-white/20 transition-colors hover:text-white/55">{t("Conditions d'utilisation →", "Terms of Use →")}</Link>
-          <Link href="/" className="ml-auto text-[9px] font-black uppercase tracking-[0.35em] text-red-600/50 transition-colors hover:text-red-500">{t("← Retour", "← Back")}</Link>
-        </div>
-      </div>
-
-    </div>
+    <PageLegale
+      titre={{ fr: "Politique de confidentialité.", en: "Privacy policy." }}
+      intro={{
+        fr: "Ce que nous recueillons, pourquoi, avec qui c'est partagé, et comment exercer vos droits. Sans jargon.",
+        en: "What we collect, why, who it is shared with, and how to exercise your rights. No jargon.",
+      }}
+      miseAJour={{ fr: "Mise à jour : 29 septembre 2026", en: "Updated: September 29, 2026" }}
+      sections={SECTIONS}
+    />
   );
 }

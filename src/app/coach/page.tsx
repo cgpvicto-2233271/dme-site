@@ -1,13 +1,13 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { ArrowRight, ChevronDown, BadgeCheck, Zap, Users, Trophy } from "lucide-react";
 import { useLang } from "@/components/LanguageContext";
 import { COACHES, type CoachData } from "@/lib/coaches-data";
-import { fadeUp, stagger, viewport } from "@/lib/motion";
+import { ease, fadeUp, stagger, viewport } from "@/lib/motion";
 import { BookingModal } from "@/components/coach/BookingModal";
 
 const RED = "#dc2626";
@@ -83,7 +83,7 @@ function FAQItem({ item, lang }: { item: typeof FAQ_ITEMS[0]; lang: string }) {
       </button>
       <AnimatePresence initial={false}>
         {open && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25, ease: ease.spring }} className="overflow-hidden">
             <p className="pb-4 text-[11px] leading-6 text-white/30">{lang === "fr" ? item.a.fr : item.a.en}</p>
           </motion.div>
         )}
@@ -249,7 +249,7 @@ export default function CoachPage() {
         <div className="dme-wrap relative z-10">
           <motion.div initial="hidden" animate="visible" variants={stagger(0.06)}>
             <motion.p variants={fadeUp(0, 10)} className="mb-4 font-mono text-[9px] font-bold uppercase tracking-[0.42em] text-[#dc2626]/60">
-              {t("DeathMark Esports · Coaching · League of Legends", "DeathMark Esports · Coaching · League of Legends")}
+              {t("DME · Coaching · League of Legends", "DME · Coaching · League of Legends")}
             </motion.p>
             <motion.h1 variants={fadeUp(0.05, 36)} className="font-abolition text-white leading-none" style={{ fontSize: "clamp(3rem, 9vw, 8.5rem)" }}>
               {t("APPRENDS DES", "LEARN FROM")}

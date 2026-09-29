@@ -9,6 +9,9 @@ node_modules/
 # Build Next.js
 # ─────────────────────────────
 .next/
+.next-*/
+.next-verify/
+.next-docs/
 out/
 dist/
 build/
@@ -60,3 +63,10 @@ inspirations/
 
 /src/generated/prisma
 .vercel
+
+# ─────────────────────────────
+# Donnees locales — renseignements personnels (scouting), jamais dans git
+# ─────────────────────────────
+*.db
+*.db-shm
+*.db-wal

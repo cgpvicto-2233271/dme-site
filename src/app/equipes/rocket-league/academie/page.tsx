@@ -3,7 +3,7 @@ import { AcademieProgramPage } from "@/components/equipes/academie-program-page"
 import type { ProgramRoster } from "@/components/equipes/team-program-page";
 
 export const metadata: Metadata = {
-  title: "Académie Rocket League | DeathMark E-Sports",
+  title: "Académie Rocket League | DME",
 };
 
 const rosters: ProgramRoster[] = [
@@ -42,7 +42,6 @@ const rosters: ProgramRoster[] = [
 export default function RocketLeagueAcademiePage() {
   return (
     <AcademieProgramPage
-      eyebrow={{ fr: "Académie / Rocket League", en: "Academy / Rocket League" }}
       title={{ fr: "Vitesse sans chaos.", en: "Speed without chaos." }}
       lead={{
         fr: "Trois rosters académie pour développer les profils GC vers les rosters principaux. Le 6Mans est le premier signal.",

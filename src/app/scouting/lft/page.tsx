@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   Shield, Search, Filter, ChevronDown, Eye, EyeOff,
   FileUp, RefreshCw, User, MessageSquare, Trash2, Plus, Star,

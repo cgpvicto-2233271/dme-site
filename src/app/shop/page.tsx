@@ -1,300 +1,172 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "motion/react";
+import { ArrowRight, ArrowUpRight, Bell, Check } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { useLang, type Lang } from "@/components/LanguageContext";
-import { ButtonLink } from "@/components/ui/button";
-import { fadeUp, stagger, dur, ease } from "@/lib/motion";
+import { EMAIL_CONTACT } from "@/lib/marque";
+import { fadeUp, stagger, transition, viewport } from "@/lib/motion";
 
-const LAUNCH_DATE = new Date("2026-06-01T00:00:00");
+type Copy = { fr: string; en: string };
 
-const DROPS = [
-  {
-    id: "jersey",
-    num: "01",
-    fr: "Maillot",
-    en: "Jersey",
-    sub: { fr: "Edition fondateurs", en: "Founder's edition" },
-    detail: { fr: "Performance esport · Broderie DME · Coupe pro", en: "Esport performance · DME embroidery · Pro cut" },
-  },
-  {
-    id: "hoodie",
-    num: "02",
-    fr: "Hoodie",
-    en: "Hoodie",
-    sub: { fr: "Collection hiver", en: "Winter collection" },
-    detail: { fr: "400g fleece · Oversized · Serigraphie premium", en: "400g fleece · Oversized · Premium screen print" },
-  },
-  {
-    id: "setup",
-    num: "03",
-    fr: "Setup",
-    en: "Setup",
-    sub: { fr: "Desk essentials", en: "Desk essentials" },
-    detail: { fr: "Mousepad XL · Cables · Accessoires branded", en: "XL mousepad · Cables · Branded accessories" },
-  },
+const DISCORD = "https://discord.gg/Zu4FP5pU9M";
+
+const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
+
+/* Le maillot tel que nos joueurs le portent en LAN : de vraies photos,
+   entieres, sans recadrage. Aucun prix ni date n'existe encore : la page
+   n'invente rien et ouvre le canal pour etre prevenu. */
+const VUES = [
+  { id: "equipe", src: "/medias/lan/ets-2026-equipe.webp", alt: { fr: "Le roster DME en maillot à la LAN ÉTS 2026", en: "The DME roster in jersey at LAN ÉTS 2026" } },
+  { id: "maillots", src: "/medias/lan/ets-2026-maillots.webp", alt: { fr: "Joueurs DME de dos en maillot", en: "DME players from behind in jersey" } },
+  { id: "celebration", src: "/medias/lan/ets-2026-celebration.webp", alt: { fr: "Joueurs DME en maillot qui célèbrent", en: "DME players in jersey celebrating" } },
+  { id: "poignees", src: "/medias/lan/ets-2026-poignees.webp", alt: { fr: "Joueurs DME en maillot après un match", en: "DME players in jersey after a match" } },
 ] as const;
 
-function pick<T extends { fr: string; en: string }>(obj: T, lang: Lang): string {
-  return lang === "en" ? obj.en : obj.fr;
-}
+const DETAILS: Copy[] = [
+  { fr: "Le maillot officiel porté par nos joueurs en compétition", en: "The official jersey our players wear in competition" },
+  { fr: "Noir et rouge, aux couleurs de DME", en: "Black and red, in DME colours" },
+  { fr: "Floqué à ton pseudo, comme celui des joueurs", en: "Printed with your gamertag, like the players' ones" },
+];
 
-function pickStr(fr: string, en: string, lang: Lang): string {
-  return lang === "en" ? en : fr;
-}
+const A_VENIR: Copy[] = [
+  { fr: "Hoodie DME", en: "DME hoodie" },
+  { fr: "Tapis de souris XL", en: "XL mousepad" },
+  { fr: "Casquette", en: "Cap" },
+];
 
-function useCountdown(target: Date) {
-  const [diff, setDiff] = useState(0);
-
-  useEffect(() => {
-    function update() {
-      setDiff(Math.max(0, target.getTime() - Date.now()));
-    }
-    update();
-    const id = window.setInterval(update, 1000);
-    return () => window.clearInterval(id);
-  }, [target]);
-
-  const totalSec = Math.floor(diff / 1000);
-  return {
-    d: Math.floor(totalSec / 86400),
-    h: Math.floor((totalSec % 86400) / 3600),
-    m: Math.floor((totalSec % 3600) / 60),
-    s: totalSec % 60,
-  };
-}
-
-function CountdownBlock({ value, label }: { value: number; label: string }) {
+function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative flex h-[clamp(5rem,12vw,9rem)] w-[clamp(4.5rem,10vw,8rem)] items-center justify-center border border-white/[0.08] bg-white/[0.025]">
-        <span
-          className="font-display text-[clamp(2.4rem,6vw,5.2rem)] leading-none font-black tabular-nums text-white"
-        >
-          {String(value).padStart(2, "0")}
-        </span>
-        <span className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#e1192d]/40 to-transparent" />
-      </div>
-      <span className="font-mono text-[8px] font-black uppercase tracking-[0.32em] text-white/30">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function DropCard({
-  drop,
-  lang,
-  index,
-}: {
-  drop: (typeof DROPS)[number];
-  lang: Lang;
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: dur.slow, ease: ease.spring, delay: index * 0.1 }}
-      className="group relative overflow-hidden border border-white/[0.07] bg-[#080808]"
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(45deg, white 0px, white 1px, transparent 1px, transparent 8px)",
-        }}
-      />
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#e1192d] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      <div className="relative flex flex-col p-6 sm:p-8">
-        <div className="mb-10 flex items-start justify-between">
-          <span className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-white/20">
-            {drop.num}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#e1192d]" />
-            <span className="font-mono text-[8px] font-black uppercase tracking-[0.28em] text-[#e1192d]/65">
-              {lang === "en" ? "Coming" : "Bientot"}
-            </span>
-          </span>
-        </div>
-        <div className="mb-10 flex justify-center">
-          <div className="relative h-[clamp(5rem,10vw,8rem)] w-[clamp(5rem,10vw,8rem)] opacity-[0.06] transition-all duration-500 group-hover:opacity-[0.10]">
-            <Image src="/logo/logo-dme.png" alt="" fill className="object-contain" />
-          </div>
-        </div>
-        <div className="mt-auto">
-          <p className="font-mono text-[9px] font-black uppercase tracking-[0.24em] text-white/28 mb-2">
-            {pick(drop.sub, lang)}
-          </p>
-          <h2
-            className="font-abolition text-[clamp(2.6rem,5vw,4rem)] leading-none uppercase text-white"
-            style={{ letterSpacing: "0.02em" }}
-          >
-            {pick(drop, lang)}
-          </h2>
-          <p className="mt-3 font-mono text-[9px] leading-relaxed text-white/35">
-            {pick(drop.detail, lang)}
-          </p>
-        </div>
-        <div className="mt-6 flex items-center gap-3 border-t border-white/[0.06] pt-5">
-          <div className="h-5 w-20 bg-white/[0.08]" />
-          <span className="font-mono text-[8px] font-black uppercase tracking-[0.28em] text-white/18">
-            {lang === "en" ? "Price TBA" : "Prix TBA"}
-          </span>
-        </div>
-      </div>
+    <motion.div variants={fadeUp(delay, 20)} initial="hidden" whileInView="visible" viewport={viewport.once} className={className}>
+      {children}
     </motion.div>
   );
 }
 
 export default function ShopPage() {
   const { lang } = useLang();
-  const countdown = useCountdown(LAUNCH_DATE);
+  const [vue, setVue] = useState<(typeof VUES)[number]["id"]>("equipe");
+  const active = VUES.find((v) => v.id === vue) ?? VUES[0];
+  const commandeGroupe = `mailto:${EMAIL_CONTACT}?subject=${encodeURIComponent(lang === "en" ? "DME group order" : "Commande de groupe DME")}`;
 
   return (
-    <div className="min-h-screen bg-[#050505]">
-
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <Image src="/medias/commun/texture-rouge.png" alt="" fill priority className="object-cover" sizes="100vw" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/20 via-[#050505]/60 to-[#050505]" />
-        <div className="absolute left-0 right-0 top-[40%] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-
-        <div className="dme-wrap relative py-[clamp(6rem,14vw,12rem)]">
-          <motion.div variants={stagger(0.08, 0.1)} initial="hidden" animate="visible">
-            <motion.div variants={fadeUp(0)} className="mb-8 flex items-center gap-4">
-              <span className="h-px w-12 bg-[#e1192d]" />
-              <span className="font-mono text-[9px] font-black uppercase tracking-[0.38em] text-[#e1192d]/70">
-                {pickStr("Shop officiel DME", "DME Official Shop", lang)}
-              </span>
-            </motion.div>
-
-            <motion.h1
-              variants={fadeUp(0.05)}
-              className="font-abolition text-[clamp(4rem,12vw,11rem)] leading-[0.88] uppercase text-white"
-              style={{ letterSpacing: "0.02em" }}
-            >
-              {pickStr("Le drop", "The drop", lang)}
-              <br />
-              <span className="text-[#e1192d]">{pickStr("arrive.", "is coming.", lang)}</span>
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUp(0.1)}
-              className="mt-8 max-w-xl font-mono text-[11px] leading-relaxed text-white/42 tracking-[0.04em]"
-            >
-              {pickStr(
-                "Maillot, hoodie, setup. Pas de boutique bruyante avant que le produit soit pret.",
-                "Jersey, hoodie, setup. No noisy store before the product is ready.",
-                lang
-              )}
-            </motion.p>
-
-            <motion.div variants={fadeUp(0.15)} className="mt-14">
-              <p className="mb-5 font-mono text-[8px] font-black uppercase tracking-[0.38em] text-white/22">
-                {pickStr("Ouverture dans", "Opening in", lang)}
-              </p>
-              <div className="flex items-end gap-3 sm:gap-4">
-                <CountdownBlock value={countdown.d} label={pickStr("Jours", "Days", lang)} />
-                <span className="mb-8 font-display text-2xl font-black text-white/20">:</span>
-                <CountdownBlock value={countdown.h} label={pickStr("Heures", "Hours", lang)} />
-                <span className="mb-8 font-display text-2xl font-black text-white/20">:</span>
-                <CountdownBlock value={countdown.m} label={pickStr("Minutes", "Minutes", lang)} />
-                <span className="mb-8 font-display text-2xl font-black text-white/20">:</span>
-                <CountdownBlock value={countdown.s} label={pickStr("Secondes", "Seconds", lang)} />
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Drops */}
-      <section className="border-t border-white/[0.06] py-[clamp(4rem,8vw,7rem)]">
-        <div className="dme-wrap">
-          <div className="mb-10 flex items-end justify-between gap-6 border-b border-white/[0.06] pb-6">
-            <div>
-              <p className="font-mono text-[9px] font-black uppercase tracking-[0.36em] text-[#e1192d]/65 mb-3">
-                {pickStr("Premier drop · S1 2026", "First drop · S1 2026", lang)}
-              </p>
-              <h2 className="font-display text-[clamp(1.6rem,3vw,2.6rem)] font-black leading-none tracking-[-0.03em] text-white">
-                {pickStr("Ce qui arrive.", "What's coming.", lang)}
-              </h2>
-            </div>
-            <span className="hidden shrink-0 font-mono text-[8px] font-black uppercase tracking-[0.28em] text-white/18 sm:block">
-              3 {pickStr("articles", "items", lang)}
+    <div className="min-h-screen text-[color:var(--t-1)]">
+      {/* ── Le maillot ───────────────────────────────────────────────── */}
+      <section className="shell grid items-center gap-10 pb-16 pt-[clamp(7.5rem,15vh,9.5rem)] lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <div>
+          <motion.figure
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={transition.cinematic}
+            className="surface relative aspect-[3/2] overflow-hidden"
+          >
+            <Image
+              key={active.id}
+              src={active.src}
+              alt={pick(active.alt, lang)}
+              fill
+              priority
+              unoptimized
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+            <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-black/70 px-3.5 py-1.5 text-[13px] font-semibold backdrop-blur-sm">
+              <span className="status-dot rounded-full" aria-hidden />
+              {lang === "en" ? "Coming soon" : "Bientôt disponible"}
             </span>
-          </div>
+          </motion.figure>
 
-          <div className="grid gap-px bg-white/[0.06] sm:grid-cols-3">
-            {DROPS.map((drop, index) => (
-              <DropCard key={drop.id} drop={drop} lang={lang} index={index} />
+          <div className="mt-3 grid grid-cols-4 gap-3" role="tablist" aria-label={lang === "en" ? "Photos of the jersey" : "Photos du maillot"}>
+            {VUES.map((v) => (
+              <button
+                key={v.id}
+                type="button"
+                role="tab"
+                aria-selected={vue === v.id}
+                onClick={() => setVue(v.id)}
+                aria-label={pick(v.alt, lang)}
+                className={`surface relative aspect-[3/2] overflow-hidden transition-[border-color,opacity] ${
+                  vue === v.id ? "border-[color:var(--red)]" : "opacity-60 hover:opacity-100"
+                }`}
+              >
+                <Image src={v.src} alt="" fill unoptimized sizes="200px" className="object-cover" />
+              </button>
             ))}
           </div>
-
-          <p className="mt-4 font-mono text-[8px] text-white/18 tracking-[0.14em]">
-            {pickStr(
-              "* Designs non finaux. Quantites limitees. Reserves aux membres Discord en avant-premiere.",
-              "* Designs not final. Limited quantities. Discord members get early access.",
-              lang
-            )}
-          </p>
         </div>
+
+        <motion.div variants={stagger(0.08, 0.1)} initial="hidden" animate="visible">
+          <motion.p variants={fadeUp(0, 16)} className="text-[15px] font-semibold text-[color:var(--red-lift)]">
+            {lang === "en" ? "The DME shop" : "La boutique DME"}
+          </motion.p>
+          <motion.h1 variants={fadeUp(0, 20)} className="h-display mt-3">
+            {lang === "en" ? "Wear the jersey." : "Porte le maillot."}
+          </motion.h1>
+          <motion.p variants={fadeUp(0, 20)} className="lede mt-6">
+            {lang === "en"
+              ? "The same jersey our rosters wear on LAN, soon available to the community. The first drop will be announced on Discord before it opens here."
+              : "Le même maillot que nos rosters portent en LAN, bientôt ouvert à la communauté. La première vente sera annoncée sur le Discord avant d'ouvrir ici."}
+          </motion.p>
+
+          <motion.ul variants={fadeUp(0, 20)} className="mt-8 space-y-3">
+            {DETAILS.map((d) => (
+              <li key={d.fr} className="flex items-start gap-3 text-[15px] text-[color:var(--t-2)]">
+                <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[rgba(225,25,45,0.14)]">
+                  <Check className="h-3 w-3 text-[color:var(--red-lift)]" aria-hidden />
+                </span>
+                {pick(d, lang)}
+              </li>
+            ))}
+          </motion.ul>
+
+          <motion.div variants={fadeUp(0, 20)} className="mt-9 flex flex-wrap gap-3">
+            <a href={DISCORD} target="_blank" rel="noopener noreferrer" className="pill">
+              <Bell className="h-4 w-4" aria-hidden />
+              {lang === "en" ? "Get notified on Discord" : "Être prévenu sur Discord"}
+            </a>
+            <a href={commandeGroupe} className="pill-ghost">
+              {lang === "en" ? "Group order" : "Commande de groupe"}
+            </a>
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* CTA */}
-      <section className="border-t border-white/[0.06]">
-        <div className="dme-wrap py-[clamp(4rem,8vw,7rem)]">
-          <div className="relative overflow-hidden border border-white/[0.07] bg-[#080808] p-[clamp(2rem,5vw,4rem)]">
-            <span className="absolute left-0 top-0 h-6 w-px bg-[#e1192d]" />
-            <span className="absolute left-0 top-0 h-px w-6 bg-[#e1192d]" />
-            <span className="absolute bottom-0 right-0 h-6 w-px bg-[#e1192d]" />
-            <span className="absolute bottom-0 right-0 h-px w-6 bg-[#e1192d]" />
-
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <p className="font-mono text-[9px] font-black uppercase tracking-[0.36em] text-[#e1192d]/65 mb-4">
-                  Drop alert
-                </p>
-                <h2 className="font-abolition text-[clamp(2.4rem,6vw,5rem)] leading-none uppercase text-white" style={{ letterSpacing: "0.02em" }}>
-                  {pickStr("Sois le premier", "Be the first", lang)}
-                  <br />
-                  <span className="text-white/40">{pickStr("informe.", "to know.", lang)}</span>
-                </h2>
-                <p className="mt-5 max-w-md font-mono text-[10px] leading-relaxed text-white/36">
-                  {pickStr(
-                    "L'annonce se fera en exclusivite sur Discord. Rejoins le serveur pour ne rien rater.",
-                    "The announcement drops exclusively on Discord. Join the server to be first.",
-                    lang
-                  )}
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
-                <ButtonLink href="https://discord.gg/Zu4FP5pU9M">
-                  {pickStr("Rejoindre Discord", "Join Discord", lang)}
-                </ButtonLink>
-                <Link
-                  href="https://x.com/DeathMarkEsport"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 border border-white/[0.1] px-5 py-3 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-white/38 transition hover:border-white/20 hover:text-white/70"
-                >
-                  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden="true">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                  X / Twitter
-                </Link>
-              </div>
+      {/* ── A venir et commandes de groupe ───────────────────────────── */}
+      <section className="shell pb-[clamp(4.5rem,9vw,8rem)]">
+        <div className="grid gap-3 md:grid-cols-2 lg:gap-4">
+          <Reveal className="surface flex h-full flex-col p-6 md:p-10">
+            <h2 className="h-card">{lang === "en" ? "Next in the collection." : "La suite de la collection."}</h2>
+            <p className="mt-2 text-[15px] text-[color:var(--t-2)]">
+              {lang === "en" ? "In preparation, after the jersey." : "En préparation, après le maillot."}
+            </p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {A_VENIR.map((a) => (
+                <li key={a.fr} className="rounded-full border border-[color:var(--line-2)] px-4 py-2 text-[14px] text-[color:var(--t-2)]">
+                  {pick(a, lang)}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={0.06} className="surface flex h-full flex-col p-6 md:p-10">
+            <h2 className="h-card">{lang === "en" ? "Ordering for a team or an event?" : "Une commande pour une équipe ou un événement ?"}</h2>
+            <p className="mt-2 text-[15px] text-[color:var(--t-2)]">
+              {lang === "en"
+                ? "Group orders and custom requests go straight to the staff."
+                : "Les commandes de groupe et les demandes sur mesure passent directement par le staff."}
+            </p>
+            <div className="mt-auto flex flex-wrap gap-3 pt-8">
+              <a href={commandeGroupe} className="pill min-h-11 text-[14px]">
+                {lang === "en" ? "Email the staff" : "Écrire au staff"}
+                <ArrowUpRight className="h-4 w-4" aria-hidden />
+              </a>
+              <Link href="/contact" className="pill-ghost min-h-11 text-[14px]">
+                {lang === "en" ? "Other questions" : "Autres questions"}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </div>

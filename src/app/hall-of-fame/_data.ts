@@ -29,27 +29,32 @@ export const GAME_LABELS: Record<GameKey, string> = {
   "marvel-rivals": "Marvel Rivals",
 };
 
+/* Programmes fermes : Rocket League et Marvel Rivals. Leurs resultats restent
+   dans l'historique (ils comptent dans les gains de l'organisation) mais ne
+   sont plus affiches nulle part. */
+export const JEUX_ARCHIVES: readonly GameKey[] = ["rocket-league", "marvel-rivals"];
+
 /* ===== Données ===== */
-export const achievements: Achievement[] = [
+const tousLesResultats: Achievement[] = [
 
   // ================================================================
-  // LAN ETS 2026, LoL (derniers résultats)
+  // LAN ÉTS 2026, LoL (derniers résultats)
   // ================================================================
   {
     id:          "lan-ets-2026-1st",
-    titre:       "LAN ETS 2026 – 1re place (League of Legends)",
-    sousTitre:   "Victoire League of Legends, 4 800 $",
+    titre:       "LAN ÉTS 2026 – 1re place (League of Legends)",
+    sousTitre:   "Champions face à Apex en finale (2-1), 8 000 $",
     type:        "LAN",
     category:    "LAN",
     jeu:         "lol",
-    cashprize:   "4 800 $",
+    cashprize:   "8 000 $",
     badge:       "1re place",
     description:
-      "DME remporte la LAN ETS 2026 à Montréal en League of Legends, le plus gros cashprize LAN de l'organisation à ce jour et un nouveau sommet pour le programme compétitif.",
+      "DME remporte la LAN ÉTS 2026 à Montréal en League of Legends : quatre équipes engagées, victoire 2-1 en finale contre Apex Mission Impossible, et le plus gros cashprize de l'organisation à ce jour. Source : Montreal Gaming.",
   },
   {
     id:          "lan-ets-2026-3rd",
-    titre:       "LAN ETS 2026 – 3e place (League of Legends)",
+    titre:       "LAN ÉTS 2026 – 3e place (League of Legends)",
     sousTitre:   "Podium League of Legends, 1 000 $",
     type:        "LAN",
     category:    "LAN",
@@ -57,7 +62,7 @@ export const achievements: Achievement[] = [
     cashprize:   "1 000 $",
     badge:       "3e place",
     description:
-      "Une deuxième équipe DME sur le podium de la LAN ETS 2026, un top 3 qui confirme la profondeur du programme League of Legends de l'organisation.",
+      "Une deuxième équipe DME sur le podium de la LAN ÉTS 2026, un top 3 qui confirme la profondeur du programme League of Legends de l'organisation.",
   },
 
   // ================================================================
@@ -72,7 +77,7 @@ export const achievements: Achievement[] = [
     jeu:         "lol",
     cashprize:   "2 000 $",
     description:
-      "Notre plus gros cashprize à ce jour. Une performance collective solide, une draft maîtrisée et une ambiance de scène qui marque un vrai tournant dans l'histoire de DeathMark E-Sports.",
+      "Notre plus gros cashprize à ce jour. Une performance collective solide, une draft maîtrisée et une ambiance de scène qui marque un vrai tournant dans l'histoire de DME.",
     bannerSrc: "/medias/commun/CQC.png",
     bannerAlt: "Roster DME pour la LAN UQTR 2025",
   },
@@ -118,8 +123,30 @@ export const achievements: Achievement[] = [
   // LAN, LoL (nouveaux résultats)
   // ================================================================
   {
+    id:          "lan-cstj-2026-lol",
+    titre:       "LAN CSTJ 2026 – 1re place (League of Legends)",
+    sousTitre:   "Victoire League of Legends",
+    type:        "LAN",
+    category:    "LAN",
+    jeu:         "lol",
+    badge:       "1re place",
+    description:
+      "DME remporte la LAN CSTJ 2026 en League of Legends. Source : dossier de commandite DME 2026-2027.",
+  },
+  {
+    id:          "lan-cfpr-2026-lol",
+    titre:       "LAN CFPR 2026 – 1re place (League of Legends)",
+    sousTitre:   "Titre conservé à la LAN CFPR",
+    type:        "LAN",
+    category:    "LAN",
+    jeu:         "lol",
+    badge:       "1re place",
+    description:
+      "Deuxième victoire consécutive de DME à la LAN CFPR en League of Legends. Source : dossier de commandite DME 2026-2027.",
+  },
+  {
     id:          "lan-cfpr-lol",
-    titre:       "LAN CFPR – 1re place (League of Legends)",
+    titre:       "LAN CFPR 2025 – 1re place (League of Legends)",
     sousTitre:   "Victoire League of Legends, 500 $",
     type:        "LAN",
     category:    "LAN",
@@ -268,14 +295,14 @@ export const achievements: Achievement[] = [
   {
     id:          "avl-champions",
     titre:       "Aegis Vanguard League – Champions",
-    sousTitre:   "1re place AVL, Spring 2026",
+    sousTitre:   "1re place AVL, Spring 2026 (roster académie)",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
     cashprize:   "2 450 $",
     badge:       "Champions",
     description:
-      "DME remporte l'Aegis Vanguard League Spring 2026, un titre qui couronne une saison dominante et positionne l'organisation parmi les meilleures structures de la scène LoL NA amateur.",
+      "Le roster académie de DME remporte l'Aegis Vanguard League Spring 2026, un titre qui couronne une saison dominante et prouve que la relève de l'organisation gagne déjà.",
     bannerSrc: "/medias/commun/avl.png",
     bannerAlt: "DME, Champions AVL Spring 2026",
   },
@@ -328,14 +355,14 @@ export const achievements: Achievement[] = [
   // ================================================================
   {
     id:          "nacl-summer-promo-2026",
-    titre:       "NACL Summer Promotion 2026 – Qualifiés",
-    sousTitre:   "Qualification au tournoi de promotion NACL",
+    titre:       "NACL Summer Promotion 2026 – Finalistes",
+    sousTitre:   "Éliminés en finale du tournoi de promotion NACL",
     type:        "Ligue",
     category:    "AEGIS",
     jeu:         "lol",
-    badge:       "NACL · Qualifiés",
+    badge:       "NACL · Finalistes",
     description:
-      "DeathMark E-Sports se qualifie pour le NACL Summer Promotion Tournament 2026, un cap majeur sur le circuit semi-professionnel nord-américain, à un palier des ligues officielles NACL.",
+      "Qualifiée pour le NACL Summer Promotion Tournament 2026, DME va jusqu'en finale avant d'être éliminée, à une série des ligues officielles NACL. Le plus haut cap jamais atteint par l'organisation sur le circuit nord-américain.",
   },
   {
     id:          "acl-autre",
@@ -398,7 +425,7 @@ export const achievements: Achievement[] = [
     jeu:         "lol",
     badge:       "NACL",
     description:
-      "Première apparition en NACL OQ : entrée officielle de DeathMark E-Sports sur le circuit semi-professionnel nord-américain, face à des structures déjà bien établies.",
+      "Première apparition en NACL OQ : entrée officielle de DME sur le circuit semi-professionnel nord-américain, face à des structures déjà bien établies.",
     bannerSrc: "/medias/commun/Roster_ACL.png",
     bannerAlt: "Roster DME pour la NACL Summer 2025",
   },
@@ -411,7 +438,7 @@ export const achievements: Achievement[] = [
     jeu:         "lol",
     badge:       "NACL · Top 18",
     description:
-      "Un Top 18 en NACL OQ de février 2026, une performance significative sur le circuit semi-professionnel nord-américain qui confirme la progression de DeathMark E-Sports face aux meilleures structures du Tier 2.",
+      "Un Top 18 en NACL OQ de février 2026, une performance significative sur le circuit semi-professionnel nord-américain qui confirme la progression de DME face aux meilleures structures du Tier 2.",
   },
   {
     id:          "nacl-oq-top38",
@@ -425,3 +452,67 @@ export const achievements: Achievement[] = [
       "Un Top 38 en NACL OQ de février 2026, une deuxième équipe DME qui s'engage sur le circuit et représente l'organisation dans un des qualificatifs les plus compétitifs de la scène amateur NA.",
   },
 ];
+
+/* ─── Rang et totaux — source unique ──────────────────────────────────────────
+   La homepage et la page palmares lisaient le meme palmares avec deux regles
+   de comptage differentes et affichaient deux chiffres differents.
+   Tout passe desormais par ici. */
+
+const MOJIBAKE: Array<[string, string]> = [
+  ["Ã©", "e"], ["Ã¨", "e"], ["Ãª", "e"],
+  ["Ã ", "a"], ["Ã¢", "a"], ["Ã´", "o"],
+  ["Ã®", "i"], ["Ã¯", "i"], ["Ã§", "c"],
+  ["Ã‰", "E"], ["Â·", "/"], ["Â", ""],
+  ["â€“", "-"], ["â€”", "-"],
+  ["â†’", "->"], ["Ã", "a"],
+];
+
+export function nettoyer(valeur: string): string {
+  return MOJIBAKE.reduce((texte, [de, vers]) => texte.replaceAll(de, vers), valeur);
+}
+
+/** Rang numerique d'un resultat. 99 = non classe. */
+export function rangDe(item: Achievement): number {
+  const h = nettoyer(`${item.titre} ${item.badge ?? ""} ${item.sousTitre}`).toLowerCase();
+  if (h.includes("1re") || h.includes("1er") || h.includes("1st") || h.includes("champion")) return 1;
+  if (h.includes("2e") || h.includes("2nd") || h.includes("finaliste")) return 2;
+  if (h.includes("3e") || h.includes("3rd") || h.includes("podium")) return 3;
+  if (h.includes("top 8")) return 8;
+  if (h.includes("top 18")) return 18;
+  if (h.includes("top 38")) return 38;
+  if (h.includes("top 256")) return 256;
+  return 99;
+}
+
+export function bourseDe(item: Achievement): number {
+  return Number((item.cashprize ?? "").replace(/[^\d]/g, "")) || 0;
+}
+
+/** Resultats affiches sur le site : les programmes fermes en sont exclus. */
+export const achievements: Achievement[] = tousLesResultats.filter(
+  (item) => !JEUX_ARCHIVES.includes(item.jeu),
+);
+
+/** Totaux calcules sur une liste de resultats. */
+export function totauxDe(liste: Achievement[]) {
+  return {
+    cashprize: liste.reduce((somme, item) => somme + bourseDe(item), 0),
+    premieres: liste.filter((item) => rangDe(item) === 1).length,
+    lans: liste.filter((item) => item.category === "LAN").length,
+    titres: liste.length,
+  };
+}
+
+/** Totaux de l'organisation. Les gains et les titres LAN couvrent tout
+   l'historique, programmes fermes compris : c'est ce que DME a reellement
+   remporte, et ce qu'annonce le dossier de commandite. Le reste ne compte que
+   les resultats affiches, pour que chaque chiffre renvoie a une ligne visible
+   du palmares. */
+export function totauxOrganisation() {
+  return {
+    ...totauxDe(achievements),
+    cashprize: tousLesResultats.reduce((somme, item) => somme + bourseDe(item), 0),
+    /** Titres en LAN sur tout l'historique : le chiffre du dossier de commandite. */
+    titresLan: tousLesResultats.filter((item) => item.category === "LAN" && rangDe(item) === 1).length,
+  };
+}

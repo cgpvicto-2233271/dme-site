@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { AcademieProgramPage } from "@/components/equipes/academie-program-page";
 
 export const metadata: Metadata = {
-  title: "Académie Valorant | DeathMark E-Sports",
+  title: "Académie Valorant | DME",
 };
 
 export default function ValorantAcademiePage() {
   return (
     <AcademieProgramPage
-      eyebrow={{ fr: "Académie / Valorant", en: "Academy / Valorant" }}
       title={{ fr: "Des rôles propres.\nDes décisions rapides.", en: "Clean roles.\nFast decisions." }}
       lead={{
         fr: "L'académie Valorant sert à détecter les profils capables de rester calmes sous pression. Cinq slots, coaching réel, exposition compétitive.",

@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { PublicCommandPage } from "@/components/layout/public-command-page";
 
 export const metadata: Metadata = {
-  title: "NA Premier & NA Rise | DeathMark E-Sports",
+  title: "NA Premier & NA Rise | DME",
 };
 
 export default function NaPremierPage() {
   return (
     <PublicCommandPage
-      eyebrow={{ fr: "LoL NA / projet ligue", en: "NA LoL / league project" }}
       title={{ fr: "NA Premier. NA Rise.", en: "NA Premier. NA Rise." }}
       lead={{
         fr: "Une compétition nord-américaine pensée pour la stabilité, le développement et l'exposition.",

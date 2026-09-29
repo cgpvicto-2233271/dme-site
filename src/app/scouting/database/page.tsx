@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const DDRAGON = "https://ddragon.leagueoflegends.com/cdn/14.10.1";
 const E = [0.16,1,0.3,1] as [number,number,number,number];

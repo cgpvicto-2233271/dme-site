@@ -1,324 +1,253 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { useLang } from "@/components/LanguageContext";
-import { ButtonLink } from "@/components/ui/button";
+import { motion } from "motion/react";
+import { ArrowRight, Mail } from "lucide-react";
+import type { ReactNode } from "react";
+import { useLang, type Lang } from "@/components/LanguageContext";
+import { EMAIL_CONTACT, FONDATION } from "@/lib/marque";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
 
-const EMAIL = "deathmarkesport@gmail.com";
+type Copy = { fr: string; en: string };
 
-type StaffMember = {
-  tag: string;
-  fullName: string;
-  role: { fr: string; en: string };
-  desc: { fr: string; en: string };
-  tags: string[];
-  department: { fr: string; en: string };
+type Membre = {
+  pseudo: string;
+  nom?: string;
+  role: Copy;
+  mission: Copy;
+  dossiers: Copy[];
 };
 
-type Department = {
-  key: string;
-  label: { fr: string; en: string };
-  members: StaffMember[];
-};
-
-const DEPARTMENTS: Department[] = [
+/* La direction de la deuxieme phase : cinq personnes, un responsable unique
+   par dossier. Source : plan de match de la direction, Q4 2026. */
+const DIRECTION: Membre[] = [
   {
-    key: "direction",
-    label: { fr: "Direction", en: "Direction" },
-    members: [
-      {
-        tag: "Seanflex",
-        fullName: "Pierre Lavoie",
-        role: { fr: "Propriétaire", en: "Owner" },
-        desc: {
-          fr: "Vision stratégique et stabilité à long terme. Fondateur de l'identité DME, chaque décision organisationnelle passe par sa validation.",
-          en: "Strategic vision and long-term stability. Founder of the DME identity, every organizational decision goes through him.",
-        },
-        tags: ["Direction", "Vision", "Organisation"],
-        department: { fr: "Direction", en: "Direction" },
-      },
-      {
-        tag: "Zeus",
-        fullName: "Alex Lallemand",
-        role: { fr: "Co-Propriétaire", en: "Co-Owner" },
-        desc: {
-          fr: "Support aux opérations et exécution au quotidien. Gère la structure interne et les décisions tactiques à l'échelle de l'organisation.",
-          en: "Day-to-day operations and execution. Manages internal structure and tactical decisions across the organization.",
-        },
-        tags: ["Direction", "Opérations", "Management"],
-        department: { fr: "Direction", en: "Direction" },
-      },
-      {
-        tag: "Coussinho",
-        fullName: "Mathieu Cousança",
-        role: { fr: "Directeur général", en: "CEO" },
-        desc: {
-          fr: "Gestion des rosters et développement compétitif. Interface principale entre le staff coaching, les joueurs et la direction de l'organisation.",
-          en: "Roster management and competitive development. Primary interface between coaching staff, players, and organizational leadership.",
-        },
-        tags: ["Rosters", "Compétitif", "Développement"],
-        department: { fr: "Direction", en: "Direction" },
-      },
+    pseudo: "Coussinho",
+    nom: "Mathieu Cousança",
+    role: { fr: "Copropriétaire · Manager", en: "Co-owner · Manager" },
+    mission: {
+      fr: "Fixe la vision avec Jarsiss, valide les ententes majeures et les embauches, et tranche les décisions finales. Garde son poste de manager auprès de ses équipes.",
+      en: "Sets the vision with Jarsiss, signs off on major deals and hires, and makes the final calls. Keeps his manager role with his teams.",
+    },
+    dossiers: [
+      { fr: "Vision", en: "Vision" },
+      { fr: "Décisions finales", en: "Final calls" },
+      { fr: "Rosters", en: "Rosters" },
     ],
   },
   {
-    key: "management",
-    label: { fr: "Management & Administration", en: "Management & Administration" },
-    members: [
-      {
-        tag: "Jarsiss",
-        fullName: "Zachary Larocque",
-        role: { fr: "Administrateur", en: "Admin" },
-        desc: {
-          fr: "Opérations internes et coordination équipes. Tryouts, plannings, communications staff, la structure qui tient au quotidien derrière chaque split.",
-          en: "Internal operations and team coordination. Tryouts, scheduling, staff communications, the structure that holds day to day.",
-        },
-        tags: ["Administration", "Tryouts", "Opérations"],
-        department: { fr: "Management", en: "Management" },
-      },
-      {
-        tag: "Etirock",
-        fullName: "Étienne Landry",
-        role: { fr: "Administrateur & Caster", en: "Admin & Caster" },
-        desc: {
-          fr: "Organisation événementielle et qualité broadcast. La voix de DME sur les matchdays, cast, coordination terrain et présence communautaire.",
-          en: "Event organization and broadcast quality. The voice of DME on matchdays, casting, on-site coordination and community presence.",
-        },
-        tags: ["Événements", "Caster", "Broadcast"],
-        department: { fr: "Management", en: "Management" },
-      },
+    pseudo: "Jarsiss",
+    nom: "Zachary Larocque",
+    role: { fr: "Copropriétaire · Manager", en: "Co-owner · Manager" },
+    mission: {
+      fr: "Partage la vision et le budget avec Coussinho et anime la réunion hebdomadaire de direction. Manager du nouveau roster Counter-Strike.",
+      en: "Shares vision and budget with Coussinho and runs the weekly leadership meeting. Manager of the new Counter-Strike roster.",
+    },
+    dossiers: [
+      { fr: "Budget", en: "Budget" },
+      { fr: "Réunion hebdo", en: "Weekly meeting" },
+      { fr: "Counter-Strike", en: "Counter-Strike" },
     ],
   },
   {
-    key: "board",
-    label: { fr: "Conseil d'administration", en: "Board & Expertise" },
-    members: [
-      {
-        tag: "Ben",
-        fullName: "Benoit Bouthillier",
-        role: { fr: "Comptable / C.A.", en: "Accountant / C.A." },
-        desc: {
-          fr: "Gestion financière et conformité réglementaire. Maintient la structure CA et la santé financière de l'organisation à chaque cycle.",
-          en: "Financial management and regulatory compliance. Maintains the corporate structure and financial health every cycle.",
-        },
-        tags: ["Finance", "Comptabilité", "CA"],
-        department: { fr: "Conseil", en: "Board" },
-      },
+    pseudo: "Etirock",
+    nom: "Étienne Landry",
+    role: { fr: "Communications · Point de contact", en: "Communications · Point of contact" },
+    mission: {
+      fr: "La voix de DME : annonces, ton et messages publics. Point de contact central pour la communauté et les partenaires, il met aussi chaque décision importante à l'épreuve avant qu'on s'engage.",
+      en: "The voice of DME: announcements, tone and public messaging. Central point of contact for the community and partners, he also stress-tests every major decision before we commit.",
+    },
+    dossiers: [
+      { fr: "Communications", en: "Communications" },
+      { fr: "Communauté", en: "Community" },
+      { fr: "Partenaires", en: "Partners" },
+    ],
+  },
+  {
+    pseudo: "Canard",
+    role: { fr: "Tournois · Commandites", en: "Tournaments · Sponsorships" },
+    mission: {
+      fr: "Organise nos tournois internes et communautaires, gère les inscriptions aux tournois externes et bâtit le pipeline de commandites.",
+      en: "Runs our internal and community tournaments, handles external tournament entries and builds the sponsorship pipeline.",
+    },
+    dossiers: [
+      { fr: "Tournois", en: "Tournaments" },
+      { fr: "Commandites", en: "Sponsorships" },
+      { fr: "Giveaways", en: "Giveaways" },
+    ],
+  },
+  {
+    pseudo: "Benoit",
+    nom: "Benoit Bouthillier",
+    role: { fr: "Finances · Prévisions", en: "Finance · Forecasting" },
+    mission: {
+      fr: "Tient la prévision 2027, valide chaque dépense majeure et suit les indicateurs financiers et d'audience qui comptent pour nos partenaires.",
+      en: "Keeps the 2027 forecast, signs off on every major expense and tracks the financial and audience metrics that matter to our partners.",
+    },
+    dossiers: [
+      { fr: "Finances", en: "Finance" },
+      { fr: "Prévisions", en: "Forecasting" },
+      { fr: "Indicateurs", en: "Metrics" },
     ],
   },
 ];
 
-const ALL_STAFF = DEPARTMENTS.flatMap((d) => d.members);
+const PRINCIPES: { titre: Copy; texte: Copy }[] = [
+  {
+    titre: { fr: "Un responsable par dossier.", en: "One owner per file." },
+    texte: {
+      fr: "Chaque sujet a une seule personne qui en répond. Personne ne se demande à qui parler.",
+      en: "Every topic has one person accountable for it. Nobody wonders who to talk to.",
+    },
+  },
+  {
+    titre: { fr: "Une réunion par semaine.", en: "One meeting a week." },
+    texte: {
+      fr: "La direction se voit chaque semaine, avec des objectifs mesurables et un suivi des tâches.",
+      en: "Leadership meets every week, with measurable goals and task tracking.",
+    },
+  },
+  {
+    titre: { fr: "Les gens d'abord.", en: "People first." },
+    texte: {
+      fr: "Joueurs comme staff, on veille au rythme, au repos et à l'équilibre de chacun. Une organisation qui dure, c'est une organisation où on va bien.",
+      en: "Players and staff alike, we look after everyone's pace, rest and balance. An organisation that lasts is one where people are doing well.",
+    },
+  },
+];
+
+const POSTES: Copy[] = [
+  { fr: "Responsable contenu et community manager", en: "Content lead and community manager" },
+  { fr: "Graphiste ou motion designer", en: "Graphic or motion designer" },
+  { fr: "Lead modération de la communauté", en: "Community moderation lead" },
+  { fr: "Responsable partenariats", en: "Partnerships lead" },
+  { fr: "Support à l'organisation de tournois", en: "Tournament operations support" },
+  { fr: "Coachs et analystes par équipe", en: "Coaches and analysts per team" },
+  { fr: "Responsable recrutement des joueurs", en: "Player recruitment lead" },
+  { fr: "Caster ou producteur de diffusion", en: "Caster or broadcast producer" },
+];
+
+const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
+
+function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
+  return (
+    <motion.div variants={fadeUp(delay, 20)} initial="hidden" whileInView="visible" viewport={viewport.once} className={className}>
+      {children}
+    </motion.div>
+  );
+}
 
 export function StaffClient() {
   const { lang } = useLang();
-  const t = (fr: string, en: string) => lang === "en" ? en : fr;
 
   return (
-    <div className="dme-page">
+    <div className="min-h-screen text-[color:var(--t-1)]">
+      {/* ── Ouverture ────────────────────────────────────────────────── */}
+      <section className="shell pb-16 pt-[clamp(8rem,16vh,10rem)]">
+        <motion.div variants={stagger(0.08, 0.05)} initial="hidden" animate="visible" className="max-w-[46rem]">
+          <motion.p variants={fadeUp(0, 16)} className="text-[15px] font-semibold text-[color:var(--red-lift)]">
+            {lang === "en" ? `Est. ${FONDATION} · Phase two` : `Est. ${FONDATION} · Deuxième phase`}
+          </motion.p>
+          <motion.h1 variants={fadeUp(0, 20)} className="h-display mt-4">
+            {lang === "en" ? "A new leadership." : "Une nouvelle direction."}
+          </motion.h1>
+          <motion.p variants={fadeUp(0, 20)} className="lede mt-6">
+            {lang === "en"
+              ? "DME is entering its second phase. Five people, one owner per file, and a steady pace: we structure and professionalise step by step, rather than promising too much, too fast."
+              : "DME entre dans sa deuxième phase. Cinq personnes, un responsable par dossier, et un rythme tenable : on se structure et on se professionnalise par paliers solides, plutôt que de promettre trop, trop vite."}
+          </motion.p>
+        </motion.div>
+      </section>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="border-b border-white/[0.07]" style={{ paddingBlock: "clamp(4rem, 8vw, 7rem)" }}>
-        <div className="dme-wrap grid gap-10 lg:grid-cols-[1fr_minmax(260px,340px)] lg:items-end">
-          <div>
-            <motion.p
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="dme-eyebrow mb-5"
-            >
-              {t("Staff / Direction / Management", "Staff / Direction / Management")}
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-              className="dme-title"
-              style={{ fontSize: "clamp(3rem, 8vw, 7.5rem)" }}
-            >
-              {t("Les gens\nderrière DME.", "The people\nbehind DME.")}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-              className="dme-lead mt-6"
-            >
-              {t(
-                "Direction, management et conseil d'administration, le noyau qui construit DeathMark au quotidien, split après split.",
-                "Direction, management, and board, the core building DeathMark daily, split after split."
-              )}
-            </motion.p>
-          </div>
+      {/* ── La direction ─────────────────────────────────────────────── */}
+      <section className="shell pb-[clamp(4.5rem,9vw,8rem)]">
+        <div className="grid gap-3 md:grid-cols-2 lg:gap-4">
+          {DIRECTION.map((m, i) => (
+            <Reveal key={m.pseudo} delay={(i % 2) * 0.06}>
+              <article className="surface flex h-full flex-col p-6 md:p-8">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-[clamp(1.6rem,2.6vw,2.1rem)] font-semibold leading-none tracking-[-0.03em]">{m.pseudo}</h2>
+                    {m.nom ? <p className="mt-2 text-[14px] text-[color:var(--t-3)]">{m.nom}</p> : null}
+                  </div>
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[rgba(225,25,45,0.12)] text-[17px] font-bold text-[color:var(--red-lift)]">
+                    {m.pseudo.charAt(0)}
+                  </span>
+                </div>
+                <p className="mt-5 text-[14px] font-semibold text-[color:var(--red-lift)]">{pick(m.role, lang)}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(m.mission, lang)}</p>
+                <ul className="mt-auto flex flex-wrap gap-2 pt-6">
+                  {m.dossiers.map((d) => (
+                    <li key={d.fr} className="rounded-full border border-[color:var(--line-2)] px-3 py-1 text-[13px] text-[color:var(--t-2)]">
+                      {pick(d, lang)}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </Reveal>
+          ))}
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.62, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="dme-gridline grid sm:grid-cols-3 lg:grid-cols-1"
-          >
-            {[
-              { value: String(ALL_STAFF.length).padStart(2, "0"), label: { fr: "Membres actifs", en: "Active members" } },
-              { value: "04", label: { fr: "Scènes couvertes", en: "Titles covered" } },
-              { value: "QC", label: { fr: "Québec / NA", en: "Quebec / NA" } },
-            ].map((stat) => (
-              <div key={stat.value} className="p-5">
-                <p className="font-abolition text-white" style={{ fontSize: "clamp(2.2rem, 4vw, 3.2rem)", lineHeight: 1 }}>
-                  {stat.value}
-                </p>
-                <p className="mt-2 font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-white/28">
-                  {lang === "en" ? stat.label.en : stat.label.fr}
-                </p>
-              </div>
-            ))}
-          </motion.div>
+          {/* Case d'appel : complete la grille de cinq. */}
+          <Reveal delay={0.06}>
+            <a
+              href="#postes"
+              className="surface lift group flex h-full min-h-[240px] flex-col justify-between p-6 md:p-8"
+              style={{ background: "linear-gradient(160deg, rgba(225,25,45,0.14), rgba(13,13,13,1) 60%)" }}
+            >
+              <p className="h-card max-w-[18ch]">{lang === "en" ? "Your name here?" : "Ton nom ici ?"}</p>
+              <span className="inline-flex items-center gap-2 text-[15px] font-semibold">
+                {lang === "en" ? "See open positions" : "Voir les postes ouverts"}
+                <ArrowRight className="h-4 w-4 text-[color:var(--red)] transition-transform group-hover:translate-x-1" aria-hidden />
+              </span>
+            </a>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── MEMBRES ──────────────────────────────────────────────────────── */}
-      <section className="border-b border-white/[0.07]" style={{ paddingBlock: "clamp(4rem, 8vw, 7rem)" }}>
-        <div className="dme-wrap space-y-16">
-          {DEPARTMENTS.map((dept, deptIdx) => (
-            <div key={dept.key}>
-              {/* Department header */}
-              <div className="mb-8 flex items-center gap-4">
-                <span className="h-px w-8 bg-[#e1192d]" />
-                <p className="font-mono text-[9px] font-bold uppercase tracking-[0.32em] text-white/30">
-                  {lang === "en" ? dept.label.en : dept.label.fr}
-                </p>
-                <span className="font-mono text-[8px] font-bold text-white/16">
-                  {dept.members.length}
-                </span>
-              </div>
-
-              <motion.div
-                className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                variants={stagger(0.06)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewport.once}
-              >
-                {dept.members.map((member, i) => (
-                  <motion.div
-                    key={member.tag}
-                    variants={fadeUp((deptIdx * 0.1) + (i * 0.07), 22)}
-                    className="group flex flex-col border border-white/[0.07] bg-[#080808] transition hover:border-white/[0.12]"
-                  >
-                    {/* Top: initials + identity */}
-                    <div className="flex items-start gap-4 p-6 pb-4">
-                      {/* Initials block */}
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-white/[0.07] bg-[#0d0d0d]">
-                        <span className="font-abolition text-white select-none" style={{ fontSize: "1.5rem", lineHeight: 1 }}>
-                          {member.tag.slice(0, 2).toUpperCase()}
-                        </span>
-                      </div>
-
-                      {/* Identity */}
-                      <div className="min-w-0">
-                        <p className="font-mono text-[8px] font-bold uppercase tracking-[0.26em] text-[#e1192d]/65">
-                          {lang === "en" ? member.role.en : member.role.fr}
-                        </p>
-                        <h2 className="font-abolition mt-1 text-white" style={{ fontSize: "clamp(1.5rem, 2.5vw, 1.9rem)", lineHeight: 0.95 }}>
-                          {member.tag}
-                        </h2>
-                        <p className="mt-1 font-mono text-[8px] text-white/30">{member.fullName}</p>
-                      </div>
-
-                      <span className="status-dot ml-auto mt-1 shrink-0" />
-                    </div>
-
-                    {/* Description */}
-                    <div className="flex-1 px-6 pb-5">
-                      <div className="h-px w-full bg-white/[0.055] mb-4" />
-                      <p className="text-[13px] leading-6 text-white/46">
-                        {lang === "en" ? member.desc.en : member.desc.fr}
-                      </p>
-                    </div>
-
-                    {/* Tags + CTA */}
-                    <div className="border-t border-white/[0.055] bg-white/[0.018] px-6 py-4">
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {member.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-white/35"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <a
-                        href={`mailto:${EMAIL}?subject=Contact ${member.tag}, DME`}
-                        className="inline-flex items-center gap-1.5 font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-white/35 transition hover:text-white"
-                      >
-                        {t("Écrire", "Write")}
-                        <ArrowUpRight className="h-3 w-3" />
-                      </a>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
+      {/* ── Comment on fonctionne ────────────────────────────────────── */}
+      <section className="shell pb-[clamp(4.5rem,9vw,8rem)]">
+        <Reveal className="mb-10 md:mb-14">
+          <h2 className="h-section">{lang === "en" ? "How we work." : "Comment on fonctionne."}</h2>
+        </Reveal>
+        <div className="grid gap-3 md:grid-cols-3 lg:gap-4">
+          {PRINCIPES.map((p, i) => (
+            <Reveal key={p.titre.fr} delay={i * 0.06} className="surface p-6 md:p-8">
+              <h3 className="h-card">{pick(p.titre, lang)}</h3>
+              <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--t-2)]">{pick(p.texte, lang)}</p>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ── POSTES OUVERTS ───────────────────────────────────────────────── */}
-      <section className="border-b border-white/[0.07] bg-[#080808]" style={{ paddingBlock: "clamp(3rem, 6vw, 5rem)" }}>
-        <div className="dme-wrap">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="h-px w-8 bg-white/20" />
-            <p className="font-mono text-[9px] font-bold uppercase tracking-[0.32em] text-white/30">
-              {t("Postes ouverts", "Open positions")}
+      {/* ── Postes ouverts ───────────────────────────────────────────── */}
+      <section id="postes" className="shell scroll-mt-24 pb-[clamp(4.5rem,9vw,8rem)]">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+          <Reveal>
+            <h2 className="h-section">{lang === "en" ? "We're building the team." : "On bâtit l'équipe."}</h2>
+            <p className="lede mt-5">
+              {lang === "en"
+                ? "The roles we're opening to support our growth. Volunteer, remote-friendly, with real responsibility from day one."
+                : "Les rôles qu'on ouvre pour soutenir notre croissance. Bénévoles, à distance, avec de vraies responsabilités dès le premier jour."}
             </p>
-          </div>
-          <div className="grid gap-px bg-white/[0.055] sm:grid-cols-2">
-            {[
-              { role: { fr: "Coach League of Legends", en: "League of Legends Coach" }, div: "League of Legends" },
-              { role: { fr: "Manager Rocket League", en: "Rocket League Manager" }, div: "Rocket League" },
-              { role: { fr: "Analyste / Scrim coordinator", en: "Analyst / Scrim coordinator" }, div: "Multi" },
-              { role: { fr: "Community Manager", en: "Community Manager" }, div: "Organisation" },
-            ].map((r, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp(i * 0.05, 16)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewport.once}
-                className="flex items-center justify-between gap-4 bg-[#080808] px-6 py-5"
-              >
-                <div>
-                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.26em] text-[#e1192d]/55">{r.div}</p>
-                  <p className="mt-2 font-bold text-white/80">{lang === "en" ? r.role.en : r.role.fr}</p>
-                </div>
-                <Link
-                  href="/recrutement"
-                  className="inline-flex shrink-0 items-center gap-1.5 font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-white/35 transition hover:text-white"
-                >
-                  {t("Postuler", "Apply")}
-                  <ArrowUpRight className="h-3 w-3" />
-                </Link>
-              </motion.div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/contact" className="pill">
+                {lang === "en" ? "Apply" : "Postuler"}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <a href={`mailto:${EMAIL_CONTACT}`} className="pill-ghost">
+                <Mail className="h-4 w-4" aria-hidden />
+                {EMAIL_CONTACT}
+              </a>
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="surface divide-y divide-[color:var(--line)] overflow-hidden">
+            {POSTES.map((poste) => (
+              <p key={poste.fr} className="flex items-center gap-4 px-6 py-4 text-[15px] md:px-8">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--red)]" aria-hidden />
+                {pick(poste, lang)}
+              </p>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section style={{ paddingBlock: "clamp(3rem, 6vw, 5.5rem)" }}>
-        <div className="dme-wrap flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="dme-title" style={{ fontSize: "clamp(2.2rem, 5vw, 4.5rem)" }}>
-              {t("Le niveau monte\nquand le système tient.", "The level rises\nwhen the system holds.")}
-            </h2>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <ButtonLink href="/recrutement">{t("Rejoindre le staff", "Join staff")}</ButtonLink>
-            <ButtonLink href="/contact" tone="secondary">{t("Nous contacter", "Contact us")}</ButtonLink>
-          </div>
+          </Reveal>
         </div>
       </section>
     </div>

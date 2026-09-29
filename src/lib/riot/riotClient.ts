@@ -1,5 +1,4 @@
 
-console.log("RIOT_API_KEY chargee ?", Boolean(process.env.RIOT_API_KEY));
 
 export type RoutageRegional = "americas" | "europe" | "asia" | "sea";
 

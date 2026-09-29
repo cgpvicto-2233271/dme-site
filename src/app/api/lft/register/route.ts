@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { adresseIp, autoriser } from "@/lib/limiteur";
 import { prisma } from "@/lib/prisma";
 import { validateAndEnrich } from "@/lib/lft/riot";
 import type { LftRegistrationInput } from "@/lib/lft/types";
@@ -54,6 +55,10 @@ function parseInput(body: unknown): LftRegistrationInput {
 }
 
 export async function POST(req: NextRequest) {
+  // Chaque inscription appelle l'API Riot : 5 par heure et par adresse.
+  if (!autoriser("lft", adresseIp(req), 5, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Trop d'inscriptions depuis cette adresse. Réessaie plus tard." }, { status: 429 });
+  }
   try {
     const raw = await req.json() as unknown;
     const input = parseInput(raw);

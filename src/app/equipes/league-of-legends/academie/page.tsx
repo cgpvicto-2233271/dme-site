@@ -3,7 +3,7 @@ import { AcademieProgramPage } from "@/components/equipes/academie-program-page"
 import type { ProgramRoster } from "@/components/equipes/team-program-page";
 
 export const metadata: Metadata = {
-  title: "Académie LoL | DeathMark E-Sports",
+  title: "Académie LoL | DME",
 };
 
 const AML_SHEET = "https://docs.google.com/spreadsheets/d/1zmXSwOpZkQxNjfYlSQI2pYxXFUfdMa_MdHhLp0gBHEw/edit?gid=402880902";
@@ -53,7 +53,6 @@ const rosters: ProgramRoster[] = [
 export default function LeagueOfLegendsAcademiePage() {
   return (
     <AcademieProgramPage
-      eyebrow={{ fr: "Académie / League of Legends", en: "Academy / League of Legends" }}
       title={{ fr: "La montée commence ici.", en: "The climb starts here." }}
       lead={{
         fr: "Trois rosters sur trois circuits Aegis. Un chemin clair du potentiel brut vers le roster actif.",

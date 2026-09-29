@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, type MotionStyle } from "motion/react";
 import { spring } from "@/lib/motion";
 
 export function Cursor() {
@@ -73,14 +73,14 @@ export function Cursor() {
           translateY:    "-50%",
           width:         28,
           height:        28,
-          border:        "1px solid rgba(220, 38, 38, 0.55)",
+          border:        "1px solid rgba(225, 25, 45, 0.55)",
           borderRadius:  "50%",
           scale:         1,
           opacity:       1,
           mixBlendMode:  "normal",
           "--ring-scale":   1,
           "--ring-opacity": 0.55,
-        } as React.CSSProperties}
+        } as MotionStyle}
         transition={spring.smooth}
       />
 
@@ -95,10 +95,10 @@ export function Cursor() {
           translateY:   "-50%",
           width:        4,
           height:       4,
-          background:   "#dc2626",
+          background:   "var(--red)",
           borderRadius: "50%",
           "--dot-scale": 1,
-        } as React.CSSProperties}
+        } as MotionStyle}
       />
     </>
   );

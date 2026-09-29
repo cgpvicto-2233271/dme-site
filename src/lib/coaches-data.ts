@@ -32,7 +32,8 @@ export type CoachData = {
   slug: string;
   pseudo: string;
   fullName: string;
-  email: string;
+  /** Courriel prive du coach : jamais dans le code (depot public). */
+  email?: string;
   role: string[];
   specialRole: string;
   rank: { fr: string; en: string };
@@ -63,7 +64,6 @@ export const COACHES: CoachData[] = [
     slug: "verdict",
     pseudo: "Verdict",
     fullName: "Vincent Filosa",
-    email: "vincent2692@live.ca",
     role: ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"],
     specialRole: "JUNGLE",
     rank: { fr: "Challenger NA", en: "Challenger NA" },
@@ -91,9 +91,9 @@ export const COACHES: CoachData[] = [
       { year: "S10+", label: { fr: "Challenger NA continu depuis la saison 10", en: "Continuous Challenger NA since season 10" } },
       { year: "Peak", label: { fr: "1 937 LP · Rank 23 Challenger NA", en: "1,937 LP · Rank 23 Challenger NA" } },
       { year: "2022", label: { fr: "LCS Proving Grounds — Team Ambition", en: "LCS Proving Grounds — Team Ambition" } },
-      { year: "2023", label: { fr: "Apex Mission Impossible — LAN ETS 2023", en: "Apex Mission Impossible — LAN ETS 2023" } },
+      { year: "2023", label: { fr: "Apex Mission Impossible — LAN ÉTS 2023", en: "Apex Mission Impossible — LAN ÉTS 2023" } },
       { year: "2026", label: { fr: "Champion CLOL East Conference — UQAM", en: "2026 CLOL East Conference Champion — UQAM" } },
-      { year: "2026", label: { fr: "Champion LAN ETS 2026 — DME", en: "2026 LAN ETS Champion — DME" } },
+      { year: "2026", label: { fr: "Champion LAN ÉTS 2026 — DME", en: "2026 LAN ÉTS Champion — DME" } },
       { year: "2026", label: { fr: "Qualifié NACL Summer Promotion — DME", en: "Qualified NACL Summer Promotion — DME" } },
     ],
     specialties: [
@@ -199,7 +199,6 @@ export const COACHES: CoachData[] = [
     slug: "goodboi",
     pseudo: "Goodboi",
     fullName: "Emmanuel Rouleau-Grosset",
-    email: "manu20022002@hotmail.com",
     role: ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"],
     specialRole: "ADC",
     rank: { fr: "Challenger NA", en: "Challenger NA" },
@@ -226,9 +225,9 @@ export const COACHES: CoachData[] = [
       { year: "S9+", label: { fr: "Challenger NA maintenu depuis la saison 9", en: "Challenger NA maintained since season 9" } },
       { year: "Peak", label: { fr: "1 790 LP · Rank 8 Challenger", en: "1,790 LP · Rank 8 Challenger" } },
       { year: "2021", label: { fr: "LCS Scouting Grounds · Dignitas Mirage", en: "LCS Scouting Grounds · Dignitas Mirage" } },
-      { year: "2022", label: { fr: "3e place LAN ETS 2022", en: "3rd place LAN ETS 2022" } },
+      { year: "2022", label: { fr: "3e place LAN ÉTS 2022", en: "3rd place LAN ÉTS 2022" } },
       { year: "2026", label: { fr: "NACL Spring Tier 1 · Apex Mission Impossible", en: "2026 NACL Spring Tier 1 · Apex Mission Impossible" } },
-      { year: "2026", label: { fr: "Champion LAN ETS 2026 · DME", en: "2026 LAN ETS Champion · DME" } },
+      { year: "2026", label: { fr: "Champion LAN ÉTS 2026 · DME", en: "2026 LAN ÉTS Champion · DME" } },
     ],
     specialties: [
       {

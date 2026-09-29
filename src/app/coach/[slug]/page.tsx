@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { use, useState, useEffect } from "react";
 import {
   ArrowLeft, ArrowRight, Shield, Star, Trophy, ExternalLink,

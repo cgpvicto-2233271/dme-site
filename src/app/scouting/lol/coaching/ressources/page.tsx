@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Star } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
 
 type Resource = {

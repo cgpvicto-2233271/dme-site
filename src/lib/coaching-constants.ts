@@ -19,11 +19,9 @@ export const DDRAGON_VERSION = "16.11.1";
 export const DD_CHAMPION_IMG = (key: string) =>
   `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${key}.png`;
 
-// Map image path (place at /public/maps/summoners-rift-16-09.jpg)
+// Carte de la Faille : version locale haute resolution, puis repli Data Dragon.
 export const MAP_IMAGE_PATHS = [
-  "/maps/summoners-rift-16-09.png",   // local high-res (place here first)
-  "/maps/summoners-rift-16-09.jpg",   // jpg variant
-  "/medias/coaching/lol-minimap.png",
+  "/maps/summoners-rift-16-09.png",
   // DDragon 512×512 minimap — always available, CORS-safe
   `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/map/map11.png`,
 ];

@@ -3,7 +3,7 @@ import { GameResultsPage } from "@/components/hall-of-fame/game-results-page";
 import type { Achievement } from "../_data";
 
 export const metadata: Metadata = {
-  title: "Hall Of Fame Valorant | DeathMark E-Sports",
+  title: "Hall Of Fame Valorant | DME",
 };
 
 const manual: Achievement[] = [
@@ -26,7 +26,6 @@ export default function HallOfFameValorantPage() {
   return (
     <GameResultsPage
       gameKey="valorant"
-      eyebrow={{ fr: "Resultats / Valorant", en: "Results / Valorant" }}
       title={{ fr: "Valorant.", en: "Valorant." }}
       lead={{
         fr: "Une scene precise, des preuves courtes, un standard DME sans bruit.",

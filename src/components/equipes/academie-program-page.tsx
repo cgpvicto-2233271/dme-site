@@ -1,11 +1,11 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowLeft } from "lucide-react";
 import { useLang, type Lang } from "@/components/LanguageContext";
 import { ButtonLink } from "@/components/ui/button";
-import { fadeUp, stagger, viewport } from "@/lib/motion";
+import { ease, fadeUp, stagger, viewport } from "@/lib/motion";
 import type { ProgramRoster } from "@/components/equipes/team-program-page";
 
 type Copy = { fr: string; en: string };
@@ -17,7 +17,6 @@ type Panel = {
 };
 
 type Props = {
-  eyebrow: Copy;
   title: Copy;
   lead: Copy;
   stats?: { value: string; label: Copy }[];
@@ -31,8 +30,7 @@ type Props = {
 
 function pick(copy: Copy, lang: Lang) { return lang === "en" ? copy.en : copy.fr; }
 
-export function AcademieProgramPage({
-  eyebrow, title, lead, stats, panels, rosters,
+export function AcademieProgramPage({ title, lead, stats, panels, rosters,
   primaryCta, secondaryCta, backHref, backLabel,
 }: Props) {
   const { lang } = useLang();
@@ -54,19 +52,10 @@ export function AcademieProgramPage({
             </Link>
           ) : null}
 
-          <motion.p
-            initial={{ opacity: 0, x: -14 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-5 font-mono text-[9px] font-bold uppercase tracking-[0.32em] text-white/32"
-          >
-            {pick(eyebrow, lang)}
-          </motion.p>
-
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.04 }}
+            transition={{ duration: 0.7, ease: ease.spring, delay: 0.04 }}
             className="font-abolition text-white"
             style={{ fontSize: "clamp(2.6rem, 6vw, 5.5rem)", lineHeight: 0.92 }}
           >
@@ -76,7 +65,7 @@ export function AcademieProgramPage({
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.55, delay: 0.14, ease: ease.spring }}
             className="mt-5 max-w-2xl text-base leading-7 text-white/42"
           >
             {pick(lead, lang)}

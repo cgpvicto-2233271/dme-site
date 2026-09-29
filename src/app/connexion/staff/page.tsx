@@ -1,21 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, type FormEvent } from "react";
 import { LockKeyhole } from "lucide-react";
+import { AccesLayout, Champ, Message } from "@/components/AccesLayout";
 import { useLang } from "@/components/LanguageContext";
 
 type ReponseLogin = { ok: boolean; role?: string; message?: string };
 
-async function sha256Hex(texte: string) {
-  const enc = new TextEncoder().encode(texte);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+/* Destination apres connexion : seulement un chemin interne, jamais une URL
+   externe (evite les redirections ouvertes). */
+function destinationSure(valeur: string | null): string {
+  if (valeur && valeur.startsWith("/") && !valeur.startsWith("//")) return valeur;
+  return "/scouting/lol";
 }
 
-export default function StaffLoginPage() {
+function FormulaireStaff() {
   const router = useRouter();
+  const params = useSearchParams();
   const { t } = useLang();
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
@@ -26,120 +29,88 @@ export default function StaffLoginPage() {
     e.preventDefault();
     setMessage(null);
 
-    if (mdp.length < 6) {
-      setMessage(t("Mot de passe trop court.", "Password too short.") as string);
-      return;
-    }
-
     setLoading(true);
     try {
       const r = await fetch("/api/acces/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, choixRole: "staff" }),
+        body: JSON.stringify({ email, choixRole: "staff", motDePasse: mdp }),
       });
       const data = (await r.json()) as ReponseLogin;
 
       if (!r.ok || !data.ok) {
-        setMessage(data.message ?? (t("Acces refuse.", "Access denied.") as string));
+        setMessage(data.message ?? (t("Accès refusé.", "Access denied.") as string));
         return;
       }
 
-      const hash = await sha256Hex(`dme_local_lock_v1|${mdp}`);
-      localStorage.setItem("dme_lock_hash", hash);
-      localStorage.setItem("dme_lock_ok", "1");
-      router.push("/scouting/lol");
+      // Le mot de passe est verifie cote serveur : rien n'est conserve dans le navigateur.
+      router.push(destinationSure(params.get("from")) as "/scouting/lol");
       router.refresh();
     } catch {
-      setMessage(t("Erreur reseau.", "Network error.") as string);
+      setMessage(t("Erreur réseau. Réessaie dans un instant.", "Network error. Try again in a moment.") as string);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="dme-page">
-      <section className="dme-section">
-        <div className="dme-wrap grid min-h-[calc(100vh-70px)] gap-10 lg:grid-cols-[1fr_minmax(320px,440px)] lg:items-center">
-          <div className="max-w-4xl">
-            <p className="dme-eyebrow mb-5">{t("Staff only", "Staff only")}</p>
-            <h1 className="dme-title text-[clamp(3rem,7vw,6rem)]">
-              {t("Acces interne.", "Internal access.")}
-            </h1>
-            <p className="dme-lead mt-6">
-              {t(
-                "Scouting, notes et operations restent derriere une session staff valide.",
-                "Scouting, notes and operations stay behind a verified staff session."
-              )}
-            </p>
-          </div>
+    <form onSubmit={soumettre} className="space-y-5">
+      <div className="flex items-center gap-3">
+        <span className="grid h-10 w-10 place-items-center rounded-full bg-[rgba(225,25,45,0.12)]">
+          <LockKeyhole className="h-4 w-4 text-[color:var(--red-lift)]" aria-hidden />
+        </span>
+        <p className="text-[14px] text-[color:var(--t-2)]">
+          {t("Courriel autorisé et mot de passe staff requis.", "Authorised email and staff password required.")}
+        </p>
+      </div>
+      <Champ
+        label={t("Courriel", "Email") as string}
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={t("prenom@exemple.com", "name@example.com") as string}
+        autoComplete="email"
+        required
+      />
+      <Champ
+        label={t("Mot de passe staff", "Staff password") as string}
+        type="password"
+        value={mdp}
+        onChange={(e) => setMdp(e.target.value)}
+        autoComplete="current-password"
+        required
+      />
+      {message ? <Message ton="error">{message}</Message> : null}
+      <button type="submit" disabled={loading} className="pill w-full justify-center disabled:cursor-not-allowed disabled:opacity-50">
+        {loading ? t("Vérification…", "Checking…") : t("Accéder aux outils", "Open the tools")}
+      </button>
+    </form>
+  );
+}
 
-          <form onSubmit={soumettre} className="dme-panel p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center border border-red-500/30 bg-red-500/[0.08] text-red-200">
-                <LockKeyhole className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="text-sm font-black text-white">{t("Connexion staff", "Staff login")}</p>
-                <p className="font-mono text-[8px] font-black uppercase tracking-[0.24em] text-white/28">
-                  DME Command
-                </p>
-              </div>
-            </div>
+export default function StaffLoginPage() {
+  const { t } = useLang();
 
-            <label className="block">
-              <span className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-white/32">
-                Email
-              </span>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="staff@deathmarkesport.com"
-                autoComplete="email"
-                required
-                className="dme-input mt-2 w-full"
-              />
-            </label>
-
-            <label className="mt-5 block">
-              <span className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-white/32">
-                {t("Mot de passe", "Password")}
-              </span>
-              <input
-                type="password"
-                value={mdp}
-                onChange={(e) => setMdp(e.target.value)}
-                placeholder="********"
-                autoComplete="current-password"
-                required
-                className="dme-input mt-2 w-full"
-              />
-            </label>
-
-            {message ? (
-              <div className="mt-5 border-l-2 border-red-500 bg-red-500/[0.08] px-4 py-3 text-sm text-red-200/80">
-                {message}
-              </div>
-            ) : null}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-6 w-full border border-red-500/45 bg-[#e1192d] px-5 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {loading ? t("Verification...", "Verifying...") : t("Entrer", "Enter")}
-            </button>
-
-            <Link
-              href="/connexion"
-              className="mt-5 inline-flex text-[10px] font-black uppercase tracking-[0.18em] text-white/34 transition hover:text-white/70"
-            >
-              {t("Retour connexion", "Back to login")}
-            </Link>
-          </form>
-        </div>
-      </section>
-    </main>
+  return (
+    <AccesLayout
+      surtitre={{ fr: "Accès staff", en: "Staff access" }}
+      titre={{ fr: "Espace interne.", en: "Internal area." }}
+      texte={{
+        fr: "Scouting, coaching et opérations. Réservé au staff de DME.",
+        en: "Scouting, coaching and operations. DME staff only.",
+      }}
+      pied={
+        <>
+          {t("Pas dans le staff ?", "Not staff?")}{" "}
+          <Link href="/connexion" className="font-semibold text-white underline underline-offset-4">
+            {t("Accès membres", "Members access")}
+          </Link>
+        </>
+      }
+    >
+      <Suspense fallback={null}>
+        <FormulaireStaff />
+      </Suspense>
+    </AccesLayout>
   );
 }

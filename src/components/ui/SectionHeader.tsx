@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useLang } from "@/components/LanguageContext";
 import { fadeUp, lineExpand, viewport } from "@/lib/motion";
 

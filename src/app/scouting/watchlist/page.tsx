@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Search, SlidersHorizontal, Star, Zap } from "lucide-react";
 import ProspectCard from "../components/ProspectCard";
 import type { MockProspect } from "@/lib/scout/mock";

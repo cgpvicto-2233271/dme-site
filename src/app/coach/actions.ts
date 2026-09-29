@@ -24,7 +24,13 @@ export type BookingResult =
   | { ok: true; id: string; totalCAD: number }
   | { ok: false; error: string };
 
+/* Le coaching individuel est retire du site : ces actions serveur restent
+   appelables par n'importe qui tant que le fichier existe. Elles sont donc
+   coupees, pour ne plus rien ecrire ni exposer. */
+const COACHING_FERME = true;
+
 export async function createBooking(input: BookingInput): Promise<BookingResult> {
+  if (COACHING_FERME) return { ok: false, error: "Le coaching individuel n'est plus offert." };
   try {
     const coach = getCoach(input.coachSlug);
     if (!coach) return { ok: false, error: "Coach introuvable." };
@@ -65,7 +71,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 
     // Email de notification (mailto fallback — remplacer par Resend/nodemailer en prod)
     try {
-      await sendBookingEmail({ booking: { ...booking, totalCAD }, coachName: coach.pseudo, coachEmail: coach.email, lang: input.lang ?? "fr" });
+      await sendBookingEmail({ booking: { ...booking, totalCAD }, coachName: coach.pseudo, coachEmail: coach.email ?? "", lang: input.lang ?? "fr" });
     } catch (emailErr) {
       const e = emailErr as { message?: string; name?: string; statusCode?: number };
       console.error("[EMAIL] Échec envoi:", e?.name, e?.statusCode, e?.message);
@@ -80,6 +86,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 }
 
 export async function getBookedSlots(coachSlug: string, fromDate: Date): Promise<string[]> {
+  if (COACHING_FERME) return [];
   const toDate = new Date(fromDate);
   toDate.setDate(toDate.getDate() + 14);
 
@@ -126,6 +133,7 @@ export type LiveReview = {
 };
 
 export async function createReview(input: ReviewInput): Promise<{ ok: boolean; error?: string }> {
+  if (COACHING_FERME) return { ok: false, error: "Le coaching individuel n'est plus offert." };
   if (!input.elevePseudo.trim() || !input.comment.trim()) {
     return { ok: false, error: "Pseudo et commentaire requis." };
   }
@@ -152,6 +160,7 @@ export async function createReview(input: ReviewInput): Promise<{ ok: boolean; e
 }
 
 export async function getCoachReviews(coachSlug: string): Promise<LiveReview[]> {
+  if (COACHING_FERME) return [];
   return prisma.coachReview.findMany({
     where: { coachSlug, isVisible: true },
     orderBy: { createdAt: "desc" },

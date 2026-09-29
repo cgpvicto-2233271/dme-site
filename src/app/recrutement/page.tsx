@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { RecrutementClient } from "./recrutement-client";
 
 export const metadata: Metadata = {
-  title: "Recrutement | DeathMark E-Sports",
+  title: "Recrutement | DME",
 };
 
 export default function RecrutementPage() {

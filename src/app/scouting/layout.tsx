@@ -1,22 +1,17 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { lireSession, NOM_COOKIE, ROLES_INTERNES } from "@/lib/session";
 import ScoutNav from "./components/ScoutNav";
 
 export default async function ScoutingLayout({ children }: { children: React.ReactNode }) {
-  try {
-    const jar        = await cookies();
-    const cookieName = process.env.DME_COOKIE_NAME ?? "dme_access";
-    const val        = jar.get(cookieName)?.value ?? "";
-    const [email, role] = val.split("|");
-    if (!email || !["staff", "coach", "admin"].includes(role ?? "")) {
-      redirect("/connexion?from=/scouting/lol");
-    }
-  } catch {
-    redirect("/connexion?from=/scouting/lol");
+  // Session signee uniquement : un cookie ecrit a la main ne passe pas.
+  const session = await lireSession((await cookies()).get(NOM_COOKIE)?.value);
+  if (!session || !ROLES_INTERNES.includes(session.role)) {
+    redirect("/connexion/staff?from=/scouting/lol");
   }
 
   return (
-    <div className="min-h-screen bg-[#070707]">
+    <div className="outils min-h-screen pt-[72px]">
       <ScoutNav />
       <main>{children}</main>
     </div>

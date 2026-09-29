@@ -1,4 +1,4 @@
-import type { Transition, Variants } from "framer-motion";
+import type { Transition, Variants } from "motion/react";
 
 // ── Easing curves ─────────────────────────────────────────────────────────────
 // Named after their character, not their math.

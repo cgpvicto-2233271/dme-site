@@ -1,7 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { BookOpen, ChevronRight, Target, Zap, Eye, Shield, Compass, Users, Activity, Swords, ExternalLink, GraduationCap, Brain, ClipboardList, Crown, Flame, UserCog, MessagesSquare, Repeat } from "lucide-react";
 import { fadeUp, stagger } from "@/lib/motion";
 import { useLang } from "@/components/LanguageContext";

@@ -2,14 +2,13 @@ import type { Metadata } from "next";
 import { GameResultsPage } from "@/components/hall-of-fame/game-results-page";
 
 export const metadata: Metadata = {
-  title: "Hall Of Fame Rocket League | DeathMark E-Sports",
+  title: "Hall Of Fame Rocket League | DME",
 };
 
 export default function HallOfFameRocketLeaguePage() {
   return (
     <GameResultsPage
       gameKey="rocket-league"
-      eyebrow={{ fr: "Resultats / Rocket League", en: "Results / Rocket League" }}
       title={{ fr: "Rocket League.", en: "Rocket League." }}
       lead={{
         fr: "LANs, ligues en ligne et premiers signaux pour construire le projet RL.",

@@ -1,7 +1,7 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   Map, BookOpen, Video, BarChart2,
   ArrowUpRight, Brain, Target, Zap, Shield,

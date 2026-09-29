@@ -3,7 +3,7 @@ import { GameResultsPage } from "@/components/hall-of-fame/game-results-page";
 import type { Achievement } from "../_data";
 
 export const metadata: Metadata = {
-  title: "Hall Of Fame LoL | DeathMark E-Sports",
+  title: "Hall Of Fame LoL | DME",
 };
 
 const manual: Achievement[] = [];
@@ -12,7 +12,6 @@ export default function HallOfFameLolPage() {
   return (
     <GameResultsPage
       gameKey="lol"
-      eyebrow={{ fr: "Resultats / League of Legends", en: "Results / League of Legends" }}
       title={{ fr: "League of Legends.", en: "League of Legends." }}
       lead={{
         fr: "LAN UQTR · LAN CFPR · LAN Parro · AVL · GGL · LQL, six titres, 12 800$+ de cashprize en un an.",

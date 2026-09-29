@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 
 const EXPO   = [0.76, 0, 0.24, 1] as [number, number, number, number];
@@ -97,7 +97,7 @@ export function IntroReveal() {
         >
           <Image
             src="/logo/logo-dme.png"
-            alt="DeathMark E-Sports"
+            alt="DME"
             width={56}
             height={56}
             priority
@@ -121,7 +121,7 @@ export function IntroReveal() {
             animate={{ y: content ? "0%" : "110%" }}
             transition={{ duration: 0.55, delay: 0.22, ease: SPRING }}
           >
-            DEATHMARK
+            DME
           </motion.span>
         </div>
 

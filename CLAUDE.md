@@ -1,5 +1,8 @@
 # DME — Creative Web Dev References
 
+> **Direction artistique** : voir `DESIGN.md` (monde visuel, trois lois, interdits).
+> **Verite produit** : voir `PRODUCT.md`.
+
 ## ⚡ Philosophy
 Ce projet vise un niveau **Awwwards / premium esport**.
 Direction : **Riot Games × Linear × Vercel**.
@@ -12,13 +15,12 @@ Pas de designs génériques IA — du craft, du rythme, de la surprise.
 
 | Layer | Tech | Notes |
 |---|---|---|
-| Framework | Next.js 16, App Router | Server components par défaut |
-| UI | React 19, TypeScript strict | Zéro `any` |
-| Styles | Tailwind CSS 4 | + `globals.css` pour tokens et animations |
-| Animations | Framer Motion 12 | Motion tokens dans `src/lib/motion.ts` |
+| Framework | Next.js 16.3, App Router, Turbopack, React Compiler (stable) | Server components par défaut. `typedRoutes` actif |
+| UI | React 19.3, TypeScript 5.9 strict | Zéro `any`. TS 7 attendu quand typescript-eslint le supportera (<6.1 exigé) |
+| Styles | Tailwind CSS 4.3 | + `globals.css` pour tokens et animations |
+| Animations | **`motion` 13** (`import … from "motion/react"`) | Motion tokens dans `src/lib/motion.ts`. Le paquet `framer-motion` n'existe plus ici |
 | Smooth scroll | Lenis 1.3 | Couplé au GSAP ticker via `SmoothScroll.tsx` |
 | GSAP | gsap 3.15 + ScrollTrigger | Enregistré dans `SmoothScroll.tsx` |
-| 3D | Three.js + R3F + Drei | Scenes dans `src/components/home/hero-scene.tsx` |
 | Auth | NextAuth 4 | Cookie `dme_access` |
 | DB | Prisma + SQLite (scouting) | `src/lib/prisma.ts` |
 
@@ -27,10 +29,18 @@ Pas de designs génériques IA — du craft, du rythme, de la surprise.
 ## 🎨 Design tokens (tous dans `src/app/globals.css`)
 
 ```css
-/* Palette */
---bg: #070707            /* fond principal */
---red: #dc2626           /* accent — utiliser chirurgicalement */
---surface: #111111       /* cards */
+/* Palette — UN SEUL rouge. La couche concurrente #dc2626 a ete supprimee. */
+--ink:      #050505      /* fond unique */
+--panel:    #0b0b0b      /* surfaces, cellules de grille */
+--panel-2:  #101010      /* surfaces surelevees */
+--red:      #e1192d      /* marque — rails, etats actifs, scores */
+--red-deep: #8e0f1c      /* filets secondaires, pressé */
+
+/* Texte — 4 niveaux, pas plus */
+--t-1: rgba(255,255,255,.94)   /* principal */
+--t-2: rgba(255,255,255,.62)   /* secondaire */
+--t-3: rgba(255,255,255,.42)   /* tertiaire */
+--t-4: rgba(255,255,255,.26)   /* discret */
 
 /* Typography scale — fluid clamp */
 --text-label  /* 8-9px   section labels */
@@ -102,12 +112,14 @@ gsap.ticker.lagSmoothing(0);
 
 | Composant | Chemin | Usage |
 |---|---|---|
-| `RevealText` | `src/components/ui/RevealText.tsx` | Word-split reveal cinématique |
-| `RevealChars` | même fichier | Char-level reveal |
-| `SpotlightCard` | `src/components/ui/SpotlightCard.tsx` | Spotlight radial au hover |
-| `MagneticButton` | `src/components/ui/MagneticButton.tsx` | Attraction magnétique spring |
-| `SectionHeader` | `src/components/ui/SectionHeader.tsx` | Label + titre standardisé |
+| `Marquee` | `src/components/ui/marquee.tsx` | Ruban defilant (adapte de Magic UI) |
+| `NumberTicker` | `src/components/ui/number-ticker.tsx` | Compteur anime, formatage deterministe |
+| `ButtonLink` | `src/components/ui/button.tsx` | Lien bouton, tons primary/secondary/ghost |
 | `PageTransition` | `src/components/PageTransition.tsx` | AnimatePresence par pathname |
+
+> `RevealText`, `SpotlightCard`, `MagneticButton` et `SectionHeader` existent sur
+> disque mais ne sont importes nulle part. Les reutiliser ou les supprimer —
+> ne pas les documenter comme s'ils etaient en service.
 
 ---
 
@@ -141,7 +153,11 @@ src/
 - **Sections** : utiliser `.section-py`, `.section-px`, `.container` pour la cohérence
 - **Grilles** : `.grid-1px` pour les grilles à séparateurs 1px (style Linear)
 - **Labels** : `.text-label` (font-mono, uppercase, red/65) — pattern signature DME
-- **Fonts** : `.font-display` (Bebas Neue), `.font-oswald`, `.font-mono`
+- **Fonts** : **Archivo** variable en largeur pour tout (display ET corps) — la largeur
+  est un axe (`--wdth-affiche: 62`, `--wdth-corps: 100`, `--wdth-label: 125`), pas une
+  police. **Martian Mono** (variable en largeur) réservée aux données des outils internes.
+  Anton, Bebas, Inter, IBM Plex, Manrope, Abolition : tous retirés (voir
+  `docs/design/recherche-2026-09.md` §9)
 - **Boutons** : `.btn-primary` (rouge) / `.btn-ghost` (transparent)
 - **Texte outline** : `.stroke-white` / `.stroke-red` / `.stroke-red-strong`
 - **Scouting UI** : tous les composants dans `src/app/scouting/lol/_components/scout-ui.tsx`
@@ -155,7 +171,22 @@ src/
 - `tsconfig.json` : `"ignoreDeprecations": "5.0"` — ne pas changer en "6.0"
 - Curseur custom : rendu côté client uniquement, inactif sur `pointer: coarse`
 - Lenis : ne pas ajouter de second RAF loop — GSAP ticker est le seul driver
-- `R3F` hero-scene : les anneaux et particules lisent `scrollYProgress` via Framer Motion
+- **Pas de 3D** : la direction retenue (L'AFFICHE, `docs/design/concepts-2026-09.md`)
+  l'exclut. `three` a été retiré. R3F est de toute façon incompatible : il exige
+  `react <19.3` et se branche sur les internes du réconciliateur
+- **`middleware.ts` n'existe plus** : Next 16 l'a renommé `src/proxy.ts` (export `proxy`)
+- **Lint** : `npm run lint` = `eslint .` (flat config). Les règles du React Compiler
+  sont en `warn` jusqu'à la fin de la refonte, puis repassent en `error`
+- **Assets** : `npm run optimize:assets[:duotone]` produit `.webp` / `.avif` (et `.duo.webp`
+  rouge/noir pour les portraits) à côté des originaux + `src/lib/assets-manifest.json`
+- **Node 24 obligatoire** — Prisma 7 refuse Node < 20.19. Le `node` par defaut du
+  terminal peut etre en v20.10 : `nvm use 24` avant tout `npm install`
+- **Pas d'`Intl.NumberFormat` dans un composant rendu cote serveur ET client** :
+  l'ICU de Node groupe en U+00A0, celui du navigateur en U+202F → hydratation cassee.
+  Voir `ui/number-ticker.tsx` pour le formatage deterministe
+- **Palmares** : `rangDe()`, `bourseDe()` et `totauxDe()` dans `hall-of-fame/_data.ts`
+  sont la source unique. Ne pas recompter ailleurs — la homepage et la page palmares
+  affichaient deux chiffres differents pour la meme chose
 
 ---
 

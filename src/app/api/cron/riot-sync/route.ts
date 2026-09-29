@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { refreshRiotData } from "@/lib/lft/riot";
 
-// Vercel cron: every 6 hours — vercel.json: { "crons": [{ "path": "/api/cron/riot-sync", "schedule": "0 */6 * * *" }] }
-// Secured by CRON_SECRET header checked against env var
+// Vercel Cron (vercel.json) : une fois par jour. Protege par CRON_SECRET.
 
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get("x-cron-secret");
-  if (secret !== process.env.CRON_SECRET) {
+  /* Vercel Cron s'authentifie avec « Authorization: Bearer <CRON_SECRET> ».
+     Sans secret configure, la route reste fermee. */
+  const attendu = process.env.CRON_SECRET;
+  const recu = req.headers.get("authorization");
+  if (!attendu || recu !== `Bearer ${attendu}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

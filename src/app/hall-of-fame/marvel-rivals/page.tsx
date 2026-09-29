@@ -2,14 +2,13 @@ import type { Metadata } from "next";
 import { GameResultsPage } from "@/components/hall-of-fame/game-results-page";
 
 export const metadata: Metadata = {
-  title: "Hall Of Fame Marvel Rivals | DeathMark E-Sports",
+  title: "Hall Of Fame Marvel Rivals | DME",
 };
 
 export default function HallOfFameMarvelRivalsPage() {
   return (
     <GameResultsPage
       gameKey="marvel-rivals"
-      eyebrow={{ fr: "Resultats / Marvel Rivals", en: "Results / Marvel Rivals" }}
       title={{ fr: "Marvel Rivals.", en: "Marvel Rivals." }}
       lead={{
         fr: "Top Americas, constance et preuve de presence sur une scene jeune.",

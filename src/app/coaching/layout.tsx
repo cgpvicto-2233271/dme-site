@@ -1,27 +1,22 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { lireSession, NOM_COOKIE, ROLES_INTERNES } from "@/lib/session";
 import CoachingNav from "@/components/coaching/CoachingNav";
 
 export const metadata = {
   title: "Coaching | DME",
-  description: "Plateforme coaching & analyse tactique DeathMark Esports",
+  description: "Plateforme coaching & analyse tactique DME",
 };
 
 export default async function CoachingLayout({ children }: { children: React.ReactNode }) {
-  try {
-    const jar        = await cookies();
-    const cookieName = process.env.DME_COOKIE_NAME ?? "dme_access";
-    const val        = jar.get(cookieName)?.value ?? "";
-    const [email, role] = val.split("|");
-    if (!email || !["staff", "coach", "admin"].includes(role ?? "")) {
-      redirect("/connexion?from=/coaching");
-    }
-  } catch {
-    redirect("/connexion?from=/coaching");
+  // Session signee uniquement : un cookie ecrit a la main ne passe pas.
+  const session = await lireSession((await cookies()).get(NOM_COOKIE)?.value);
+  if (!session || !ROLES_INTERNES.includes(session.role)) {
+    redirect("/connexion/staff?from=/coaching");
   }
 
   return (
-    <div className="min-h-screen bg-[#070707]">
+    <div className="outils min-h-screen pt-[72px]">
       <CoachingNav />
       <main>{children}</main>
     </div>

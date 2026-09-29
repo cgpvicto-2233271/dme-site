@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
 import { ArrowLeft, ArrowUpRight, Trophy, Star } from "lucide-react";
 import { useLang } from "@/components/LanguageContext";
@@ -42,11 +42,11 @@ const PLAYERS = [
     liquipedia: "https://liquipedia.net/leagueoflegends/Verdict",
     tagline: { fr: "Le tempo qui dicte la carte.", en: "The tempo that dictates the map." },
     bio: {
-      fr: "Vétéran depuis 2020, LCS Proving Grounds 2022, champion CLOL East avec l'UQAM, gagnant de la LAN ETS 2026. Verdict ne perd pas le fil.",
-      en: "Veteran since 2020, 2022 LCS Proving Grounds, CLOL East champion with UQAM, 2026 LAN ETS winner. Verdict never loses the thread.",
+      fr: "Vétéran depuis 2020, LCS Proving Grounds 2022, champion CLOL East avec l'UQAM, gagnant de la LAN ÉTS 2026. Verdict ne perd pas le fil.",
+      en: "Veteran since 2020, 2022 LCS Proving Grounds, CLOL East champion with UQAM, 2026 LAN ÉTS winner. Verdict never loses the thread.",
     },
     achievements: [
-      { fr: "Champion — LAN ETS 2026", en: "Champion — 2026 LAN ETS" },
+      { fr: "Champion — LAN ÉTS 2026", en: "Champion — 2026 LAN ÉTS" },
       { fr: "Champion CLOL East 2026 (UQAM)", en: "2026 CLOL East Champion (UQAM)" },
       { fr: "LCS Proving Grounds 2022", en: "2022 LCS Proving Grounds" },
     ],
@@ -63,11 +63,11 @@ const PLAYERS = [
     liquipedia: "https://liquipedia.net/leagueoflegends/SirZepre",
     tagline: { fr: "Contrôle du tempo. Priorité absolue.", en: "Tempo control. Total priority." },
     bio: {
-      fr: "Depuis 2023 sur les circuits NACL, vice-champion CLOL Fall Warmup 2025, vainqueur de la LAN ETS 2026 dès sa première sortie sous les couleurs DME.",
-      en: "On NACL circuits since 2023, runner-up CLOL Fall Warmup 2025, LAN ETS 2026 winner on his very first showing in DME colors.",
+      fr: "Depuis 2023 sur les circuits NACL, vice-champion CLOL Fall Warmup 2025, vainqueur de la LAN ÉTS 2026 dès sa première sortie sous les couleurs DME.",
+      en: "On NACL circuits since 2023, runner-up CLOL Fall Warmup 2025, LAN ÉTS 2026 winner on his very first showing in DME colors.",
     },
     achievements: [
-      { fr: "Champion — LAN ETS 2026", en: "Champion — 2026 LAN ETS" },
+      { fr: "Champion — LAN ÉTS 2026", en: "Champion — 2026 LAN ÉTS" },
       { fr: "Vice-champion CLOL Fall Warmup 2025", en: "Runner-up 2025 CLOL Fall Warmup" },
     ],
     color: "#dc2626",
@@ -83,11 +83,11 @@ const PLAYERS = [
     liquipedia: "https://liquipedia.net/leagueoflegends/Good_Boi",
     tagline: { fr: "Le vétéran. L'expérience, le carry.", en: "The veteran. Experience, carry." },
     bio: {
-      fr: "LCS Scouting Grounds 2021, podium LAN ETS 2022, NACL Tier 1 Spring 2026 — Goodboi a tout vu. Il apporte son bagage au botside de DME pour la Promotion.",
-      en: "2021 LCS Scouting Grounds, LAN ETS 2022 podium, NACL Tier 1 Spring 2026 — Goodboi has seen it all. He brings his track record to DME's bot side for the Promotion.",
+      fr: "LCS Scouting Grounds 2021, podium LAN ÉTS 2022, NACL Tier 1 Spring 2026 — Goodboi a tout vu. Il apporte son bagage au botside de DME pour la Promotion.",
+      en: "2021 LCS Scouting Grounds, LAN ÉTS 2022 podium, NACL Tier 1 Spring 2026 — Goodboi has seen it all. He brings his track record to DME's bot side for the Promotion.",
     },
     achievements: [
-      { fr: "Champion — LAN ETS 2026", en: "Champion — 2026 LAN ETS" },
+      { fr: "Champion — LAN ÉTS 2026", en: "Champion — 2026 LAN ÉTS" },
       { fr: "LCS Scouting Grounds 2021 — 4e (Team Ocean)", en: "2021 LCS Scouting Grounds — 4th (Team Ocean)" },
       { fr: "NACL 2026 Spring Tier 1 (Apex MI)", en: "2026 NACL Spring Tier 1 (Apex MI)" },
     ],
@@ -171,7 +171,7 @@ function PlayerCard({ player, index, lang }: { player: (typeof PLAYERS)[0]; inde
             <motion.div
               className="absolute bottom-0 left-0 h-0.5 bg-[#dc2626] origin-left"
               animate={{ scaleX: hovered ? 1 : 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, ease: ease.spring }}
             />
           </>
         ) : (
@@ -241,7 +241,7 @@ function PlayerCard({ player, index, lang }: { player: (typeof PLAYERS)[0]; inde
         <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: hovered ? "auto" : 0, opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.35, ease: ease.spring }}
           className="overflow-hidden"
         >
           <p className="mt-3 text-[12px] leading-6 text-white/50 border-t border-white/[0.055] pt-3">
@@ -332,7 +332,7 @@ export default function NaclRosterPage() {
           className="absolute left-0 top-0 h-full w-px bg-[#dc2626]/40"
           initial={{ scaleY: 0, originY: 0 }}
           animate={{ scaleY: 1 }}
-          transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
+          transition={{ duration: 1.1, ease: ease.expo, delay: 0.2 }}
         />
 
         <div className="dme-wrap relative z-10">
@@ -408,13 +408,13 @@ export default function NaclRosterPage() {
         </div>
       </section>
 
-      {/* ── LAN ETS BADGE ────────────────────────────────────────────────── */}
+      {/* ── LAN ÉTS BADGE ────────────────────────────────────────────────── */}
       <section className="border-b border-white/[0.07] bg-[#dc2626]/[0.04]" style={{ paddingBlock: "clamp(1.5rem, 3vw, 2.5rem)" }}>
         <div className="dme-wrap flex flex-wrap items-center gap-4">
           <Star className="h-4 w-4 text-[#dc2626]" />
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.32em] text-[#dc2626]">
-            {t("Champions LAN ETS 2026 · Qualifiés NACL Summer Promotion · Du 17 au 20 juin 2026",
-               "2026 LAN ETS Champions · Qualified NACL Summer Promotion · June 17–20, 2026")}
+            {t("Champions LAN ÉTS 2026 · Qualifiés NACL Summer Promotion · Du 17 au 20 juin 2026",
+               "2026 LAN ÉTS Champions · Qualified NACL Summer Promotion · June 17–20, 2026")}
           </p>
         </div>
       </section>

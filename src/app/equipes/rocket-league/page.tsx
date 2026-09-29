@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { TeamProgramPage, type ProgramRoster } from "@/components/equipes/team-program-page";
 
 export const metadata: Metadata = {
-  title: "Rocket League | DeathMark E-Sports",
+  title: "Rocket League | DME",
 };
 
 const rosters: ProgramRoster[] = [
@@ -59,7 +59,7 @@ const rosters: ProgramRoster[] = [
 export default function RocketLeaguePage() {
   return (
     <TeamProgramPage
-      eyebrow={{ fr: "Rocket League / 3v3", en: "Rocket League / 3v3" }}
+      jeu="Rocket League"
       title={{ fr: "Quatre rosters.\nUn standard.", en: "Four rosters.\nOne standard." }}
       lead={{
         fr: "De 1800 à 2000+ MMR. Scrims réguliers, encadrement staff, objectif tournois compétitifs.",
@@ -74,8 +74,6 @@ export default function RocketLeaguePage() {
       rosters={rosters}
       primaryCta={{ href: "/recrutement", label: { fr: "Postuler Rocket League", en: "Apply Rocket League" } }}
       secondaryCta={{ href: "/6mans", label: { fr: "Ladder 6Mans", en: "6Mans Ladder" } }}
-      academieHref="/equipes/rocket-league/academie"
-      academieLabel={{ fr: "Du 6Mans au roster.", en: "From 6Mans to roster." }}
       backHref="/equipes"
     />
   );

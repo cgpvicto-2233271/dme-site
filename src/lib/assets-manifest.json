@@ -1,0 +1,2497 @@
+{
+  "medias/commun/academie-team-optimise.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 1959162,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\academie-team-optimise.webp",
+        "etat": "191 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\academie-team-optimise.avif",
+        "etat": "137 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\academie-team-optimise.duo.webp",
+        "etat": "205 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/commun/academie-team.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 2085189,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\academie-team.webp",
+        "etat": "191 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\academie-team.avif",
+        "etat": "137 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\academie-team.duo.webp",
+        "etat": "205 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/commun/ADL - Spring 2026.jfif": {
+    "largeur": 1640,
+    "hauteur": 924,
+    "original": 298857,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ADL - Spring 2026.webp",
+        "etat": "185 Ko",
+        "largeur": 1640,
+        "hauteur": 924
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ADL - Spring 2026.avif",
+        "etat": "151 Ko",
+        "largeur": 1640,
+        "hauteur": 924
+      }
+    ]
+  },
+  "medias/commun/AEL - Sping 2026.jfif": {
+    "largeur": 1640,
+    "hauteur": 924,
+    "original": 296703,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\AEL - Sping 2026.webp",
+        "etat": "182 Ko",
+        "largeur": 1640,
+        "hauteur": 924
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\AEL - Sping 2026.avif",
+        "etat": "148 Ko",
+        "largeur": 1640,
+        "hauteur": 924
+      }
+    ]
+  },
+  "medias/commun/akali.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 2743764,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\akali.webp",
+        "etat": "226 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\akali.avif",
+        "etat": "180 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  },
+  "medias/commun/ambessa_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 268592,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ambessa_card.webp",
+        "etat": "23 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ambessa_card.avif",
+        "etat": "20 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/AML - Spring 2026.jfif": {
+    "largeur": 1640,
+    "hauteur": 924,
+    "original": 298044,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\AML - Spring 2026.webp",
+        "etat": "184 Ko",
+        "largeur": 1640,
+        "hauteur": 924
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\AML - Spring 2026.avif",
+        "etat": "148 Ko",
+        "largeur": 1640,
+        "hauteur": 924
+      }
+    ]
+  },
+  "medias/commun/Astra.png": {
+    "largeur": 626,
+    "hauteur": 960,
+    "original": 499676,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Astra.webp",
+        "etat": "89 Ko",
+        "largeur": 626,
+        "hauteur": 960
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Astra.avif",
+        "etat": "59 Ko",
+        "largeur": 626,
+        "hauteur": 960
+      }
+    ]
+  },
+  "medias/commun/avl.png": {
+    "largeur": 1491,
+    "hauteur": 921,
+    "original": 2210975,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\avl.webp",
+        "etat": "97 Ko",
+        "largeur": 1491,
+        "hauteur": 921
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\avl.avif",
+        "etat": "77 Ko",
+        "largeur": 1491,
+        "hauteur": 921
+      }
+    ]
+  },
+  "medias/commun/avl1.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3013355,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\avl1.webp",
+        "etat": "113 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\avl1.avif",
+        "etat": "87 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/banner-leagueoflegends.png": {
+    "largeur": 212,
+    "hauteur": 542,
+    "original": 193324,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-leagueoflegends.webp",
+        "etat": "6 Ko",
+        "largeur": 212,
+        "hauteur": 542
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-leagueoflegends.avif",
+        "etat": "5 Ko",
+        "largeur": 212,
+        "hauteur": 542
+      }
+    ]
+  },
+  "medias/commun/banner-marvelrivals.png": {
+    "largeur": 231,
+    "hauteur": 538,
+    "original": 222933,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-marvelrivals.webp",
+        "etat": "8 Ko",
+        "largeur": 231,
+        "hauteur": 538
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-marvelrivals.avif",
+        "etat": "6 Ko",
+        "largeur": 231,
+        "hauteur": 538
+      }
+    ]
+  },
+  "medias/commun/banner-r6.png": {
+    "largeur": 214,
+    "hauteur": 534,
+    "original": 196699,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-r6.webp",
+        "etat": "5 Ko",
+        "largeur": 214,
+        "hauteur": 534
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-r6.avif",
+        "etat": "4 Ko",
+        "largeur": 214,
+        "hauteur": 534
+      }
+    ]
+  },
+  "medias/commun/banner-rocketleague.png": {
+    "largeur": 227,
+    "hauteur": 542,
+    "original": 231410,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-rocketleague.webp",
+        "etat": "11 Ko",
+        "largeur": 227,
+        "hauteur": 542
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-rocketleague.avif",
+        "etat": "8 Ko",
+        "largeur": 227,
+        "hauteur": 542
+      }
+    ]
+  },
+  "medias/commun/banner-valorant.png": {
+    "largeur": 224,
+    "hauteur": 425,
+    "original": 166290,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-valorant.webp",
+        "etat": "6 Ko",
+        "largeur": 224,
+        "hauteur": 425
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\banner-valorant.avif",
+        "etat": "5 Ko",
+        "largeur": 224,
+        "hauteur": 425
+      }
+    ]
+  },
+  "medias/commun/bannière-dme-lql.png": {
+    "largeur": 1405,
+    "hauteur": 1024,
+    "original": 3125701,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\bannière-dme-lql.webp",
+        "etat": "147 Ko",
+        "largeur": 1405,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\bannière-dme-lql.avif",
+        "etat": "114 Ko",
+        "largeur": 1405,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/commun/camille.png": {
+    "largeur": 650,
+    "hauteur": 384,
+    "original": 154424,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\camille.webp",
+        "etat": "23 Ko",
+        "largeur": 650,
+        "hauteur": 384
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\camille.avif",
+        "etat": "16 Ko",
+        "largeur": 650,
+        "hauteur": 384
+      }
+    ]
+  },
+  "medias/commun/Camille_iGSkin.jpg": {
+    "largeur": 1215,
+    "hauteur": 717,
+    "original": 135690,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Camille_iGSkin.webp",
+        "etat": "65 Ko",
+        "largeur": 1215,
+        "hauteur": 717
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Camille_iGSkin.avif",
+        "etat": "55 Ko",
+        "largeur": 1215,
+        "hauteur": 717
+      }
+    ]
+  },
+  "medias/commun/cam_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 251992,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\cam_card.webp",
+        "etat": "21 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\cam_card.avif",
+        "etat": "15 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/cfpr1.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 1662315,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\cfpr1.webp",
+        "etat": "64 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\cfpr1.avif",
+        "etat": "48 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/CQC.png": {
+    "largeur": 2560,
+    "hauteur": 1440,
+    "original": 4340416,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\CQC.webp",
+        "etat": "316 Ko",
+        "largeur": 2400,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\CQC.avif",
+        "etat": "235 Ko",
+        "largeur": 2400,
+        "hauteur": 1350
+      }
+    ]
+  },
+  "medias/commun/dawn (2).png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3897550,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\dawn (2).webp",
+        "etat": "365 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\dawn (2).avif",
+        "etat": "272 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/dawn.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3897395,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\dawn.webp",
+        "etat": "362 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\dawn.avif",
+        "etat": "272 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/DeathMarkACL.jpg": {
+    "largeur": 2560,
+    "hauteur": 1440,
+    "original": 2526294,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\DeathMarkACL.webp",
+        "etat": "474 Ko",
+        "largeur": 2400,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\DeathMarkACL.avif",
+        "etat": "348 Ko",
+        "largeur": 2400,
+        "hauteur": 1350
+      }
+    ]
+  },
+  "medias/commun/diana_card (1).png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 326742,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\diana_card (1).webp",
+        "etat": "24 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\diana_card (1).avif",
+        "etat": "20 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/diana_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 293505,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\diana_card.webp",
+        "etat": "21 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\diana_card.avif",
+        "etat": "18 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/dme-exodia.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3662877,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\dme-exodia.webp",
+        "etat": "333 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\dme-exodia.avif",
+        "etat": "251 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/DME_ACL.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3811658,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\DME_ACL.webp",
+        "etat": "363 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\DME_ACL.avif",
+        "etat": "274 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/DME_ACL1.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3811658,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\DME_ACL1.webp",
+        "etat": "363 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\DME_ACL1.avif",
+        "etat": "274 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/exodia.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3770299,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\exodia.webp",
+        "etat": "346 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\exodia.avif",
+        "etat": "260 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/ezreal.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 2525551,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ezreal.webp",
+        "etat": "205 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ezreal.avif",
+        "etat": "162 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  },
+  "medias/commun/ezreal_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 244708,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ezreal_card.webp",
+        "etat": "20 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ezreal_card.avif",
+        "etat": "16 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/Fade.png": {
+    "largeur": 587,
+    "hauteur": 900,
+    "original": 270433,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Fade.webp",
+        "etat": "40 Ko",
+        "largeur": 587,
+        "hauteur": 900
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Fade.avif",
+        "etat": "29 Ko",
+        "largeur": 587,
+        "hauteur": 900
+      }
+    ]
+  },
+  "medias/commun/fade1.png": {
+    "largeur": 587,
+    "hauteur": 900,
+    "original": 270433,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\fade1.webp",
+        "etat": "40 Ko",
+        "largeur": 587,
+        "hauteur": 900
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\fade1.avif",
+        "etat": "29 Ko",
+        "largeur": 587,
+        "hauteur": 900
+      }
+    ]
+  },
+  "medias/commun/fade2.png": {
+    "largeur": 1000,
+    "hauteur": 908,
+    "original": 324206,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\fade2.webp",
+        "etat": "58 Ko",
+        "largeur": 1000,
+        "hauteur": 908
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\fade2.avif",
+        "etat": "32 Ko",
+        "largeur": 1000,
+        "hauteur": 908
+      }
+    ]
+  },
+  "medias/commun/Gambit.png": {
+    "largeur": 1000,
+    "hauteur": 1000,
+    "original": 537190,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Gambit.webp",
+        "etat": "81 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Gambit.avif",
+        "etat": "52 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      }
+    ]
+  },
+  "medias/commun/ggl.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3743934,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ggl.webp",
+        "etat": "341 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ggl.avif",
+        "etat": "256 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/Lan_CSF.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3641356,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Lan_CSF.webp",
+        "etat": "326 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Lan_CSF.avif",
+        "etat": "251 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/leblanc_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 277222,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\leblanc_card.webp",
+        "etat": "23 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\leblanc_card.avif",
+        "etat": "17 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/logo-lol1.png": {
+    "largeur": 584,
+    "hauteur": 427,
+    "original": 133347,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-lol1.webp",
+        "etat": "16 Ko",
+        "largeur": 584,
+        "hauteur": 427
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-lol1.avif",
+        "etat": "10 Ko",
+        "largeur": 584,
+        "hauteur": 427
+      }
+    ]
+  },
+  "medias/commun/logo-marvel.png": {
+    "largeur": 2340,
+    "hauteur": 768,
+    "original": 76052,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-marvel.webp",
+        "etat": "98 Ko",
+        "largeur": 2340,
+        "hauteur": 768
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-marvel.avif",
+        "etat": "23 Ko",
+        "largeur": 2340,
+        "hauteur": 768
+      }
+    ]
+  },
+  "medias/commun/logo-r6 (2).png": {
+    "largeur": 474,
+    "hauteur": 484,
+    "original": 42396,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-r6 (2).webp",
+        "etat": "10 Ko",
+        "largeur": 474,
+        "hauteur": 484
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-r6 (2).avif",
+        "etat": "7 Ko",
+        "largeur": 474,
+        "hauteur": 484
+      }
+    ]
+  },
+  "medias/commun/logo-rl.png": {
+    "largeur": 875,
+    "hauteur": 285,
+    "original": 196355,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-rl.webp",
+        "etat": "31 Ko",
+        "largeur": 875,
+        "hauteur": 285
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-rl.avif",
+        "etat": "23 Ko",
+        "largeur": 875,
+        "hauteur": 285
+      }
+    ]
+  },
+  "medias/commun/logo-valorant2.png": {
+    "largeur": 297,
+    "hauteur": 180,
+    "original": 30809,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-valorant2.webp",
+        "etat": "8 Ko",
+        "largeur": 297,
+        "hauteur": 180
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\logo-valorant2.avif",
+        "etat": "5 Ko",
+        "largeur": 297,
+        "hauteur": 180
+      }
+    ]
+  },
+  "medias/commun/lol-logo.png": {
+    "largeur": 3840,
+    "hauteur": 2160,
+    "original": 1059030,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\lol-logo.webp",
+        "etat": "436 Ko",
+        "largeur": 2400,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\lol-logo.avif",
+        "etat": "145 Ko",
+        "largeur": 2400,
+        "hauteur": 1350
+      }
+    ]
+  },
+  "medias/commun/magneto.png": {
+    "largeur": 640,
+    "hauteur": 761,
+    "original": 444275,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\magneto.webp",
+        "etat": "54 Ko",
+        "largeur": 640,
+        "hauteur": 761
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\magneto.avif",
+        "etat": "39 Ko",
+        "largeur": 640,
+        "hauteur": 761
+      }
+    ]
+  },
+  "medias/commun/magneto1.png": {
+    "largeur": 1000,
+    "hauteur": 1000,
+    "original": 521410,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\magneto1.webp",
+        "etat": "76 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\magneto1.avif",
+        "etat": "46 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      }
+    ]
+  },
+  "medias/commun/mister.png": {
+    "largeur": 1337,
+    "hauteur": 1079,
+    "original": 454218,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\mister.webp",
+        "etat": "59 Ko",
+        "largeur": 1337,
+        "hauteur": 1079
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\mister.avif",
+        "etat": "42 Ko",
+        "largeur": 1337,
+        "hauteur": 1079
+      }
+    ]
+  },
+  "medias/commun/Neon.png": {
+    "largeur": 2153,
+    "hauteur": 2597,
+    "original": 1621540,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Neon.webp",
+        "etat": "292 Ko",
+        "largeur": 2153,
+        "hauteur": 2597
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Neon.avif",
+        "etat": "192 Ko",
+        "largeur": 2153,
+        "hauteur": 2597
+      }
+    ]
+  },
+  "medias/commun/nrls1.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 1642473,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\nrls1.webp",
+        "etat": "72 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\nrls1.avif",
+        "etat": "50 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/Psylocke.png": {
+    "largeur": 1000,
+    "hauteur": 1000,
+    "original": 361942,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Psylocke.webp",
+        "etat": "60 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Psylocke.avif",
+        "etat": "38 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      }
+    ]
+  },
+  "medias/commun/pyke_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 295495,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\pyke_card.webp",
+        "etat": "22 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\pyke_card.avif",
+        "etat": "20 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/rakan.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 2876349,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\rakan.webp",
+        "etat": "182 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\rakan.avif",
+        "etat": "158 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  },
+  "medias/commun/rl-logo.png": {
+    "largeur": 900,
+    "hauteur": 411,
+    "original": 136608,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\rl-logo.webp",
+        "etat": "17 Ko",
+        "largeur": 900,
+        "hauteur": 411
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\rl-logo.avif",
+        "etat": "12 Ko",
+        "largeur": 900,
+        "hauteur": 411
+      }
+    ]
+  },
+  "medias/commun/rll-logo.png": {
+    "largeur": 2806,
+    "hauteur": 990,
+    "original": 251398,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\rll-logo.webp",
+        "etat": "89 Ko",
+        "largeur": 2400,
+        "hauteur": 847
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\rll-logo.avif",
+        "etat": "38 Ko",
+        "largeur": 2400,
+        "hauteur": 847
+      }
+    ]
+  },
+  "medias/commun/Roster_ACL.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3329705,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Roster_ACL.webp",
+        "etat": "356 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Roster_ACL.avif",
+        "etat": "267 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Roster_ACL.duo.webp",
+        "etat": "350 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/Roster_ADL.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 2898132,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Roster_ADL.webp",
+        "etat": "355 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Roster_ADL.avif",
+        "etat": "274 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\Roster_ADL.duo.webp",
+        "etat": "342 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/ryze.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 2130130,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ryze.webp",
+        "etat": "149 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\ryze.avif",
+        "etat": "114 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  },
+  "medias/commun/section reo.png": {
+    "largeur": 1385,
+    "hauteur": 708,
+    "original": 958431,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\section reo.webp",
+        "etat": "39 Ko",
+        "largeur": 1385,
+        "hauteur": 708
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\section reo.avif",
+        "etat": "27 Ko",
+        "largeur": 1385,
+        "hauteur": 708
+      }
+    ]
+  },
+  "medias/commun/semi-pro-logo-optimise.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 1814539,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\semi-pro-logo-optimise.webp",
+        "etat": "154 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\semi-pro-logo-optimise.avif",
+        "etat": "114 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/commun/semi-pro-logo.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 1937026,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\semi-pro-logo.webp",
+        "etat": "154 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\semi-pro-logo.avif",
+        "etat": "114 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/commun/starlord.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 637503,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\starlord.webp",
+        "etat": "108 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\starlord.avif",
+        "etat": "60 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  },
+  "medias/commun/taliyah_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 327803,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\taliyah_card.webp",
+        "etat": "27 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\taliyah_card.avif",
+        "etat": "21 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/TEAM_PANDALAN.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3486544,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\TEAM_PANDALAN.webp",
+        "etat": "352 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\TEAM_PANDALAN.avif",
+        "etat": "266 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/texture-rouge.png": {
+    "largeur": 1536,
+    "hauteur": 1024,
+    "original": 2674105,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\texture-rouge.webp",
+        "etat": "168 Ko",
+        "largeur": 1536,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\texture-rouge.avif",
+        "etat": "168 Ko",
+        "largeur": 1536,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/commun/thor.png": {
+    "largeur": 894,
+    "hauteur": 894,
+    "original": 657966,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\thor.webp",
+        "etat": "99 Ko",
+        "largeur": 894,
+        "hauteur": 894
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\thor.avif",
+        "etat": "49 Ko",
+        "largeur": 894,
+        "hauteur": 894
+      }
+    ]
+  },
+  "medias/commun/thor1.png": {
+    "largeur": 1000,
+    "hauteur": 1000,
+    "original": 627411,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\thor1.webp",
+        "etat": "99 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\thor1.avif",
+        "etat": "55 Ko",
+        "largeur": 1000,
+        "hauteur": 1000
+      }
+    ]
+  },
+  "medias/commun/tresh_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 228386,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\tresh_card.webp",
+        "etat": "17 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\tresh_card.avif",
+        "etat": "15 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/udyr_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 311938,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\udyr_card.webp",
+        "etat": "21 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\udyr_card.avif",
+        "etat": "19 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/valo.png": {
+    "largeur": 1920,
+    "hauteur": 1080,
+    "original": 3655145,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\valo.webp",
+        "etat": "360 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\valo.avif",
+        "etat": "274 Ko",
+        "largeur": 1920,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "medias/commun/viper.png": {
+    "largeur": 600,
+    "hauteur": 650,
+    "original": 185092,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\viper.webp",
+        "etat": "39 Ko",
+        "largeur": 600,
+        "hauteur": 650
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\viper.avif",
+        "etat": "22 Ko",
+        "largeur": 600,
+        "hauteur": 650
+      }
+    ]
+  },
+  "medias/commun/waylay.png": {
+    "largeur": 1200,
+    "hauteur": 1091,
+    "original": 745588,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\waylay.webp",
+        "etat": "90 Ko",
+        "largeur": 1200,
+        "hauteur": 1091
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\waylay.avif",
+        "etat": "70 Ko",
+        "largeur": 1200,
+        "hauteur": 1091
+      }
+    ]
+  },
+  "medias/commun/woman.png": {
+    "largeur": 1337,
+    "hauteur": 1079,
+    "original": 360232,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\woman.webp",
+        "etat": "52 Ko",
+        "largeur": 1337,
+        "hauteur": 1079
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\woman.avif",
+        "etat": "34 Ko",
+        "largeur": 1337,
+        "hauteur": 1079
+      }
+    ]
+  },
+  "medias/commun/yunara_card.png": {
+    "largeur": 460,
+    "hauteur": 614,
+    "original": 355782,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\yunara_card.webp",
+        "etat": "33 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\yunara_card.avif",
+        "etat": "26 Ko",
+        "largeur": 460,
+        "hauteur": 614
+      }
+    ]
+  },
+  "medias/commun/zed.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 2460191,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\zed.webp",
+        "etat": "189 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\commun\\zed.avif",
+        "etat": "150 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  },
+  "medias/flags/ca.png": {
+    "largeur": 1969,
+    "hauteur": 985,
+    "original": 29530,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\ca.webp",
+        "etat": "14 Ko",
+        "largeur": 1969,
+        "hauteur": 985
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\ca.avif",
+        "etat": "7 Ko",
+        "largeur": 1969,
+        "hauteur": 985
+      }
+    ]
+  },
+  "medias/flags/fr.png": {
+    "largeur": 1280,
+    "hauteur": 853,
+    "original": 1616,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\fr.webp",
+        "etat": "2 Ko",
+        "largeur": 1280,
+        "hauteur": 853
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\fr.avif",
+        "etat": "1 Ko",
+        "largeur": 1280,
+        "hauteur": 853
+      }
+    ]
+  },
+  "medias/flags/rom.png": {
+    "largeur": 3594,
+    "hauteur": 2396,
+    "original": 75062,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\rom.webp",
+        "etat": "8 Ko",
+        "largeur": 2400,
+        "hauteur": 1600
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\rom.avif",
+        "etat": "2 Ko",
+        "largeur": 2400,
+        "hauteur": 1600
+      }
+    ]
+  },
+  "medias/flags/us.png": {
+    "largeur": 2100,
+    "hauteur": 1144,
+    "original": 228382,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\us.webp",
+        "etat": "43 Ko",
+        "largeur": 2100,
+        "hauteur": 1144
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\flags\\us.avif",
+        "etat": "24 Ko",
+        "largeur": 2100,
+        "hauteur": 1144
+      }
+    ]
+  },
+  "medias/players/AdmirablePotato (1).png": {
+    "largeur": 1122,
+    "hauteur": 1402,
+    "original": 1360430,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\AdmirablePotato (1).webp",
+        "etat": "69 Ko",
+        "largeur": 1122,
+        "hauteur": 1402
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\AdmirablePotato (1).avif",
+        "etat": "46 Ko",
+        "largeur": 1122,
+        "hauteur": 1402
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\AdmirablePotato (1).duo.webp",
+        "etat": "66 Ko",
+        "largeur": 1122,
+        "hauteur": 1402
+      }
+    ]
+  },
+  "medias/players/anti (1).png": {
+    "largeur": 1080,
+    "hauteur": 1456,
+    "original": 1521154,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\anti (1).webp",
+        "etat": "88 Ko",
+        "largeur": 1080,
+        "hauteur": 1456
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\anti (1).avif",
+        "etat": "59 Ko",
+        "largeur": 1080,
+        "hauteur": 1456
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\anti (1).duo.webp",
+        "etat": "86 Ko",
+        "largeur": 1080,
+        "hauteur": 1456
+      }
+    ]
+  },
+  "medias/players/anti.png": {
+    "largeur": 1080,
+    "hauteur": 1456,
+    "original": 2248036,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\anti.webp",
+        "etat": "74 Ko",
+        "largeur": 1080,
+        "hauteur": 1456
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\anti.avif",
+        "etat": "55 Ko",
+        "largeur": 1080,
+        "hauteur": 1456
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\anti.duo.webp",
+        "etat": "72 Ko",
+        "largeur": 1080,
+        "hauteur": 1456
+      }
+    ]
+  },
+  "medias/players/challenger.png": {
+    "largeur": 128,
+    "hauteur": 128,
+    "original": 23451,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\challenger.webp",
+        "etat": "8 Ko",
+        "largeur": 128,
+        "hauteur": 128
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\challenger.avif",
+        "etat": "5 Ko",
+        "largeur": 128,
+        "hauteur": 128
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\challenger.duo.webp",
+        "etat": "7 Ko",
+        "largeur": 128,
+        "hauteur": 128
+      }
+    ]
+  },
+  "medias/players/FR.jpg": {
+    "largeur": 728,
+    "hauteur": 508,
+    "original": 41613,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\FR.webp",
+        "etat": "15 Ko",
+        "largeur": 728,
+        "hauteur": 508
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\FR.avif",
+        "etat": "12 Ko",
+        "largeur": 728,
+        "hauteur": 508
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\FR.duo.webp",
+        "etat": "15 Ko",
+        "largeur": 728,
+        "hauteur": 508
+      }
+    ]
+  },
+  "medias/players/FR1.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 9767,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\FR1.webp",
+        "etat": "6 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\FR1.avif",
+        "etat": "4 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\FR1.duo.webp",
+        "etat": "4 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "medias/players/goodboi (1).png": {
+    "largeur": 456,
+    "hauteur": 456,
+    "original": 197051,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\goodboi (1).webp",
+        "etat": "22 Ko",
+        "largeur": 456,
+        "hauteur": 456
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\goodboi (1).avif",
+        "etat": "14 Ko",
+        "largeur": 456,
+        "hauteur": 456
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\goodboi (1).duo.webp",
+        "etat": "20 Ko",
+        "largeur": 456,
+        "hauteur": 456
+      }
+    ]
+  },
+  "medias/players/goodboilol.png": {
+    "largeur": 1123,
+    "hauteur": 1401,
+    "original": 1450887,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\goodboilol.webp",
+        "etat": "66 Ko",
+        "largeur": 1123,
+        "hauteur": 1401
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\goodboilol.avif",
+        "etat": "53 Ko",
+        "largeur": 1123,
+        "hauteur": 1401
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\goodboilol.duo.webp",
+        "etat": "68 Ko",
+        "largeur": 1123,
+        "hauteur": 1401
+      }
+    ]
+  },
+  "medias/players/karsiak (2).png": {
+    "largeur": 1080,
+    "hauteur": 1350,
+    "original": 1598121,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\karsiak (2).webp",
+        "etat": "100 Ko",
+        "largeur": 1080,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\karsiak (2).avif",
+        "etat": "63 Ko",
+        "largeur": 1080,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\karsiak (2).duo.webp",
+        "etat": "94 Ko",
+        "largeur": 1080,
+        "hauteur": 1350
+      }
+    ]
+  },
+  "medias/players/sirzepre.png": {
+    "largeur": 1080,
+    "hauteur": 1350,
+    "original": 1451121,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\sirzepre.webp",
+        "etat": "84 Ko",
+        "largeur": 1080,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\sirzepre.avif",
+        "etat": "57 Ko",
+        "largeur": 1080,
+        "hauteur": 1350
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\sirzepre.duo.webp",
+        "etat": "84 Ko",
+        "largeur": 1080,
+        "hauteur": 1350
+      }
+    ]
+  },
+  "medias/players/US.png": {
+    "largeur": 160,
+    "hauteur": 160,
+    "original": 1588,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\US.webp",
+        "etat": "2 Ko",
+        "largeur": 160,
+        "hauteur": 160
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\US.avif",
+        "etat": "2 Ko",
+        "largeur": 160,
+        "hauteur": 160
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\players\\US.duo.webp",
+        "etat": "2 Ko",
+        "largeur": 160,
+        "hauteur": 160
+      }
+    ]
+  },
+  "medias/sponsors/arene1.png": {
+    "largeur": 640,
+    "hauteur": 392,
+    "original": 138326,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\arene1.webp",
+        "etat": "38 Ko",
+        "largeur": 640,
+        "hauteur": 392
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\arene1.avif",
+        "etat": "22 Ko",
+        "largeur": 640,
+        "hauteur": 392
+      }
+    ]
+  },
+  "medias/sponsors/econext1.png": {
+    "largeur": 500,
+    "hauteur": 500,
+    "original": 89602,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\econext1.webp",
+        "etat": "20 Ko",
+        "largeur": 500,
+        "hauteur": 500
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\econext1.avif",
+        "etat": "12 Ko",
+        "largeur": 500,
+        "hauteur": 500
+      }
+    ]
+  },
+  "medias/sponsors/guru1.png": {
+    "largeur": 599,
+    "hauteur": 416,
+    "original": 77380,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\guru1.webp",
+        "etat": "20 Ko",
+        "largeur": 599,
+        "hauteur": 416
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\guru1.avif",
+        "etat": "14 Ko",
+        "largeur": 599,
+        "hauteur": 416
+      }
+    ]
+  },
+  "medias/sponsors/ig1.png": {
+    "largeur": 933,
+    "hauteur": 856,
+    "original": 66728,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\ig1.webp",
+        "etat": "25 Ko",
+        "largeur": 933,
+        "hauteur": 856
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\ig1.avif",
+        "etat": "13 Ko",
+        "largeur": 933,
+        "hauteur": 856
+      }
+    ]
+  },
+  "medias/sponsors/passion.png": {
+    "largeur": 474,
+    "hauteur": 202,
+    "original": 74053,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\passion.webp",
+        "etat": "18 Ko",
+        "largeur": 474,
+        "hauteur": 202
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\passion.avif",
+        "etat": "10 Ko",
+        "largeur": 474,
+        "hauteur": 202
+      }
+    ]
+  },
+  "medias/sponsors/rogue1.png": {
+    "largeur": 645,
+    "hauteur": 387,
+    "original": 198990,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\rogue1.webp",
+        "etat": "27 Ko",
+        "largeur": 645,
+        "hauteur": 387
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\rogue1.avif",
+        "etat": "18 Ko",
+        "largeur": 645,
+        "hauteur": 387
+      }
+    ]
+  },
+  "medias/sponsors/sim.png": {
+    "largeur": 4094,
+    "hauteur": 1750,
+    "original": 390844,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\sim.webp",
+        "etat": "61 Ko",
+        "largeur": 2400,
+        "hauteur": 1026
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\sim.avif",
+        "etat": "33 Ko",
+        "largeur": 2400,
+        "hauteur": 1026
+      }
+    ]
+  },
+  "medias/sponsors/tnt1.png": {
+    "largeur": 528,
+    "hauteur": 366,
+    "original": 201823,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\tnt1.webp",
+        "etat": "30 Ko",
+        "largeur": 528,
+        "hauteur": 366
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\tnt1.avif",
+        "etat": "21 Ko",
+        "largeur": 528,
+        "hauteur": 366
+      }
+    ]
+  },
+  "medias/sponsors/tuninclub.png": {
+    "largeur": 2460,
+    "hauteur": 2443,
+    "original": 1573312,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\tuninclub.webp",
+        "etat": "242 Ko",
+        "largeur": 2400,
+        "hauteur": 2383
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\medias\\sponsors\\tuninclub.avif",
+        "etat": "135 Ko",
+        "largeur": 2400,
+        "hauteur": 2383
+      }
+    ]
+  },
+  "logo/discord.png": {
+    "largeur": 920,
+    "hauteur": 920,
+    "original": 58817,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\discord.webp",
+        "etat": "31 Ko",
+        "largeur": 920,
+        "hauteur": 920
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\discord.avif",
+        "etat": "14 Ko",
+        "largeur": 920,
+        "hauteur": 920
+      }
+    ]
+  },
+  "logo/DME LOGO.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 1411469,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\DME LOGO.webp",
+        "etat": "51 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\DME LOGO.avif",
+        "etat": "39 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "logo/dme-abyss.png": {
+    "largeur": 1080,
+    "hauteur": 1080,
+    "original": 567104,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-abyss.webp",
+        "etat": "64 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-abyss.avif",
+        "etat": "42 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "logo/dme-dawn.png": {
+    "largeur": 1080,
+    "hauteur": 1080,
+    "original": 689838,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-dawn.webp",
+        "etat": "57 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-dawn.avif",
+        "etat": "43 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "logo/dme-exodia.png": {
+    "largeur": 1080,
+    "hauteur": 1080,
+    "original": 749197,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-exodia.webp",
+        "etat": "70 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-exodia.avif",
+        "etat": "45 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "logo/dme-forg.png": {
+    "largeur": 1080,
+    "hauteur": 1080,
+    "original": 671343,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-forg.webp",
+        "etat": "66 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-forg.avif",
+        "etat": "42 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "logo/dme-pl.png": {
+    "largeur": 1080,
+    "hauteur": 1080,
+    "original": 706949,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-pl.webp",
+        "etat": "66 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-pl.avif",
+        "etat": "47 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "logo/dme-take.png": {
+    "largeur": 1080,
+    "hauteur": 1080,
+    "original": 750048,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-take.webp",
+        "etat": "69 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\dme-take.avif",
+        "etat": "49 Ko",
+        "largeur": 1080,
+        "hauteur": 1080
+      }
+    ]
+  },
+  "logo/image_player.png": {
+    "largeur": 700,
+    "hauteur": 700,
+    "original": 50376,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\image_player.webp",
+        "etat": "10 Ko",
+        "largeur": 700,
+        "hauteur": 700
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\image_player.avif",
+        "etat": "7 Ko",
+        "largeur": 700,
+        "hauteur": 700
+      }
+    ]
+  },
+  "logo/insta.jfif": {
+    "largeur": 880,
+    "hauteur": 920,
+    "original": 217893,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\insta.webp",
+        "etat": "20 Ko",
+        "largeur": 880,
+        "hauteur": 920
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\insta.avif",
+        "etat": "13 Ko",
+        "largeur": 880,
+        "hauteur": 920
+      }
+    ]
+  },
+  "logo/insta.png": {
+    "largeur": 1600,
+    "hauteur": 1200,
+    "original": 200542,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\insta.webp",
+        "etat": "a jour"
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\insta.avif",
+        "etat": "a jour"
+      }
+    ]
+  },
+  "logo/kri.png": {
+    "largeur": 433,
+    "hauteur": 475,
+    "original": 131751,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\kri.webp",
+        "etat": "13 Ko",
+        "largeur": 433,
+        "hauteur": 475
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\kri.avif",
+        "etat": "10 Ko",
+        "largeur": 433,
+        "hauteur": 475
+      }
+    ]
+  },
+  "logo/krip.png": {
+    "largeur": 375,
+    "hauteur": 547,
+    "original": 144793,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\krip.webp",
+        "etat": "13 Ko",
+        "largeur": 375,
+        "hauteur": 547
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\krip.avif",
+        "etat": "10 Ko",
+        "largeur": 375,
+        "hauteur": 547
+      }
+    ]
+  },
+  "logo/krips.png": {
+    "largeur": 1024,
+    "hauteur": 826,
+    "original": 740267,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\krips.webp",
+        "etat": "88 Ko",
+        "largeur": 1024,
+        "hauteur": 826
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\krips.avif",
+        "etat": "26 Ko",
+        "largeur": 1024,
+        "hauteur": 826
+      }
+    ]
+  },
+  "logo/kripsuspro (2).png": {
+    "largeur": 1280,
+    "hauteur": 1057,
+    "original": 844463,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\kripsuspro (2).webp",
+        "etat": "28 Ko",
+        "largeur": 1280,
+        "hauteur": 1057
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\kripsuspro (2).avif",
+        "etat": "23 Ko",
+        "largeur": 1280,
+        "hauteur": 1057
+      }
+    ]
+  },
+  "logo/kripsuspro.png": {
+    "largeur": 1024,
+    "hauteur": 1024,
+    "original": 1710915,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\kripsuspro.webp",
+        "etat": "125 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\kripsuspro.avif",
+        "etat": "38 Ko",
+        "largeur": 1024,
+        "hauteur": 1024
+      }
+    ]
+  },
+  "logo/logo-dme.png": {
+    "largeur": 800,
+    "hauteur": 800,
+    "original": 370643,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\logo-dme.webp",
+        "etat": "28 Ko",
+        "largeur": 800,
+        "hauteur": 800
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\logo-dme.avif",
+        "etat": "18 Ko",
+        "largeur": 800,
+        "hauteur": 800
+      }
+    ]
+  },
+  "logo/spy 1.png": {
+    "largeur": 750,
+    "hauteur": 1624,
+    "original": 959440,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\spy 1.webp",
+        "etat": "62 Ko",
+        "largeur": 750,
+        "hauteur": 1624
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\spy 1.avif",
+        "etat": "43 Ko",
+        "largeur": 750,
+        "hauteur": 1624
+      }
+    ]
+  },
+  "logo/spypro.png": {
+    "largeur": 1024,
+    "hauteur": 1019,
+    "original": 999225,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\spypro.webp",
+        "etat": "59 Ko",
+        "largeur": 1024,
+        "hauteur": 1019
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\spypro.avif",
+        "etat": "41 Ko",
+        "largeur": 1024,
+        "hauteur": 1019
+      }
+    ]
+  },
+  "logo/tiktok.png": {
+    "largeur": 3688,
+    "hauteur": 4167,
+    "original": 169390,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\tiktok.webp",
+        "etat": "97 Ko",
+        "largeur": 2400,
+        "hauteur": 2712
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\tiktok.avif",
+        "etat": "70 Ko",
+        "largeur": 2400,
+        "hauteur": 2712
+      }
+    ]
+  },
+  "logo/twitch.png": {
+    "largeur": 2400,
+    "hauteur": 2400,
+    "original": 40842,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\twitch.webp",
+        "etat": "20 Ko",
+        "largeur": 2400,
+        "hauteur": 2400
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\twitch.avif",
+        "etat": "10 Ko",
+        "largeur": 2400,
+        "hauteur": 2400
+      }
+    ]
+  },
+  "logo/waza 7.png": {
+    "largeur": 1024,
+    "hauteur": 1017,
+    "original": 1675074,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\waza 7.webp",
+        "etat": "64 Ko",
+        "largeur": 1024,
+        "hauteur": 1017
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\waza 7.avif",
+        "etat": "53 Ko",
+        "largeur": 1024,
+        "hauteur": 1017
+      }
+    ]
+  },
+  "logo/wazapro.png": {
+    "largeur": 486,
+    "hauteur": 496,
+    "original": 187549,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\wazapro.webp",
+        "etat": "18 Ko",
+        "largeur": 486,
+        "hauteur": 496
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\wazapro.avif",
+        "etat": "11 Ko",
+        "largeur": 486,
+        "hauteur": 496
+      }
+    ]
+  },
+  "logo/X-logo.png": {
+    "largeur": 450,
+    "hauteur": 450,
+    "original": 38321,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\X-logo.webp",
+        "etat": "11 Ko",
+        "largeur": 450,
+        "hauteur": 450
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\X-logo.avif",
+        "etat": "9 Ko",
+        "largeur": 450,
+        "hauteur": 450
+      }
+    ]
+  },
+  "logo/x-x.png": {
+    "largeur": 450,
+    "hauteur": 450,
+    "original": 42978,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\x-x.webp",
+        "etat": "12 Ko",
+        "largeur": 450,
+        "hauteur": 450
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\x-x.avif",
+        "etat": "7 Ko",
+        "largeur": 450,
+        "hauteur": 450
+      }
+    ]
+  },
+  "logo/x.jpg": {
+    "largeur": 736,
+    "hauteur": 736,
+    "original": 51888,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\x.webp",
+        "etat": "23 Ko",
+        "largeur": 736,
+        "hauteur": 736
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\x.avif",
+        "etat": "21 Ko",
+        "largeur": 736,
+        "hauteur": 736
+      }
+    ]
+  },
+  "logo/x.png": {
+    "largeur": 2000,
+    "hauteur": 2000,
+    "original": 79680,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\x.webp",
+        "etat": "a jour"
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\x.avif",
+        "etat": "a jour"
+      }
+    ]
+  },
+  "logo/youtube.png": {
+    "largeur": 1200,
+    "hauteur": 1200,
+    "original": 19227,
+    "sorties": [
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\youtube.webp",
+        "etat": "12 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      },
+      {
+        "chemin": "C:\\Users\\dc617\\OneDrive\\Documents\\VS CODE\\dme-site\\public\\logo\\youtube.avif",
+        "etat": "7 Ko",
+        "largeur": 1200,
+        "hauteur": 1200
+      }
+    ]
+  }
+}

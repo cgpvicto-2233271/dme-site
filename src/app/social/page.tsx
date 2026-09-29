@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SocialClient } from "./social-client";
 
 export const metadata: Metadata = {
-  title: "Communauté | DeathMark E-Sports",
+  title: "Communauté | DME",
 };
 
 export default function SocialPage() {

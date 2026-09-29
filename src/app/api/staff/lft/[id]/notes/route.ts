@@ -1,17 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyStaff } from "@/lib/scout/auth";
-import { cookies } from "next/headers";
+import { getStaffIdentity, verifyStaff } from "@/lib/scout/auth";
 
 type Params = { params: Promise<{ id: string }> };
-
-function getAuthorEmail(): string {
-  const jar = cookies();
-  const raw = (jar as unknown as { get(name: string): { value: string } | undefined }).get(
-    process.env.DME_COOKIE_NAME ?? "dme_access"
-  )?.value ?? "";
-  return raw.split("|")[0] ?? "staff@dme";
-}
 
 export async function POST(req: NextRequest, { params }: Params) {
   const bad = await verifyStaff();
@@ -25,7 +16,7 @@ export async function POST(req: NextRequest, { params }: Params) {
     if (!content) return NextResponse.json({ error: "Contenu requis" }, { status: 400 });
 
     const noteType = String(body.noteType ?? "general");
-    const authorEmail = getAuthorEmail();
+    const authorEmail = (await getStaffIdentity())?.email ?? "staff@dme";
 
     const record = await prisma.staffScoutingRecord.upsert({
       where: { playerId: id },

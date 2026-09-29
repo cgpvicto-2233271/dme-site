@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { TeamProgramPage, type ProgramRoster } from "@/components/equipes/team-program-page";
 
 export const metadata: Metadata = {
-  title: "Marvel Rivals | DeathMark E-Sports",
+  title: "Marvel Rivals | DME",
 };
 
 const rosters: ProgramRoster[] = [
@@ -26,7 +26,7 @@ const rosters: ProgramRoster[] = [
 export default function MarvelRivalsPage() {
   return (
     <TeamProgramPage
-      eyebrow={{ fr: "Marvel Rivals / Americas", en: "Marvel Rivals / Americas" }}
+      jeu="Marvel Rivals"
       title={{ fr: "DME Street.", en: "DME Street." }}
       lead={{
         fr: "Top 256 Americas trois saisons consécutives. Sept profils, rôles définis, hero pools profonds. Objectif playoffs.",

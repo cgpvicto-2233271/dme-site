@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { useLang, type Lang } from "@/components/LanguageContext";
 import { ButtonLink } from "@/components/ui/button";
-import { fadeUp, viewport } from "@/lib/motion";
+import { ease, fadeUp, viewport } from "@/lib/motion";
 
 export type LocalizedCopy = { fr: string; en: string };
 
@@ -24,7 +24,6 @@ export type CommandPanel = {
 };
 
 export type PublicCommandPageProps = {
-  eyebrow: LocalizedCopy;
   title: LocalizedCopy;
   lead: LocalizedCopy;
   stats: CommandStat[];
@@ -43,7 +42,6 @@ function pick(copy: LocalizedCopy, lang: Lang) {
 }
 
 export function PublicCommandPage({
-  eyebrow,
   title,
   lead,
   stats,
@@ -72,18 +70,10 @@ export function PublicCommandPage({
                 {backLabel ? pick(backLabel, lang) : (lang === "en" ? "Back" : "Retour")}
               </Link>
             ) : null}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="dme-eyebrow mb-5"
-            >
-              {pick(eyebrow, lang)}
-            </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: ease.spring }}
               className="dme-title max-w-5xl text-[clamp(3rem,7.5vw,7rem)]"
             >
               {pick(title, lang)}
@@ -91,7 +81,7 @@ export function PublicCommandPage({
             <motion.p
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.6, delay: 0.12, ease: ease.spring }}
               className="dme-lead mt-6"
             >
               {pick(lead, lang)}
@@ -101,7 +91,7 @@ export function PublicCommandPage({
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.62, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.62, delay: 0.18, ease: ease.spring }}
             className="dme-gridline grid sm:grid-cols-3 lg:grid-cols-1"
           >
             {stats.map((stat) => (
@@ -187,9 +177,6 @@ export function PublicCommandPage({
       <section className="dme-section-tight border-b-0">
         <div className="dme-wrap grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="dme-eyebrow mb-5">
-              DME Command
-            </p>
             <h2 className="dme-title max-w-4xl text-[clamp(2.4rem,5.5vw,5rem)]">
               {pick(closingTitle, lang)}
             </h2>

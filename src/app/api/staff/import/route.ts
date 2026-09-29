@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyStaff } from "@/lib/scout/auth";
+import { getStaffIdentity, verifyStaff } from "@/lib/scout/auth";
 import { validateAndEnrich } from "@/lib/lft/riot";
 import type { CsvImportRow } from "@/lib/lft/types";
 import { Region, Role } from "@prisma/client";
-import { cookies } from "next/headers";
 
 const VALID_REGIONS = new Set<string>(Object.values(Region));
 const VALID_ROLES = new Set<string>(Object.values(Role));
-
-function getStaffEmail(): string {
-  const jar = cookies();
-  const raw = (jar as unknown as { get(name: string): { value: string } | undefined }).get(
-    process.env.DME_COOKIE_NAME ?? "dme_access"
-  )?.value ?? "";
-  return raw.split("|")[0] ?? "staff@dme";
-}
 
 function parseCsvText(text: string): CsvImportRow[] {
   const lines = text.split(/\r?\n/).filter(Boolean);
@@ -69,7 +60,7 @@ export async function POST(req: NextRequest) {
       filename = body.filename;
     }
 
-    const importedBy = getStaffEmail();
+    const importedBy = (await getStaffIdentity())?.email ?? "staff@dme";
     const errors: Array<{ row: number; error: string }> = [];
     let successCount = 0;
 

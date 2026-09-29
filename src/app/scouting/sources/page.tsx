@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   CheckCircle, XCircle, Clock, AlertCircle, RefreshCw,
   Database, Zap, Globe, Lock, Upload, Info, FlaskConical,

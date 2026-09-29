@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { achievements, GAME_LABELS, type Achievement, type GameKey } from "@/app/hall-of-fame/_data";
 import { useLang, type Lang } from "@/components/LanguageContext";
 import { fadeUp, viewport } from "@/lib/motion";
@@ -29,15 +29,12 @@ const cleanPairs: Array<[string, string]> = [
 const GAME_LINKS: Array<{ href: string; key: GameKey; label: string }> = [
   { href: "/hall-of-fame/lol", key: "lol", label: "LoL" },
   { href: "/hall-of-fame/valorant", key: "valorant", label: "Valorant" },
-  { href: "/hall-of-fame/rocket-league", key: "rocket-league", label: "Rocket League" },
-  { href: "/hall-of-fame/marvel-rivals", key: "marvel-rivals", label: "Marvel Rivals" },
 ];
 
 type Copy = { fr: string; en: string };
 
 export type GameResultsPageProps = {
   gameKey: GameKey;
-  eyebrow: Copy;
   title: Copy;
   lead: Copy;
   teamHref: string;
@@ -69,7 +66,7 @@ function rankScore(item: Achievement) {
 function BannerPlaceholder() {
   return (
     <div className="relative flex aspect-[16/9] items-center justify-center border-b border-white/[0.06] bg-white/[0.025]">
-      <Image src="/logo/logo-dme.png" alt="DeathMark E-Sports" width={48} height={48} className="opacity-18 object-contain" />
+      <Image src="/logo/logo-dme.png" alt="DME" width={48} height={48} className="opacity-18 object-contain" />
       <span className="absolute bottom-3 font-mono text-[8px] font-bold uppercase tracking-[0.26em] text-white/14">
         Photo à venir
       </span>
@@ -136,7 +133,6 @@ function ResultCard({ item, index }: { item: Achievement; index: number }) {
 
 export function GameResultsPage({
   gameKey,
-  eyebrow,
   title,
   lead,
   teamHref,
@@ -167,7 +163,6 @@ export function GameResultsPage({
               <span className="text-white/14">/</span>
               <span className="text-red-200/60">{GAME_LABELS[gameKey]}</span>
             </div>
-            <p className="dme-eyebrow mb-5">{pick(eyebrow, lang)}</p>
             <h1 className="dme-title max-w-5xl text-[clamp(3rem,7vw,6.8rem)]">
               {pick(title, lang)}
             </h1>
@@ -218,7 +213,6 @@ export function GameResultsPage({
       <section className="dme-section-tight border-b-0">
         <div className="dme-wrap grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="dme-eyebrow mb-5">DME Results</p>
             <h2 className="dme-title max-w-3xl text-[clamp(2.4rem,5vw,4.8rem)]">
               {lang === "en" ? "Follow the roster." : "Voir le roster."}
             </h2>

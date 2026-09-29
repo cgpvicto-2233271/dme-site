@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useState, useTransition } from "react";
 import { Check, X, Clock, User, Mail, MessageSquare, Calendar, ArrowUpRight } from "lucide-react";
 import { COACHES } from "@/lib/coaches-data";
@@ -184,7 +184,7 @@ export function CoachAdminClient({
         <div className="mb-8 flex items-center justify-between">
           <div>
             <p className="mb-1 font-mono text-[9px] font-bold uppercase tracking-[0.36em] text-[#dc2626]/65">
-              DeathMark Esports · Coach Admin
+              DME · Coach Admin
             </p>
             <h1 className="font-abolition text-white" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1 }}>
               Réservations

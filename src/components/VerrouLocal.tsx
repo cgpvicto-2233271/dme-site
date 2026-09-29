@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 async function sha256Hex(texte: string) {
   const enc = new TextEncoder().encode(texte);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
+  const buf = await crypto.subtle.digest("SHA-256", enc.buffer as ArrayBuffer);
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 

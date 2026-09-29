@@ -1,11 +1,6 @@
-﻿import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
-import {
-  Inter,
-  Manrope,
-  IBM_Plex_Mono,
-  Bebas_Neue,
-} from "next/font/google";
+import { Archivo, Martian_Mono } from "next/font/google";
 
 import Header, { RoleAcces } from "../components/Header";
 import Footer from "./Footer";
@@ -15,40 +10,40 @@ import { IntroReveal } from "../components/IntroReveal";
 import { LanguageProvider } from "../components/LanguageContext";
 import { PageTransition } from "../components/PageTransition";
 import { Cursor } from "../components/Cursor";
+import { AvisTemoins } from "../components/AvisTemoins";
+
+import { lireSession, NOM_COOKIE } from "../lib/session";
 
 import "./globals.css";
 
 /* ── Fonts ──────────────────────────────────────────────────────────────── */
-const inter = Inter({
-  weight:   ["400", "500", "600", "700", "800"],
-  subsets:  ["latin"],
-  variable: "--font-body",
-  display:  "swap",
+/* Une seule famille pour l'affichage et le corps : Archivo, variable en
+   largeur (wdth 62–125) et en graisse (100–900). La largeur est un axe de
+   motion, pas un choix de police : condensee pour les capitales d'affiche,
+   normale pour la lecture, etendue pour les micro-labels.
+   Anton (le display de T1), Inter en display et IBM Plex sont ecartes —
+   voir docs/design/recherche-2026-09.md §9. */
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
 });
-const manrope = Manrope({
-  weight:   ["600", "700", "800"],
-  subsets:  ["latin"],
-  variable: "--font-display",
-  display:  "swap",
-});
-const bebasNeue = Bebas_Neue({
-  weight:   ["400"],
-  subsets:  ["latin"],
-  variable: "--font-bebas",
-  display:  "swap",
-});
-const ibmMono = IBM_Plex_Mono({
-  weight:   ["400", "600", "700"],
-  subsets:  ["latin"],
-  variable: "--font-mono",
-  display:  "swap",
+
+/* Mono reservee a la donnee des outils internes (scouting, coaching) et aux
+   notations : scores, rangs, dates. Jamais en texte courant. */
+const martianMono = Martian_Mono({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-martian",
+  display: "swap",
 });
 
 /* ── Metadata ────────────────────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title: "DeathMark Esports",
+  title: "DME",
   description:
-    "Organisation esport competitive du Quebec - LoL, Valorant, Rocket League, Marvel Rivals.",
+    "DME, organisation esport compétitive du Québec : League of Legends, Valorant et Counter-Strike 2.",
   icons: {
     icon:     "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -61,24 +56,13 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/* ── Role helpers ────────────────────────────────────────────────────────── */
-function estRoleAcces(v: string): v is RoleAcces {
-  return (
-    v === "joueur"        ||
-    v === "staff"         ||
-    v === "coach"         ||
-    v === "pending_staff" ||
-    v === "public"
-  );
-}
-
+/* ── Role ─────────────────────────────────────────────────────────────────── */
+/* Le role ne vient que d'un cookie signe : une valeur ecrite a la main ou
+   alteree retombe sur « public ». */
 async function lireRoleDepuisCookie(): Promise<RoleAcces> {
-  const cookieName = process.env.DME_COOKIE_NAME ?? "dme_access";
-  const store      = await cookies();
-  const raw        = store.get(cookieName)?.value ?? "";
-  const parts      = raw.split("|");
-  const roleBrut   = (parts[1] ?? "public").trim();
-  return estRoleAcces(roleBrut) ? roleBrut : "public";
+  const store = await cookies();
+  const session = await lireSession(store.get(NOM_COOKIE)?.value);
+  return session?.role ?? "public";
 }
 
 /* ── Root layout ─────────────────────────────────────────────────────────── */
@@ -92,11 +76,11 @@ export default async function RootLayout({
   return (
     <html
       lang="fr"
-      className={`h-full ${inter.variable} ${manrope.variable} ${bebasNeue.variable} ${ibmMono.variable}`}
+      className={`h-full ${archivo.variable} ${martianMono.variable}`}
     >
       <body
         suppressHydrationWarning
-        className="bg-black text-white min-h-screen antialiased overflow-x-clip"
+        className="text-white min-h-screen antialiased overflow-x-clip"
         style={{
           paddingTop:    "env(safe-area-inset-top)",
           paddingBottom: "env(safe-area-inset-bottom)",
@@ -113,12 +97,13 @@ export default async function RootLayout({
             <Header role={role} />
             <VerrouLocal actif={role !== "public"} />
 
-            <div className="pt-[70px] flex min-h-screen flex-col">
+            <div className="flex min-h-screen flex-col">
               <PageTransition>
                 <main className="flex-1">{children}</main>
                 <Footer />
               </PageTransition>
             </div>
+            <AvisTemoins />
           </Providers>
         </LanguageProvider>
       </body>

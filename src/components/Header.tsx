@@ -2,407 +2,411 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronRight,
-  Languages,
-  LogOut,
-  Menu,
-  Shield,
-  ShoppingBag,
-  User,
-  X,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "motion/react";
+import { ArrowRight, ArrowUpRight, LogOut, Shield } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLang, type Lang } from "./LanguageContext";
+import { achievements } from "@/app/hall-of-fame/_data";
+import { DEVISE, FONDATION, MISSION, SIGLE } from "@/lib/marque";
+import { PROGRAMMES } from "@/lib/programmes";
+import { fadeUp, stagger, transition } from "@/lib/motion";
 
 export type RoleAcces = "joueur" | "staff" | "coach" | "pending_staff" | "public";
 
 type Props = { role: RoleAcces };
+type Copy = { fr: string; en: string };
+type Lien = { href: string; label: Copy; note?: Copy; externe?: boolean };
 
-type Copy = {
-  fr: string;
-  en: string;
-};
-
-type NavItem = {
-  href: string;
-  label: Copy;
-};
-
-const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: { fr: "Accueil", en: "Home" } },
+/* Les liens visibles dans la barre sur grand ecran. */
+const BARRE: Lien[] = [
   { href: "/equipes", label: { fr: "Équipes", en: "Teams" } },
-  { href: "/hall-of-fame", label: { fr: "Résultats", en: "Results" } },
-  { href: "/coach", label: { fr: "Coaching", en: "Coaching" } },
+  { href: "/hall-of-fame", label: { fr: "Palmarès", en: "Record" } },
+  { href: "/staff", label: { fr: "Direction", en: "Leadership" } },
   { href: "/recrutement", label: { fr: "Recrutement", en: "Tryouts" } },
-  { href: "/social", label: { fr: "Communauté", en: "Community" } },
-  { href: "/staff", label: { fr: "Staff", en: "Staff" } },
-  { href: "/contact", label: { fr: "Contact", en: "Contact" } },
+  { href: "/shop", label: { fr: "Boutique", en: "Shop" } },
 ];
 
-const ACCOUNT_LINKS: NavItem[] = [
-  { href: "/connexion", label: { fr: "Connexion", en: "Login" } },
-  { href: "/shop", label: { fr: "Shop", en: "Shop" } },
+/* Le menu complet, range par intention. */
+const GROUPES: { titre: Copy; liens: Lien[] }[] = [
+  {
+    titre: { fr: "Compétition", en: "Competition" },
+    liens: [
+      {
+        href: "/hall-of-fame",
+        label: { fr: "Palmarès", en: "Record" },
+        note: { fr: `${achievements.length} résultats publiés`, en: `${achievements.length} published results` },
+      },
+      { href: "/recrutement", label: { fr: "Recrutement", en: "Tryouts" }, note: { fr: "Tests ouverts", en: "Tryouts open" } },
+      { href: "/equipes", label: { fr: "Équipes", en: "Teams" }, note: { fr: "LoL · Valorant · CS2", en: "LoL · Valorant · CS2" } },
+    ],
+  },
+  {
+    titre: { fr: "Organisation", en: "Organisation" },
+    liens: [
+      { href: "/staff", label: { fr: "Direction", en: "Leadership" }, note: { fr: "Qui dirige DME", en: "Who runs DME" } },
+      { href: "/partenaires", label: { fr: "Partenariats", en: "Partnerships" }, note: { fr: "Devenir partenaire", en: "Become a partner" } },
+      { href: "/contact", label: { fr: "Contact", en: "Contact" }, note: { fr: "Nous écrire", en: "Write to us" } },
+    ],
+  },
+  {
+    titre: { fr: "Communauté", en: "Community" },
+    liens: [
+      { href: "/shop", label: { fr: "Boutique", en: "Shop" }, note: { fr: "Maillots et merch", en: "Jerseys and merch" } },
+      { href: "/social", label: { fr: "Réseaux", en: "Socials" }, note: { fr: "Twitch · X · Instagram", en: "Twitch · X · Instagram" } },
+      { href: "https://discord.gg/Zu4FP5pU9M", label: { fr: "Discord", en: "Discord" }, note: { fr: "Rejoindre le serveur", en: "Join the server" }, externe: true },
+    ],
+  },
 ];
 
-function pick(copy: Copy, lang: Lang) {
-  return lang === "en" ? copy.en : copy.fr;
-}
-
-function isPathActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
-}
+const pick = (copy: Copy, lang: Lang) => (lang === "en" ? copy.en : copy.fr);
 
 export default function Header({ role }: Props) {
   const pathname = usePathname() ?? "/";
+  const router = useRouter();
   const { lang, setLang } = useLang();
-  const [isOpen, setIsOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const accountRef = useRef<HTMLDivElement>(null);
+  const [ouvert, setOuvert] = useState(false);
+  const [defile, setDefile] = useState(false);
+  const [masque, setMasque] = useState(false);
+  const declencheur = useRef<HTMLButtonElement>(null);
+  const panneau = useRef<HTMLDivElement>(null);
 
   const isConnected = role !== "public";
   const canScout = role === "staff" || role === "coach";
-  const accountLabel = isConnected
-    ? lang === "en"
-      ? "Account"
-      : "Compte"
-    : lang === "en"
-      ? "Login"
-      : "Connexion";
+  const fermer = useCallback(() => setOuvert(false), []);
 
+  /* Fond pose des qu'on quitte le haut de page ; la barre s'efface en
+     descendant et revient en remontant. */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
+    let precedent = window.scrollY;
+    const onScroll = () => {
+      const courant = window.scrollY;
+      setDefile(courant > 24);
+      setMasque(courant > 160 && courant > precedent);
+      precedent = courant;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Verrouille le scroll, piege le focus, rend le focus au declencheur. */
   useEffect(() => {
-    setIsOpen(false);
-    setAccountOpen(false);
-  }, [pathname]);
+    if (!ouvert) return;
+    document.body.style.overflow = "hidden";
 
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+    const premier = panneau.current?.querySelector<HTMLElement>("a, button");
+    premier?.focus();
 
-  useEffect(() => {
-    const closeAccount = (event: MouseEvent) => {
-      if (!accountOpen) return;
-      if (!accountRef.current?.contains(event.target as Node)) {
-        setAccountOpen(false);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOuvert(false);
+        declencheur.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab" || !panneau.current) return;
+      const focusables = panneau.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusables.length === 0) return;
+      const debut = focusables[0];
+      const fin = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === debut) {
+        event.preventDefault();
+        fin.focus();
+      } else if (!event.shiftKey && document.activeElement === fin) {
+        event.preventDefault();
+        debut.focus();
       }
     };
-    window.addEventListener("mousedown", closeAccount);
-    return () => window.removeEventListener("mousedown", closeAccount);
-  }, [accountOpen]);
 
-  async function logout() {
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [ouvert]);
+
+  const logout = useCallback(async () => {
     await fetch("/api/acces/logout", { method: "POST" });
-    window.location.href = "/";
-  }
+    setOuvert(false);
+    router.push("/");
+    router.refresh();
+  }, [router]);
+
+  const fondBarre = defile || ouvert;
 
   return (
     <>
+      {/* ── Barre ──────────────────────────────────────────────────────── */}
       <header
-        className={`fixed inset-x-0 top-0 z-50 border-b transition duration-300 ${
-          scrolled
-            ? "border-white/[0.08] bg-[#050505]/92 backdrop-blur-xl"
-            : "border-white/[0.045] bg-[#050505]/42 backdrop-blur-sm"
-        }`}
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-[transform,background-color,border-color] duration-300 ${
+          fondBarre
+            ? "border-[color:var(--line)] bg-[rgba(3,3,3,0.82)] backdrop-blur-xl"
+            : "border-transparent bg-transparent"
+        } ${masque && !ouvert ? "-translate-y-full" : "translate-y-0"}`}
       >
-        <div className="mx-auto grid h-[70px] max-w-[118rem] grid-cols-[auto_1fr_auto] items-center gap-4 px-4 sm:px-6 lg:px-10">
-          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="DME">
-            <Image
-              src="/logo/logo-dme.png"
-              alt="DeathMark E-Sports"
-              width={36}
-              height={36}
-              priority
-              className="h-8 w-8 shrink-0 object-contain"
-            />
-            <div className="hidden leading-none sm:block">
-              <p className="text-[12px] font-black uppercase tracking-[0.18em] text-white">
-                DeathMark
-              </p>
-              <p className="mt-1 font-mono text-[8px] font-bold uppercase tracking-[0.28em] text-white/35">
-                Quebec / NA
-              </p>
-            </div>
+        <div className="shell flex h-[72px] items-center justify-between gap-6">
+          <Link href="/" onClick={fermer} className="flex items-center gap-3" aria-label="DME, accueil">
+            <Image src="/logo/logo-dme.png" alt="" width={34} height={34} priority className="h-[34px] w-[34px] object-contain" />
+            <span className="flex flex-col leading-none">
+              <span className="text-[18px] font-bold tracking-[-0.02em]">DME</span>
+              <span className="mt-1 hidden text-[11.5px] text-[color:var(--t-3)] sm:block">{DEVISE}</span>
+            </span>
           </Link>
 
-          <nav className="hidden items-center justify-center gap-1 lg:flex" aria-label={lang === "en" ? "Main navigation" : "Navigation principale"}>
-            {NAV_ITEMS.map((item) => {
-              const active = isPathActive(pathname, item.href);
+          <nav aria-label={lang === "en" ? "Main" : "Principale"} className="hidden items-center gap-1 xl:flex">
+            {BARRE.map((lien) => {
+              const courant = pathname.startsWith(lien.href);
               return (
                 <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition ${
-                    active ? "text-white" : "text-white/44 hover:text-white/78"
+                  key={lien.href}
+                  href={lien.href}
+                  aria-current={courant ? "page" : undefined}
+                  className={`rounded-full px-4 py-2 text-[15px] font-medium transition-colors ${
+                    courant ? "bg-white/[0.07] text-white" : "text-[color:var(--t-2)] hover:text-white"
                   }`}
                 >
-                  {pick(item.label, lang)}
-                  {active ? (
-                    <motion.span
-                      layoutId="dme-nav-line"
-                      className="absolute inset-x-3 bottom-0 h-px bg-red-500"
-                      transition={{ type: "spring", stiffness: 420, damping: 36 }}
-                    />
-                  ) : null}
+                  {pick(lien.label, lang)}
                 </Link>
               );
             })}
-            {canScout ? (
-              <>
-                <Link
-                  href="/scouting/lol"
-                  className={`relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition ${
-                    isPathActive(pathname, "/scouting") ? "text-red-200" : "text-red-300/52 hover:text-red-100"
-                  }`}
-                >
-                  Scouting
-                  {isPathActive(pathname, "/scouting") ? (
-                    <motion.span
-                      layoutId="dme-nav-line"
-                      className="absolute inset-x-3 bottom-0 h-px bg-red-500"
-                      transition={{ type: "spring", stiffness: 420, damping: 36 }}
-                    />
-                  ) : null}
-                </Link>
-                <Link
-                  href="/coaching"
-                  className={`relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition ${
-                    isPathActive(pathname, "/coaching") ? "text-red-200" : "text-red-300/52 hover:text-red-100"
-                  }`}
-                >
-                  Coaching
-                  {isPathActive(pathname, "/coaching") ? (
-                    <motion.span
-                      layoutId="dme-nav-line"
-                      className="absolute inset-x-3 bottom-0 h-px bg-red-500"
-                      transition={{ type: "spring", stiffness: 420, damping: 36 }}
-                    />
-                  ) : null}
-                </Link>
-              </>
-            ) : null}
           </nav>
 
-          <div className="flex items-center justify-end gap-2">
-            <div className="hidden items-center border border-white/[0.1] bg-white/[0.025] md:flex">
-              {(["fr", "en"] as const).map((candidate) => (
-                <button
-                  key={candidate}
-                  type="button"
-                  onClick={() => setLang(candidate)}
-                  className={`h-8 px-3 text-base transition ${
-                    lang === candidate
-                      ? "bg-white/10 opacity-100"
-                      : "opacity-35 hover:opacity-70"
-                  }`}
-                  aria-label={candidate === "fr" ? "Francais" : "English"}
-                >
-                  <Image src={candidate === "fr" ? "/medias/players/FR1.png" : "/medias/players/US.png"} alt={candidate} width={26} height={18} className="rounded-[2px] object-cover" />
-                </button>
-              ))}
-            </div>
-
+          <div className="flex items-center gap-2">
             <Link
-              href="/shop"
-              className="hidden h-9 w-9 items-center justify-center border border-white/[0.1] bg-white/[0.025] text-white/45 transition hover:border-white/20 hover:text-white md:flex"
-              aria-label="Shop"
+              href="/partenaires"
+              onClick={fermer}
+              className="hidden h-11 items-center rounded-full bg-[color:var(--red)] px-5 text-[15px] font-semibold transition-colors hover:bg-[color:var(--red-lift)] md:inline-flex"
             >
-              <ShoppingBag className="h-4 w-4" />
+              {lang === "en" ? "Partner with us" : "Devenir partenaire"}
             </Link>
-
-            <div ref={accountRef} className="relative hidden md:block">
-              <button
-                type="button"
-                onClick={() => setAccountOpen((value) => !value)}
-                className={`flex h-9 w-9 items-center justify-center border transition ${
-                  accountOpen || isConnected
-                    ? "border-red-500/45 bg-red-500/[0.08] text-red-200"
-                    : "border-white/[0.1] bg-white/[0.025] text-white/45 hover:border-white/20 hover:text-white"
-                }`}
-                aria-label={accountLabel}
-                aria-expanded={accountOpen}
-              >
-                <User className="h-4 w-4" />
-              </button>
-
-              <AnimatePresence>
-                {accountOpen ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    transition={{ duration: 0.16 }}
-                    className="absolute right-0 mt-2 w-56 border border-white/[0.09] bg-[#070707]/98 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.7)] backdrop-blur-xl"
-                  >
-                    <p className="border-b border-white/[0.07] px-3 pb-2 pt-1 font-mono text-[8px] font-black uppercase tracking-[0.28em] text-white/28">
-                      {isConnected
-                        ? lang === "en"
-                          ? `Access: ${role}`
-                          : `Acces: ${role}`
-                        : lang === "en"
-                          ? "Public session"
-                          : "Session publique"}
-                    </p>
-                    <div className="mt-1 flex flex-col">
-                      {ACCOUNT_LINKS.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/46 transition hover:bg-white/[0.045] hover:text-white"
-                        >
-                          {pick(item.label, lang)}
-                        </Link>
-                      ))}
-                      {canScout ? (
-                        <>
-                          <Link
-                            href="/scouting/lol"
-                            className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-red-200/62 transition hover:bg-red-500/[0.06] hover:text-red-100"
-                          >
-                            <Shield className="h-3.5 w-3.5" />
-                            Scouting
-                          </Link>
-                          <Link
-                            href="/coaching"
-                            className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-red-200/62 transition hover:bg-red-500/[0.06] hover:text-red-100"
-                          >
-                            <Shield className="h-3.5 w-3.5" />
-                            Coaching
-                          </Link>
-                        </>
-                      ) : null}
-                      {isConnected ? (
-                        <button
-                          type="button"
-                          onClick={() => void logout()}
-                          className="mt-1 flex items-center gap-2 border-t border-white/[0.07] px-3 py-2 text-left text-[10px] font-black uppercase tracking-[0.16em] text-red-200/55 transition hover:bg-red-500/[0.06] hover:text-red-100"
-                        >
-                          <LogOut className="h-3.5 w-3.5" />
-                          {lang === "en" ? "Sign out" : "Deconnexion"}
-                        </button>
-                      ) : null}
-                    </div>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </div>
-
-            <Link
-              href="/recrutement"
-              className="hidden items-center gap-2 border border-red-500/45 bg-red-600 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-red-500 xl:flex"
-            >
-              {lang === "en" ? "Apply" : "Rejoindre"}
-              <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
-
             <button
+              ref={declencheur}
               type="button"
-              onClick={() => setIsOpen((value) => !value)}
-              className="flex h-10 w-10 items-center justify-center border border-white/[0.1] bg-white/[0.025] text-white/70 transition hover:border-white/22 hover:text-white lg:hidden"
-              aria-label="Menu"
-              aria-expanded={isOpen}
+              onClick={() => setOuvert((v) => !v)}
+              aria-expanded={ouvert}
+              aria-controls="dme-menu"
+              className="flex h-11 items-center gap-2.5 rounded-full border border-[color:var(--line-2)] pl-5 pr-4 text-[15px] font-medium transition-colors hover:border-white/30"
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {ouvert ? (lang === "en" ? "Close" : "Fermer") : "Menu"}
+              <span className="flex h-2.5 w-4 flex-col justify-between" aria-hidden>
+                <span
+                  className={`h-[1.5px] w-full origin-center bg-current transition-transform duration-300 ${
+                    ouvert ? "translate-y-[4.5px] rotate-45" : ""
+                  }`}
+                />
+                <span
+                  className={`h-[1.5px] w-full origin-center bg-current transition-transform duration-300 ${
+                    ouvert ? "-translate-y-[4.5px] -rotate-45" : ""
+                  }`}
+                />
+              </span>
             </button>
           </div>
         </div>
       </header>
 
+      {/* ── Menu plein ecran ───────────────────────────────────────────── */}
       <AnimatePresence>
-        {isOpen ? (
+        {ouvert ? (
           <motion.div
+            id="dme-menu"
+            ref={panneau}
+            role="dialog"
+            aria-modal="true"
+            aria-label={lang === "en" ? "Main menu" : "Menu principal"}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/72 backdrop-blur-sm lg:hidden"
+            transition={transition.quick}
+            className="fixed inset-0 z-40 overflow-y-auto bg-[color:var(--ink)] pt-[72px]"
+            data-lenis-prevent
           >
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
-              className="ml-auto flex h-full w-[min(92vw,420px)] flex-col border-l border-white/[0.08] bg-[#060606]"
-            >
-              <div className="flex h-[70px] items-center justify-between border-b border-white/[0.07] px-5">
-                <div className="flex items-center gap-3">
-                  <Image src="/logo/logo-dme.png" alt="DME" width={28} height={28} className="h-7 w-7 object-contain" />
-                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white">DeathMark</p>
-                </div>
-                <button type="button" onClick={() => setIsOpen(false)} className="text-white/54 hover:text-white" aria-label="Close menu">
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto px-5 py-6">
-                <nav className="flex flex-col gap-1" aria-label={lang === "en" ? "Mobile navigation" : "Navigation mobile"}>
-                  {[...NAV_ITEMS, ...(canScout ? [{ href: "/scouting/lol", label: { fr: "Scouting", en: "Scouting" } }, { href: "/coaching", label: { fr: "Coaching", en: "Coaching" } }] : [])].map((item, index) => {
-                    const active = isPathActive(pathname, item.href);
-                    return (
-                      <motion.div
-                        key={item.href}
-                        initial={{ opacity: 0, x: 18 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.24, delay: index * 0.025 }}
+            <div className="shell grid gap-10 py-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14 lg:py-12">
+              <motion.div variants={stagger(0.04, 0.04)} initial="hidden" animate="visible">
+                {/* Nos equipes */}
+                <motion.div variants={fadeUp(0, 14)} className="flex items-end justify-between gap-4">
+                  <p className="text-[15px] font-semibold text-[color:var(--t-3)]">{lang === "en" ? "Our teams" : "Nos équipes"}</p>
+                  <Link href="/equipes" onClick={fermer} className="group inline-flex items-center gap-1.5 text-[14px] text-[color:var(--t-2)] hover:text-white">
+                    {lang === "en" ? "All teams" : "Toutes les équipes"}
+                    <ArrowRight className="h-3.5 w-3.5 text-[color:var(--red)] transition-transform group-hover:translate-x-0.5" aria-hidden />
+                  </Link>
+                </motion.div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {PROGRAMMES.map((prog) => (
+                    <motion.div key={prog.href} variants={fadeUp(0, 14)}>
+                      <Link
+                        href={prog.href}
+                        onClick={fermer}
+                        className="surface lift group flex h-full items-center gap-4 overflow-hidden p-3 sm:flex-col sm:items-stretch sm:p-0"
                       >
-                        <Link
-                          href={item.href}
-                          className={`flex items-center justify-between border-b border-white/[0.055] py-4 text-sm font-black uppercase tracking-[0.16em] ${
-                            active ? "text-white" : "text-white/45"
-                          }`}
-                        >
-                          {pick(item.label, lang)}
-                          {active ? <span className="h-px w-8 bg-red-500" /> : <ChevronRight className="h-4 w-4 text-white/20" />}
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </nav>
-              </div>
+                        <span className="relative block h-16 w-20 shrink-0 overflow-hidden rounded-[12px] sm:h-auto sm:w-auto sm:rounded-none sm:aspect-[16/9]">
+                          {prog.image ? (
+                            <Image src={prog.image} unoptimized={prog.image.endsWith(".webp")} alt="" fill sizes="(min-width: 640px) 280px, 80px" className="object-cover opacity-80" />
+                          ) : (
+                            <span
+                              className="absolute inset-0 grid place-items-center text-[20px] font-bold tracking-[-0.04em] text-white/25 sm:text-[34px]"
+                              style={{ background: "radial-gradient(80% 90% at 50% 110%, rgba(225,25,45,0.35), #141414 70%)" }}
+                              aria-hidden
+                            >
+                              {prog.court}
+                            </span>
+                          )}
+                        </span>
+                        <span className="block sm:px-5 sm:py-4">
+                          <span className="flex items-center gap-2 text-[17px] font-semibold">
+                            {prog.jeu}
+                            {prog.nouveau ? (
+                              <span className="rounded-full bg-[color:var(--red)] px-2 py-0.5 text-[11px] font-semibold">
+                                {lang === "en" ? "New" : "Nouveau"}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="mt-0.5 block text-[13px] text-[color:var(--t-3)]">{prog.roster}</span>
+                        </span>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
 
-              <div className="border-t border-white/[0.07] p-5">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.24em] text-white/28">
-                    <Languages className="h-3.5 w-3.5" />
-                    {lang === "en" ? "Language" : "Langue"}
-                  </div>
-                  <div className="flex border border-white/[0.1]">
-                    {(["fr", "en"] as const).map((candidate) => (
+                {/* Groupes */}
+                <div className="mt-10 grid gap-8 border-t border-[color:var(--line)] pt-8 sm:grid-cols-3">
+                  {GROUPES.map((groupe) => (
+                    <motion.div key={groupe.titre.fr} variants={fadeUp(0, 14)}>
+                      <p className="text-[15px] font-semibold text-[color:var(--t-3)]">{pick(groupe.titre, lang)}</p>
+                      <ul className="mt-4 space-y-4">
+                        {groupe.liens.map((lien) => {
+                          const contenu = (
+                            <>
+                              <span className="flex items-center gap-1.5 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-white/85 transition-colors group-hover:text-white">
+                                {pick(lien.label, lang)}
+                                {lien.externe ? <ArrowUpRight className="h-4 w-4 text-[color:var(--t-3)]" aria-hidden /> : null}
+                              </span>
+                              {lien.note ? <span className="mt-0.5 block text-[13px] text-[color:var(--t-3)]">{pick(lien.note, lang)}</span> : null}
+                            </>
+                          );
+                          return (
+                            <li key={lien.label.fr}>
+                              {lien.externe ? (
+                                <a href={lien.href} target="_blank" rel="noopener noreferrer" className="group block">
+                                  {contenu}
+                                </a>
+                              ) : (
+                                <Link
+                                  href={lien.href}
+                                  onClick={fermer}
+                                  aria-current={pathname.startsWith(lien.href) ? "page" : undefined}
+                                  className="group block"
+                                >
+                                  {contenu}
+                                </Link>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Compte et langue */}
+                <motion.div
+                  variants={fadeUp(0, 14)}
+                  className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-[color:var(--line)] pt-6"
+                >
+                  {canScout ? (
+                    <>
+                      <Link
+                        href="/scouting/lol"
+                        onClick={fermer}
+                        className="flex items-center gap-1.5 text-[15px] text-[color:var(--red-lift)] transition-opacity hover:opacity-75"
+                      >
+                        <Shield className="h-3.5 w-3.5" aria-hidden />
+                        Scouting
+                      </Link>
+                      <Link
+                        href="/coaching"
+                        onClick={fermer}
+                        className="flex items-center gap-1.5 text-[15px] text-[color:var(--red-lift)] transition-opacity hover:opacity-75"
+                      >
+                        <Shield className="h-3.5 w-3.5" aria-hidden />
+                        {lang === "en" ? "Tools" : "Outils"}
+                      </Link>
+                    </>
+                  ) : null}
+                  {isConnected ? (
+                    <button
+                      type="button"
+                      onClick={() => void logout()}
+                      className="flex items-center gap-1.5 text-[15px] text-[color:var(--t-2)] transition-colors hover:text-white"
+                    >
+                      <LogOut className="h-3.5 w-3.5" aria-hidden />
+                      {lang === "en" ? "Sign out" : "Déconnexion"}
+                    </button>
+                  ) : (
+                    <Link href="/connexion" onClick={fermer} className="text-[15px] text-[color:var(--t-2)] transition-colors hover:text-white">
+                      {lang === "en" ? "Member login" : "Connexion membres"}
+                    </Link>
+                  )}
+
+                  <div
+                    className="ml-auto flex overflow-hidden rounded-full border border-[color:var(--line-2)]"
+                    role="group"
+                    aria-label={lang === "en" ? "Language" : "Langue"}
+                  >
+                    {(["fr", "en"] as const).map((choix) => (
                       <button
-                        key={candidate}
+                        key={choix}
                         type="button"
-                        onClick={() => setLang(candidate)}
-                        className={`h-8 w-12 text-base transition ${
-                          lang === candidate ? "bg-white/10 opacity-100" : "opacity-38"
+                        onClick={() => setLang(choix)}
+                        aria-pressed={lang === choix}
+                        className={`h-9 px-4 text-[13px] font-semibold uppercase transition-colors ${
+                          lang === choix ? "bg-[color:var(--red)] text-white" : "text-[color:var(--t-3)] hover:text-white"
                         }`}
                       >
-                        <Image src={candidate === "fr" ? "/medias/players/FR1.png" : "/medias/players/US.png"} alt={candidate} width={26} height={18} className="rounded-[2px] object-cover" />
+                        {choix}
                       </button>
                     ))}
                   </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Qui on est */}
+              <motion.aside
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...transition.reveal, delay: 0.1 }}
+                className="surface self-start overflow-hidden"
+              >
+                <div className="relative aspect-[16/9]">
+                  <Image
+                    src="/medias/lan/ets-2026-equipe.webp"
+                    alt={lang === "en" ? "The DME roster at LAN ÉTS 2026" : "Le roster DME à la LAN ÉTS 2026"}
+                    fill
+                    unoptimized
+                    sizes="(min-width: 1024px) 560px, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute left-4 top-4 rounded-full bg-black/65 px-3 py-1 text-[13px] font-semibold backdrop-blur-sm">
+                    Est. {FONDATION} · Québec
+                  </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <Link href="/connexion" className="border border-white/[0.1] px-4 py-3 text-center text-[10px] font-black uppercase tracking-[0.16em] text-white/56">
-                    {lang === "en" ? "Login" : "Connexion"}
-                  </Link>
-                  <Link href="/recrutement" className="border border-red-500/45 bg-red-600 px-4 py-3 text-center text-[10px] font-black uppercase tracking-[0.16em] text-white">
-                    {lang === "en" ? "Apply" : "Rejoindre"}
-                  </Link>
+                <div className="p-6 md:p-8">
+                  <p className="text-[18px] font-semibold leading-snug tracking-[-0.015em]">{pick(MISSION, lang)}</p>
+                  <ul className="mt-6 space-y-4">
+                    {SIGLE.map((s) => (
+                      <li key={s.lettre} className="flex gap-4">
+                        <span className="w-6 shrink-0 text-[22px] font-bold leading-none text-[color:var(--red)]">{s.lettre}</span>
+                        <span>
+                          <span className="block text-[15px] font-semibold">{s.mot}</span>
+                          <span className="mt-1 block text-[14px] leading-relaxed text-[color:var(--t-3)]">{pick(s.sens, lang)}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            </motion.aside>
+              </motion.aside>
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>

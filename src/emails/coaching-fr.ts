@@ -7,7 +7,7 @@ const HTML = `<!DOCTYPE html>
   <meta name="x-apple-disable-message-reformatting">
   <meta name="color-scheme" content="dark">
   <meta name="supported-color-schemes" content="dark">
-  <title>Session confirmee — DeathMark E-Sports</title>
+  <title>Session confirmee — DME</title>
   <!--[if mso]>
   <style>table,td,div,p,a{font-family:Arial,sans-serif !important;}</style>
   <![endif]-->
@@ -174,7 +174,7 @@ const HTML = `<!DOCTYPE html>
               </td></tr>
               <tr><td style="padding-top:18px;">
                 <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;line-height:1.6;color:#54545e;">
-                  DeathMark E-Sports — Esport quebecois. Ambition nord-americaine. Fait pour la pression.
+                  DME — Esport quebecois. Ambition nord-americaine. Fait pour la pression.
                 </p>
                 <p style="margin:10px 0 0;" class="mono"><span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#ff3344;">#DMEONTOP</span></p>
               </td></tr>

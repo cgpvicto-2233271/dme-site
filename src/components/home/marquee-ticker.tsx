@@ -4,7 +4,7 @@ import { useLang } from "@/components/LanguageContext";
 
 const ITEMS_FR = [
   "Communauté de l'année 2025",
-  "DeathMark E-Sports",
+  "DME",
   "Québec · NA",
   "League of Legends",
   "Valorant",
@@ -17,7 +17,7 @@ const ITEMS_FR = [
 
 const ITEMS_EN = [
   "Community of the Year 2025",
-  "DeathMark E-Sports",
+  "DME",
   "Quebec · NA",
   "League of Legends",
   "Valorant",
